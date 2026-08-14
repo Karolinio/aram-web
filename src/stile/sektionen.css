@@ -1,0 +1,351 @@
+/* Die Sektionen. Alle Werte kommen aus tokens.css. */
+
+/* ── Sprungmarke ──────────────────────────────────────────────────────────── */
+.sprung {
+  position: absolute;
+  left: -9999px;
+  z-index: 100;
+  padding: 0.75em 1.25em;
+  background: var(--glut);
+  color: var(--kohle);
+  border-radius: 0 0 8px 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-decoration: none;
+}
+.sprung:focus { left: 0; top: 0; }
+
+/* ── Mehlstaub ────────────────────────────────────────────────────────────── */
+.mehlstaub {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  opacity: 0.7;
+}
+
+/* ── Hinweisband + Kopfzeile ──────────────────────────────────────────────── */
+.band {
+  position: relative;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7em;
+  padding: 0.65em var(--gutter);
+  background: color-mix(in oklch, var(--glut) 16%, var(--kohle));
+  border-bottom: 1px solid var(--glas-kante);
+  color: var(--asche);
+  font-size: var(--text-meta);
+  text-align: center;
+}
+.band__punkt {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--glut);
+  flex: none;
+  box-shadow: 0 0 0 4px color-mix(in oklch, var(--glut) 22%, transparent);
+}
+
+.kopf {
+  position: sticky;
+  top: 0;
+  z-index: 25;
+  transition: background var(--dauer-mikro), backdrop-filter var(--dauer-mikro),
+    border-color var(--dauer-mikro);
+  border-bottom: 1px solid transparent;
+}
+/* Die Ofentuer wird beim Scrollen dichter. Vorher liegt sie ueber dem Feuer und
+   darf durchsichtig sein — genau die Regel „Glas nur ueber etwas Bewegtem". */
+.kopf.ist-dicht {
+  background: var(--glas-fond);
+  backdrop-filter: var(--glas-unschaerfe);
+  -webkit-backdrop-filter: var(--glas-unschaerfe);
+  border-bottom-color: var(--glas-kante);
+}
+.kopf__reihe {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2.5rem);
+  padding-block: 0.9rem;
+}
+.kopf__marke {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.5rem;
+  letter-spacing: 0.02em;
+  font-variation-settings: 'wdth' 120;
+  color: var(--asche);
+  text-decoration: none;
+  margin-right: auto;
+}
+.kopf__nav { display: flex; gap: clamp(0.9rem, 2vw, 1.8rem); }
+.kopf__nav a {
+  color: var(--asche-mtl);
+  text-decoration: none;
+  font-size: var(--text-meta);
+  padding-block: 0.35em;
+  border-bottom: 2px solid transparent;
+  transition: color var(--dauer-mikro), border-color var(--dauer-mikro);
+}
+.kopf__nav a:hover { color: var(--asche); }
+.kopf__nav a[aria-current='true'] { color: var(--glut-hell); border-bottom-color: var(--glut); }
+.kopf__knopf { padding: 0.6em 1.15em; font-size: 0.9375rem; }
+@media (max-width: 720px) { .kopf__nav { display: none; } }
+
+/* ── Sektion 1 · Der Ofen ─────────────────────────────────────────────────── */
+.ofen {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  padding-block: clamp(4rem, 10vh, 8rem);
+  overflow: hidden;
+}
+.ofen__grund { position: absolute; inset: 0; z-index: 0; }
+.ofen__feuer { position: absolute; inset: 0; width: 100% !important; height: 100%; }
+.ofen__feuer .umriss { border-radius: 0; }
+/* Die Glut: eine Lichtquelle, unten. Atmet langsam. */
+.ofen__glut {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 70% at 50% 118%,
+      color-mix(in oklch, var(--glut) 42%, transparent) 0%,
+      transparent 62%),
+    linear-gradient(to top, var(--kohle) 4%, transparent 55%);
+  animation: atmen 8s ease-in-out infinite;
+}
+@keyframes atmen { 0%, 100% { opacity: 0.86; } 50% { opacity: 1; } }
+
+.ofen__buehne {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 4rem);
+  perspective: 1400px;
+}
+.ofen__marke {
+  font-size: var(--text-hero);
+  line-height: 0.88;
+  margin-bottom: clamp(1rem, 2.5vw, 2rem);
+  text-transform: uppercase;
+}
+.ofen__karte { padding: clamp(1.25rem, 3vw, 2.25rem); display: grid; gap: 0.9rem; }
+.ofen__zeile { font-family: var(--font-display); font-weight: 600; letter-spacing: -0.015em; }
+.ofen__detail { font-size: var(--text-base); max-width: var(--measure-eng); }
+.ofen__knoepfe { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.4rem; }
+.ofen__gericht { display: grid; place-items: center; transform-style: preserve-3d; }
+.ofen__weiter {
+  position: absolute;
+  left: 50%; bottom: 1.6rem;
+  z-index: 3;
+  translate: -50% 0;
+}
+.ofen__weiter span {
+  display: block; width: 1px; height: 46px;
+  background: linear-gradient(to bottom, transparent, var(--glut));
+}
+@media (max-width: 900px) {
+  .ofen__buehne { grid-template-columns: 1fr; }
+  .ofen__gericht { order: -1; }
+}
+
+/* ── Sektion 2 · Was es gibt ──────────────────────────────────────────────── */
+.gerichte { perspective: 1600px; }
+.gerichte__kopf { max-width: var(--measure); margin-bottom: var(--space-block); display: grid; gap: 0.9rem; }
+.gerichte__blech {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: clamp(1rem, 2vw, 2rem) 0;
+  transform-style: preserve-3d;
+}
+/* Versetzt, nicht im Raster — ein gleichmaessiges Vierer-Raster ist die
+   Lieferando-Form, und dagegen wird hier gebaut. */
+.gerichte__platz { display: grid; justify-items: center; gap: 0.75rem; margin: 0; }
+.gerichte__platz--1 { grid-column: 1 / span 5; }
+.gerichte__platz--2 { grid-column: 7 / span 6; margin-top: clamp(1rem, 5vw, 5rem); }
+.gerichte__platz--3 { grid-column: 2 / span 4; margin-top: clamp(0.5rem, 3vw, 3rem); }
+.gerichte__platz--4 { grid-column: 8 / span 5; }
+.gerichte__name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-gericht);
+  letter-spacing: -0.02em;
+  display: flex; align-items: baseline; gap: 0.6em;
+}
+.gerichte__nummer {
+  font-size: var(--text-micro);
+  color: var(--glut-hell);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--tracking-label);
+}
+@media (max-width: 760px) {
+  .gerichte__blech { grid-template-columns: 1fr; gap: var(--space-block); }
+  .gerichte__platz { grid-column: 1 / -1 !important; margin-top: 0 !important; }
+}
+
+/* ── Sektion 3 · Das Showpiece ────────────────────────────────────────────── */
+.weg__huelle { position: relative; }
+.weg {
+  position: sticky;
+  top: 0;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  perspective: 1400px;
+}
+.weg--ruhig { position: static; min-height: 0; }
+.weg__buehne { display: grid; gap: clamp(1.5rem, 4vw, 3rem); width: 100%; }
+.weg__kopf { display: grid; gap: 0.6rem; }
+.weg__mitte {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: clamp(220px, 38vh, 420px);
+  transform-style: preserve-3d;
+}
+.weg__zustand {
+  grid-area: 1 / 1;
+  display: grid;
+  place-items: center;
+  transition: opacity 340ms linear;
+}
+.weg__takte {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(0.75rem, 2vw, 1.75rem);
+  list-style: none;
+  padding: 0;
+  border-top: 1px solid var(--linie);
+  padding-top: 1.25rem;
+}
+.weg__takte li { opacity: 0.32; transition: opacity 320ms var(--ease-schieber); }
+.weg__takte li.ist-aktiv { opacity: 1; }
+.weg__takte h3 { font-size: var(--text-gericht); margin-block: 0.15em 0.3em; }
+.weg__takte p { font-size: var(--text-meta); }
+.weg__zahl {
+  font-family: var(--font-display);
+  font-size: var(--text-micro);
+  letter-spacing: var(--tracking-label);
+  color: var(--glut-hell);
+  font-variant-numeric: tabular-nums;
+}
+.weg__liste { list-style: none; padding: 0; display: grid; gap: var(--space-block); }
+.weg__stufe { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2rem; align-items: center; }
+@media (max-width: 760px) {
+  .weg__takte { grid-template-columns: 1fr 1fr; }
+  .weg__stufe { grid-template-columns: 1fr; }
+}
+
+/* ── Sektion 4 · Die Karte ────────────────────────────────────────────────── */
+.karte { background: var(--kohle-2); }
+.karte__kopf { display: grid; gap: 0.7rem; margin-bottom: var(--space-block); }
+.karte__offen { font-size: var(--text-meta); }
+.karte__gruppen { display: grid; gap: clamp(2rem, 4vw, 3.5rem); }
+.karte__gruppenkopf { margin-bottom: 1.1rem; }
+.karte__gruppenkopf h3 { font-size: var(--text-gericht); }
+.karte__gruppenhinweis { font-size: var(--text-meta); }
+.karte__liste { list-style: none; padding: 0; display: grid; gap: 0.9rem; }
+.karte__zeile { display: flex; align-items: baseline; gap: 0.75rem; }
+.karte__wort { display: grid; gap: 0.15rem; }
+/* Der Name des Gerichts ist gross, der Preis daneben klein und ruhig.
+   Von der Speisekarte an der Wand geklaut. */
+.karte__gericht { font-family: var(--font-display); font-weight: 700; font-size: 1.1875rem; letter-spacing: -0.015em; }
+.karte__beschreibung { font-size: var(--text-meta); }
+.karte__allergene {
+  font-size: var(--text-micro);
+  color: var(--asche-mtl);
+  letter-spacing: 0.02em;
+}
+.karte__punkte {
+  flex: 1;
+  border-bottom: 1px dotted var(--linie);
+  transform: translateY(-0.25em);
+  min-width: 1.5rem;
+}
+.karte__preis { flex: none; }
+.karte__fuss { font-size: var(--text-micro); margin-top: var(--space-block); max-width: var(--measure); }
+
+/* ── Sektion 5 · Der Laden ────────────────────────────────────────────────── */
+.laden__gitter {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(1.5rem, 4vw, 4rem);
+  align-items: center;
+  perspective: 1400px;
+}
+.laden__bild { display: grid; place-items: center; }
+.laden__wort { display: grid; gap: 1rem; }
+.laden__fakten { display: grid; gap: 1.1rem; margin-top: 0.5rem; }
+.laden__fakten dt {
+  font-family: var(--font-display);
+  font-size: var(--text-micro);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--glut-hell);
+  margin-bottom: 0.2rem;
+}
+.laden__fakten dd { margin: 0; }
+.laden__fakten a { color: var(--asche); text-decoration-color: var(--glut); text-underline-offset: 3px; }
+.laden__zeiten { list-style: none; padding: 0; display: grid; gap: 0.3rem; max-width: 22rem; }
+.laden__zeiten li { display: flex; justify-content: space-between; gap: 1rem; }
+@media (max-width: 860px) { .laden__gitter { grid-template-columns: 1fr; } }
+
+/* ── Sektion 6 · Bestellen ────────────────────────────────────────────────── */
+.bestellen__kopf { display: grid; gap: 0.8rem; margin-bottom: var(--space-block); }
+.bestellen__direkt {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: clamp(0.75rem, 2vw, 1.5rem);
+}
+.bestellen__kachel {
+  display: grid;
+  gap: 0.4rem;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  text-decoration: none;
+  color: inherit;
+}
+.bestellen__gross {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.5rem, 1rem + 2vw, 2.75rem);
+  letter-spacing: -0.03em;
+  display: block;
+}
+.bestellen__kachel--gross .bestellen__gross { color: var(--glut); }
+.bestellen__dienste { margin-top: var(--space-block); display: grid; gap: 0.9rem; }
+.bestellen__vorschau { font-size: var(--text-meta); max-width: var(--measure); }
+.bestellen__liste {
+  list-style: none; padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 0.75rem;
+}
+.bestellen__dienst {
+  display: grid;
+  gap: 0.3rem;
+  padding: 1rem 1.15rem;
+  text-decoration: none;
+  color: inherit;
+}
+.bestellen__dienst.ist-inaktiv { opacity: 0.45; cursor: not-allowed; }
+.bestellen__dienst.ist-inaktiv:hover { transform: none; }
+.bestellen__punkt { width: 9px; height: 9px; border-radius: 50%; display: block; }
+.bestellen__dienstname { font-family: var(--font-display); font-weight: 700; font-size: 1.0625rem; }
+.bestellen__status { font-size: var(--text-micro); }
+@media (max-width: 720px) { .bestellen__direkt { grid-template-columns: 1fr; } }
+
+/* ── Fuß ──────────────────────────────────────────────────────────────────── */
+.fuss { padding-block: var(--space-block) 3rem; border-top: 1px solid var(--linie); }
+.fuss__warnung { padding: 1.25rem 1.5rem; display: grid; gap: 0.5rem; margin-bottom: var(--space-block); }
+.fuss__warnung code { font-size: var(--text-meta); color: var(--glut-hell); }
+.fuss__reihe { display: flex; flex-wrap: wrap; gap: 1.5rem 2.5rem; align-items: baseline; justify-content: space-between; }
+.fuss__marke { font-family: var(--font-display); font-weight: 800; font-size: 1.25rem; letter-spacing: 0.02em; }
+.fuss__nav, .fuss__kontakt { display: flex; gap: 1.25rem; }
+.fuss a { color: var(--asche-mtl); text-decoration: none; font-size: var(--text-meta); }
+.fuss a:hover { color: var(--glut-hell); }

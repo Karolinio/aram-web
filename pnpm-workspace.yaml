@@ -1,0 +1,7 @@
+# esbuild braucht sein postinstall, sonst fehlt die Binaerdatei und `vite` startet nicht.
+#
+# Der Schluessel heisst in pnpm 11.9 `allowBuilds`, NICHT `onlyBuiltDependencies` —
+# gemessen am 14.08.2026. Mit dem falschen Schluessel bleibt die Installation gruen
+# und der Build faellt spaeter mit einer Meldung um, die nicht nach pnpm aussieht.
+allowBuilds:
+  esbuild: true

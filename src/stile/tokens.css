@@ -1,0 +1,79 @@
+/**
+ * Design-Tokens. Einzige Quelle für Farbe, Grad, Abstand, Zeit.
+ *
+ * Jeder Wert hier lässt sich auf eine Zeile in clients/aram/DIRECTION.md zurückführen.
+ * Ein Token, das das nicht kann, ist eine Improvisation: löschen oder die Direktion
+ * ergänzen.
+ */
+
+:root {
+  /* ── Farbe ───────────────────────────────────────────────────────────────
+     Abgeleitet aus IHREN gemessenen Farben (#fe6201 auf #1d140e), nur wärmer
+     angesetzt. Gemessen am 14.08.2026 mit packages/shared/src/kontrast.ts. */
+  --kohle: oklch(14% 0.022 45);        /* Grund. Ofeninneres, geschwärzt */
+  --kohle-2: oklch(20% 0.032 48);      /* zweite Fläche, Boden unter Glas */
+  --asche: oklch(94% 0.014 75);        /* Text. Warmes Mehlweiß, nie reinweiß */
+  --asche-mtl: oklch(74% 0.020 70);    /* Sekundärtext, Bildunterschriften */
+  --linie: oklch(34% 0.025 45);        /* Haarlinien, 1px */
+  --glut: oklch(70% 0.190 45);         /* IHR Orange. Flächen, Knöpfe, Zahlen ab 24px */
+  --glut-hell: oklch(78% 0.170 60);    /* dasselbe Signal als KLEINER Text */
+
+  /* Glut als Text hält 6,96 — AA, nicht AAA. Deshalb zwei Werte und nicht einer:
+     ab 24px reicht --glut, darunter muss --glut-hell (9,36 AAA) genommen werden.
+     Wer das vertauscht, baut eine Seite, die im eigenen Scanner durchfällt. */
+
+  /* ── Glas: die Ofentür ───────────────────────────────────────────────────
+     Die Glutkante sitzt UNTEN, nicht oben. Bei TAFELWERK saß die Lichtkante oben,
+     weil Tageslicht von oben kommt. Hier ist das Feuer unten. Das ist kein Detail,
+     das ist die These. */
+  --glas-fond: color-mix(in oklch, var(--kohle-2) 76%, transparent);
+  --glas-kante: color-mix(in oklch, var(--glut) 22%, transparent);
+  --glas-unschaerfe: blur(16px) saturate(1.25);
+  --radius-karte: 14px;
+
+  /* ── Typografie ──────────────────────────────────────────────────────────
+     Bricolage Grotesque trägt „gemaltes Ladenschild", Newsreader trägt die
+     Speisekarte. Umkehrung von TAFELWERK (dort Serife oben, Grotesk unten) —
+     Absicht: die beiden Marken dürfen sich nicht ähneln. */
+  --font-display: 'Bricolage Grotesque Variable', 'Trebuchet MS', sans-serif;
+  --font-text: 'Newsreader Variable', Georgia, 'Times New Roman', serif;
+
+  --text-hero: clamp(3rem, 1rem + 8vw, 8rem);
+  --text-section: clamp(2rem, 1.2rem + 2.8vw, 3.75rem);
+  --text-gericht: clamp(1.375rem, 1.1rem + 1.1vw, 2rem);
+  --text-lead: clamp(1.125rem, 1.02rem + 0.42vw, 1.375rem);
+  --text-base: 1.0625rem;
+  --text-meta: 0.9375rem;
+  --text-micro: 0.8125rem;
+
+  --leading-tight: 0.94;
+  --leading-head: 1.08;
+  --leading-body: 1.62;
+
+  --tracking-hero: -0.035em;
+  --tracking-head: -0.02em;
+  --tracking-label: 0.16em;
+
+  --measure: 58ch;
+  --measure-eng: 44ch;
+
+  /* ── Raum ────────────────────────────────────────────────────────────────
+     Sektionen atmen weit, Zeilen innerhalb einer Gruppe eng. Kein gleichmäßiges
+     Padding über die ganze Seite. */
+  --space-section: clamp(5rem, 3rem + 7vw, 11rem);
+  --space-block: clamp(2.5rem, 1.6rem + 3vw, 5rem);
+  --gutter: clamp(1.25rem, 0.4rem + 3.2vw, 4.5rem);
+  --shell: 1440px;
+  --content: 1120px;
+
+  /* ── Bewegung ────────────────────────────────────────────────────────────
+     Signaturzug: alles kommt aus dem Ofen. EINE Richtung — aus der Tiefe nach
+     vorn. Schnell heraus, sanft aus; leichtes Überschwingen ist hier erlaubt,
+     anders als bei TAFELWERK: ein Gericht, das vom Schieber gleitet, kommt
+     nicht sanft zum Stehen. */
+  --ease-schieber: cubic-bezier(0.22, 1, 0.28, 1);
+  --dauer-ankunft: 720ms;
+  --dauer-mikro: 200ms;
+  --hebung-hover: 10px;
+  --neigung-max: 6deg;
+}

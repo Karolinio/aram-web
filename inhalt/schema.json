@@ -1,0 +1,37 @@
+{
+  "_": [
+    "Was der Kunde selbst ändern darf — und nichts darüber hinaus.",
+    "Daraus baut sich der Editor. Zwei Bereiche, zwei Formulare, sonst nichts.",
+    "`ziel` sagt, WO auf der Seite der Inhalt landet. Ohne `ziel` schreibt der Kunde",
+    "in eine Datei, die die Seite nirgends liest — dann ist das CMS eine Attrappe."
+  ],
+  "kunde": "aram",
+  "bereiche": [
+    {
+      "id": "hinweis",
+      "titel": "Hinweis ganz oben",
+      "art": "einzel",
+      "quelle": "inhalt/hinweis.json",
+      "ziel": "inhalt.hinweis",
+      "hinweis": "Urlaub, Feiertage, kurzfristige Änderungen. Erscheint als Band über der Seite.",
+      "felder": {
+        "aktiv": { "art": "auswahl", "label": "Anzeigen?", "werte": ["ja", "nein"], "pflicht": true },
+        "text": { "art": "text", "label": "Was steht drin?", "pflicht": true, "max": 140 },
+        "bis": { "art": "datum", "label": "Bis wann anzeigen?" }
+      }
+    },
+    {
+      "id": "speisekarte",
+      "titel": "Speisekarte",
+      "art": "liste",
+      "quelle": "inhalt/speisekarte.json",
+      "ziel": "inhalt.speisekarte",
+      "min": 1,
+      "hinweis": "Gruppen mit Gerichten. Preise ändern sich — deshalb ist das der wichtigste Bereich.",
+      "eintrag": {
+        "gruppe": { "art": "text", "label": "Gruppe", "pflicht": true, "max": 40 },
+        "hinweis": { "art": "text", "label": "Zeile unter der Gruppe", "max": 90 }
+      }
+    }
+  ]
+}

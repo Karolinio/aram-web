@@ -1,0 +1,21 @@
+{
+  "kunde": "aram",
+  "langname": "Aram — Orientalisches Gebäck & Pizza",
+  "mandant": "finesite",
+  "branche": "gastronomie",
+  "stand": "im-bau",
+  "substrat": { "art": "vite", "version": "7.3.6", "react": "19" },
+  "deploy": { "ziel": null, "domain": "arampizzeria-bonn.de", "besitzer": null },
+  "cms": { "art": "schema-json", "bereiche": ["hinweis", "speisekarte"] },
+  "recht": { "impressum": false, "datenschutz": false, "grund": "Rechtsform und ladungsfähige Anschrift fehlen" },
+  "pflege": { "wer": null, "monatlich": null },
+  "offen": [
+    "Gerichtefotos — 11 Slots, Liste in public/bilder/FOTOLISTE.md",
+    "Öffnungszeiten",
+    "Anschrift mit Hausnummer",
+    "Speisekarte mit Preisen und Allergenen",
+    "Impressum: Rechtsform, ladungsfähige Anschrift, Steuernummer",
+    "Lieferdienste: ob Lieferando/Uber Eats/Wolt, und die Adressen",
+    "Domain: wem gehört sie, wo liegt sie"
+  ]
+}

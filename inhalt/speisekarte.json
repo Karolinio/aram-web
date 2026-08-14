@@ -1,0 +1,35 @@
+[
+  {
+    "gruppe": "Syrische Fata'er",
+    "hinweis": "Herzhaft gefüllte Teigtaschen. Teig morgens von Hand gerollt.",
+    "gerichte": [
+      { "name": "Fatayer mit Spinat", "beschreibung": "Spinat, Zwiebel, Zitrone, Sumach", "preis": null, "allergene": ["Gluten"] },
+      { "name": "Fatayer mit Käse", "beschreibung": "Akkawi-Käse, Schwarzkümmel", "preis": null, "allergene": ["Gluten", "Milch"] },
+      { "name": "Fatayer mit Hackfleisch", "beschreibung": "Rindhack, Granatapfelmelasse", "preis": null, "allergene": ["Gluten"] }
+    ]
+  },
+  {
+    "gruppe": "Manakisch & Käseschiffchen",
+    "hinweis": "Ofenfrisches Fladenbrot, offen belegt.",
+    "gerichte": [
+      { "name": "Manakisch Zaatar", "beschreibung": "Zaatar, Olivenöl", "preis": null, "allergene": ["Gluten", "Sesam"] },
+      { "name": "Käseschiffchen", "beschreibung": "Käse, Ei, Butter — in Schiffchenform", "preis": null, "allergene": ["Gluten", "Milch", "Ei"] }
+    ]
+  },
+  {
+    "gruppe": "Lahmacun",
+    "hinweis": "Dünn ausgerollt, im Steinofen gebacken.",
+    "gerichte": [
+      { "name": "Lahmacun", "beschreibung": "Hackfleisch, Paprika, Petersilie, Zitrone", "preis": null, "allergene": ["Gluten"] },
+      { "name": "Lahm bi Ajin", "beschreibung": "Die syrische Art — kleiner, würziger", "preis": null, "allergene": ["Gluten"] }
+    ]
+  },
+  {
+    "gruppe": "Pizza",
+    "hinweis": "Frisch belegt, vor Ort zubereitet.",
+    "gerichte": [
+      { "name": "Pizza Margherita", "beschreibung": "Tomate, Mozzarella, Basilikum", "preis": null, "allergene": ["Gluten", "Milch"] },
+      { "name": "Pizza Salami", "beschreibung": "Tomate, Mozzarella, Salami", "preis": null, "allergene": ["Gluten", "Milch"] }
+    ]
+  }
+]
