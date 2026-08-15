@@ -1,33 +1,108 @@
-import { useVersatz } from '../bewegung.ts'
+import { useFlug, useVersatz } from '../bewegung.ts'
 
 /**
- * Handarbeit — der Savor-Rhythmus und das eine laute Farbfeld.
+ * Der Weg zum Fata’er — die Savor-Sequenz.
  *
- * ═══ Das Band ═══
+ * ═══ Was ich beim ersten Bau falsch verstanden hatte ═══
  *
- * Ein einziges gesättigtes Feld in IHREM Orange, quer über die ganze Breite, mit
- * dunkler Schrift darauf. Von Yellowbird geklaut, aber nicht deren Register:
- * dort schreit die Farbe, hier trägt das Material. Es ist die einzige Stelle der
- * Seite, an der `--glut` grossflächig steht — ein Effekt, der überall ist, ist
- * keiner.
+ * Die Direktion nennt Savor als Referenz und beschreibt sie als „Bilder liegen
+ * versetzt und überlappend". Daraus hatte ich ein Nebeneinander gebaut: Text
+ * links, Bild rechts. Beim Nachsehen der Referenz auf Mobbin zeigt sie etwas
+ * anderes — die Bilder stehen FAST SENKRECHT ÜBEREINANDER, jedes anders breit,
+ * seitlich versetzt, und sie überlappen sich VERTIKAL. Bei Savor ist es
+ * Butter → Butter im Mehl → Butter brutzelt.
  *
- * Gemessen: Ruß auf Glut hält 4,97 (AA). Das reicht für Schrift dieser Grösse
- * und für nichts Kleineres. Deshalb steht auf dieser Fläche genau ein Satz und
- * keine Bildunterschrift.
+ * Das ist kein Layout, das ist ein Prozess. Der Scroll führt durch die Schritte,
+ * und weil sie sich überlappen, liest man sie als einen Vorgang statt als drei
+ * Bilder. Genau deshalb funktioniert es ohne einen einzigen Rahmen.
  *
- * ═══ Der Rhythmus ═══
+ * ═══ Die beiden Rollen ═══
  *
- * Zwei Fotos, verschieden breit, versetzt, überlappend, keins mittig. Sie ziehen
- * beim Scrollen ungleich schnell hoch (`useVersatz`) — daraus entsteht Bewegung,
- * ohne dass sich ein Element dreht oder skaliert. Kein Rahmen, kein Schatten,
- * kein Kasten: die Bilder liegen einfach da.
+ * Die RECHTECKE liegen rechts und ziehen ungleich schnell hoch — das ist der
+ * Savor-Rhythmus. Das FREIGESTELLTE Gericht liegt links und REIST: von unten
+ * nach oben, dabei dreht es sich und wird grösser. Es ist das einzige Element
+ * der Seite mit einem Eigenschatten, weil es als einziges ein Gegenstand ist
+ * und kein Bild.
  *
- * Die Merkmalskarten stehen DANEBEN, nicht darauf. Eine Beschriftung auf einem
- * Foto ist eine Sprechblase, und Sprechblasen sind der Ton einer Werbeanzeige.
+ * ═══ Warum nur ein Freisteller ═══
+ *
+ * Aus dem Scan ihrer alten Seite gibt es genau EIN Produktfoto. Der Freisteller
+ * ist Hintergrundentfernung an eben diesem Foto — ihr echtes Fata’er, nur ohne
+ * Hintergrund. Erzeugt ist daran nichts: ein erzeugtes Fata’er wäre eine
+ * Aussage über ein Produkt, das der Gast gleich in der Hand hält.
+ *
+ * Kommen die restlichen Aufnahmen, fliegen hier mehrere Gerichte — die Bahn
+ * unten nimmt beliebig viele.
  */
+
+/** Die Bahn des reisenden Gerichts. Von unten links nach oben, drehend. */
+/**
+ * Von unten links nach oben — und dabei nach rechts ausweichend.
+ *
+ * Der seitliche Drift ist kein Schmuck: ohne ihn steigt der Flieger am Ende
+ * genau in die Überschrift der Sektion. Er weicht ihr aus, statt dass die
+ * Überschrift ihm ausweichen muss — das war der erste Versuch, und eine
+ * rechtsbündige Überschrift mit umbrechender Augenbraue war der Preis dafür.
+ */
+const BAHN = {
+  y: [0.38, -0.16] as [number, number],
+  x: [-0.1, 0.55] as [number, number],
+  dreh: [-15, 7] as [number, number],
+  skala: [0.82, 1.08] as [number, number],
+  buehne: '.prozess',
+  /* Unter 1000 px gibt es keine freie linke Bahn — siehe useFlug. */
+  abBreite: 1000,
+}
+
+const RECHTECKE = [
+  {
+    zahl: '01',
+    titel: 'Mehl auf die Fläche',
+    text: 'Morgens um sieben, bevor der erste Gast kommt.',
+    quelle: '/bilder/textur/mehl-holz.jpg',
+    alt: '',
+    breite: 1700,
+    hoehe: 949,
+    tempo: -0.05,
+  },
+  {
+    zahl: '02',
+    titel: 'Von Hand gerollt',
+    text: 'Jede Scheibe einzeln, nicht aus der Kiste.',
+    quelle: '/bilder/echt/handarbeit.webp',
+    alt: 'Zwei Bäcker drücken Teigscheiben auf der bemehlten Arbeitsfläche, daneben ein Stapel fertiger Fladen',
+    breite: 500,
+    hoehe: 600,
+    tempo: 0.04,
+  },
+]
+
+function Rechteck({ s, i }: { s: (typeof RECHTECKE)[number]; i: number }) {
+  const ref = useVersatz<HTMLLIElement>(s.tempo)
+
+  return (
+    <li className={`schritt schritt--${i + 1}`} ref={ref}>
+      <figure className="schritt__bild">
+        <img
+          src={s.quelle}
+          alt={s.alt}
+          width={s.breite}
+          height={s.hoehe}
+          loading="lazy"
+          decoding="async"
+        />
+      </figure>
+      <div className="schritt__wort">
+        <span className="schritt__zahl">{s.zahl}</span>
+        <h3 className="schritt__titel">{s.titel}</h3>
+        <p className="schritt__text">{s.text}</p>
+      </div>
+    </li>
+  )
+}
+
 export default function Handarbeit() {
-  const links = useVersatz<HTMLElement>(-0.08)
-  const rechts = useVersatz<HTMLElement>(0.05)
+  const flieger = useFlug<HTMLDivElement>(BAHN)
 
   return (
     <>
@@ -35,55 +110,39 @@ export default function Handarbeit() {
         <p className="band__satz schale">Du siehst zu, wie dein Fata’er entsteht.</p>
       </div>
 
-      <section className="handarbeit" aria-labelledby="handarbeit-titel">
-        <div className="schale handarbeit__gitter">
-          <div className="handarbeit__wort">
+      <section className="prozess" aria-labelledby="prozess-titel">
+        <div className="schale prozess__buehne">
+          <header className="prozess__kopf">
             <span className="augenbraue">Rollen, belegen, in den heissen Ofen</span>
-            <h2 id="handarbeit-titel">Alles entsteht vor deinen Augen</h2>
-            <p>
-              Der Teig wird morgens von Hand gerollt, nicht aus der Kiste geholt. Belegt wird
-              erst, wenn du bestellt hast — deshalb dauert es ein paar Minuten, und deshalb
-              schmeckt man den Unterschied.
+            <h2 id="prozess-titel">Alles entsteht vor deinen Augen</h2>
+          </header>
+
+          <ol className="folge">
+            {RECHTECKE.map((s, i) => (
+              <Rechteck key={s.zahl} s={s} i={i} />
+            ))}
+          </ol>
+
+          {/* Das reisende Gericht. Es liegt ausserhalb der Schrittliste, weil es
+              kein Schritt IST — es ist das Ergebnis, und es bewegt sich quer
+              durch alle Schritte hindurch. */}
+          <div className="flieger" ref={flieger}>
+            <img
+              src="/bilder/echt/fatayer-frei.png"
+              alt="Ein fertiges Fata’er von Aram, gewölbt und glänzend, dicht mit Sesam und Schwarzkümmel bestreut"
+              width={500}
+              height={400}
+              loading="lazy"
+              decoding="async"
+            />
+            <p className="flieger__wort">
+              <span className="schritt__zahl">03</span>
+              <span className="flieger__titel">Erst dann belegt</span>
+              <span className="flieger__text">
+                Und in den heissen Ofen. Deshalb dauert es ein paar Minuten.
+              </span>
             </p>
           </div>
-
-          <figure className="handarbeit__bild handarbeit__bild--gross" ref={links}>
-            <img
-              src="/bilder/echt/handarbeit.webp"
-              alt="Zwei Bäcker drücken Teigscheiben auf der bemehlten Arbeitsfläche, daneben ein Stapel fertiger Fladen"
-              width={500}
-              height={600}
-              loading="lazy"
-              decoding="async"
-            />
-          </figure>
-
-          <ul className="merkmale">
-            <li className="merkmal">
-              <span className="merkmal__zahl">01</span>
-              <p className="merkmal__text">Teig morgens von Hand gerollt</p>
-            </li>
-            <li className="merkmal">
-              <span className="merkmal__zahl">02</span>
-              <p className="merkmal__text">Erst bei deiner Bestellung belegt</p>
-            </li>
-            <li className="merkmal">
-              <span className="merkmal__zahl">03</span>
-              <p className="merkmal__text">Im Steinofen gebacken, vor den Augen der Gäste</p>
-            </li>
-          </ul>
-
-          <figure className="handarbeit__bild handarbeit__bild--klein" ref={rechts}>
-            <img
-              src="/bilder/echt/brueder.webp"
-              alt="Zwei der Brüder vor dem Laden, unter dem orangefarbenen Schild"
-              width={500}
-              height={600}
-              loading="lazy"
-              decoding="async"
-            />
-            <figcaption>Geführt wird der Laden vom Inhaber und seinen Brüdern.</figcaption>
-          </figure>
         </div>
       </section>
     </>

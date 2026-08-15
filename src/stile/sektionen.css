@@ -258,7 +258,14 @@
   margin-block-end: clamp(-13rem, -13vw, -6rem);
 }
 
-.backstube__bild img { width: 100%; height: auto; }
+/* Der Eigenschatten des freigestellten Gerichts — der EINZIGE Schatten der
+   ganzen Seite. Er fällt nach unten rechts, weil das Licht vom Fenster links
+   oben kommt, und er macht aus einem Aufkleber einen Gegenstand. */
+.backstube__bild img {
+  width: 100%;
+  height: auto;
+  filter: var(--schatten-speise);
+}
 
 /**
  * Die Bildunterschrift steht hier ÜBER dem Bild.
@@ -275,10 +282,8 @@
 }
 
 .backstube__bild figcaption { margin-bottom: 0.7rem; }
-.handarbeit__bild figcaption { margin-top: 0.7rem; }
 
-.backstube__bild figcaption,
-.handarbeit__bild figcaption {
+.backstube__bild figcaption {
   font-size: var(--text-micro);
   color: var(--russ-mtl);
   letter-spacing: 0.01em;
@@ -321,77 +326,147 @@
   color: var(--tinte-glut);
 }
 
-/* ── Handarbeit: der Savor-Rhythmus ───────────────────────────────────────── */
+/* ── Der Prozess: die Savor-Sequenz ───────────────────────────────────────── */
 
-.handarbeit { padding-block: var(--raum-sektion); }
+/**
+ * Savor, nachgesehen statt nacherzählt.
+ *
+ * Die Referenz stapelt ihre Bilder FAST SENKRECHT: jedes anders breit, seitlich
+ * versetzt, und sie überlappen sich VERTIKAL. Aus dieser Überlappung entsteht
+ * der Eindruck eines Vorgangs statt einer Bildreihe — und sie ist der Grund,
+ * warum das Ganze ohne einen einzigen Rahmen auskommt.
+ *
+ * Die Rechtecke liegen rechts. Links bleibt die Bahn frei, auf der das
+ * freigestellte Gericht von unten nach oben reist.
+ */
 
-.handarbeit__gitter {
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  column-gap: var(--rinne);
-  row-gap: clamp(2rem, 4vw, 4rem);
-  align-items: start;
+.prozess {
+  position: relative;
+  padding-block: var(--raum-sektion);
+  /* Die Bahn des Fliegers reicht über die Sektionskante hinaus; ohne `clip`
+     entstünde daraus eine waagerechte Scrollleiste. */
+  overflow: clip;
 }
 
-.handarbeit__wort { grid-column: 1 / 6; }
-.handarbeit__wort h2 { margin-bottom: 1.2rem; }
+.prozess__buehne { position: relative; }
 
-.handarbeit__bild--gross {
-  grid-column: 7 / 13;
-  grid-row: 1 / 3;
+/* Linksbündig und normal breit. Rechtsbündig gesetzt — um die linke Bahn für
+   den Flieger frei zu halten — brach die Augenbraue um und die Überschrift
+   klebte am Rand. Der Flieger weicht stattdessen aus: er steigt nach rechts,
+   statt in den Kopf zu fliegen. */
+/* `rem`, nicht `ch`. `ch` rechnet gegen die Schriftgrösse DIESES Elements — das
+   ist die Fliesstextgrösse, nicht die der Überschrift darin. 24ch ergaben so
+   204 px statt der gemeinten ~770, und die Überschrift brach nach jedem Wort um. */
+.prozess__kopf {
+  max-width: 34rem;
+  margin-bottom: clamp(2.5rem, 6vw, 6rem);
 }
 
-.merkmale {
-  grid-column: 1 / 6;
+.folge {
   list-style: none;
   padding: 0;
   margin: 0;
-}
-
-.handarbeit__bild--klein {
-  grid-column: 4 / 9;
-  width: 74%;
-  margin-top: clamp(-6rem, -5vw, -2rem);
-}
-
-.handarbeit__bild img { width: 100%; height: auto; }
-
-/* Die Merkmalskarte steht DANEBEN, nicht auf dem Bild. Eine Beschriftung auf
-   einem Foto ist eine Sprechblase, und Sprechblasen sind der Ton einer Anzeige. */
-.merkmal {
   display: flex;
-  align-items: baseline;
-  gap: 1rem;
-  padding-block: 1rem;
-  border-bottom: 1px solid var(--linie);
-  transition:
-    transform var(--dauer-mikro) var(--ease-teig),
-    border-color var(--dauer-mikro) var(--ease-teig);
-}
-/* Nur für echte Zeiger — siehe grundlage.css. Auf Touch bliebe die Hebung nach
-   dem Antippen stehen. */
-@media (hover: hover) {
-  .merkmal:hover {
-    transform: translateY(calc(var(--hebung-karte) * -1));
-    border-bottom-color: var(--terra);
-  }
+  flex-direction: column;
 }
 
-.merkmal__zahl {
-  flex: none;
+/* Anders breit, seitlich versetzt, vertikal überlappend — die drei Zahlen sind
+   das ganze Savor-Rezept. Alle drei lehnen nach rechts, damit die linke Bahn
+   für den Flieger frei bleibt. */
+.schritt {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: clamp(1rem, 2.5vw, 2.5rem);
+}
+
+.schritt--1 { width: 62%; margin-inline-start: 38%; }
+.schritt--2 {
+  width: 54%;
+  margin-inline-start: 30%;
+  margin-top: clamp(-7rem, -6vw, -2.5rem);
+}
+
+.schritt__bild { flex: 1 1 auto; min-width: 0; margin: 0; }
+.schritt__bild img { width: 100%; height: auto; }
+
+.schritt__wort { flex: 0 0 clamp(7rem, 12vw, 11rem); padding-bottom: 0.4rem; }
+
+.schritt__zahl {
+  display: block;
   font-family: var(--font-display);
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   font-weight: 600;
   font-variation-settings: var(--wonk-klein);
   font-variant-numeric: tabular-nums;
   line-height: 1;
   color: var(--terra);
+  margin-bottom: 0.5rem;
 }
 
-.merkmal__text {
-  margin: 0;
-  font-size: var(--text-lead);
-  max-width: none;
+.schritt__titel {
+  font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.3rem);
+  margin-bottom: 0.3rem;
+}
+
+.schritt__text {
+  font-size: var(--text-meta);
+  color: var(--russ-mtl);
+  max-width: 22ch;
+}
+
+/**
+ * Der Flieger — das einzige Ding auf dieser Seite statt eines Bildes.
+ *
+ * Kein Rahmen, kein Kasten, kein Hintergrund: nur der Eigenschatten, und der
+ * fällt nach unten rechts, weil das Licht vom Fenster links oben kommt. Genau
+ * dieser Schatten macht aus einem Aufkleber einen Gegenstand.
+ *
+ * Die Bewegung steht in src/bewegung.ts und ist reines `transform`.
+ */
+.flieger {
+  position: absolute;
+  left: 0;
+  bottom: 8%;
+  width: clamp(13rem, 26vw, 24rem);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.flieger img {
+  width: 100%;
+  height: auto;
+  filter: var(--schatten-speise);
+}
+
+.flieger__wort {
+  margin: 1.1rem 0 0;
+  max-width: 22ch;
+}
+
+.flieger__titel {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.3rem);
+  font-weight: 570;
+  font-variation-settings: var(--wonk-klein);
+  margin-bottom: 0.3rem;
+}
+
+.flieger__text {
+  display: block;
+  font-size: var(--text-meta);
+  color: var(--russ-mtl);
+}
+
+/* Ohne Bewegung reist nichts. Dann steht der Flieger einfach unter der Folge —
+   ersetzt, nicht gestrichen. */
+@media (prefers-reduced-motion: reduce) {
+  .flieger {
+    position: static;
+    width: min(100%, 22rem);
+    margin: clamp(2rem, 5vw, 4rem) 0 0;
+  }
 }
 
 /* ── Die Karte ────────────────────────────────────────────────────────────── */
@@ -878,15 +953,24 @@
     margin-block-end: clamp(-6rem, -6vw, -3rem);
   }
 
-  .handarbeit__wort,
-  .merkmale,
-  .handarbeit__bild--gross,
-  .handarbeit__bild--klein {
-    grid-column: 1 / -1;
-    grid-row: auto;
+  /* Am Handy wird zusammengelegt, nicht gestrichen: die Schritte behalten ihren
+     Versatz, nur kleiner, und der Flieger reist weiter — er bekommt nur weniger
+     Weg und mehr Platz, damit er die Rechtecke nicht verdeckt. */
+  .prozess__kopf { max-width: none; text-align: start; margin-inline-start: 0; }
+  .schritt { flex-direction: column; align-items: stretch; gap: 0.9rem; }
+  .schritt--1 { width: 78%; margin-inline-start: 22%; }
+  .schritt--2 { width: 70%; margin-inline-start: 8%; margin-top: -2.5rem; }
+  .schritt__wort { flex: none; padding-bottom: 0; }
+  .schritt__text { max-width: none; }
+  /* Unter 1000 px reist das Gericht nicht, es steht als letzter Schritt da —
+     zusammengelegt, nicht gestrichen. Fliegend verdeckte es auf 393 px die
+     Beschriftung des zweiten Schritts, und beides war unlesbar. */
+  .flieger {
+    position: static;
+    width: 72%;
+    margin: 1rem 0 0 6%;
   }
-  .handarbeit__bild--gross { width: min(86%, 26rem); justify-self: end; }
-  .handarbeit__bild--klein { width: min(66%, 18rem); margin-top: -3rem; justify-self: start; }
+  .flieger__wort { margin-top: 0.9rem; }
 
   .laden__bild,
   .laden__wort { grid-column: 1 / -1; }
@@ -924,7 +1008,7 @@
   /* Der Auftrag deckelt das Handy bei 10 Bildschirmhöhen. Gemessen wurde 10,1 —
      diese sechs Zeilen sind der Rest. Zusammengelegt, nicht gestrichen: kein
      Abschnitt fällt weg, sie stehen nur enger beieinander. */
-  .handarbeit__gitter { row-gap: 1.5rem; }
+  .folge { row-gap: 1.5rem; }
   .karte__kopf { margin-bottom: 1.5rem; }
   .filter { margin-bottom: 1.75rem; }
   .bestellen__wege { margin-top: 1.5rem; }

@@ -53,6 +53,34 @@ body::before {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='k'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23k)'/%3E%3C/svg%3E");
 }
 
+/**
+ * Der eingerückte Rahmen — von Yellowbird geklaut.
+ *
+ * ═══ Warum ausgerechnet diese eine Linie ═══
+ *
+ * Yellowbird zieht eine dünne schwarze Linie rings um das Fenster, ein Stück
+ * vom Rand eingerückt, und lässt sie über allem liegen: über dem Farbfeld, über
+ * den Fotos, über der Navigation. Es kostet eine Zeile CSS und macht aus einer
+ * Seite ein BLATT — etwas Gesetztes mit einem Rand, statt Inhalt, der bis an
+ * die Bildschirmkante ausläuft.
+ *
+ * Das ist der Griff, den diese Seite von Yellowbird übernimmt. NICHT übernommen
+ * wird deren Register: Knallfarbe, dicke Umrisse, Comicfiguren. Deren
+ * Selbstsicherheit kommt aus Aufdruck, Arams aus Material — dieselbe Haltung,
+ * anderes Mittel.
+ *
+ * Über allem, aber unter der Sprungmarke: wer mit der Tastatur ankommt, muss
+ * den ersten Fokus vollständig sehen.
+ */
+body::after {
+  content: '';
+  position: fixed;
+  inset: clamp(6px, 0.9vw, 13px);
+  z-index: 55;
+  border: 1px solid var(--russ);
+  pointer-events: none;
+}
+
 /* Fokus ist sichtbar, immer, in der Signalfarbe. Ein unsichtbarer Fokus ist
    hier kein Stilfehler — er macht die Seite mit der Tastatur unbenutzbar. */
 :focus-visible {

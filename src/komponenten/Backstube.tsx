@@ -74,13 +74,18 @@ export default function Backstube() {
           </div>
         </div>
 
+        {/* Freigestellt, nicht rechteckig: „Das Essen liegt nicht auf dieser
+            Seite, es schwebt darüber" — der erste Satz der Direktion, und bis
+            jetzt war er nicht eingelöst. Der Freisteller entsteht durch
+            Hintergrundentfernung an IHREM Foto; erzeugt ist daran nichts. */}
         <figure className="backstube__bild" ref={bild}>
           <img
-            src="/bilder/echt/fatayer.webp"
-            alt="Ein Fata'er von Aram, gewölbt und glänzend, dicht mit Sesam und Schwarzkümmel bestreut"
+            src="/bilder/echt/fatayer-frei.png"
+            alt="Ein Fata’er von Aram, gewölbt und glänzend, dicht mit Sesam und Schwarzkümmel bestreut"
             width={500}
             height={400}
             loading="eager"
+            fetchPriority="high"
             decoding="async"
           />
           <figcaption>Fata’er, frisch aus dem Ofen</figcaption>
