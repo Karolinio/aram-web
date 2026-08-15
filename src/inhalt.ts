@@ -34,7 +34,16 @@ export type Gruppe = {
 }
 
 export type Hinweis = {
-  aktiv: boolean
+  /**
+   * „ja" oder „nein" — kein Boolean.
+   *
+   * Der Editor baut sich aus `inhalt/schema.json`, und dort ist dieses Feld
+   * eine Auswahl mit genau diesen beiden Rubriken. Stünde hier `true`, würde
+   * der Kunde im Formular „ja" wählen, die Datei bekäme etwas anderes zu sehen
+   * als sie erwartet, und das CMS wäre an dieser Stelle eine Attrappe.
+   * `node engine/inhalt-pruefen.mjs aram` misst genau das.
+   */
+  aktiv: 'ja' | 'nein'
   text: string
   bis: string | null
 }
@@ -47,7 +56,7 @@ export const inhalt = {
 /** Ist der Hinweis heute noch gültig? Ein abgelaufener Urlaubshinweis ist schlimmer als keiner. */
 export const hinweisGilt = (heute = new Date()): boolean => {
   const h = inhalt.hinweis
-  if (!h.aktiv || !h.text.trim()) return false
+  if (h.aktiv !== 'ja' || !h.text.trim()) return false
   if (!h.bis) return true
   return new Date(h.bis) >= heute
 }

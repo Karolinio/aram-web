@@ -7,8 +7,15 @@ Essen**.
 ## Die Regel, ohne Ausnahme
 
 **Kein Bild aus diesem Ordner geht live.** Nicht als Platzhalter, nicht „für den ersten
-Entwurf", nicht „bis die echten kommen". Deshalb liegen sie in `muster/` statt in
-`bilder/`, und deshalb heissen sie `MUSTER-*`.
+Entwurf", nicht „bis die echten kommen". Deshalb heissen sie `MUSTER-*`.
+
+> **Verschoben am 15.08.2026.** Der Ordner lag vorher unter `public/bilder/muster/`.
+> Alles unter `public/` kopiert Vite unverändert in den Build — die fünf Muster waren
+> damit auf einer ausgerollten Seite unter `/bilder/muster/MUSTER-fatayer.png` öffentlich
+> abrufbar. Die Regel „geht nicht live" stand als Satz in dieser Datei und war technisch
+> nicht durchgesetzt. Jetzt liegt der Ordner ausserhalb von `public/`: er ist im Repo,
+> zum Zeigen und Vergleichen, und kommt nicht mehr in den Build.
+> Nebenbei: der Build ist dadurch von 8,7 MB auf 1,1 MB geschrumpft.
 
 Ein erzeugtes Fatayer ist eine Aussage über ein Produkt, das der Gast gleich in der Hand
 hält. Wenn die Pizza auf der Seite anders aussieht als die im Karton, ist das keine

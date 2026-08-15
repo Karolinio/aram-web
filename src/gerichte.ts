@@ -49,11 +49,28 @@ export type Slot = {
   aufnahme: string
 }
 
-/** Reihenfolge = Reihenfolge auf der Seite. Wer umsortiert, sortiert die Seite um. */
+/**
+ * Reihenfolge = Reihenfolge auf der Seite. Wer umsortiert, sortiert die Seite um.
+ *
+ * ═══ Stand 15.08.2026: kein einziger dieser Slots ist endgültig besetzt ═══
+ *
+ * Was auf der Seite steht, sind VORLÄUFIGE Bilder aus dem Scan ihrer alten
+ * Website — echte Fotos, aber in Website-Auflösung (500 px breit, Handy,
+ * Innenlicht) und ohne Freisteller:
+ *
+ *   public/bilder/echt/fatayer.webp      ihr Fata'er, steht vorläufig im Hero
+ *   public/bilder/echt/handarbeit.webp   zwei Bäcker an der Arbeitsfläche
+ *   public/bilder/echt/brueder.webp      zwei der Brüder vor dem Laden
+ *   public/bilder/echt/team-laden.webp   fünf Männer vor der Ladenfront
+ *
+ * Sie ersetzen die Slots NICHT. Für die Reise braucht es 3–4 Aufnahmen je
+ * Gericht rundherum aus derselben Kameraposition, freigestellt — das kann ein
+ * Scan einer alten Seite nicht liefern, und deshalb ist die Reise nicht gebaut.
+ */
 export const SLOTS: Slot[] = [
   {
     id: 'ofen-feuer',
-    name: 'Der Ofen',
+    name: 'Die Backstube',
     sektion: 'ofen',
     verhaeltnis: 1.78,
     breiteVw: 100,
@@ -61,9 +78,16 @@ export const SLOTS: Slot[] = [
     drehung: [0, 0],
     fortschritt: [0, 1],
     freisteller: false,
+    /* Umgeschrieben am 15.08.2026 mit Fassung 2. Vorher stand hier „dunkel ist
+       gut — die Seite ist ohnehin dunkel". Diese Seite gibt es nicht mehr. Eine
+       Fotoanweisung, die eine tote Direktion beschreibt, schickt jemanden mit
+       der Kamera in die falsche Richtung. */
     aufnahme:
-      'Der Ofen mit Feuer, quer. Wird der Hintergrund der Startseite. Dunkel ist gut — ' +
-      'die Seite ist ohnehin dunkel, und die Glut soll die einzige helle Stelle sein.',
+      'Die Backstube am Vormittag, quer. Wird der randlose Hintergrund der Startseite, ' +
+      'mit einem Cremeschleier darüber. HELL ist gut: offenes Fenster, Licht auf der ' +
+      'Arbeitsfläche, Mehl auf dem Holz. Kein Blitz, keine Deckenlampe als einzige ' +
+      'Quelle. Solange dieses Bild fehlt, steht dort eine erzeugte Mehl-auf-Holz-Textur ' +
+      '— Material ohne erkennbaren Ort, und ausdrücklich nicht ihr Laden.',
   },
   {
     id: 'fatayer-hero',

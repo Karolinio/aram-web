@@ -1,88 +1,199 @@
-import Sektion from './ui/Sektion.tsx'
-import { inhalt } from '../inhalt.ts'
+import { useMemo, useState } from 'react'
+
+import { inhalt, type Gericht } from '../inhalt.ts'
+import { anzahlVon, minus, plus } from '../bestellung.ts'
+import { useBestellung } from '../useBestellung.ts'
 
 /**
- * Sektion 4 — Die Karte.
+ * Die Speisekarte — ein Werkzeug, kein Aushang.
  *
- * Das meistbesuchte Element jeder Gastro-Seite. Deshalb bekommt es hier die grösste
- * handwerkliche Sorgfalt, obwohl es die flachste Sektion ist: Zahlenkolonne bündig,
- * Gerichtname gross, Preis klein und ruhig daneben — von der Speisekarte an der Wand
- * geklaut. Eine Seite, die den Preis grösser setzt als das Essen, verkauft Preise.
+ * ═══ Warum der Allergenfilter hier steht und nicht in einer Fussnote ═══
  *
- * ═══ Zwei Dinge, die hier NICHT erfunden werden ═══
+ * Allergene sind Pflicht, sobald Preise online stehen (LMIV) — der häufigste
+ * Grund, warum Gastro-Seiten Post vom Ordnungsamt bekommen. Diese Seite macht
+ * aus der Pflichtangabe einen Vorteil: für jemanden mit Nussallergie ist der
+ * Filter der Grund, hier zu bestellen statt woanders.
  *
- * `preis: null` heisst: der Preis fehlt noch, und die Seite ZEIGT das. Ein erfundener
- * Preis auf einer Speisekarte ist keine Lücke, sondern eine Falschangabe — und der
- * Gast steht damit an der Theke.
+ * Kein Dialogfenster, kein Aufklappen. Die Karte bleibt stehen und wird kürzer.
  *
- * `allergene` ist Pflicht, sobald Preise online stehen (LMIV). Ein leeres Feld ist
- * hier ein Befund, kein Zustand — deshalb steht es sichtbar da und nicht im Fussnoten-
- * Kleingedruckten.
+ * ═══ Jedes Gericht hat eine eigene Adresse ═══
  *
- * Inhalt kommt aus `inhalt/speisekarte.json`, `ziel: inhalt.speisekarte`. Der Kunde
- * pflegt ihn selbst — genau deshalb, weil Preise sich ändern.
+ * `#kaeseschiffchen` als Anker, mit `scroll-margin-top`, damit es unter der
+ * Kopfzeile nicht abgeschnitten steht. Wer den Link in WhatsApp schickt, landet
+ * auf dem Gericht und nicht auf dem Seitenanfang.
  */
+
+/** So werden die Filterknöpfe sortiert. Was nicht vorkommt, wird nicht angeboten. */
+const REIHENFOLGE = ['Gluten', 'Milch', 'Ei', 'Sesam', 'Nüsse', 'Soja', 'Senf']
+
+/** "Fatayer mit Käse" → "fatayer-mit-kaese". Wird zur Adresse des Gerichts. */
+export const kennung = (name: string): string =>
+  name
+    .toLowerCase()
+    .replace(/ä/g, 'ae')
+    .replace(/ö/g, 'oe')
+    .replace(/ü/g, 'ue')
+    .replace(/ß/g, 'ss')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+
 export default function Karte() {
+  const [versteckt, setVersteckt] = useState<string[]>([])
+  useBestellung() /* neu rendern, sobald sich die Auswahl ändert */
+
+  /* Nur Allergene anbieten, die auf dieser Karte wirklich vorkommen. Ein Knopf
+     „Nüsse", der nichts ausblendet, weil kein Gericht Nüsse enthält, sieht aus
+     wie ein kaputter Filter. */
+  const allergene = useMemo(() => {
+    const alle = new Set(inhalt.speisekarte.flatMap((g) => g.gerichte).flatMap((g) => g.allergene))
+    return [...alle].sort((a, b) => {
+      const ia = REIHENFOLGE.indexOf(a)
+      const ib = REIHENFOLGE.indexOf(b)
+      return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib)
+    })
+  }, [])
+
+  const zeigt = (g: Gericht) => !g.allergene.some((a) => versteckt.includes(a))
+
   const gruppen = inhalt.speisekarte
-  const offen = gruppen.flatMap((g) => g.gerichte).filter((g) => g.preis === null).length
+    .map((gr) => ({ ...gr, gerichte: gr.gerichte.filter(zeigt) }))
+    .filter((gr) => gr.gerichte.length > 0)
+
+  const gesamt = inhalt.speisekarte.reduce((s, g) => s + g.gerichte.length, 0)
+  const sichtbar = gruppen.reduce((s, g) => s + g.gerichte.length, 0)
+  const ohnePreis = inhalt.speisekarte
+    .flatMap((g) => g.gerichte)
+    .filter((g) => g.preis === null).length
+
+  const umschalten = (a: string) =>
+    setVersteckt((v) => (v.includes(a) ? v.filter((x) => x !== a) : [...v, a]))
 
   return (
-    <Sektion id="karte" className="karte" aria-labelledby="karte-titel">
+    <section className="karte" id="karte" aria-labelledby="karte-titel">
       <div className="schale">
         <header className="karte__kopf">
-          <p className="augenbraue">Speisekarte</p>
-          <h2 id="karte-titel">Was heute im Ofen ist.</h2>
-          {offen > 0 && (
-            <p className="karte__offen">
-              <span className="luecke">{offen} Preise fehlen noch</span>{' '}
-              <span className="leise">
-                — kommen von Aram, sobald das Foto der Karte da ist.
-              </span>
+          <span className="augenbraue">Speisekarte</span>
+          <h2 id="karte-titel">Was es gibt</h2>
+          {ohnePreis > 0 && (
+            <p className="karte__preishinweis">
+              <span className="luecke">Die Preise tragen wir nach</span> — sie liegen uns noch
+              nicht vor. Am Telefon nennen wir sie dir sofort.
             </p>
           )}
         </header>
 
-        <div className="karte__gruppen">
-          {gruppen.map((g) => (
-            <section key={g.gruppe} className="karte__gruppe" aria-label={g.gruppe}>
-              <div className="karte__gruppenkopf">
-                <h3>{g.gruppe}</h3>
-                <p className="leise karte__gruppenhinweis">{g.hinweis}</p>
-              </div>
-
-              <ul className="karte__liste">
-                {g.gerichte.map((gericht) => (
-                  <li key={gericht.name} className="karte__zeile">
-                    <div className="karte__wort">
-                      <span className="karte__gericht">{gericht.name}</span>
-                      <span className="leise karte__beschreibung">{gericht.beschreibung}</span>
-                      {gericht.allergene.length > 0 && (
-                        <span className="karte__allergene">
-                          Enthält: {gericht.allergene.join(' · ')}
-                        </span>
-                      )}
-                    </div>
-                    <span className="karte__punkte" aria-hidden="true" />
-                    {gericht.preis === null ? (
-                      <span className="luecke karte__preis">?</span>
-                    ) : (
-                      <span className="preis karte__preis">
-                        {gericht.preis.toFixed(2).replace('.', ',')} €
-                      </span>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </section>
-          ))}
+        <div className="filter">
+          <p className="filter__titel" id="filter-titel">
+            Enthält etwas, das du nicht verträgst? Tipp es an — dann verschwindet es.
+          </p>
+          <div className="filter__knoepfe" role="group" aria-labelledby="filter-titel">
+            {allergene.map((a) => (
+              <button
+                key={a}
+                type="button"
+                className="filter__knopf"
+                aria-pressed={versteckt.includes(a)}
+                onClick={() => umschalten(a)}
+              >
+                {versteckt.includes(a) ? 'ohne ' : ''}
+                {a}
+              </button>
+            ))}
+            {versteckt.length > 0 && (
+              <button
+                type="button"
+                className="filter__zuruecksetzen"
+                onClick={() => setVersteckt([])}
+              >
+                Alles wieder zeigen
+              </button>
+            )}
+          </div>
+          {/* Live gemeldet, damit auch ohne Blick auf die Liste klar ist, was der
+              Knopf getan hat. Ein Filter, dessen Wirkung man nicht hört, ist für
+              einen Screenreader ein Knopf ohne Funktion. */}
+          <p className="filter__stand" role="status">
+            {versteckt.length === 0
+              ? `${gesamt} Gerichte`
+              : `${sichtbar} von ${gesamt} Gerichten · ausgeblendet: ${versteckt.join(', ')}`}
+          </p>
         </div>
 
-        <p className="leise karte__fuss">
-          Alle Angaben zu Allergenen sind Pflichtangaben nach der
-          Lebensmittelinformations-Verordnung. Bei Fragen zu Zusatzstoffen fragt bitte
-          im Laden — wir sagen euch genau, was drin ist.
-        </p>
+        {sichtbar === 0 ? (
+          <p className="karte__leer">
+            Mit dieser Auswahl bleibt nichts übrig. Ruf uns an — wir finden trotzdem etwas.
+          </p>
+        ) : (
+          <div className="karte__gruppen">
+            {gruppen.map((gr) => (
+            <div className="gruppe" key={gr.gruppe}>
+              <h3 className="gruppe__titel">{gr.gruppe}</h3>
+              {gr.hinweis && <p className="gruppe__hinweis">{gr.hinweis}</p>}
+
+              <ul className="gruppe__liste">
+                {gr.gerichte.map((g) => {
+                  const id = kennung(g.name)
+                  const anzahl = anzahlVon(g.name)
+                  return (
+                    <li className="zeile" id={id} key={id}>
+                      <div className="zeile__wort">
+                        <p className="zeile__name">{g.name}</p>
+                        <p className="zeile__beschreibung">{g.beschreibung}</p>
+                        <p className="zeile__allergene">
+                          <span className="visuell-versteckt">Enthält: </span>
+                          {g.allergene.join(' · ')}
+                        </p>
+                      </div>
+
+                      {/* Ein blosser Gedankenstrich ist in einer Tabelle die
+                          Konvention für „kein Wert" — am Handy steht er aber in
+                          einer eigenen Zeile und liest sich dort als Fehler.
+                          Zwei Wörter lesen sich als Absicht. */}
+                      <p className={g.preis === null ? 'preis preis--folgt' : 'preis'}>
+                        {g.preis === null
+                          ? 'Preis folgt'
+                          : g.preis.toFixed(2).replace('.', ',') + ' €'}
+                      </p>
+
+                      <div className="zaehler">
+                        {anzahl > 0 && (
+                          <>
+                            <button
+                              type="button"
+                              className="zaehler__knopf"
+                              onClick={() => minus(g.name)}
+                            >
+                              <span aria-hidden="true">−</span>
+                              <span className="visuell-versteckt">
+                                {g.name}: eins weniger
+                              </span>
+                            </button>
+                            <span className="zaehler__stand" aria-hidden="true">
+                              {anzahl}
+                            </span>
+                          </>
+                        )}
+                        <button
+                          type="button"
+                          className="zaehler__knopf zaehler__knopf--plus"
+                          onClick={() => plus(g.name)}
+                        >
+                          <span aria-hidden="true">+</span>
+                          <span className="visuell-versteckt">
+                            {g.name} zur Bestellung hinzufügen
+                            {anzahl > 0 ? `, aktuell ${anzahl}` : ''}
+                          </span>
+                        </button>
+                      </div>
+                    </li>
+                  )
+                })}
+              </ul>
+            </div>
+            ))}
+          </div>
+        )}
       </div>
-    </Sektion>
+    </section>
   )
 }

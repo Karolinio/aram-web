@@ -11,6 +11,8 @@
  * einer verschlossenen Tuer.
  */
 
+import { ZEITEN } from './oeffnung.ts'
+
 export type Luecke = null
 
 export const ARAM = {
@@ -37,8 +39,11 @@ export const ARAM = {
     maps: null as string | Luecke,
   },
 
-  /* Aus dem Bogen: keine Zeiten auf der alten Seite auffindbar. */
-  zeiten: null as { tag: string; von: string; bis: string }[] | Luecke,
+  /* Die Öffnungszeiten stehen NICHT hier, sondern in `inhalt/zeiten.json`.
+     Grund: die Seite rechnet daraus live, ob gerade offen ist, und diese Zahl
+     ändert sich häufiger als alles andere auf dieser Seite. Zwei Quellen für
+     dieselbe Angabe wären genau die Art von Drift, die einen Gast vor eine
+     verschlossene Tür schickt. Siehe src/oeffnung.ts. */
 
   bestellen: {
     /* Demo-Schalter. Solange `false`, wird der Bereich als VORSCHAU gezeigt und ist
@@ -53,7 +58,13 @@ export const ARAM = {
   },
 
   recht: {
-    /* Ohne diese vier geht die Seite nicht live. Absichtlich null. */
+    /* Ohne diese vier geht die Seite nicht live. Absichtlich null.
+
+       SPUR, nicht Wahrheit: auf ihrem eigenen Logo steht „Aram Pizzeria &
+       gastronomie GmbH". Das ist ein starker Hinweis auf die Rechtsform, aber
+       ein Logo ist kein Registereintrag. Bevor das hier eingetragen wird, muss
+       jemand ins Handelsregister sehen — ein falscher Firmenname im Impressum
+       ist genau der Fehler, den ein Impressum verhindern soll. */
     firma: null as string | Luecke,
     inhaber: null as string | Luecke,
     anschrift: null as string | Luecke,
@@ -70,7 +81,7 @@ export const ARAM = {
 export const lueckenVorLive = (): string[] => {
   const l: string[] = []
   if (!ARAM.ort.strasse) l.push('Anschrift')
-  if (!ARAM.zeiten) l.push('Öffnungszeiten')
+  if (ZEITEN.length === 0) l.push('Öffnungszeiten')
   if (!ARAM.recht.firma) l.push('Impressum: Firma')
   if (!ARAM.recht.anschrift) l.push('Impressum: ladungsfähige Anschrift')
   if (!ARAM.kontakt.mail) l.push('E-Mail für Anfragen')

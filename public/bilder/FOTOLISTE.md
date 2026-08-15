@@ -5,12 +5,17 @@ anpasst, ändert es beim nächsten Erzeugen wieder zurück. Die Wahrheit steht i
 
 Dateiname jeweils: `public/bilder/<kennung>.webp`
 
-## Der Ofen
+> **Stand 15.08.2026.** Auf der Seite stehen zurzeit vier echte Fotos aus dem Scan eurer
+> alten Website (Fata'er, Arbeitsfläche, zwei Brüder, Team vor dem Laden). Die sind nur
+> 500 px breit und keine Freisteller — sie halten den Platz warm und werden durch die
+> Aufnahmen aus dieser Liste ersetzt. Kein Slot unten ist damit erledigt.
+
+## Die Backstube
 
 - **Datei:** `ofen-feuer.webp`
 - **Art:** rechteckiges Foto
 - **Seitenverhältnis:** 1.78 : 1 · Breite 100 vw
-- **So aufnehmen:** Der Ofen mit Feuer, quer. Wird der Hintergrund der Startseite. Dunkel ist gut — die Seite ist ohnehin dunkel, und die Glut soll die einzige helle Stelle sein.
+- **So aufnehmen:** Die Backstube am Vormittag, quer. Wird der randlose Hintergrund der Startseite, mit einem Cremeschleier darüber. HELL ist gut: offenes Fenster, Licht auf der Arbeitsfläche, Mehl auf dem Holz. Kein Blitz, keine Deckenlampe als einzige Quelle.
 
 ## "Fataer"
 

@@ -1,0 +1,247 @@
+@import './tokens.css';
+
+/**
+ * Die Grundlage: Reset, Typografie, Knöpfe, Lücken.
+ *
+ * Fassung 1 hatte hier eine Klasse für durchscheinende Karten mit Weichzeichner.
+ * Die ist ersatzlos weg — nicht auskommentiert, weg. Wer eine durchscheinende
+ * Fläche stehen lässt, baut halb Ofen und halb Backstube.
+ */
+
+/* ── Reset ────────────────────────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+* { margin: 0; }
+
+html {
+  scroll-behavior: auto; /* Lenis übernimmt. Beides gleichzeitig ruckelt. */
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--creme);
+  color: var(--russ);
+  font-family: var(--font-text);
+  font-size: var(--text-base);
+  line-height: var(--leading-text);
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+img, video, svg { display: block; max-width: 100%; }
+button, input, textarea, select { font: inherit; color: inherit; }
+
+/**
+ * Papierkorn, 3 %.
+ *
+ * Mehl ist nicht glatt. Ein völlig ebener Cremegrund sieht aus wie eine
+ * Füllfarbe; drei Prozent Korn machen daraus eine Fläche. Erzeugt als SVG-
+ * Rauschen im Dokument, nicht als PNG über der Seite — ein Bild über einer
+ * Seite sieht immer aus wie ein Bild über einer Seite.
+ */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='k'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23k)'/%3E%3C/svg%3E");
+}
+
+/* Fokus ist sichtbar, immer, in der Signalfarbe. Ein unsichtbarer Fokus ist
+   hier kein Stilfehler — er macht die Seite mit der Tastatur unbenutzbar. */
+:focus-visible {
+  outline: 2px solid var(--terra);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.sprung {
+  position: absolute;
+  left: var(--rinne);
+  top: -100vh;
+  z-index: 60;
+  background: var(--terra);
+  color: var(--papier);
+  padding: 0.7em 1.2em;
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-decoration: none;
+}
+.sprung:focus-visible { top: 0.6rem; }
+
+/* ── Typografie ───────────────────────────────────────────────────────────── */
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: var(--leading-kopf);
+  letter-spacing: var(--sperr-kopf);
+  text-wrap: balance;
+  font-variation-settings: 'wdth' 112, 'opsz' 48;
+}
+
+h1 {
+  font-size: var(--text-hero);
+  line-height: var(--leading-eng);
+  letter-spacing: var(--sperr-hero);
+  font-variation-settings: 'wdth' 120, 'opsz' 96;
+}
+
+h2 { font-size: var(--text-sektion); }
+h3 { font-size: var(--text-gericht); font-variation-settings: 'wdth' 108, 'opsz' 24; }
+
+p { max-width: var(--breite-satz); }
+
+a { color: var(--terra); text-underline-offset: 0.2em; }
+
+/* Die Augenbraue über einer Überschrift. Versalien, weit gesperrt, klein —
+   von der Speisekarte an der Wand geklaut, nicht von einer Software-Marke. */
+.augenbraue {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--text-micro);
+  font-weight: 700;
+  letter-spacing: var(--sperr-label);
+  text-transform: uppercase;
+  color: var(--terra);
+  font-variation-settings: 'wdth' 100;
+  margin-bottom: 0.9rem;
+}
+
+.lead {
+  font-size: var(--text-lead);
+  max-width: var(--breite-satz-eng);
+}
+
+.leise { color: var(--russ-mtl); }
+
+/* Preise. Eine Zahlenkolonne, die wackelt, sieht selbstgemacht aus. */
+.preis {
+  font-variant-numeric: tabular-nums;
+  font-family: var(--font-display);
+  font-size: var(--text-meta);
+  font-weight: 600;
+  color: var(--russ-mtl);
+  white-space: nowrap;
+  font-variation-settings: 'wdth' 100;
+}
+
+/* ── Aufbau ───────────────────────────────────────────────────────────────── */
+
+.schale {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: var(--schale);
+  margin-inline: auto;
+  padding-inline: var(--rinne);
+}
+
+.spalte { width: 100%; max-width: var(--spalte); }
+
+section {
+  position: relative;
+  padding-block: var(--raum-sektion);
+}
+
+/* Sprungmarken landen unter der Kopfzeile, nicht darunter abgeschnitten. */
+[id] { scroll-margin-top: calc(var(--kopf-hoehe) + 1.5rem); }
+
+/* ── Knöpfe ───────────────────────────────────────────────────────────────── */
+
+.knopf {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55em;
+  min-height: 44px; /* Tippziel. Am Handy wird mit einer Hand bestellt. */
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.0625rem;
+  letter-spacing: -0.01em;
+  padding: 0.75em 1.4em;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  background: var(--terra);
+  color: var(--papier); /* 8,47 gegen Terrakotta — AAA */
+  transition:
+    transform var(--dauer-mikro) var(--ease-teig),
+    background-color var(--dauer-mikro) var(--ease-teig);
+}
+/**
+ * Hebungen nur für echte Zeiger.
+ *
+ * Auf einem Touchgerät gibt es kein Überfahren. Was der Browser dort trotzdem
+ * als `:hover` auslöst, ist der Tipp selbst — und der Zustand bleibt danach
+ * hängen, bis irgendwo anders hingetippt wird. Ein Knopf, der nach dem Antippen
+ * dauerhaft angehoben stehen bleibt, sieht kaputt aus.
+ */
+@media (hover: hover) {
+  .knopf:hover { transform: translateY(-2px); }
+}
+
+/* Ihr Orange als Fläche, mit dunkler Schrift darauf. Die einzige erlaubte
+   Verwendung von --glut auf einem Bedienelement — und die Schrift ist groß
+   genug für die gemessenen 4,97. */
+.knopf--glut {
+  background: var(--glut);
+  color: var(--russ);
+}
+
+.knopf--leise {
+  background: transparent;
+  color: var(--russ);
+  border-color: var(--linie);
+}
+.knopf--leise:hover { border-color: var(--terra); color: var(--terra); }
+
+/* Ein Knopf, der noch nichts tut, sieht auch so aus und ist nicht anklickbar.
+   Ein toter Bestellknopf kostet eine Bestellung, nicht einen Klick. */
+.knopf[aria-disabled='true'] {
+  background: transparent;
+  border-color: var(--linie);
+  color: var(--russ-mtl);
+  cursor: default;
+  pointer-events: none;
+}
+
+/* ── Lücken sichtbar machen ───────────────────────────────────────────────── */
+
+/**
+ * Was noch fehlt, wird GEZEIGT statt erfunden.
+ *
+ * Kein gestrichelter Kasten — der war Fassung 1 und sah aus wie ein Grundriss.
+ * Stattdessen eine ruhige Zeile in Terrakotta mit einer Haarlinie darunter:
+ * lesbar als Hinweis an Karol, nicht als kaputtes Layout.
+ */
+.luecke {
+  display: inline-block;
+  color: var(--terra);
+  font-family: var(--font-display);
+  font-size: var(--text-meta);
+  font-weight: 600;
+  border-bottom: 1px solid var(--terra);
+  padding-bottom: 1px;
+}
+
+/* ── Bewegung ─────────────────────────────────────────────────────────────── */
+
+/* Jede Bewegung hat einen stehenden Ersatz — nicht abgeschaltet, ERSETZT.
+   Eine Bewegung, die etwas erklärt hat, hinterlässt ersatzlos ein Loch. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .knopf:hover { transform: none; }
+}

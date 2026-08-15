@@ -1,0 +1,22 @@
+{
+  "_": [
+    "Öffnungszeiten. Die Seite RECHNET daraus live, ob gerade offen ist.",
+    "",
+    "Solange `tage` leer ist, steht auf der Seite GAR NICHTS zum Thema Öffnung —",
+    "keine Zeiten, kein Punkt, keine Vermutung. Ein Gast, der wegen einer",
+    "erfundenen Öffnungszeit vor verschlossener Tür steht, kommt nicht wieder.",
+    "",
+    "Format je Eintrag:",
+    "  tag: 0 = Sonntag, 1 = Montag ... 6 = Samstag",
+    "  von / bis: \"HH:MM\" in Ortszeit Berlin.",
+    "",
+    "Mehrere Einträge pro Tag sind erlaubt — für eine Mittagspause einfach zwei",
+    "Zeilen mit demselben `tag`. Geht `bis` über Mitternacht, wird richtig",
+    "gerechnet (z. B. von 18:00 bis 01:00).",
+    "",
+    "Beispiel, wie es aussehen wird — NICHT übernehmen, sondern durch die echten",
+    "Zeiten ersetzen:",
+    "  { \"tag\": 1, \"von\": \"11:00\", \"bis\": \"22:00\" }"
+  ],
+  "tage": []
+}

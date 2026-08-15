@@ -1,351 +1,930 @@
-/* Die Sektionen. Alle Werte kommen aus tokens.css. */
+/**
+ * Die Sektionen.
+ *
+ * ═══ Die eine Regel, die diese Datei zusammenhält ═══
+ *
+ * Tiefe entsteht durch ÜBERLAPPUNG und GRÖSSE. Es gibt in dieser Datei keinen
+ * Weichzeichner, keine durchscheinende Karte und keinen Schlagschatten unter
+ * einem Kasten. Der einzige Schatten der ganzen Seite ist `--schatten-speise`,
+ * und der gehört einem freigestellten Gericht — davon gibt es noch keins.
+ *
+ * Wo Kanten nötig sind, sind es Haarlinien: 1px `--linie`. Wie auf einer
+ * gedruckten Speisekarte.
+ */
 
-/* ── Sprungmarke ──────────────────────────────────────────────────────────── */
-.sprung {
+/* ── Werkzeug ─────────────────────────────────────────────────────────────── */
+
+.visuell-versteckt {
   position: absolute;
-  left: -9999px;
-  z-index: 100;
-  padding: 0.75em 1.25em;
-  background: var(--glut);
-  color: var(--kohle);
-  border-radius: 0 0 8px 0;
-  font-family: var(--font-display);
-  font-weight: 700;
-  text-decoration: none;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }
-.sprung:focus { left: 0; top: 0; }
 
-/* ── Mehlstaub ────────────────────────────────────────────────────────────── */
 .mehlstaub {
   position: fixed;
   inset: 0;
-  z-index: 1;
+  z-index: 3;
   pointer-events: none;
-  mix-blend-mode: screen;
-  opacity: 0.7;
 }
 
-/* ── Hinweisband + Kopfzeile ──────────────────────────────────────────────── */
-.band {
+/* ── Öffnungsstatus ───────────────────────────────────────────────────────── */
+
+.oeffnung {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-meta);
+  font-weight: 600;
+  font-variation-settings: 'wdth' 100;
+  color: var(--russ);
+  max-width: none;
+}
+
+.oeffnung__punkt {
+  flex: none;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--terra);
+}
+
+/* Grün heisst auf dieser Seite nichts — die Palette kennt kein Grün. Der
+   Unterschied zwischen offen und zu ist der Puls, nicht die Farbe. */
+.oeffnung[data-art='offen'] .oeffnung__punkt {
+  animation: puls 2.6s var(--ease-teig) infinite;
+}
+.oeffnung[data-art='zu'] .oeffnung__punkt {
+  background: var(--linie);
+  border: 1px solid var(--russ-mtl);
+}
+
+@keyframes puls {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .oeffnung[data-art='offen'] .oeffnung__punkt { animation: none; }
+}
+
+/* ── Hinweisband ──────────────────────────────────────────────────────────── */
+
+.hinweisband {
   position: relative;
-  z-index: 30;
+  z-index: 41;
+  background: var(--creme-tief);
+  border-bottom: 1px solid var(--linie);
+}
+
+.hinweisband__zeile {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.7em;
-  padding: 0.65em var(--gutter);
-  background: color-mix(in oklch, var(--glut) 16%, var(--kohle));
-  border-bottom: 1px solid var(--glas-kante);
-  color: var(--asche);
-  font-size: var(--text-meta);
-  text-align: center;
+  gap: 0.7rem;
+  padding-block: 0.6rem;
 }
-.band__punkt {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: var(--glut);
+
+.hinweisband__punkt {
   flex: none;
-  box-shadow: 0 0 0 4px color-mix(in oklch, var(--glut) 22%, transparent);
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--terra);
 }
+
+.hinweisband__text {
+  margin: 0;
+  max-width: none;
+  font-size: var(--text-meta);
+  color: var(--russ);
+}
+
+/* ── Kopfzeile ────────────────────────────────────────────────────────────── */
 
 .kopf {
   position: sticky;
   top: 0;
-  z-index: 25;
-  transition: background var(--dauer-mikro), backdrop-filter var(--dauer-mikro),
-    border-color var(--dauer-mikro);
-  border-bottom: 1px solid transparent;
+  z-index: 40;
+  /* Deckend, nicht durchscheinend. Eine Kopfzeile, durch die man die Seite
+     schimmern sieht, braucht einen Weichzeichner — und den gibt es hier nicht. */
+  background: var(--creme);
+  border-bottom: 1px solid var(--linie);
 }
-/* Die Ofentuer wird beim Scrollen dichter. Vorher liegt sie ueber dem Feuer und
-   darf durchsichtig sein — genau die Regel „Glas nur ueber etwas Bewegtem". */
-.kopf.ist-dicht {
-  background: var(--glas-fond);
-  backdrop-filter: var(--glas-unschaerfe);
-  -webkit-backdrop-filter: var(--glas-unschaerfe);
-  border-bottom-color: var(--glas-kante);
-}
-.kopf__reihe {
-  display: flex;
-  align-items: center;
-  gap: clamp(1rem, 3vw, 2.5rem);
-  padding-block: 0.9rem;
-}
-.kopf__marke {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 1.5rem;
-  letter-spacing: 0.02em;
-  font-variation-settings: 'wdth' 120;
-  color: var(--asche);
-  text-decoration: none;
-  margin-right: auto;
-}
-.kopf__nav { display: flex; gap: clamp(0.9rem, 2vw, 1.8rem); }
-.kopf__nav a {
-  color: var(--asche-mtl);
-  text-decoration: none;
-  font-size: var(--text-meta);
-  padding-block: 0.35em;
-  border-bottom: 2px solid transparent;
-  transition: color var(--dauer-mikro), border-color var(--dauer-mikro);
-}
-.kopf__nav a:hover { color: var(--asche); }
-.kopf__nav a[aria-current='true'] { color: var(--glut-hell); border-bottom-color: var(--glut); }
-.kopf__knopf { padding: 0.6em 1.15em; font-size: 0.9375rem; }
-@media (max-width: 720px) { .kopf__nav { display: none; } }
 
-/* ── Sektion 1 · Der Ofen ─────────────────────────────────────────────────── */
-.ofen {
-  position: relative;
-  min-height: 100svh;
+.kopf__zeile {
   display: flex;
   align-items: center;
-  padding-block: clamp(4rem, 10vh, 8rem);
-  overflow: hidden;
+  gap: clamp(0.75rem, 2vw, 2rem);
+  min-height: var(--kopf-hoehe);
 }
-.ofen__grund { position: absolute; inset: 0; z-index: 0; }
-.ofen__feuer { position: absolute; inset: 0; width: 100% !important; height: 100%; }
-.ofen__feuer .umriss { border-radius: 0; }
-/* Die Glut: eine Lichtquelle, unten. Atmet langsam. */
-.ofen__glut {
+
+.kopf__marke { display: flex; flex: none; }
+
+/* Ihr Logo bekommt eine feste kleine Höhe und wird nirgends vergrössert.
+   38 px, nicht 28: bei 28 war die Wortmarke ein roter Fleck, und ein Logo, das
+   man nicht lesen kann, erfüllt seinen einzigen Zweck nicht — ihre Kunden
+   sollen es vom Ladenschild wiedererkennen. */
+.kopf__logo {
+  height: 38px;
+  width: auto;
+}
+
+.kopf__navi {
+  display: flex;
+  gap: clamp(1rem, 2vw, 1.8rem);
+  margin-inline-end: auto;
+}
+
+.kopf__anker {
+  font-family: var(--font-display);
+  font-size: var(--text-meta);
+  font-weight: 600;
+  font-variation-settings: 'wdth' 100;
+  color: var(--russ);
+  text-decoration: none;
+  padding-block: 0.4rem;
+  border-bottom: 2px solid transparent;
+}
+.kopf__anker:hover { color: var(--terra); }
+.kopf__anker[aria-current='true'] {
+  color: var(--terra);
+  border-bottom-color: var(--terra);
+}
+
+.kopf__anruf { padding: 0.5em 1.1em; font-size: var(--text-meta); }
+.kopf__anruf-kurz { display: none; }
+
+/* Die kurze Fassung des Status ist am Rechner überflüssig. */
+.kopf__oeffnung-kurz { display: none; }
+
+/* ── Die Backstube ────────────────────────────────────────────────────────── */
+
+.backstube {
+  position: relative;
+  /* Über dem Band, damit das Foto darüber liegen kann statt darunter zu
+     verschwinden. Ohne diese Zeile schneidet die orange Fläche es ab. */
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  min-height: 84svh;
+  /* Der untere Innenabstand ist klein, weil das Foto ihn sonst nur auffüllt
+     statt über die Kante zu ragen. Gemessen: mit 9rem blieben 11 px Überlappung
+     übrig — also gar keine. */
+  padding-block: clamp(3rem, 2rem + 4vw, 6rem) clamp(2rem, 1rem + 4vw, 4rem);
+}
+
+/* Geklippt wird nur der Grund, nicht die Sektion. Läge das `clip` auf der
+   Sektion, wäre die Überlappung des Fotos nach unten abgeschnitten — und genau
+   diese Überlappung IST die Tiefe dieser Seite. */
+.backstube__grund { position: absolute; inset: 0; z-index: 0; overflow: clip; }
+
+.backstube__grund img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 60% 40%;
+}
+
+/**
+ * Der Cremeschleier.
+ *
+ * Eine deckende Fläche mit Alpha, kein Weichzeichner. Er ist links dichter, wo
+ * die Schrift steht, und rechts dünner, wo das Foto atmen darf. Das ist der
+ * Unterschied zwischen Papier und einer durchscheinenden Scheibe: die Struktur
+ * des Fotos bleibt stehen, nur sein Kontrast geht zurück.
+ */
+.backstube__schleier {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(120% 70% at 50% 118%,
-      color-mix(in oklch, var(--glut) 42%, transparent) 0%,
-      transparent 62%),
-    linear-gradient(to top, var(--kohle) 4%, transparent 55%);
-  animation: atmen 8s ease-in-out infinite;
+    linear-gradient(
+      100deg,
+      var(--schleier-dicht) 0%,
+      var(--schleier-dicht) 34%,
+      var(--schleier) 68%,
+      var(--schleier) 100%
+    );
 }
-@keyframes atmen { 0%, 100% { opacity: 0.86; } 50% { opacity: 1; } }
 
-.ofen__buehne {
+.backstube__gitter {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  align-items: center;
+  gap: clamp(2rem, 4vw, 4rem);
+}
+
+.backstube__unter {
+  margin-top: 0.9rem;
+  font-family: var(--font-display);
+  font-size: clamp(0.9rem, 0.8rem + 0.4vw, 1.1rem);
+  font-weight: 700;
+  font-variation-settings: 'wdth' 100;
+  letter-spacing: var(--sperr-label);
+  text-transform: uppercase;
+  color: var(--terra);
+  max-width: none;
+}
+
+.backstube__lead { margin-top: clamp(1.5rem, 3vw, 2.5rem); }
+.backstube__oeffnung { margin-top: 1.4rem; }
+
+.backstube__knoepfe {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.6rem;
+}
+
+/* Das Foto ragt nach unten aus der Sektion heraus und überlappt die nächste.
+   Diese Überlappung IST die Tiefe — sie ersetzt den Schatten, den es nicht gibt. */
+.backstube__bild {
   position: relative;
   z-index: 2;
-  display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-  align-items: center;
-  gap: clamp(1.5rem, 4vw, 4rem);
-  perspective: 1400px;
-}
-.ofen__marke {
-  font-size: var(--text-hero);
-  line-height: 0.88;
-  margin-bottom: clamp(1rem, 2.5vw, 2rem);
-  text-transform: uppercase;
-}
-.ofen__karte { padding: clamp(1.25rem, 3vw, 2.25rem); display: grid; gap: 0.9rem; }
-.ofen__zeile { font-family: var(--font-display); font-weight: 600; letter-spacing: -0.015em; }
-.ofen__detail { font-size: var(--text-base); max-width: var(--measure-eng); }
-.ofen__knoepfe { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.4rem; }
-.ofen__gericht { display: grid; place-items: center; transform-style: preserve-3d; }
-.ofen__weiter {
-  position: absolute;
-  left: 50%; bottom: 1.6rem;
-  z-index: 3;
-  translate: -50% 0;
-}
-.ofen__weiter span {
-  display: block; width: 1px; height: 46px;
-  background: linear-gradient(to bottom, transparent, var(--glut));
-}
-@media (max-width: 900px) {
-  .ofen__buehne { grid-template-columns: 1fr; }
-  .ofen__gericht { order: -1; }
+  justify-self: end;
+  /* Unten verankert, nicht mittig. Gemessen: mittig zentriert endete das Foto
+     167 px ÜBER dem Band — der negative Aussenabstand verschob es nur innerhalb
+     der Zeile, statt es über die Kante zu schieben. Erst `end` hängt es an die
+     Unterkante, und von dort ragt es hinaus. */
+  align-self: end;
+  width: min(100%, 30rem);
+  /* Das Foto ragt weiter herunter, als die Sektion reicht, und liegt dadurch
+     auf dem orangen Band. Diese Überlappung ersetzt den Schatten, den es auf
+     dieser Seite nicht gibt. */
+  margin-block-end: clamp(-13rem, -13vw, -6rem);
 }
 
-/* ── Sektion 2 · Was es gibt ──────────────────────────────────────────────── */
-.gerichte { perspective: 1600px; }
-.gerichte__kopf { max-width: var(--measure); margin-bottom: var(--space-block); display: grid; gap: 0.9rem; }
-.gerichte__blech {
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: clamp(1rem, 2vw, 2rem) 0;
-  transform-style: preserve-3d;
-}
-/* Versetzt, nicht im Raster — ein gleichmaessiges Vierer-Raster ist die
-   Lieferando-Form, und dagegen wird hier gebaut. */
-.gerichte__platz { display: grid; justify-items: center; gap: 0.75rem; margin: 0; }
-.gerichte__platz--1 { grid-column: 1 / span 5; }
-.gerichte__platz--2 { grid-column: 7 / span 6; margin-top: clamp(1rem, 5vw, 5rem); }
-.gerichte__platz--3 { grid-column: 2 / span 4; margin-top: clamp(0.5rem, 3vw, 3rem); }
-.gerichte__platz--4 { grid-column: 8 / span 5; }
-.gerichte__name {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: var(--text-gericht);
-  letter-spacing: -0.02em;
-  display: flex; align-items: baseline; gap: 0.6em;
-}
-.gerichte__nummer {
-  font-size: var(--text-micro);
-  color: var(--glut-hell);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: var(--tracking-label);
-}
-@media (max-width: 760px) {
-  .gerichte__blech { grid-template-columns: 1fr; gap: var(--space-block); }
-  .gerichte__platz { grid-column: 1 / -1 !important; margin-top: 0 !important; }
-}
+.backstube__bild img { width: 100%; height: auto; }
 
-/* ── Sektion 3 · Das Showpiece ────────────────────────────────────────────── */
-.weg__huelle { position: relative; }
-.weg {
-  position: sticky;
-  top: 0;
-  min-height: 100svh;
+/**
+ * Die Bildunterschrift steht hier ÜBER dem Bild.
+ *
+ * Gemessen: darunter landete sie auf dem orangen Band, und `--russ-mtl` auf
+ * `--glut` kommt auf 2,2 — unlesbar. Sie nach oben zu drehen löst beides auf
+ * einmal: sie steht immer auf Creme, und die Unterkante des Fotos ist frei,
+ * um wirklich auf dem Band zu liegen. Eine Bildunterschrift über dem Bild ist
+ * eine Konvention aus dem Zeitungssatz, kein Notbehelf.
+ */
+.backstube__bild {
   display: flex;
-  align-items: center;
-  overflow: hidden;
-  perspective: 1400px;
+  flex-direction: column-reverse;
 }
-.weg--ruhig { position: static; min-height: 0; }
-.weg__buehne { display: grid; gap: clamp(1.5rem, 4vw, 3rem); width: 100%; }
-.weg__kopf { display: grid; gap: 0.6rem; }
-.weg__mitte {
+
+.backstube__bild figcaption { margin-bottom: 0.7rem; }
+.handarbeit__bild figcaption { margin-top: 0.7rem; }
+
+.backstube__bild figcaption,
+.handarbeit__bild figcaption {
+  font-size: var(--text-micro);
+  color: var(--russ-mtl);
+  letter-spacing: 0.01em;
+}
+
+/* ── Das Band: das eine gesättigte Farbfeld ───────────────────────────────── */
+
+.band {
   position: relative;
-  display: grid;
-  place-items: center;
-  min-height: clamp(220px, 38vh, 420px);
-  transform-style: preserve-3d;
+  z-index: 1;
+  background: var(--glut);
+  color: var(--russ);
+  padding-block: clamp(2rem, 1.5rem + 4vw, 5rem);
+  /* Am Handy liegt das Foto fast über die volle Breite — dort darf das Band
+     nicht hochrutschen, sonst landet es auf der Schlagzeile. */
+  margin-top: clamp(1rem, 3vw, 2rem);
 }
-.weg__zustand {
-  grid-area: 1 / 1;
-  display: grid;
-  place-items: center;
-  transition: opacity 340ms linear;
+
+/* Ab Tabletbreite rutscht das Band unter das Hero-Foto, sodass das Foto auf dem
+   Orange liegt. Gemessen: ohne diese Zeile blieb genau der positive Abstand von
+   57 px als Lücke stehen, und die Überlappung fand nicht statt. */
+@media (min-width: 1000px) {
+  .band { margin-top: clamp(-5rem, -5vw, -2rem); }
 }
-.weg__takte {
+
+/* Ruß auf Glut hält gemessen 4,97. Das reicht für Schrift dieser Grösse — und
+   deshalb steht auf dieser Fläche genau ein Satz und sonst nichts. */
+.band__satz {
+  margin: 0;
+  max-width: 20ch;
+  font-family: var(--font-display);
+  font-size: var(--text-band);
+  font-weight: 800;
+  font-variation-settings: 'wdth' 120;
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+  color: var(--russ);
+}
+
+/* ── Handarbeit: der Savor-Rhythmus ───────────────────────────────────────── */
+
+.handarbeit { padding-block: var(--raum-sektion); }
+
+.handarbeit__gitter {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: clamp(0.75rem, 2vw, 1.75rem);
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--rinne);
+  row-gap: clamp(2rem, 4vw, 4rem);
+  align-items: start;
+}
+
+.handarbeit__wort { grid-column: 1 / 6; }
+.handarbeit__wort h2 { margin-bottom: 1.2rem; }
+
+.handarbeit__bild--gross {
+  grid-column: 7 / 13;
+  grid-row: 1 / 3;
+}
+
+.merkmale {
+  grid-column: 1 / 6;
   list-style: none;
   padding: 0;
-  border-top: 1px solid var(--linie);
-  padding-top: 1.25rem;
+  margin: 0;
 }
-.weg__takte li { opacity: 0.32; transition: opacity 320ms var(--ease-schieber); }
-.weg__takte li.ist-aktiv { opacity: 1; }
-.weg__takte h3 { font-size: var(--text-gericht); margin-block: 0.15em 0.3em; }
-.weg__takte p { font-size: var(--text-meta); }
-.weg__zahl {
+
+.handarbeit__bild--klein {
+  grid-column: 4 / 9;
+  width: 74%;
+  margin-top: clamp(-6rem, -5vw, -2rem);
+}
+
+.handarbeit__bild img { width: 100%; height: auto; }
+
+/* Die Merkmalskarte steht DANEBEN, nicht auf dem Bild. Eine Beschriftung auf
+   einem Foto ist eine Sprechblase, und Sprechblasen sind der Ton einer Anzeige. */
+.merkmal {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  padding-block: 1rem;
+  border-bottom: 1px solid var(--linie);
+  transition:
+    transform var(--dauer-mikro) var(--ease-teig),
+    border-color var(--dauer-mikro) var(--ease-teig);
+}
+/* Nur für echte Zeiger — siehe grundlage.css. Auf Touch bliebe die Hebung nach
+   dem Antippen stehen. */
+@media (hover: hover) {
+  .merkmal:hover {
+    transform: translateY(calc(var(--hebung-karte) * -1));
+    border-bottom-color: var(--terra);
+  }
+}
+
+.merkmal__zahl {
+  flex: none;
   font-family: var(--font-display);
   font-size: var(--text-micro);
-  letter-spacing: var(--tracking-label);
-  color: var(--glut-hell);
+  font-weight: 700;
+  font-variation-settings: 'wdth' 100;
+  letter-spacing: var(--sperr-label);
+  color: var(--terra);
+}
+
+.merkmal__text {
+  margin: 0;
+  font-size: var(--text-lead);
+  max-width: none;
+}
+
+/* ── Die Karte ────────────────────────────────────────────────────────────── */
+
+.karte {
+  background: var(--papier);
+  border-block: 1px solid var(--linie);
+}
+
+.karte__kopf { margin-bottom: clamp(2rem, 4vw, 3rem); }
+.karte__kopf h2 { margin-bottom: 1rem; }
+.karte__preishinweis { color: var(--russ-mtl); }
+
+.filter { margin-bottom: clamp(2rem, 4vw, 3.5rem); }
+
+.filter__titel {
+  font-size: var(--text-meta);
+  color: var(--russ-mtl);
+  margin-bottom: 0.9rem;
+  max-width: var(--breite-satz);
+}
+
+.filter__knoepfe {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.filter__knopf {
+  min-height: 44px;
+  padding: 0.5em 1.1em;
+  border-radius: 999px;
+  border: 1px solid var(--linie);
+  background: transparent;
+  color: var(--russ);
+  font-family: var(--font-display);
+  font-size: var(--text-meta);
+  font-weight: 600;
+  font-variation-settings: 'wdth' 100;
+  cursor: pointer;
+  transition:
+    border-color var(--dauer-mikro) var(--ease-teig),
+    color var(--dauer-mikro) var(--ease-teig);
+}
+.filter__knopf:hover { border-color: var(--terra); color: var(--terra); }
+
+/* Gedrückt heisst hier „wird ausgeblendet". Deshalb wird der Knopf gefüllt und
+   nicht nur farbig umrandet: der Zustand muss auch ohne Farbwahrnehmung lesbar
+   sein — und die Beschriftung wechselt zusätzlich auf „ohne Gluten". */
+.filter__knopf[aria-pressed='true'] {
+  background: var(--terra);
+  border-color: var(--terra);
+  color: var(--papier);
+}
+
+.filter__zuruecksetzen {
+  min-height: 44px;
+  padding: 0.5em 0.4em;
+  border: 0;
+  background: transparent;
+  color: var(--terra);
+  font-family: var(--font-display);
+  font-size: var(--text-meta);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+  cursor: pointer;
+}
+
+.filter__stand {
+  margin-top: 0.8rem;
+  font-size: var(--text-micro);
+  color: var(--russ-mtl);
+  letter-spacing: 0.01em;
+}
+
+.karte__leer {
+  font-size: var(--text-lead);
+  padding-block: 2rem;
+  border-top: 1px solid var(--linie);
+}
+
+/**
+ * Zwei Spalten ab 1000 px.
+ *
+ * Einspaltig lief jede Zeile über 1330 px: links der Name, rechts der Preis,
+ * und dazwischen eine handbreite Leere. Das liest sich als Tabelle, nicht als
+ * Speisekarte. Eine gedruckte Karte setzt zwei Spalten, damit Name und Preis in
+ * einem Blick zusammenbleiben — und sie halbiert nebenbei die Höhe.
+ */
+.karte__gruppen {
+  display: grid;
+  gap: 0 clamp(2.5rem, 5vw, 5rem);
+}
+
+@media (min-width: 1000px) {
+  .karte__gruppen { grid-template-columns: 1fr 1fr; align-items: start; }
+}
+
+.gruppe { margin-bottom: clamp(2.5rem, 4vw, 3.5rem); }
+
+.gruppe__titel {
+  font-size: clamp(1.1rem, 1rem + 0.5vw, 1.35rem);
+  font-variation-settings: 'wdth' 100;
+  letter-spacing: var(--sperr-label);
+  text-transform: uppercase;
+  padding-bottom: 0.7rem;
+  border-bottom: 2px solid var(--russ);
+}
+
+.gruppe__hinweis {
+  margin-top: 0.7rem;
+  font-size: var(--text-meta);
+  font-style: italic;
+  color: var(--russ-mtl);
+}
+
+.gruppe__liste { list-style: none; padding: 0; margin: 1rem 0 0; }
+
+.zeile {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  column-gap: clamp(0.75rem, 2vw, 1.5rem);
+  padding-block: 0.9rem;
+  border-bottom: 1px solid var(--linie);
+}
+
+/* Der Name des Gerichts ist gross, der Preis daneben klein und ruhig. Von der
+   Karte an der Wand geklaut: eine Seite, die den Preis grösser setzt als das
+   Essen, verkauft Preise. */
+.zeile__name {
+  margin: 0;
+  font-size: var(--text-gericht);
+  font-weight: 600;
+  line-height: 1.25;
+  max-width: none;
+}
+
+.zeile__beschreibung {
+  margin: 0.15rem 0 0;
+  font-size: var(--text-meta);
+  color: var(--russ-mtl);
+  max-width: 46ch;
+}
+
+.zeile__allergene {
+  margin: 0.35rem 0 0;
+  font-family: var(--font-display);
+  font-size: var(--text-micro);
+  font-weight: 600;
+  font-variation-settings: 'wdth' 100;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--russ-mtl);
+  max-width: none;
+}
+
+.preis--folgt {
+  font-size: var(--text-micro);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--russ-mtl);
+}
+
+.zaehler { display: flex; align-items: center; gap: 0.3rem; }
+
+.zaehler__knopf {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--linie);
+  background: transparent;
+  color: var(--russ);
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    border-color var(--dauer-mikro) var(--ease-teig),
+    color var(--dauer-mikro) var(--ease-teig);
+}
+.zaehler__knopf:hover { border-color: var(--terra); color: var(--terra); }
+.zaehler__knopf--plus { border-color: var(--terra); color: var(--terra); }
+.zaehler__knopf--plus:hover { background: var(--terra); color: var(--papier); }
+
+.zaehler__stand {
+  min-width: 1.6ch;
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
-.weg__liste { list-style: none; padding: 0; display: grid; gap: var(--space-block); }
-.weg__stufe { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2rem; align-items: center; }
-@media (max-width: 760px) {
-  .weg__takte { grid-template-columns: 1fr 1fr; }
-  .weg__stufe { grid-template-columns: 1fr; }
-}
 
-/* ── Sektion 4 · Die Karte ────────────────────────────────────────────────── */
-.karte { background: var(--kohle-2); }
-.karte__kopf { display: grid; gap: 0.7rem; margin-bottom: var(--space-block); }
-.karte__offen { font-size: var(--text-meta); }
-.karte__gruppen { display: grid; gap: clamp(2rem, 4vw, 3.5rem); }
-.karte__gruppenkopf { margin-bottom: 1.1rem; }
-.karte__gruppenkopf h3 { font-size: var(--text-gericht); }
-.karte__gruppenhinweis { font-size: var(--text-meta); }
-.karte__liste { list-style: none; padding: 0; display: grid; gap: 0.9rem; }
-.karte__zeile { display: flex; align-items: baseline; gap: 0.75rem; }
-.karte__wort { display: grid; gap: 0.15rem; }
-/* Der Name des Gerichts ist gross, der Preis daneben klein und ruhig.
-   Von der Speisekarte an der Wand geklaut. */
-.karte__gericht { font-family: var(--font-display); font-weight: 700; font-size: 1.1875rem; letter-spacing: -0.015em; }
-.karte__beschreibung { font-size: var(--text-meta); }
-.karte__allergene {
-  font-size: var(--text-micro);
-  color: var(--asche-mtl);
-  letter-spacing: 0.02em;
-}
-.karte__punkte {
-  flex: 1;
-  border-bottom: 1px dotted var(--linie);
-  transform: translateY(-0.25em);
-  min-width: 1.5rem;
-}
-.karte__preis { flex: none; }
-.karte__fuss { font-size: var(--text-micro); margin-top: var(--space-block); max-width: var(--measure); }
+/* ── Der Laden ────────────────────────────────────────────────────────────── */
 
-/* ── Sektion 5 · Der Laden ────────────────────────────────────────────────── */
 .laden__gitter {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: clamp(1.5rem, 4vw, 4rem);
-  align-items: center;
-  perspective: 1400px;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--rinne);
+  row-gap: clamp(2rem, 4vw, 3rem);
+  align-items: start;
 }
-.laden__bild { display: grid; place-items: center; }
-.laden__wort { display: grid; gap: 1rem; }
-.laden__fakten { display: grid; gap: 1.1rem; margin-top: 0.5rem; }
-.laden__fakten dt {
+
+.laden__bild { grid-column: 1 / 7; }
+.laden__bild img { width: 100%; height: auto; }
+.laden__wort { grid-column: 8 / 13; }
+.laden__wort h2 { margin-bottom: 1.2rem; }
+
+.daten { margin-top: 2rem; }
+
+.daten__paar {
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr);
+  gap: 1rem;
+  padding-block: 0.9rem;
+  border-top: 1px solid var(--linie);
+}
+
+.daten dt {
   font-family: var(--font-display);
   font-size: var(--text-micro);
-  letter-spacing: var(--tracking-label);
+  font-weight: 700;
+  font-variation-settings: 'wdth' 100;
+  letter-spacing: var(--sperr-label);
   text-transform: uppercase;
-  color: var(--glut-hell);
-  margin-bottom: 0.2rem;
+  color: var(--russ-mtl);
+  padding-top: 0.25em;
 }
-.laden__fakten dd { margin: 0; }
-.laden__fakten a { color: var(--asche); text-decoration-color: var(--glut); text-underline-offset: 3px; }
-.laden__zeiten { list-style: none; padding: 0; display: grid; gap: 0.3rem; max-width: 22rem; }
-.laden__zeiten li { display: flex; justify-content: space-between; gap: 1rem; }
-@media (max-width: 860px) { .laden__gitter { grid-template-columns: 1fr; } }
 
-/* ── Sektion 6 · Bestellen ────────────────────────────────────────────────── */
-.bestellen__kopf { display: grid; gap: 0.8rem; margin-bottom: var(--space-block); }
-.bestellen__direkt {
-  display: grid;
-  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
-  gap: clamp(0.75rem, 2vw, 1.5rem);
+.daten dd { margin: 0; }
+
+.zeiten { list-style: none; padding: 0; margin: 0; }
+.zeiten li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: 20rem;
+  padding-block: 0.2rem;
 }
-.bestellen__kachel {
+
+/* ── Bestellen ────────────────────────────────────────────────────────────── */
+
+.bestellen {
+  position: relative;
+  background: var(--creme-tief);
+  border-top: 1px solid var(--linie);
+}
+
+.bestellen__grund { position: absolute; inset: 0; z-index: 0; overflow: clip; }
+
+.bestellen__grund img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 65%;
+}
+
+/* Dichter als im Hero. Hier wird gelesen und getippt, nicht geschaut — die
+   Textur darf die Zeilen nicht stören, sie soll die Fläche nur beleben. */
+.bestellen__schleier {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in oklch, var(--creme-tief) 92%, transparent);
+}
+
+.bestellen h2 { margin-bottom: 1rem; }
+.bestellen__oeffnung { margin-top: 1.5rem; }
+
+.bestellen__gitter {
   display: grid;
-  gap: 0.4rem;
-  padding: clamp(1.25rem, 3vw, 2rem);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  margin-top: 2rem;
+  align-items: start;
+}
+
+/* Links die Wege, die heute funktionieren; rechts, was noch offen ist. */
+@media (min-width: 1000px) {
+  .bestellen__gitter { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); }
+  .dienste { margin-top: 0; }
+}
+
+.bestellen__wege {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: 1rem;
+}
+
+.weg {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: clamp(1.2rem, 3vw, 1.75rem);
+  border: 1px solid var(--linie);
   text-decoration: none;
-  color: inherit;
+  color: var(--russ);
+  transition:
+    transform var(--dauer-mikro) var(--ease-teig),
+    border-color var(--dauer-mikro) var(--ease-teig);
 }
-.bestellen__gross {
+@media (hover: hover) {
+  .weg:hover { transform: translateY(-3px); border-color: var(--terra); }
+}
+
+/* Ihr Orange als Fläche mit dunkler Schrift. Nie andersherum. */
+.weg--glut { background: var(--glut); border-color: transparent; }
+.weg--glut:hover { border-color: var(--russ); }
+
+.weg__art {
   font-family: var(--font-display);
-  font-weight: 800;
-  font-size: clamp(1.5rem, 1rem + 2vw, 2.75rem);
-  letter-spacing: -0.03em;
-  display: block;
+  font-size: var(--text-micro);
+  font-weight: 700;
+  font-variation-settings: 'wdth' 100;
+  letter-spacing: var(--sperr-label);
+  text-transform: uppercase;
+  color: var(--terra);
 }
-.bestellen__kachel--gross .bestellen__gross { color: var(--glut); }
-.bestellen__dienste { margin-top: var(--space-block); display: grid; gap: 0.9rem; }
-.bestellen__vorschau { font-size: var(--text-meta); max-width: var(--measure); }
-.bestellen__liste {
-  list-style: none; padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-  gap: 0.75rem;
-}
-.bestellen__dienst {
-  display: grid;
-  gap: 0.3rem;
-  padding: 1rem 1.15rem;
-  text-decoration: none;
-  color: inherit;
-}
-.bestellen__dienst.ist-inaktiv { opacity: 0.45; cursor: not-allowed; }
-.bestellen__dienst.ist-inaktiv:hover { transform: none; }
-.bestellen__punkt { width: 9px; height: 9px; border-radius: 50%; display: block; }
-.bestellen__dienstname { font-family: var(--font-display); font-weight: 700; font-size: 1.0625rem; }
-.bestellen__status { font-size: var(--text-micro); }
-@media (max-width: 720px) { .bestellen__direkt { grid-template-columns: 1fr; } }
+.weg--glut .weg__art { color: var(--russ); }
 
-/* ── Fuß ──────────────────────────────────────────────────────────────────── */
-.fuss { padding-block: var(--space-block) 3rem; border-top: 1px solid var(--linie); }
-.fuss__warnung { padding: 1.25rem 1.5rem; display: grid; gap: 0.5rem; margin-bottom: var(--space-block); }
-.fuss__warnung code { font-size: var(--text-meta); color: var(--glut-hell); }
-.fuss__reihe { display: flex; flex-wrap: wrap; gap: 1.5rem 2.5rem; align-items: baseline; justify-content: space-between; }
-.fuss__marke { font-family: var(--font-display); font-weight: 800; font-size: 1.25rem; letter-spacing: 0.02em; }
-.fuss__nav, .fuss__kontakt { display: flex; gap: 1.25rem; }
-.fuss a { color: var(--asche-mtl); text-decoration: none; font-size: var(--text-meta); }
-.fuss a:hover { color: var(--glut-hell); }
+.weg__wert {
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 1.1rem + 1vw, 1.9rem);
+  font-weight: 800;
+  font-variation-settings: 'wdth' 110;
+  letter-spacing: -0.02em;
+}
+
+.weg__zusatz { font-size: var(--text-meta); color: var(--russ-mtl); }
+/* Auf Glut trägt auch der Kleintext das dunkle Braun — 4,97 gemessen. Das
+   gedämpfte --russ-mtl käme dort auf 2,2 und wäre unlesbar. */
+.weg--glut .weg__zusatz { color: var(--russ); }
+
+.dienste { margin-top: clamp(2.5rem, 5vw, 4rem); }
+
+.dienste__titel {
+  font-family: var(--font-display);
+  font-size: var(--text-meta);
+  font-weight: 600;
+  margin-bottom: 0.9rem;
+}
+
+.dienste__liste {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem;
+}
+
+.dienste__grund { font-size: var(--text-micro); max-width: var(--breite-satz); }
+
+/* ── Die Bestellleiste ────────────────────────────────────────────────────── */
+
+.leiste {
+  position: fixed;
+  z-index: 50;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--papier);
+  border-top: 1px solid var(--linie);
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.leiste__innen {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem var(--rinne);
+  max-width: var(--schale);
+  margin-inline: auto;
+}
+
+.leiste__wort { min-width: 0; flex: 1; }
+
+.leiste__zahl {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-micro);
+  font-weight: 700;
+  font-variation-settings: 'wdth' 100;
+  letter-spacing: var(--sperr-label);
+  text-transform: uppercase;
+  color: var(--terra);
+}
+
+.leiste__liste {
+  margin: 0;
+  max-width: none;
+  font-size: var(--text-meta);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.leiste__knoepfe { display: flex; align-items: center; gap: 0.6rem; flex: none; }
+
+.leiste__leeren {
+  min-height: 44px;
+  padding: 0 0.6rem;
+  border: 0;
+  background: transparent;
+  color: var(--russ-mtl);
+  font-family: var(--font-display);
+  font-size: var(--text-meta);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+.leiste__leeren:hover { color: var(--terra); }
+
+/* ── Der Fuss ─────────────────────────────────────────────────────────────── */
+
+.fuss {
+  position: relative;
+  z-index: 1;
+  background: var(--creme-tief);
+  border-top: 1px solid var(--linie);
+  padding-block: clamp(3rem, 5vw, 5rem);
+  /* Platz, damit die Bestellleiste den Fuss nicht überdeckt. */
+  padding-bottom: clamp(7rem, 10vw, 9rem);
+}
+
+.fuss__gitter {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: clamp(2rem, 4vw, 3rem);
+}
+
+.fuss__logo { height: 34px; width: auto; margin-bottom: 1rem; }
+
+.fuss__titel {
+  font-family: var(--font-display);
+  font-size: var(--text-micro);
+  font-weight: 700;
+  font-variation-settings: 'wdth' 100;
+  letter-spacing: var(--sperr-label);
+  text-transform: uppercase;
+  color: var(--russ-mtl);
+  margin-bottom: 0.8rem;
+}
+
+.fuss__navi ul { list-style: none; padding: 0; margin: 0; }
+.fuss__navi li { padding-block: 0.3rem; }
+
+.nichtlive {
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--terra);
+}
+
+.nichtlive__titel {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--terra);
+  margin-bottom: 0.6rem;
+}
+
+.nichtlive ul { margin: 0 0 0.8rem 1.1rem; }
+.nichtlive__fuss { font-size: var(--text-micro); }
+.nichtlive code { font-family: ui-monospace, monospace; font-size: 0.9em; }
+
+/* ══ Handy und Tablet ══════════════════════════════════════════════════════
+   Am Handy wird zusammengelegt, nicht weggelassen: der Savor-Rhythmus wird zur
+   einspaltigen Folge, aber die Versätze bleiben als kleine Verschiebungen
+   erhalten. Eine gestapelte Spalte mittiger Kästen wäre eine andere Seite. */
+
+@media (max-width: 1000px) {
+  .kopf__navi { display: none; }
+  .kopf__anruf { margin-inline-start: auto; }
+
+  .backstube__gitter { grid-template-columns: minmax(0, 1fr); }
+  .backstube__bild {
+    justify-self: end;
+    width: min(82%, 24rem);
+    margin-block-end: clamp(-6rem, -6vw, -3rem);
+  }
+
+  .handarbeit__wort,
+  .merkmale,
+  .handarbeit__bild--gross,
+  .handarbeit__bild--klein {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+  .handarbeit__bild--gross { width: min(86%, 26rem); justify-self: end; }
+  .handarbeit__bild--klein { width: min(66%, 18rem); margin-top: -3rem; justify-self: start; }
+
+  .laden__bild,
+  .laden__wort { grid-column: 1 / -1; }
+  .laden__bild { width: min(92%, 34rem); }
+}
+
+@media (max-width: 700px) {
+  .kopf__oeffnung { display: none; }
+  .kopf__oeffnung-kurz { display: inline-flex; margin-inline-start: auto; }
+  .kopf__anruf { margin-inline-start: 0; }
+  .kopf__anruf-text { display: none; }
+  .kopf__anruf-kurz { display: inline; }
+
+  .backstube { min-height: 70svh; }
+
+  /* Der Preis rutscht unter den Namen, der Zähler bleibt rechts daneben. Eine
+     dreispaltige Zeile mit 44px-Knopf passt auf 393px nicht ohne Quetschen. */
+  .zeile {
+    grid-template-columns: minmax(0, 1fr) auto;
+    row-gap: 0.4rem;
+  }
+  .zeile__wort { grid-column: 1; }
+  .preis { grid-column: 1; grid-row: 2; }
+  .zaehler { grid-column: 2; grid-row: 1 / 3; }
+
+  .leiste__liste { font-size: var(--text-micro); }
+  .leiste__leeren { display: none; }
+
+  /* Elf Zeilen mal zweimal 0,2 rem sind am Handy eine viertel Bildschirmhöhe.
+     Die Karte ist der längste Abschnitt — hier zahlt sich jede Zeile aus. */
+  .zeile { padding-block: 0.7rem; }
+  .gruppe { margin-bottom: 2rem; }
+  .fuss { padding-block: 2.5rem; padding-bottom: 6.5rem; }
+
+  /* Der Auftrag deckelt das Handy bei 10 Bildschirmhöhen. Gemessen wurde 10,1 —
+     diese sechs Zeilen sind der Rest. Zusammengelegt, nicht gestrichen: kein
+     Abschnitt fällt weg, sie stehen nur enger beieinander. */
+  .handarbeit__gitter { row-gap: 1.5rem; }
+  .karte__kopf { margin-bottom: 1.5rem; }
+  .filter { margin-bottom: 1.75rem; }
+  .bestellen__wege { margin-top: 1.5rem; }
+  .dienste { margin-top: 2rem; }
+  .daten { margin-top: 1.5rem; }
+}

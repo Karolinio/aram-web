@@ -1,79 +1,110 @@
 /**
- * Design-Tokens. Einzige Quelle für Farbe, Grad, Abstand, Zeit.
+ * Design-Tokens, Fassung 2. Einzige Quelle für Farbe, Grad, Abstand, Zeit.
  *
- * Jeder Wert hier lässt sich auf eine Zeile in clients/aram/DIRECTION.md zurückführen.
+ * ═══ Was hier passiert ist ═══
+ *
+ * Fassung 1 stand auf einem sehr dunklen Grund mit durchscheinenden Karten. Das ist
+ * gestorben. Diese Datei ist nicht aufgeräumt, sie ist neu: kein einziger Wert aus
+ * Fassung 1 hat überlebt.
+ *
+ * Ihr Markenorange (#fe6201) ist vom Signal in den GRUND gewandert. Aufgehellt und
+ * entsättigt wird daraus Creme. Als Signal wäre es auf sich selbst unsichtbar —
+ * 2,88 gemessen, durchgefallen. Deshalb trennen sich hier zwei Rollen sauber:
+ *
+ *   --glut   ist eine FLÄCHE und trägt immer dunkle Schrift. Nie Text, nie Linie.
+ *   --terra  ist das SIGNAL und markiert den nächsten Schritt. Nie Fläche.
+ *
+ * Jeder Wert lässt sich auf eine Zeile in clients/aram/DIRECTION.md zurückführen.
  * Ein Token, das das nicht kann, ist eine Improvisation: löschen oder die Direktion
  * ergänzen.
  */
 
 :root {
   /* ── Farbe ───────────────────────────────────────────────────────────────
-     Abgeleitet aus IHREN gemessenen Farben (#fe6201 auf #1d140e), nur wärmer
-     angesetzt. Gemessen am 14.08.2026 mit packages/shared/src/kontrast.ts. */
-  --kohle: oklch(14% 0.022 45);        /* Grund. Ofeninneres, geschwärzt */
-  --kohle-2: oklch(20% 0.032 48);      /* zweite Fläche, Boden unter Glas */
-  --asche: oklch(94% 0.014 75);        /* Text. Warmes Mehlweiß, nie reinweiß */
-  --asche-mtl: oklch(74% 0.020 70);    /* Sekundärtext, Bildunterschriften */
-  --linie: oklch(34% 0.025 45);        /* Haarlinien, 1px */
-  --glut: oklch(70% 0.190 45);         /* IHR Orange. Flächen, Knöpfe, Zahlen ab 24px */
-  --glut-hell: oklch(78% 0.170 60);    /* dasselbe Signal als KLEINER Text */
+     Gemessen am 15.08.2026 mit packages/shared/src/kontrast.ts. Die Zahlen in
+     den Kommentaren sind Messwerte, keine Schätzungen. */
+  --papier: oklch(97.5% 0.018 82);      /* hellste Fläche. Die Speisekarte */
+  --creme: oklch(95% 0.030 78);         /* Grund. Teig, Mehl, Sonne auf Holz */
+  --creme-tief: oklch(90% 0.045 72);    /* zweite Fläche, Sektionswechsel */
+  --russ: oklch(24% 0.030 50);          /* Text. Dunkles warmes Braun, nie Schwarz */
+  --russ-mtl: oklch(46% 0.035 50);      /* Sekundärtext — 6,21 auf Creme, AA */
+  --linie: oklch(84% 0.030 70);         /* Haarlinien, immer 1px */
+  --terra: oklch(40% 0.130 35);         /* DAS Signal — 8,47 auf Creme, AAA */
+  --glut: oklch(66% 0.180 45);          /* IHR Orange. NUR Fläche, Ruß darauf 4,97 AA */
 
-  /* Glut als Text hält 6,96 — AA, nicht AAA. Deshalb zwei Werte und nicht einer:
-     ab 24px reicht --glut, darunter muss --glut-hell (9,36 AAA) genommen werden.
-     Wer das vertauscht, baut eine Seite, die im eigenen Scanner durchfällt. */
+  /* Kein Schwarz. Reines Schwarz auf Creme sieht aus wie ein Ausdruck, nicht wie
+     eine Backstube. --russ ist dunkles warmes Braun und bleibt es. */
 
-  /* ── Glas: die Ofentür ───────────────────────────────────────────────────
-     Die Glutkante sitzt UNTEN, nicht oben. Bei TAFELWERK saß die Lichtkante oben,
-     weil Tageslicht von oben kommt. Hier ist das Feuer unten. Das ist kein Detail,
-     das ist die These. */
-  --glas-fond: color-mix(in oklch, var(--kohle-2) 76%, transparent);
-  --glas-kante: color-mix(in oklch, var(--glut) 22%, transparent);
-  --glas-unschaerfe: blur(16px) saturate(1.25);
-  --radius-karte: 14px;
+  /* ── Ebenen ohne durchscheinende Flächen ─────────────────────────────────
+     Die Tiefenstrategie der Direktion. Tiefe entsteht durch ÜBERLAPPUNG und
+     GRÖSSE, nicht durch Weichzeichner. Es gibt in dieser Datei deshalb keinen
+     einzigen Unschärfe-Wert und keinen Schatten unter einem Kasten.
+
+     Der einzige Schatten der ganzen Seite ist der Eigenschatten der
+     freigestellten Gerichte. Er macht sie zu Gegenständen statt zu Aufklebern,
+     und er fällt nach unten rechts, weil das Licht vom Fenster links oben kommt. */
+  --schatten-speise:
+    drop-shadow(0 18px 28px oklch(24% 0.03 50 / 0.22))
+    drop-shadow(0 3px 8px oklch(24% 0.03 50 / 0.16));
+
+  /* Der Cremeschleier über der Fotografie. Eine DECKENDE Fläche mit Alpha —
+     kein Weichzeichner. Der Unterschied ist sichtbar: ein Schleier lässt die
+     Struktur des Fotos stehen und nimmt ihm nur den Kontrast. */
+  --schleier: oklch(95% 0.03 78 / 0.72);
+  --schleier-dicht: oklch(95% 0.03 78 / 0.88);
 
   /* ── Typografie ──────────────────────────────────────────────────────────
-     Bricolage Grotesque trägt „gemaltes Ladenschild", Newsreader trägt die
-     Speisekarte. Umkehrung von TAFELWERK (dort Serife oben, Grotesk unten) —
-     Absicht: die beiden Marken dürfen sich nicht ähneln. */
+     Bricolage Grotesque trägt das gemalte Ladenschild, Newsreader trägt die
+     Speisekarte. Serife im Fließtext ist auf einer Gastro-Seite eine
+     Entscheidung, keine Voreinstellung: sie gibt der Karte das Gewicht einer
+     gedruckten Speisekarte. */
   --font-display: 'Bricolage Grotesque Variable', 'Trebuchet MS', sans-serif;
   --font-text: 'Newsreader Variable', Georgia, 'Times New Roman', serif;
 
-  --text-hero: clamp(3rem, 1rem + 8vw, 8rem);
-  --text-section: clamp(2rem, 1.2rem + 2.8vw, 3.75rem);
-  --text-gericht: clamp(1.375rem, 1.1rem + 1.1vw, 2rem);
+  --text-hero: clamp(3.5rem, 1rem + 11vw, 11rem);
+  --text-band: clamp(1.75rem, 1rem + 3.4vw, 4rem);
+  --text-sektion: clamp(2rem, 1.2rem + 2.8vw, 3.5rem);
+  --text-gericht: clamp(1.25rem, 1.05rem + 0.9vw, 1.75rem);
   --text-lead: clamp(1.125rem, 1.02rem + 0.42vw, 1.375rem);
   --text-base: 1.0625rem;
   --text-meta: 0.9375rem;
   --text-micro: 0.8125rem;
 
-  --leading-tight: 0.94;
-  --leading-head: 1.08;
-  --leading-body: 1.62;
+  --leading-eng: 0.9;
+  --leading-kopf: 1.06;
+  --leading-text: 1.6;
 
-  --tracking-hero: -0.035em;
-  --tracking-head: -0.02em;
-  --tracking-label: 0.16em;
+  --sperr-hero: -0.035em;
+  --sperr-kopf: -0.02em;
+  --sperr-label: 0.16em;
 
-  --measure: 58ch;
-  --measure-eng: 44ch;
+  --breite-satz: 56ch;
+  --breite-satz-eng: 42ch;
 
   /* ── Raum ────────────────────────────────────────────────────────────────
-     Sektionen atmen weit, Zeilen innerhalb einer Gruppe eng. Kein gleichmäßiges
-     Padding über die ganze Seite. */
-  --space-section: clamp(5rem, 3rem + 7vw, 11rem);
-  --space-block: clamp(2.5rem, 1.6rem + 3vw, 5rem);
-  --gutter: clamp(1.25rem, 0.4rem + 3.2vw, 4.5rem);
-  --shell: 1440px;
-  --content: 1120px;
+     Sektionen atmen weit, Zeilen innerhalb einer Gruppe eng. Gleichmäßiges
+     Padding über die ganze Seite ist der Grund, warum Vorlagen wie Vorlagen
+     aussehen. */
+  /* Der kleine Wert ist gemessen, nicht gewählt: mit 4,5rem kam das Handy auf
+     10,4 Bildschirmhöhen, und die Grenze sind 10. Der grosse Wert bleibt — am
+     Rechner ist Luft der Unterschied zwischen einer Seite und einem Formular. */
+  --raum-sektion: clamp(3rem, 2.5rem + 6vw, 9rem);
+  --raum-block: clamp(2.25rem, 1.4rem + 2.6vw, 4rem);
+  --rinne: clamp(1.25rem, 0.4rem + 3.2vw, 4.5rem);
+  --schale: 1440px;
+  --spalte: 1080px;
 
   /* ── Bewegung ────────────────────────────────────────────────────────────
-     Signaturzug: alles kommt aus dem Ofen. EINE Richtung — aus der Tiefe nach
-     vorn. Schnell heraus, sanft aus; leichtes Überschwingen ist hier erlaubt,
-     anders als bei TAFELWERK: ein Gericht, das vom Schieber gleitet, kommt
-     nicht sanft zum Stehen. */
-  --ease-schieber: cubic-bezier(0.22, 1, 0.28, 1);
-  --dauer-ankunft: 720ms;
+     Schnell und entschieden, leichtes Überschwingen erlaubt: ein Gericht, das
+     vom Schieber gleitet, kommt nicht sanft zum Stehen. */
+  --ease-teig: cubic-bezier(0.22, 1, 0.28, 1);
+  --dauer-reise: 900ms;
   --dauer-mikro: 200ms;
-  --hebung-hover: 10px;
+  --hebung-karte: 6px;
   --neigung-max: 6deg;
+
+  /* Höhe der Kopfzeile. Steht hier, weil zwei Dinge davon abhängen: der Abstand
+     der Sprungmarken (scroll-margin-top) und der Platz oben im Hero. Zwei
+     Zahlen, die auseinanderlaufen, sind ein abgeschnittenes Gericht. */
+  --kopf-hoehe: 3.75rem;
 }
