@@ -39,10 +39,10 @@
   align-items: center;
   gap: 0.55em;
   margin: 0;
-  font-family: var(--font-display);
+  font-family: var(--font-text);
   font-size: var(--text-meta);
   font-weight: 600;
-  font-variation-settings: 'wdth' 100;
+  
   color: var(--russ);
   max-width: none;
 }
@@ -142,10 +142,10 @@
 }
 
 .kopf__anker {
-  font-family: var(--font-display);
+  font-family: var(--font-text);
   font-size: var(--text-meta);
   font-weight: 600;
-  font-variation-settings: 'wdth' 100;
+  
   color: var(--russ);
   text-decoration: none;
   padding-block: 0.4rem;
@@ -222,13 +222,10 @@
 }
 
 .backstube__unter {
-  margin-top: 0.9rem;
-  font-family: var(--font-display);
-  font-size: clamp(0.9rem, 0.8rem + 0.4vw, 1.1rem);
-  font-weight: 700;
-  font-variation-settings: 'wdth' 100;
-  letter-spacing: var(--sperr-label);
-  text-transform: uppercase;
+  margin-top: 0.8rem;
+  font-family: var(--font-text);
+  font-size: clamp(0.95rem, 0.85rem + 0.4vw, 1.15rem);
+  font-weight: 500;
   color: var(--terra);
   max-width: none;
 }
@@ -311,14 +308,17 @@
    deshalb steht auf dieser Fläche genau ein Satz und sonst nichts. */
 .band__satz {
   margin: 0;
-  max-width: 20ch;
+  max-width: 18ch;
   font-family: var(--font-display);
   font-size: var(--text-band);
-  font-weight: 800;
-  font-variation-settings: 'wdth' 120;
-  line-height: 0.98;
-  letter-spacing: -0.03em;
-  color: var(--russ);
+  font-weight: 600;
+  font-variation-settings: var(--wonk-display);
+  line-height: 1;
+  letter-spacing: -0.015em;
+  /* Die eigene Tinte für Orange. Mit --russ wären es 4,14 — für diese
+     Schriftgrösse noch zulässig, aber dann gilt auf derselben Fläche zweierlei
+     Recht. Eine Fläche, eine Tinte. */
+  color: var(--tinte-glut);
 }
 
 /* ── Handarbeit: der Savor-Rhythmus ───────────────────────────────────────── */
@@ -380,10 +380,11 @@
 .merkmal__zahl {
   flex: none;
   font-family: var(--font-display);
-  font-size: var(--text-micro);
-  font-weight: 700;
-  font-variation-settings: 'wdth' 100;
-  letter-spacing: var(--sperr-label);
+  font-size: 1.15rem;
+  font-weight: 600;
+  font-variation-settings: var(--wonk-klein);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
   color: var(--terra);
 }
 
@@ -422,14 +423,14 @@
 .filter__knopf {
   min-height: 44px;
   padding: 0.5em 1.1em;
-  border-radius: 999px;
+  border-radius: var(--radius-knopf);
   border: 1px solid var(--linie);
   background: transparent;
   color: var(--russ);
-  font-family: var(--font-display);
+  font-family: var(--font-text);
   font-size: var(--text-meta);
   font-weight: 600;
-  font-variation-settings: 'wdth' 100;
+  
   cursor: pointer;
   transition:
     border-color var(--dauer-mikro) var(--ease-teig),
@@ -452,7 +453,7 @@
   border: 0;
   background: transparent;
   color: var(--terra);
-  font-family: var(--font-display);
+  font-family: var(--font-text);
   font-size: var(--text-meta);
   font-weight: 600;
   text-decoration: underline;
@@ -492,13 +493,16 @@
 
 .gruppe { margin-bottom: clamp(2.5rem, 4vw, 3.5rem); }
 
+/* Vorher: Versalien, 0,16em gesperrt, 2px-Balken darunter — eine gedruckte
+   Karte von 1995. Jetzt trägt die Schrift selbst den Ton: Fraunces, gross,
+   normale Schreibweise, und eine Haarlinie statt eines Balkens. */
 .gruppe__titel {
-  font-size: clamp(1.1rem, 1rem + 0.5vw, 1.35rem);
-  font-variation-settings: 'wdth' 100;
-  letter-spacing: var(--sperr-label);
-  text-transform: uppercase;
-  padding-bottom: 0.7rem;
-  border-bottom: 2px solid var(--russ);
+  font-size: clamp(1.4rem, 1.1rem + 1.1vw, 1.9rem);
+  font-weight: 600;
+  font-variation-settings: var(--wonk-kopf);
+  letter-spacing: -0.01em;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--russ);
 }
 
 .gruppe__hinweis {
@@ -522,11 +526,17 @@
 /* Der Name des Gerichts ist gross, der Preis daneben klein und ruhig. Von der
    Karte an der Wand geklaut: eine Seite, die den Preis grösser setzt als das
    Essen, verkauft Preise. */
+/* Die Gerichtnamen tragen Fraunces, der Rest der Zeile Archivo. Das ist der
+   ganze Trick der neuen Paarung: die Serife markiert, was gelesen werden SOLL,
+   die Grotesk das, was gelesen werden MUSS. */
 .zeile__name {
   margin: 0;
+  font-family: var(--font-display);
   font-size: var(--text-gericht);
   font-weight: 600;
-  line-height: 1.25;
+  font-variation-settings: var(--wonk-klein);
+  line-height: 1.2;
+  letter-spacing: -0.005em;
   max-width: none;
 }
 
@@ -538,13 +548,10 @@
 }
 
 .zeile__allergene {
-  margin: 0.35rem 0 0;
-  font-family: var(--font-display);
+  margin: 0.3rem 0 0;
+  font-family: var(--font-text);
   font-size: var(--text-micro);
-  font-weight: 600;
-  font-variation-settings: 'wdth' 100;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-weight: 450;
   color: var(--russ-mtl);
   max-width: none;
 }
@@ -553,7 +560,6 @@
   font-size: var(--text-micro);
   font-weight: 500;
   letter-spacing: 0.04em;
-  text-transform: uppercase;
   color: var(--russ-mtl);
 }
 
@@ -569,9 +575,9 @@
   border: 1px solid var(--linie);
   background: transparent;
   color: var(--russ);
-  font-family: var(--font-display);
+  font-family: var(--font-text);
   font-size: 1.25rem;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1;
   cursor: pointer;
   transition:
@@ -585,8 +591,8 @@
 .zaehler__stand {
   min-width: 1.6ch;
   text-align: center;
-  font-family: var(--font-display);
-  font-weight: 700;
+  font-family: var(--font-text);
+  font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
 
@@ -616,12 +622,11 @@
 }
 
 .daten dt {
-  font-family: var(--font-display);
+  font-family: var(--font-text);
   font-size: var(--text-micro);
-  font-weight: 700;
-  font-variation-settings: 'wdth' 100;
-  letter-spacing: var(--sperr-label);
-  text-transform: uppercase;
+  font-weight: 600;
+  
+  letter-spacing: 0.005em;
   color: var(--russ-mtl);
   padding-top: 0.25em;
 }
@@ -702,36 +707,36 @@
 
 /* Ihr Orange als Fläche mit dunkler Schrift. Nie andersherum. */
 .weg--glut { background: var(--glut); border-color: transparent; }
-.weg--glut:hover { border-color: var(--russ); }
+.weg--glut:hover { border-color: var(--tinte-glut); }
 
 .weg__art {
-  font-family: var(--font-display);
+  font-family: var(--font-text);
   font-size: var(--text-micro);
-  font-weight: 700;
-  font-variation-settings: 'wdth' 100;
-  letter-spacing: var(--sperr-label);
-  text-transform: uppercase;
+  font-weight: 600;
+  
+  letter-spacing: 0.005em;
   color: var(--terra);
 }
-.weg--glut .weg__art { color: var(--russ); }
+.weg--glut .weg__art { color: var(--tinte-glut); }
 
 .weg__wert {
   font-family: var(--font-display);
   font-size: clamp(1.35rem, 1.1rem + 1vw, 1.9rem);
-  font-weight: 800;
-  font-variation-settings: 'wdth' 110;
-  letter-spacing: -0.02em;
+  font-weight: 580;
+  font-variation-settings: var(--wonk-kopf);
+  letter-spacing: -0.012em;
+  line-height: 1.15;
 }
 
 .weg__zusatz { font-size: var(--text-meta); color: var(--russ-mtl); }
 /* Auf Glut trägt auch der Kleintext das dunkle Braun — 4,97 gemessen. Das
    gedämpfte --russ-mtl käme dort auf 2,2 und wäre unlesbar. */
-.weg--glut .weg__zusatz { color: var(--russ); }
+.weg--glut .weg__zusatz { color: var(--tinte-glut); }
 
 .dienste { margin-top: clamp(2.5rem, 5vw, 4rem); }
 
 .dienste__titel {
-  font-family: var(--font-display);
+  font-family: var(--font-text);
   font-size: var(--text-meta);
   font-weight: 600;
   margin-bottom: 0.9rem;
@@ -774,12 +779,11 @@
 
 .leiste__zahl {
   margin: 0;
-  font-family: var(--font-display);
+  font-family: var(--font-text);
   font-size: var(--text-micro);
-  font-weight: 700;
-  font-variation-settings: 'wdth' 100;
-  letter-spacing: var(--sperr-label);
-  text-transform: uppercase;
+  font-weight: 600;
+  
+  letter-spacing: 0.005em;
   color: var(--terra);
 }
 
@@ -800,7 +804,7 @@
   border: 0;
   background: transparent;
   color: var(--russ-mtl);
-  font-family: var(--font-display);
+  font-family: var(--font-text);
   font-size: var(--text-meta);
   cursor: pointer;
   text-decoration: underline;
@@ -829,12 +833,11 @@
 .fuss__logo { height: 34px; width: auto; margin-bottom: 1rem; }
 
 .fuss__titel {
-  font-family: var(--font-display);
+  font-family: var(--font-text);
   font-size: var(--text-micro);
-  font-weight: 700;
-  font-variation-settings: 'wdth' 100;
-  letter-spacing: var(--sperr-label);
-  text-transform: uppercase;
+  font-weight: 600;
+  
+  letter-spacing: 0.005em;
   color: var(--russ-mtl);
   margin-bottom: 0.8rem;
 }
@@ -849,8 +852,8 @@
 }
 
 .nichtlive__titel {
-  font-family: var(--font-display);
-  font-weight: 700;
+  font-family: var(--font-text);
+  font-weight: 600;
   color: var(--terra);
   margin-bottom: 0.6rem;
 }

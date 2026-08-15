@@ -26,14 +26,36 @@
   --papier: oklch(97.5% 0.018 82);      /* hellste Fläche. Die Speisekarte */
   --creme: oklch(95% 0.030 78);         /* Grund. Teig, Mehl, Sonne auf Holz */
   --creme-tief: oklch(90% 0.045 72);    /* zweite Fläche, Sektionswechsel */
-  --russ: oklch(24% 0.030 50);          /* Text. Dunkles warmes Braun, nie Schwarz */
-  --russ-mtl: oklch(46% 0.035 50);      /* Sekundärtext — 6,21 auf Creme, AA */
+  --russ: oklch(30% 0.055 55);          /* Tinte. Espresso — 11,93 auf Creme, AAA */
+  --russ-mtl: oklch(48% 0.050 52);      /* Sekundärtext — 5,74 auf Creme, AA */
   --linie: oklch(84% 0.030 70);         /* Haarlinien, immer 1px */
   --terra: oklch(40% 0.130 35);         /* DAS Signal — 8,47 auf Creme, AAA */
-  --glut: oklch(66% 0.180 45);          /* IHR Orange. NUR Fläche, Ruß darauf 4,97 AA */
+  --glut: oklch(66% 0.180 45);          /* IHR Orange. NUR Fläche */
 
-  /* Kein Schwarz. Reines Schwarz auf Creme sieht aus wie ein Ausdruck, nicht wie
-     eine Backstube. --russ ist dunkles warmes Braun und bleibt es. */
+  /**
+   * Warum die Tinte 30 % hell ist und nicht 24 %.
+   *
+   * Fassung 2 hatte hier oklch(24% 0.030 50) und nannte es „dunkles warmes Braun".
+   * Der Wert war braun, die Wahrnehmung nicht: bei 24 % Helligkeit ist so wenig
+   * Buntheit nicht mehr unterscheidbar, das Auge sieht Schwarz. Karol hat genau das
+   * gemeldet — „ich weiss nicht, ob Schwarz die richtige Farbe ist" — auf einer
+   * Seite, die gar kein Schwarz enthielt.
+   *
+   * Bei 30 % mit fast doppelter Buntheit liest sie als Espresso. Der Kontrast fällt
+   * von 14,34 auf 11,93 und bleibt damit AAA.
+   */
+
+  /**
+   * Die eine Ausnahme: Schrift auf ihrem Orange.
+   *
+   * Die hellere Tinte verliert auf Glut Kontrast — 4,14 statt 4,97, und damit unter
+   * der Schwelle für normalen Text. Gemessen wurde auch der andere Weg: das Orange
+   * abzudunkeln macht es SCHLIMMER, weil es sich der Tinte annähert (3,51 bei 62 %
+   * Helligkeit). Also trägt Glut als einzige Fläche eine eigene, dunklere Tinte.
+   *
+   * Auf gesättigtem Orange liest auch 26 % nicht als Schwarz — die Umgebung färbt.
+   */
+  --tinte-glut: oklch(26% 0.045 52);    /* NUR auf --glut — 4,73, AA */
 
   /* ── Ebenen ohne durchscheinende Flächen ─────────────────────────────────
      Die Tiefenstrategie der Direktion. Tiefe entsteht durch ÜBERLAPPUNG und
@@ -53,30 +75,56 @@
   --schleier: oklch(95% 0.03 78 / 0.72);
   --schleier-dicht: oklch(95% 0.03 78 / 0.88);
 
-  /* ── Typografie ──────────────────────────────────────────────────────────
-     Bricolage Grotesque trägt das gemalte Ladenschild, Newsreader trägt die
-     Speisekarte. Serife im Fließtext ist auf einer Gastro-Seite eine
-     Entscheidung, keine Voreinstellung: sie gibt der Karte das Gewicht einer
-     gedruckten Speisekarte. */
-  --font-display: 'Bricolage Grotesque Variable', 'Trebuchet MS', sans-serif;
-  --font-text: 'Newsreader Variable', Georgia, 'Times New Roman', serif;
+  /**
+   * ── Typografie ─────────────────────────────────────────────────────────
+   *
+   * Die Paarung ist gegenüber Fassung 2 UMGEDREHT: Serife nach oben, Grotesk
+   * nach unten. Vorher stand Bricolage Grotesque über Newsreader — das ist die
+   * Voreinstellung nahezu jeder erzeugten Seite von 2026, und der Serifen-
+   * Fliesstext war der Hauptgrund dafür, dass die Seite als Zeitung und damit
+   * als altbacken las.
+   *
+   * Fraunces bringt echte Eigenheit statt Systemklang: `WONK 1` schaltet die
+   * schrägen Alternativzeichen frei, `SOFT` rundet die Kanten. Beides sind
+   * Achsen der Schrift, keine Effekte — sie kosten nichts und lassen sich nicht
+   * nachahmen.
+   */
+  --font-display: 'Fraunces Variable', Georgia, serif;
+  --font-text: 'Archivo Variable', system-ui, sans-serif;
 
-  --text-hero: clamp(3.5rem, 1rem + 11vw, 11rem);
-  --text-band: clamp(1.75rem, 1rem + 3.4vw, 4rem);
-  --text-sektion: clamp(2rem, 1.2rem + 2.8vw, 3.5rem);
-  --text-gericht: clamp(1.25rem, 1.05rem + 0.9vw, 1.75rem);
+  /* Fraunces führt `opsz` mit der Schriftgrösse mit — eine Schlagzeile in
+     144 pt bekommt feinere Haarstriche als eine Zwischenüberschrift. Das ist der
+     Unterschied zwischen einer skalierten und einer gesetzten Schrift. */
+  /* SOFT niedrig, nicht hoch. Stark gerundete Enden lassen eine Serife
+     gemütlich-retro wirken — und „gemütlich-retro" ist eine Nachbarschaft von
+     „altbacken". Scharfe Enden bei hohem `opsz` geben stattdessen feine
+     Haarstriche und damit den Kontrast, der eine Schlagzeile gesetzt aussehen
+     lässt statt nur gross. */
+  --wonk-display: 'opsz' 144, 'SOFT' 12, 'WONK' 1;
+  --wonk-kopf: 'opsz' 72, 'SOFT' 10, 'WONK' 1;
+  --wonk-klein: 'opsz' 28, 'SOFT' 14, 'WONK' 0;
+
+  /* Grössere Sprünge als in Fassung 2. Dort lagen Sektionsüberschrift (3,5rem)
+     und Gerichtname (1,75rem) so dicht am Fliesstext, dass die Seite überall
+     gleich laut war — und gleichmässige Lautstärke ist das, was eine Vorlage
+     von einer gesetzten Seite unterscheidet. */
+  --text-hero: clamp(3.5rem, 1rem + 12vw, 12rem);
+  --text-band: clamp(1.9rem, 1rem + 3.8vw, 4.5rem);
+  --text-sektion: clamp(2.1rem, 1.2rem + 3.2vw, 4rem);
+  --text-gericht: clamp(1.2rem, 1.05rem + 0.7vw, 1.55rem);
   --text-lead: clamp(1.125rem, 1.02rem + 0.42vw, 1.375rem);
   --text-base: 1.0625rem;
   --text-meta: 0.9375rem;
   --text-micro: 0.8125rem;
 
-  --leading-eng: 0.9;
-  --leading-kopf: 1.06;
-  --leading-text: 1.6;
+  --leading-eng: 0.92;
+  --leading-kopf: 1.04;
+  --leading-text: 1.58;
 
-  --sperr-hero: -0.035em;
-  --sperr-kopf: -0.02em;
-  --sperr-label: 0.16em;
+  /* Serifen brauchen weniger Enge als Grotesken. -0.035em war für Bricolage
+     richtig und würde Fraunces zusammenkleben. */
+  --sperr-hero: -0.02em;
+  --sperr-kopf: -0.012em;
 
   --breite-satz: 56ch;
   --breite-satz-eng: 42ch;
@@ -102,6 +150,9 @@
   --dauer-mikro: 200ms;
   --hebung-karte: 6px;
   --neigung-max: 6deg;
+
+  /* Pillen (999px) lesen als Software-Oberfläche. Ein Laden hat keine Pillen. */
+  --radius-knopf: 3px;
 
   /* Höhe der Kopfzeile. Steht hier, weil zwei Dinge davon abhängen: der Abstand
      der Sprungmarken (scroll-margin-top) und der Platz oben im Hero. Zwei

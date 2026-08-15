@@ -83,7 +83,7 @@ export default function Backstube() {
             loading="eager"
             decoding="async"
           />
-          <figcaption>Fata'er, frisch aus dem Ofen</figcaption>
+          <figcaption>Fata’er, frisch aus dem Ofen</figcaption>
         </figure>
       </div>
     </section>

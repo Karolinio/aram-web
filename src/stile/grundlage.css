@@ -69,9 +69,9 @@ body::before {
   background: var(--terra);
   color: var(--papier);
   padding: 0.7em 1.2em;
-  border-radius: 999px;
-  font-family: var(--font-display);
-  font-weight: 700;
+  border-radius: var(--radius-knopf);
+  font-family: var(--font-text);
+  font-weight: 600;
   text-decoration: none;
 }
 .sprung:focus-visible { top: 0.6rem; }
@@ -80,39 +80,57 @@ body::before {
 
 h1, h2, h3 {
   font-family: var(--font-display);
-  font-weight: 800;
+  /* 570, nicht 650. Fraunces wird bei hohem Gewicht zur Plakatschrift und
+     erschlägt eine Seite, die von Material leben soll. Die Wirkung soll aus
+     Grösse und Strichkontrast kommen, nicht aus Fettigkeit. */
+  font-weight: 570;
   line-height: var(--leading-kopf);
   letter-spacing: var(--sperr-kopf);
   text-wrap: balance;
-  font-variation-settings: 'wdth' 112, 'opsz' 48;
+  font-variation-settings: var(--wonk-kopf);
 }
 
 h1 {
   font-size: var(--text-hero);
+  font-weight: 600;
   line-height: var(--leading-eng);
   letter-spacing: var(--sperr-hero);
-  font-variation-settings: 'wdth' 120, 'opsz' 96;
+  font-variation-settings: var(--wonk-display);
 }
 
 h2 { font-size: var(--text-sektion); }
-h3 { font-size: var(--text-gericht); font-variation-settings: 'wdth' 108, 'opsz' 24; }
+h3 { font-size: var(--text-gericht); font-variation-settings: var(--wonk-klein); }
 
 p { max-width: var(--breite-satz); }
 
 a { color: var(--terra); text-underline-offset: 0.2em; }
 
-/* Die Augenbraue über einer Überschrift. Versalien, weit gesperrt, klein —
-   von der Speisekarte an der Wand geklaut, nicht von einer Software-Marke. */
+/**
+ * Das Etikett über einer Überschrift.
+ *
+ * Fassung 2 setzte es in weit gesperrten Versalien — der Baustein, den jede
+ * Landingpage-Vorlage seit 2015 trägt und der die Seite mit altaussehen lässt.
+ * Jetzt: normale Schreibweise, keine Sperrung, dafür ein kurzer Strich davor.
+ * Der Strich macht die Arbeit, die vorher die Sperrung machen sollte — er
+ * markiert das Etikett als Etikett, ohne es zu schreien.
+ */
 .augenbraue {
-  display: block;
-  font-family: var(--font-display);
-  font-size: var(--text-micro);
-  font-weight: 700;
-  letter-spacing: var(--sperr-label);
-  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-text);
+  font-size: var(--text-meta);
+  font-weight: 500;
   color: var(--terra);
-  font-variation-settings: 'wdth' 100;
-  margin-bottom: 0.9rem;
+  margin-bottom: 0.8rem;
+}
+
+.augenbraue::before {
+  content: '';
+  width: 1.6rem;
+  height: 1px;
+  background: var(--terra);
+  flex: none;
 }
 
 .lead {
@@ -125,12 +143,11 @@ a { color: var(--terra); text-underline-offset: 0.2em; }
 /* Preise. Eine Zahlenkolonne, die wackelt, sieht selbstgemacht aus. */
 .preis {
   font-variant-numeric: tabular-nums;
-  font-family: var(--font-display);
-  font-size: var(--text-meta);
-  font-weight: 600;
-  color: var(--russ-mtl);
+  font-family: var(--font-text);
+  font-size: var(--text-base);
+  font-weight: 550;
+  color: var(--russ);
   white-space: nowrap;
-  font-variation-settings: 'wdth' 100;
 }
 
 /* ── Aufbau ───────────────────────────────────────────────────────────────── */
@@ -162,12 +179,12 @@ section {
   justify-content: center;
   gap: 0.55em;
   min-height: 44px; /* Tippziel. Am Handy wird mit einer Hand bestellt. */
-  font-family: var(--font-display);
-  font-weight: 700;
+  font-family: var(--font-text);
+  font-weight: 600;
   font-size: 1.0625rem;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.005em;
   padding: 0.75em 1.4em;
-  border-radius: 999px;
+  border-radius: var(--radius-knopf);
   border: 1px solid transparent;
   cursor: pointer;
   text-decoration: none;
@@ -192,9 +209,10 @@ section {
 /* Ihr Orange als Fläche, mit dunkler Schrift darauf. Die einzige erlaubte
    Verwendung von --glut auf einem Bedienelement — und die Schrift ist groß
    genug für die gemessenen 4,97. */
+/* Die eigene, dunklere Tinte — sonst fällt dieser Knopf mit 4,14 durch. */
 .knopf--glut {
   background: var(--glut);
-  color: var(--russ);
+  color: var(--tinte-glut);
 }
 
 .knopf--leise {
@@ -226,9 +244,9 @@ section {
 .luecke {
   display: inline-block;
   color: var(--terra);
-  font-family: var(--font-display);
+  font-family: var(--font-text);
   font-size: var(--text-meta);
-  font-weight: 600;
+  font-weight: 550;
   border-bottom: 1px solid var(--terra);
   padding-bottom: 1px;
 }

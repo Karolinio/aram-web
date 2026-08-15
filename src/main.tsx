@@ -1,8 +1,11 @@
 import { StrictMode, useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
 
-import '@fontsource-variable/bricolage-grotesque'
-import '@fontsource-variable/newsreader'
+/* `full` und nicht der Standard: nur diese Datei trägt die Achsen SOFT und WONK,
+   und ohne WONK ist Fraunces eine gewöhnliche Serife — genau das, was hier nicht
+   gebraucht wird. */
+import '@fontsource-variable/fraunces/full.css'
+import '@fontsource-variable/archivo'
 import './stile/grundlage.css'
 import './stile/sektionen.css'
 
