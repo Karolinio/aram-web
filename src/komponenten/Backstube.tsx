@@ -82,8 +82,8 @@ export default function Backstube() {
           <img
             src="/bilder/echt/fatayer-frei.png"
             alt="Ein Fata’er von Aram, gewölbt und glänzend, dicht mit Sesam und Schwarzkümmel bestreut"
-            width={500}
-            height={400}
+            width={1000}
+            height={799}
             loading="eager"
             fetchPriority="high"
             decoding="async"

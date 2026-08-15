@@ -35,7 +35,6 @@ import { useFlug, useVersatz } from '../bewegung.ts'
  * unten nimmt beliebig viele.
  */
 
-/** Die Bahn des reisenden Gerichts. Von unten links nach oben, drehend. */
 /**
  * Von unten links nach oben — und dabei nach rechts ausweichend.
  *
@@ -45,10 +44,19 @@ import { useFlug, useVersatz } from '../bewegung.ts'
  * rechtsbündige Überschrift mit umbrechender Augenbraue war der Preis dafür.
  */
 const BAHN = {
-  y: [0.38, -0.16] as [number, number],
-  x: [-0.1, 0.55] as [number, number],
-  dreh: [-15, 7] as [number, number],
-  skala: [0.82, 1.08] as [number, number],
+  /* Klein, weil `position: sticky` das Halten übernimmt. Die Bewegung kommt
+     aus der Drehung, nicht aus dem Verschieben. */
+  y: [0.1, -0.1] as [number, number],
+  x: [-0.06, 0.06] as [number, number],
+  dreh: [-13, 9] as [number, number],
+  /* Die beiden Achsen, die aus einem Bild einen Gegenstand machen: das Kippen
+     nach links/rechts und das Neigen nach vorn/hinten. Zusammen mit `z` und
+     der `perspective` der Bühne liest es sich, als drehte sich das Gericht im
+     Raum — ohne eine einzige Zeile 3D-Geometrie. */
+  drehY: [-30, 26] as [number, number],
+  drehX: [12, -9] as [number, number],
+  z: [-220, 160] as [number, number],
+  skala: [0.88, 1.05] as [number, number],
   buehne: '.prozess',
   /* Unter 1000 px gibt es keine freie linke Bahn — siehe useFlug. */
   abBreite: 1000,
@@ -117,34 +125,114 @@ export default function Handarbeit() {
             <h2 id="prozess-titel">Alles entsteht vor deinen Augen</h2>
           </header>
 
-          <ol className="folge">
-            {RECHTECKE.map((s, i) => (
-              <Rechteck key={s.zahl} s={s} i={i} />
-            ))}
-          </ol>
+          <div className="prozess__gitter">
+            {/* Die linke Spur ist so hoch wie die Folge daneben. Sie muss es
+                sein, sonst hat `position: sticky` keinen Weg zum Kleben. */}
+            <div className="spur">
+              {/* Klebender Rahmen und gedrehtes Bild sind zwei Elemente. Läge
+                  die Beschriftung im gedrehten, würde sie mitkippen; läge sie
+                  frei daneben, verdeckte das Gericht sie beim Wandern. So
+                  klebt beides gemeinsam, und nur das Bild dreht sich. */}
+              <div className="klebt">
+                <p className="flieger__wort">
+                  <span className="schritt__zahl">03</span>
+                  <span className="flieger__titel">Erst dann belegt</span>
+                  <span className="flieger__text">
+                    Und in den heissen Ofen. Deshalb dauert es ein paar Minuten.
+                  </span>
+                </p>
+                <div className="flieger" ref={flieger}>
+                  <img
+                    src="/bilder/echt/fatayer-frei.png"
+                    alt="Ein fertiges Fata’er von Aram, gewölbt und glänzend, dicht mit Sesam und Schwarzkümmel bestreut"
+                    width={1000}
+                    height={799}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+              </div>
+            </div>
 
-          {/* Das reisende Gericht. Es liegt ausserhalb der Schrittliste, weil es
-              kein Schritt IST — es ist das Ergebnis, und es bewegt sich quer
-              durch alle Schritte hindurch. */}
-          <div className="flieger" ref={flieger}>
-            <img
-              src="/bilder/echt/fatayer-frei.png"
-              alt="Ein fertiges Fata’er von Aram, gewölbt und glänzend, dicht mit Sesam und Schwarzkümmel bestreut"
-              width={500}
-              height={400}
-              loading="lazy"
-              decoding="async"
-            />
-            <p className="flieger__wort">
-              <span className="schritt__zahl">03</span>
-              <span className="flieger__titel">Erst dann belegt</span>
-              <span className="flieger__text">
-                Und in den heissen Ofen. Deshalb dauert es ein paar Minuten.
-              </span>
-            </p>
+            <ol className="folge">
+              {RECHTECKE.map((s, i) => (
+                <Rechteck key={s.zahl} s={s} i={i} />
+              ))}
+            </ol>
           </div>
         </div>
+
+        {/* Vierzehn freigestellte Sesam- und Schwarzkümmelkörner, jedes mit
+            eigenem Tempo. Sie liegen hinter der Bühne und geben dem Raum eine
+            Ausdehnung. Erzeugt — aber Material ohne erkennbaren Ort, und damit
+            auf der erlaubten Seite der Grenze. Ein erzeugtes Gericht wäre es
+            nicht. */}
+        <Koerner />
       </section>
     </>
+  )
+}
+
+/**
+ * Einzelne Körner statt Klumpen.
+ *
+ * ═══ Zwei Fehlversuche, und warum der dritte funktioniert ═══
+ *
+ * 1. Drei Schichten zu 46/30/62 Prozent der Sektionsbreite: auf 1440 px sind
+ *    das Körner von zwei Zentimetern. Sie lasen sich als Mandeln.
+ * 2. Fünf kleine Schichten: richtig gross, aber jede zeigte dasselbe Blatt
+ *    komplett — fünf enge Klumpen statt verstreuter Körner.
+ *
+ * Jetzt zeigt jedes Teilchen einen AUSSCHNITT des Blattes. `background-size:
+ * 380%` bildet das Blatt auf knapp das Vierfache des Teilchens ab, und
+ * `background-position` wählt daraus eine Stelle. Vierzehn Teilchen, vierzehn
+ * verschiedene Stellen: aus einem Bild werden vierzehn verschiedene Körner,
+ * bei einem einzigen Netzabruf.
+ *
+ * Die Stellen sind von Hand gewählt und liegen im mittleren Bereich des
+ * Blattes — an den Rändern ist es leer, und ein leeres Teilchen ist ein Loch.
+ */
+const KOERNER = [
+  { x: 32, y: 24, gr: 44, li: 3, ob: 6, tempo: -0.3, deck: 0.5 },
+  { x: 58, y: 30, gr: 26, li: 16, ob: 15, tempo: 0.2, deck: 0.36 },
+  { x: 44, y: 52, gr: 34, li: 27, ob: 3, tempo: -0.42, deck: 0.28 },
+  { x: 66, y: 44, gr: 20, li: 41, ob: 21, tempo: 0.32, deck: 0.42 },
+  { x: 38, y: 70, gr: 40, li: 55, ob: 9, tempo: -0.24, deck: 0.32 },
+  { x: 72, y: 62, gr: 28, li: 84, ob: 17, tempo: 0.26, deck: 0.45 },
+  { x: 50, y: 38, gr: 22, li: 92, ob: 40, tempo: -0.36, deck: 0.3 },
+  { x: 60, y: 70, gr: 36, li: 8, ob: 44, tempo: 0.18, deck: 0.34 },
+  { x: 28, y: 46, gr: 24, li: 34, ob: 58, tempo: -0.46, deck: 0.4 },
+  { x: 70, y: 26, gr: 46, li: 62, ob: 52, tempo: 0.36, deck: 0.26 },
+  { x: 40, y: 60, gr: 18, li: 78, ob: 66, tempo: -0.2, deck: 0.44 },
+  { x: 54, y: 22, gr: 32, li: 21, ob: 78, tempo: 0.44, deck: 0.3 },
+  { x: 64, y: 54, gr: 26, li: 47, ob: 86, tempo: -0.34, deck: 0.38 },
+  { x: 36, y: 34, gr: 38, li: 88, ob: 88, tempo: 0.22, deck: 0.28 },
+]
+
+function Koerner() {
+  return (
+    <div className="koerner" aria-hidden="true">
+      {KOERNER.map((k, i) => (
+        <Korn key={i} k={k} />
+      ))}
+    </div>
+  )
+}
+
+function Korn({ k }: { k: (typeof KOERNER)[number] }) {
+  const ref = useVersatz<HTMLSpanElement>(k.tempo)
+  return (
+    <span
+      ref={ref}
+      className="korn"
+      style={{
+        width: `${k.gr}px`,
+        height: `${k.gr}px`,
+        left: `${k.li}%`,
+        top: `${k.ob}%`,
+        opacity: k.deck,
+        backgroundPosition: `${k.x}% ${k.y}%`,
+      }}
+    />
   )
 }

@@ -20,42 +20,31 @@ import Fusszeile from './komponenten/Fusszeile.tsx'
 import Bestellleiste from './komponenten/Bestellleiste.tsx'
 import Mehlstaub from './komponenten/ui/Mehlstaub.tsx'
 
+import { scrollenStarten } from './scrollen.ts'
 import { SLOTS } from './gerichte.ts'
 import { lueckenVorLive } from './aram.config.ts'
 import { preiseFehlen } from './inhalt.ts'
 
 /**
- * Weiches Scrollen mit Lenis — aber NUR, wenn der Nutzer Bewegung will.
+ * Weiches Scrollen — aber NUR, wenn der Nutzer Bewegung will.
  *
- * Wer Bewegung reduziert haben will, will erst recht kein Scrollen, das
- * nachfedert. Dann bleibt es beim nativen Scrollen des Browsers.
+ * Die Mechanik steht in src/scrollen.ts, weil sie eine Bedingung hat, die ein
+ * Hook nicht garantieren kann: es darf genau EINE Instanz geben, und sie muss
+ * sich denselben Ticker mit ScrollTrigger teilen.
  */
 function useWeichesScrollen() {
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    let lenis: { raf: (t: number) => void; destroy: () => void } | null = null
-    let id = 0
+    let aufraeumen: (() => void) | null = null
     let tot = false
 
-    void import('lenis')
-      .then(({ default: Lenis }) => {
-        if (tot) return
-        lenis = new Lenis({ duration: 0.9, smoothWheel: true })
-        const takt = (t: number) => {
-          lenis?.raf(t)
-          id = requestAnimationFrame(takt)
-        }
-        id = requestAnimationFrame(takt)
-      })
-      /* Schlägt das Nachladen fehl, scrollt der Browser eben selbst. Weiches
-         Scrollen ist Komfort, nicht Inhalt — eine unbehandelte Ablehnung in der
-         Konsole wäre der schlechtere Tausch. */
-      .catch(() => undefined)
+    void scrollenStarten().then((f) => {
+      if (tot) f?.()
+      else aufraeumen = f
+    })
 
     return () => {
       tot = true
-      cancelAnimationFrame(id)
-      lenis?.destroy()
+      aufraeumen?.()
     }
   }, [])
 }

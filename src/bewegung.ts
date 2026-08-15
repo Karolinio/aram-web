@@ -119,8 +119,14 @@ type Flug = {
   y: [von: number, bis: number]
   /** Seitlicher Drift, in Anteilen der Elementbreite. */
   x: [von: number, bis: number]
-  /** Drehung in Grad. */
+  /** Drehung in der Bildebene, in Grad. */
   dreh: [von: number, bis: number]
+  /** Drehung um die Hochachse — das Kippen nach links und rechts. */
+  drehY: [von: number, bis: number]
+  /** Drehung um die Querachse — das Neigen nach vorn und hinten. */
+  drehX: [von: number, bis: number]
+  /** Tiefe in Pixeln. Braucht `perspective` am Vorfahren, sonst passiert nichts. */
+  z: [von: number, bis: number]
   /** Grösse. Ein Gegenstand, der näher kommt, wird grösser. */
   skala: [von: number, bis: number]
   /** Woran der Flug hängt. Steigt der Wähler ins Leere, hängt er am Element selbst. */
@@ -203,19 +209,30 @@ export function useFlug<T extends HTMLElement>(f: Flug) {
           y: () => f.y[0] * window.innerHeight,
           xPercent: f.x[0] * 100,
           rotate: f.dreh[0],
+          rotateY: f.drehY[0],
+          rotateX: f.drehX[0],
+          z: f.z[0],
           scale: f.skala[0],
         },
         {
           y: () => f.y[1] * window.innerHeight,
           xPercent: f.x[1] * 100,
           rotate: f.dreh[1],
+          rotateY: f.drehY[1],
+          rotateX: f.drehX[1],
+          z: f.z[1],
           scale: f.skala[1],
+          /* Linear. Die Beschleunigung liefert der Daumen des Nutzers; eine
+             Kurve obendrauf kämpft dagegen und liest sich als Verzögerung. */
           ease: 'none',
           scrollTrigger: {
             trigger: buehne,
             start: 'top bottom',
             end: 'bottom top',
-            scrub: true,
+            /* `1` statt `true`: eine Sekunde Nachlauf. Starr gescrubbt ist
+               technisch richtig und fühlt sich mechanisch an — das ist der
+               Unterschied, der eine Seite teuer wirken lässt. */
+            scrub: 1,
             invalidateOnRefresh: true,
             onToggle: ({ isActive }) => {
               el.style.willChange = isActive ? 'transform' : ''
@@ -236,7 +253,7 @@ export function useFlug<T extends HTMLElement>(f: Flug) {
       tot = true
       abraeumen?.()
     }
-  }, [breitGenug, f.buehne, f.y, f.x, f.dreh, f.skala])
+  }, [breitGenug, f.buehne, f.y, f.x, f.dreh, f.drehY, f.drehX, f.z, f.skala])
 
   return ref
 }

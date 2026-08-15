@@ -343,23 +343,133 @@
 .prozess {
   position: relative;
   padding-block: var(--raum-sektion);
-  /* Die Bahn des Fliegers reicht über die Sektionskante hinaus; ohne `clip`
-     entstünde daraus eine waagerechte Scrollleiste. */
+  /* Die Bahn des Fliegers und die Körnerschichten reichen über die Kante
+     hinaus; ohne `clip` entstünde daraus eine waagerechte Scrollleiste. */
   overflow: clip;
+  /**
+   * Die Tiefe der Bühne.
+   *
+   * OHNE diese Zeile passiert bei `rotateY`, `rotateX` und `translateZ`
+   * praktisch nichts — die Drehungen werden flach projiziert und das Gericht
+   * wird beim Kippen nur schmaler. Erst die Perspektive macht aus einer
+   * Drehung eine Drehung IM RAUM.
+   *
+   * 1400 px ist weit genug, dass die Verzerrung an den Rändern nicht
+   * auffällt, und nah genug, dass man das Kippen sieht. Bei 600 px sähe es
+   * aus wie ein Fischauge.
+   */
+  perspective: 1400px;
 }
 
-.prozess__buehne { position: relative; }
+.prozess__buehne { position: relative; z-index: 1; }
 
-/* Linksbündig und normal breit. Rechtsbündig gesetzt — um die linke Bahn für
-   den Flieger frei zu halten — brach die Augenbraue um und die Überschrift
-   klebte am Rand. Der Flieger weicht stattdessen aus: er steigt nach rechts,
-   statt in den Kopf zu fliegen. */
 /* `rem`, nicht `ch`. `ch` rechnet gegen die Schriftgrösse DIESES Elements — das
    ist die Fliesstextgrösse, nicht die der Überschrift darin. 24ch ergaben so
    204 px statt der gemeinten ~770, und die Überschrift brach nach jedem Wort um. */
 .prozess__kopf {
   max-width: 34rem;
   margin-bottom: clamp(2.5rem, 6vw, 6rem);
+}
+
+.prozess__gitter {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: clamp(1.5rem, 3vw, 3rem);
+}
+
+/**
+ * Die Spur, auf der das Gericht klebt.
+ *
+ * `position: sticky` und nicht GSAPs `pin`. Beide halten ein Element fest;
+ * `pin` schiebt dafür einen Platzhalter ins Layout, und dieser Platzhalter
+ * kämpft mit den negativen Aussenabständen, aus denen hier die Überlappungen
+ * bestehen. Sticky greift nicht ins Layout ein, kostet keinen Frame und kann
+ * nicht in der falschen Höhe enden, wenn sich das Fenster ändert.
+ *
+ * Die Spur muss so hoch sein wie die Folge daneben — sonst hat das klebende
+ * Element keinen Weg, auf dem es kleben könnte. Genau dafür ist sie ein
+ * Gitterelement, das sich streckt.
+ */
+.spur {
+  position: relative;
+  align-self: stretch;
+}
+
+/* Klebt als Ganzes; nur das Bild darin dreht sich. Gemessen: lag die
+   Beschriftung selbst klebend mit fester Höhe darunter, verdeckte das
+   wandernde Gericht sie — die Höhe des Bildes ist nicht konstant, weil es
+   skaliert. */
+.klebt {
+  position: sticky;
+  top: 22vh;
+}
+
+.flieger {
+  width: min(100%, 24rem);
+  margin-top: 1.4rem;
+  /* Damit die 3D-Drehung des Kindes nicht flachgerechnet wird. */
+  transform-style: preserve-3d;
+  pointer-events: none;
+}
+
+.flieger img {
+  width: 100%;
+  height: auto;
+  filter: var(--schatten-speise);
+}
+
+.flieger__wort {
+  margin: 0;
+  max-width: 22ch;
+}
+
+.flieger__titel {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.3rem);
+  font-weight: 570;
+  font-variation-settings: var(--wonk-klein);
+  margin-bottom: 0.3rem;
+}
+
+.flieger__text {
+  display: block;
+  font-size: var(--text-meta);
+  color: var(--russ-mtl);
+}
+
+/**
+ * Sesam und Schwarzkümmel in drei Tiefen.
+ *
+ * Sie liegen HINTER der Bühne (z-index 0 gegen 1) und ziehen unterschiedlich
+ * schnell vorbei. Das ist der billigste Raumeindruck, den es gibt: nichts dreht
+ * sich, nichts skaliert, nur drei Geschwindigkeiten.
+ *
+ * Erzeugt — aber Material ohne erkennbaren Ort, und damit auf der erlaubten
+ * Seite der Grenze. Ein erzeugtes Gericht wäre es nicht.
+ */
+.koerner {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: clip;
+  pointer-events: none;
+}
+
+/* Jedes Teilchen zeigt einen anderen Ausschnitt desselben Blattes. 380 %
+   bildet das Blatt auf knapp das Vierfache des Teilchens ab — gross genug,
+   dass ein Ausschnitt ein oder zwei Körner trifft, klein genug, dass er nicht
+   im leeren Rand landet. */
+.korn {
+  position: absolute;
+  display: block;
+  background-image: url('/bilder/textur/koerner.png');
+  background-size: 380% 380%;
+  background-repeat: no-repeat;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .koerner { display: none; }
 }
 
 .folge {
@@ -413,60 +523,6 @@
   font-size: var(--text-meta);
   color: var(--russ-mtl);
   max-width: 22ch;
-}
-
-/**
- * Der Flieger — das einzige Ding auf dieser Seite statt eines Bildes.
- *
- * Kein Rahmen, kein Kasten, kein Hintergrund: nur der Eigenschatten, und der
- * fällt nach unten rechts, weil das Licht vom Fenster links oben kommt. Genau
- * dieser Schatten macht aus einem Aufkleber einen Gegenstand.
- *
- * Die Bewegung steht in src/bewegung.ts und ist reines `transform`.
- */
-.flieger {
-  position: absolute;
-  left: 0;
-  bottom: 8%;
-  width: clamp(13rem, 26vw, 24rem);
-  z-index: 2;
-  pointer-events: none;
-}
-
-.flieger img {
-  width: 100%;
-  height: auto;
-  filter: var(--schatten-speise);
-}
-
-.flieger__wort {
-  margin: 1.1rem 0 0;
-  max-width: 22ch;
-}
-
-.flieger__titel {
-  display: block;
-  font-family: var(--font-display);
-  font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.3rem);
-  font-weight: 570;
-  font-variation-settings: var(--wonk-klein);
-  margin-bottom: 0.3rem;
-}
-
-.flieger__text {
-  display: block;
-  font-size: var(--text-meta);
-  color: var(--russ-mtl);
-}
-
-/* Ohne Bewegung reist nichts. Dann steht der Flieger einfach unter der Folge —
-   ersetzt, nicht gestrichen. */
-@media (prefers-reduced-motion: reduce) {
-  .flieger {
-    position: static;
-    width: min(100%, 22rem);
-    margin: clamp(2rem, 5vw, 4rem) 0 0;
-  }
 }
 
 /* ── Die Karte ────────────────────────────────────────────────────────────── */
@@ -964,13 +1020,20 @@
   .schritt__text { max-width: none; }
   /* Unter 1000 px reist das Gericht nicht, es steht als letzter Schritt da —
      zusammengelegt, nicht gestrichen. Fliegend verdeckte es auf 393 px die
-     Beschriftung des zweiten Schritts, und beides war unlesbar. */
-  .flieger {
+     Beschriftung des zweiten Schritts, und beides war unlesbar. Damit fällt
+     auch die zweispaltige Bühne weg: eine Spur zum Kleben braucht Platz
+     neben dem Inhalt, und den gibt es hier nicht. */
+  .prozess { perspective: none; }
+  .prozess__gitter { grid-template-columns: minmax(0, 1fr); }
+  .spur { display: block; }
+  .klebt { position: static; top: auto; }
+  .flieger,
+  .flieger__wort {
     position: static;
-    width: 72%;
-    margin: 1rem 0 0 6%;
+    top: auto;
   }
-  .flieger__wort { margin-top: 0.9rem; }
+  .flieger { width: 72%; margin: 1rem 0 0 6%; }
+  .flieger__wort { margin: 0.9rem 0 0 6%; }
 
   .laden__bild,
   .laden__wort { grid-column: 1 / -1; }
