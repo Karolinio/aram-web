@@ -22,6 +22,7 @@ import Mehlstaub from './komponenten/ui/Mehlstaub.tsx'
 
 import { scrollenStarten } from './scrollen.ts'
 import { SLOTS } from './gerichte.ts'
+import { erzeugteGerichte } from './gebaecke.ts'
 import { lueckenVorLive } from './aram.config.ts'
 import { preiseFehlen } from './inhalt.ts'
 
@@ -74,6 +75,11 @@ function useLueckenMelden() {
     )
     console.log('Preise fehlen:', preiseFehlen(), 'von',
       SLOTS.length > 0 ? 'allen Gerichten der Karte' : '—')
+    console.warn(
+      'ERZEUGTE Gerichtebilder auf dieser Seite:', erzeugteGerichte(),
+      '— sie zeigen NICHT ihr Essen. Siehe public/bilder/erzeugt/LIESMICH.md.',
+      'Sobald die echten Fotos da sind: Ordner löschen, nicht ergänzen.',
+    )
     console.log('Vor dem Livegang:', lueckenVorLive().join(' · ') || 'nichts')
     console.groupEnd()
     /* eslint-enable no-console */

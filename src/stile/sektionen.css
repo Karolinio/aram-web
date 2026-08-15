@@ -393,35 +393,29 @@
 .spur {
   position: relative;
   align-self: stretch;
+  /* Fünf Bahnen brauchen Weg. Ohne diese Mindesthöhe ist die Spur nur so hoch
+     wie die zwei Bilder daneben, und die unteren Gebäcke stehen ausserhalb. */
+  min-height: 108vh;
+  /* Damit die Gebäcke einen Raum haben, in dem sie sich drehen können, statt
+     flach projiziert zu werden. Die Sektion setzt die Perspektive, dieser
+     Kasten reicht sie an seine Kinder weiter. */
+  transform-style: preserve-3d;
 }
 
-/* Klebt als Ganzes; nur das Bild darin dreht sich. Gemessen: lag die
-   Beschriftung selbst klebend mit fester Höhe darunter, verdeckte das
-   wandernde Gericht sie — die Höhe des Bildes ist nicht konstant, weil es
-   skaliert. */
+/* Die Beschriftung klebt; der Schwarm fliegt daran vorbei. */
 .klebt {
   position: sticky;
   top: 22vh;
+  /* Über dem Schwarm. Ein Gebäck, das über der Beschriftung liegt, ist ein
+     schöner Effekt und ein unlesbarer Satz. */
+  z-index: 4;
+  max-width: 17ch;
 }
 
-.flieger {
-  width: min(100%, 24rem);
-  margin-top: 1.4rem;
-  /* Damit die 3D-Drehung des Kindes nicht flachgerechnet wird. */
-  transform-style: preserve-3d;
-  pointer-events: none;
-}
-
-.flieger img {
-  width: 100%;
-  height: auto;
-  filter: var(--schatten-speise);
-}
-
-.flieger__wort {
-  margin: 0;
-  max-width: 22ch;
-}
+/* Diese drei Regeln waren beim Umbau auf den Schwarm versehentlich mit dem
+   alten Flieger-Block gelöscht worden. Ohne sie liefen Titel und Text in einer
+   Zeile zusammen: „Erst dann belegtUnd in den heissen Ofen." */
+.flieger__wort { margin: 0; }
 
 .flieger__titel {
   display: block;
@@ -429,13 +423,57 @@
   font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.3rem);
   font-weight: 570;
   font-variation-settings: var(--wonk-klein);
-  margin-bottom: 0.3rem;
+  margin: 0.15rem 0 0.35rem;
 }
 
 .flieger__text {
   display: block;
   font-size: var(--text-meta);
   color: var(--russ-mtl);
+}
+
+.schwarm {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  pointer-events: none;
+}
+
+/**
+ * Ein fliegendes Gebäck.
+ *
+ * Kein Rahmen, kein Kasten, kein Hintergrund — nur der Eigenschatten, und der
+ * fällt nach unten rechts, weil das Licht vom Fenster links oben kommt. Genau
+ * dieser Schatten macht aus einem Aufkleber einen Gegenstand.
+ */
+.gebaeck {
+  position: absolute;
+  height: auto;
+  filter: var(--schatten-speise);
+}
+
+/* Ihr echtes Gericht liegt vorn. Die erzeugten sind Beiwerk und gehören nach
+   hinten — auch in der Stapelreihenfolge. */
+.gebaeck--echt { z-index: 3; }
+
+/* Ohne Bewegung fliegt nichts. Dann stehen die Gebäcke als ruhige Auslage
+   untereinander — ersetzt, nicht gestrichen. */
+@media (prefers-reduced-motion: reduce) {
+  .schwarm {
+    position: static;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: flex-end;
+    margin-top: 2rem;
+  }
+  .gebaeck {
+    position: static;
+    width: 44% !important;
+    left: auto !important;
+    top: auto !important;
+  }
+  .klebt { position: static; top: auto; }
 }
 
 /**
@@ -1025,15 +1063,32 @@
      neben dem Inhalt, und den gibt es hier nicht. */
   .prozess { perspective: none; }
   .prozess__gitter { grid-template-columns: minmax(0, 1fr); }
-  .spur { display: block; }
-  .klebt { position: static; top: auto; }
-  .flieger,
-  .flieger__wort {
+  /* Die Mindesthöhe der Flugspur ist am Handy eine ganze leere Bildschirmhöhe:
+     dort fliegt nichts, also braucht auch nichts Bahn. Gemessen 10,3 statt der
+     erlaubten 10 — das hier war der Unterschied. */
+  .spur { display: block; min-height: 0; }
+  .klebt { position: static; top: auto; max-width: none; }
+
+  /* Aus dem Schwarm wird eine Auslage: die Gebäcke stehen nebeneinander statt
+     zu fliegen. Fliegend verdeckten sie auf 393 px die Beschriftungen der
+     Schritte, und beides war unlesbar — es gibt hier keine freie Bahn neben
+     dem Inhalt. Zusammengelegt, nicht gestrichen. */
+  .schwarm {
     position: static;
-    top: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
   }
-  .flieger { width: 72%; margin: 1rem 0 0 6%; }
-  .flieger__wort { margin: 0.9rem 0 0 6%; }
+  /* Drei nebeneinander statt zwei: gemessen kam das Handy mit 46 % auf 10,3
+     Bildschirmhöhen, und der Auftrag deckelt bei 10. */
+  .gebaeck {
+    position: static;
+    width: 30% !important;
+    left: auto !important;
+    top: auto !important;
+  }
 
   .laden__bild,
   .laden__wort { grid-column: 1 / -1; }

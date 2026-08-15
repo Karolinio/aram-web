@@ -1,4 +1,5 @@
 import { useFlug, useVersatz } from '../bewegung.ts'
+import { GEBAECKE, type Gebaeck } from '../gebaecke.ts'
 
 /**
  * Der Weg zum Fata’er — die Savor-Sequenz.
@@ -19,48 +20,18 @@ import { useFlug, useVersatz } from '../bewegung.ts'
  * ═══ Die beiden Rollen ═══
  *
  * Die RECHTECKE liegen rechts und ziehen ungleich schnell hoch — das ist der
- * Savor-Rhythmus. Das FREIGESTELLTE Gericht liegt links und REIST: von unten
- * nach oben, dabei dreht es sich und wird grösser. Es ist das einzige Element
- * der Seite mit einem Eigenschatten, weil es als einziges ein Gegenstand ist
- * und kein Bild.
+ * Savor-Rhythmus. Links fliegt der SCHWARM: fünf freigestellte Gebäcke fallen
+ * von oben nach unten durch die Sektion, jedes mit eigener Weite, Drehung und
+ * Tiefe. Sie sind die einzigen Elemente der Seite mit Eigenschatten, weil sie
+ * als einzige Gegenstände sind und keine Bilder.
  *
- * ═══ Warum nur ein Freisteller ═══
+ * ═══ Eins davon ist ihr Essen, vier sind es nicht ═══
  *
- * Aus dem Scan ihrer alten Seite gibt es genau EIN Produktfoto. Der Freisteller
- * ist Hintergrundentfernung an eben diesem Foto — ihr echtes Fata’er, nur ohne
- * Hintergrund. Erzeugt ist daran nichts: ein erzeugtes Fata’er wäre eine
- * Aussage über ein Produkt, das der Gast gleich in der Hand hält.
- *
- * Kommen die restlichen Aufnahmen, fliegen hier mehrere Gerichte — die Bahn
- * unten nimmt beliebig viele.
+ * Welche, steht in gebaecke.ts im Feld `echt` — und warum, in
+ * public/bilder/erzeugt/LIESMICH.md. Kurz: aus dem Scan ihrer alten Seite gibt
+ * es genau EIN Produktfoto, und Karol hat am 15.08.2026 ausdrücklich
+ * entschieden, die übrigen vier erzeugen zu lassen.
  */
-
-/**
- * Von unten links nach oben — und dabei nach rechts ausweichend.
- *
- * Der seitliche Drift ist kein Schmuck: ohne ihn steigt der Flieger am Ende
- * genau in die Überschrift der Sektion. Er weicht ihr aus, statt dass die
- * Überschrift ihm ausweichen muss — das war der erste Versuch, und eine
- * rechtsbündige Überschrift mit umbrechender Augenbraue war der Preis dafür.
- */
-const BAHN = {
-  /* Klein, weil `position: sticky` das Halten übernimmt. Die Bewegung kommt
-     aus der Drehung, nicht aus dem Verschieben. */
-  y: [0.1, -0.1] as [number, number],
-  x: [-0.06, 0.06] as [number, number],
-  dreh: [-13, 9] as [number, number],
-  /* Die beiden Achsen, die aus einem Bild einen Gegenstand machen: das Kippen
-     nach links/rechts und das Neigen nach vorn/hinten. Zusammen mit `z` und
-     der `perspective` der Bühne liest es sich, als drehte sich das Gericht im
-     Raum — ohne eine einzige Zeile 3D-Geometrie. */
-  drehY: [-30, 26] as [number, number],
-  drehX: [12, -9] as [number, number],
-  z: [-220, 160] as [number, number],
-  skala: [0.88, 1.05] as [number, number],
-  buehne: '.prozess',
-  /* Unter 1000 px gibt es keine freie linke Bahn — siehe useFlug. */
-  abBreite: 1000,
-}
 
 const RECHTECKE = [
   {
@@ -109,9 +80,43 @@ function Rechteck({ s, i }: { s: (typeof RECHTECKE)[number]; i: number }) {
   )
 }
 
-export default function Handarbeit() {
-  const flieger = useFlug<HTMLDivElement>(BAHN)
+/**
+ * Ein Gebäck auf seiner Bahn.
+ *
+ * Jedes bekommt seinen eigenen Trigger-Fortschritt über dieselbe Bühne, aber
+ * eigene Weiten, Drehungen und Tiefen. Dass sie sich nicht überholen und nicht
+ * überlappen, steckt in den Zahlen in gebaecke.ts — nicht in einer Kollisions-
+ * rechnung, die auf jedem Bildschirm etwas anderes ergäbe.
+ */
+function Gebaeckstueck({ g }: { g: Gebaeck }) {
+  const ref = useFlug<HTMLImageElement>({
+    y: g.y,
+    x: g.x,
+    dreh: g.dreh,
+    drehY: g.drehY,
+    drehX: g.drehX,
+    z: g.z,
+    skala: g.skala,
+    buehne: '.prozess',
+    abBreite: 1000,
+  })
 
+  return (
+    <img
+      ref={ref}
+      className={g.echt ? 'gebaeck gebaeck--echt' : 'gebaeck'}
+      src={g.quelle}
+      alt={g.alt}
+      width={g.breite}
+      height={g.hoehe}
+      loading="lazy"
+      decoding="async"
+      style={{ left: `${g.li}%`, top: `${g.ob}%`, width: `${g.gr}%` }}
+    />
+  )
+}
+
+export default function Handarbeit() {
   return (
     <>
       <div className="band">
@@ -126,31 +131,21 @@ export default function Handarbeit() {
           </header>
 
           <div className="prozess__gitter">
-            {/* Die linke Spur ist so hoch wie die Folge daneben. Sie muss es
-                sein, sonst hat `position: sticky` keinen Weg zum Kleben. */}
+            {/* Die linke Spur. Sie ist so hoch wie die Folge daneben — nur
+                deshalb haben die Gebäcke einen Weg zum Fliegen. */}
             <div className="spur">
-              {/* Klebender Rahmen und gedrehtes Bild sind zwei Elemente. Läge
-                  die Beschriftung im gedrehten, würde sie mitkippen; läge sie
-                  frei daneben, verdeckte das Gericht sie beim Wandern. So
-                  klebt beides gemeinsam, und nur das Bild dreht sich. */}
-              <div className="klebt">
-                <p className="flieger__wort">
-                  <span className="schritt__zahl">03</span>
-                  <span className="flieger__titel">Erst dann belegt</span>
-                  <span className="flieger__text">
-                    Und in den heissen Ofen. Deshalb dauert es ein paar Minuten.
-                  </span>
-                </p>
-                <div className="flieger" ref={flieger}>
-                  <img
-                    src="/bilder/echt/fatayer-frei.png"
-                    alt="Ein fertiges Fata’er von Aram, gewölbt und glänzend, dicht mit Sesam und Schwarzkümmel bestreut"
-                    width={1000}
-                    height={799}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
+              <p className="klebt flieger__wort">
+                <span className="schritt__zahl">03</span>
+                <span className="flieger__titel">Erst dann belegt</span>
+                <span className="flieger__text">
+                  Und in den heissen Ofen. Deshalb dauert es ein paar Minuten.
+                </span>
+              </p>
+
+              <div className="schwarm">
+                {GEBAECKE.map((g) => (
+                  <Gebaeckstueck key={g.id} g={g} />
+                ))}
               </div>
             </div>
 
