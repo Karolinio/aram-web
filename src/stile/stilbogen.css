@@ -75,7 +75,7 @@
   gap: 1.5rem;
 }
 
-.stil__gerichte img { width: 100%; height: auto; filter: var(--schatten-speise); }
+.stil__gerichte img { width: 100%; height: auto; }
 .stil__name { margin: 0.6rem 0 0; font-family: var(--font-display); font-size: var(--text-meta); }
 .stil__echt { margin: 0; font-size: var(--text-micro); color: var(--terra); }
 .stil__erzeugt { margin: 0; font-size: var(--text-micro); color: var(--russ-mtl); }
@@ -83,3 +83,8 @@
 /* Der Bogen ist kein Hero. Seine Überschrift in `--text-hero` zu setzen war
    der erste Fehler, den er selbst sichtbar gemacht hat. */
 .stil__kopf h1 { font-size: var(--text-sektion); }
+
+.stil__hinweis { margin-bottom: 2rem; }
+.stil__daten { margin: 2rem 0 0; max-width: 34rem; }
+/* Die Gerichtebilder im Bogen sind Belege, keine Gegenstände — kein Schatten. */
+.stil__gerichte .bild img { filter: none; }

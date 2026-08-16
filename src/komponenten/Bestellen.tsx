@@ -1,5 +1,6 @@
 import { ARAM } from '../aram.config.ts'
 import Oeffnung from './ui/Oeffnung.tsx'
+import { Etikett, Kopf, Sektion } from './ui/bausteine.tsx'
 
 const DIENSTE = [
   { name: 'Lieferando', schalter: ARAM.bestellen.lieferando },
@@ -26,7 +27,7 @@ const DIENSTE = [
  */
 export default function Bestellen() {
   return (
-    <section className="bestellen" id="bestellen" aria-labelledby="bestellen-titel">
+    <Sektion id="bestellen" grund="creme-tief" kante klasse="bestellen" beschriftetVon="bestellen-titel">
       {/* Dieselbe Technik wie im Hero: echte Fotografie, darüber ein deckender
           Cremeschleier. Sie schliesst den Kreis — die Seite beginnt und endet
           auf demselben Holz. Der Schleier ist hier dichter, weil hier gelesen
@@ -44,12 +45,12 @@ export default function Bestellen() {
       </div>
 
       <div className="schale">
-        <span className="augenbraue">Bestellen</span>
-        <h2 id="bestellen-titel" className="lebt">Ruf an oder schreib uns</h2>
-        <p className="lead">
-          Beides geht sofort und kostet uns keine Provision. Wir sagen dir am Telefon, wie
-          lange es dauert.
-        </p>
+        <Kopf
+          id="bestellen-titel"
+          etikett="Bestellen"
+          titel="Ruf an oder schreib uns"
+          lead="Beides geht sofort und kostet uns keine Provision. Wir sagen dir am Telefon, wie lange es dauert."
+        />
 
         <Oeffnung className="bestellen__oeffnung" />
 
@@ -59,7 +60,7 @@ export default function Bestellen() {
         <div className="bestellen__gitter">
         <div className="bestellen__wege">
           <a className="weg" href={ARAM.kontakt.telefonHref}>
-            <span className="weg__art">Anrufen</span>
+            <Etikett klasse="weg__art">Anrufen</Etikett>
             <span className="weg__wert">{ARAM.kontakt.telefon}</span>
             <span className="weg__zusatz">Am schnellsten. Auch für Sonderwünsche.</span>
           </a>
@@ -70,7 +71,7 @@ export default function Bestellen() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <span className="weg__art">WhatsApp</span>
+            <Etikett klasse="weg__art">WhatsApp</Etikett>
             <span className="weg__wert">Nachricht schreiben</span>
             <span className="weg__zusatz">
               Gerichte in der Karte antippen — der Text schreibt sich selbst.
@@ -79,8 +80,9 @@ export default function Bestellen() {
         </div>
 
         <div className="dienste">
-          <p className="dienste__titel">
-            Lieferdienste — <span className="luecke">noch nicht bestätigt</span>
+          <Etikett klasse="dienste__titel">Lieferdienste</Etikett>
+          <p className="dienste__stand">
+            <span className="luecke">noch nicht bestätigt</span>
           </p>
           <ul className="dienste__liste">
             {DIENSTE.map((d) => (
@@ -101,6 +103,6 @@ export default function Bestellen() {
         </div>
         </div>
       </div>
-    </section>
+    </Sektion>
   )
 }

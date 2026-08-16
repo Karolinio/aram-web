@@ -1,4 +1,5 @@
 import { GEBAECKE } from '../gebaecke.ts'
+import { Bild, Datenzeile, Etikett, Kopf } from './ui/bausteine.tsx'
 
 /**
  * Der Stilbogen — die Antwort auf „wie binden wir einen konsistenten Style
@@ -18,6 +19,13 @@ import { GEBAECKE } from '../gebaecke.ts'
  *
  * Erreichbar unter /stil.html, nicht verlinkt. Sie gehört zur Werkstatt, nicht
  * zur Seite.
+ *
+ * ═══ Und sie zeigt keine NACHBILDUNG ═══
+ *
+ * Jedes Bauteil hier ist dasselbe `<Kopf>`, dasselbe `<Etikett>`, dieselbe
+ * `<Datenzeile>`, die auch die Seite verwendet. Ein Stilbogen, der seine
+ * Beispiele selbst nachbaut, driftet von dem ab, was er beschreibt — und dann
+ * ist er schlimmer als keiner, weil man ihm glaubt.
  */
 
 const FARBEN = [
@@ -48,11 +56,12 @@ export default function Stilbogen() {
     <main className="stil">
       <div className="schale">
         <header className="stil__kopf">
-          <span className="augenbraue">Stilbogen · nicht Teil der Seite</span>
+          <Etikett>Stilbogen · nicht Teil der Seite</Etikett>
           <h1 className="lebt">Woraus Aram gebaut ist</h1>
           <p className="lead">
-            Jeder Wert hier kommt aus <code>src/stile/tokens.css</code> — derselben Datei, aus
-            der die Seite liest. Sieht hier etwas falsch aus, ist es auf der Seite auch falsch.
+            Jeder Wert kommt aus <code>src/stile/tokens.css</code>, jedes Bauteil aus{' '}
+            <code>src/komponenten/ui/bausteine.tsx</code> — denselben Dateien, aus denen die
+            Seite besteht. Sieht hier etwas falsch aus, ist es auf der Seite auch falsch.
           </p>
         </header>
 
@@ -93,10 +102,25 @@ export default function Stilbogen() {
         </section>
 
         <section className="stil__block">
-          <h2 className="lebt">Etikett, Linie, Knopf</h2>
-          <p className="augenbraue">So sieht jedes Etikett aus</p>
-          <div className="stil__punkte" />
-          <p className="leise">Die gepunktete Linie trennt überall — Karte, Adressdaten, Fuss.</p>
+          <h2 className="lebt">Die Bauteile</h2>
+          <p className="leise stil__hinweis">
+            Alles hierunter ist derselbe Code wie auf der Seite — kein Nachbau.
+          </p>
+
+          <Kopf
+            id="stil-kopfbeispiel"
+            etikett="So sieht ein Sektionskopf aus"
+            titel="Überschrift mit Achsen-Hover"
+            lead="Und der Vorspann darunter. Etikett, Überschrift, Vorspann — immer in dieser Reihenfolge, immer mit denselben Abständen."
+          />
+
+          <dl className="stil__daten">
+            <Datenzeile was="Datenzeile">Etikett links, Wert rechts, gepunktete Linie oben.</Datenzeile>
+            <Datenzeile was="Noch eine">
+              <span className="luecke">So sieht eine Lücke aus</span>
+            </Datenzeile>
+          </dl>
+
           <div className="stil__knoepfe">
             <span className="knopf">Anrufen</span>
             <span className="knopf knopf--glut">Per WhatsApp</span>
@@ -112,7 +136,7 @@ export default function Stilbogen() {
           <ul className="stil__gerichte">
             {GEBAECKE.map((g) => (
               <li key={g.id}>
-                <img src={g.bilder[0]} alt="" width={g.breite} height={g.hoehe} loading="lazy" />
+                <Bild quelle={g.bilder[0]} alt="" breite={g.breite} hoehe={g.hoehe} />
                 <p className="stil__name">{g.name}</p>
                 <p className={g.echt ? 'stil__echt' : 'stil__erzeugt'}>
                   {g.echt ? 'ihr Foto' : 'erzeugt'} · {g.bilder.length}{' '}

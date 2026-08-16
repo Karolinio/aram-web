@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react'
 import { inhalt, type Gericht } from '../inhalt.ts'
 import { anzahlVon, minus, plus } from '../bestellung.ts'
 import { useBestellung } from '../useBestellung.ts'
+import { Kopf, Sektion } from './ui/bausteine.tsx'
 
 /**
  * Die Speisekarte — ein Werkzeug, kein Aushang.
@@ -69,18 +70,21 @@ export default function Karte() {
     setVersteckt((v) => (v.includes(a) ? v.filter((x) => x !== a) : [...v, a]))
 
   return (
-    <section className="karte" id="karte" aria-labelledby="karte-titel">
+    <Sektion id="karte" grund="papier" kante klasse="karte" beschriftetVon="karte-titel">
       <div className="schale">
-        <header className="karte__kopf">
-          <span className="augenbraue">Speisekarte</span>
-          <h2 id="karte-titel" className="lebt">Was es gibt</h2>
-          {ohnePreis > 0 && (
-            <p className="karte__preishinweis">
-              <span className="luecke">Die Preise tragen wir nach</span> — sie liegen uns noch
-              nicht vor. Am Telefon nennen wir sie dir sofort.
-            </p>
-          )}
-        </header>
+        <Kopf
+          id="karte-titel"
+          etikett="Speisekarte"
+          titel="Was es gibt"
+          lead={
+            ohnePreis > 0 ? (
+              <>
+                <span className="luecke">Die Preise tragen wir nach</span> — sie liegen uns
+                noch nicht vor. Am Telefon nennen wir sie dir sofort.
+              </>
+            ) : undefined
+          }
+        />
 
         <div className="filter">
           <p className="filter__titel" id="filter-titel">
@@ -194,6 +198,6 @@ export default function Karte() {
           </div>
         )}
       </div>
-    </section>
+    </Sektion>
   )
 }

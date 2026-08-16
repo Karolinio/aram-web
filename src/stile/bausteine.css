@@ -1,0 +1,152 @@
+/**
+ * Die Bausteine — das Stilblatt, aus dem die Seite besteht.
+ *
+ * ═══ Was hier steht und was nicht ═══
+ *
+ * Hier steht alles, was MEHR ALS EINE Sektion betrifft: Grund, Innenabstand,
+ * Kante, Etikett, Sektionskopf, Bild mit Unterschrift, Datenzeile.
+ *
+ * In `sektionen.css` steht nur noch, was eine Sektion EINZIGARTIG macht — der
+ * Schwarm, die klebende Spur, der Allergenfilter, das orange Band.
+ *
+ * Die Trennung ist der eigentliche Punkt. Vorher stand beides gemischt in einer
+ * Datei, und deshalb hatte jede Sektion ihre eigene Auffassung davon, wie weit
+ * ein Etikett von seiner Überschrift steht.
+ */
+
+/* ── Sektion ──────────────────────────────────────────────────────────────── */
+
+.sektion {
+  position: relative;
+  padding-block: var(--raum-sektion);
+}
+
+.sektion--creme { background: var(--creme); }
+.sektion--papier { background: var(--papier); }
+.sektion--creme-tief { background: var(--creme-tief); }
+
+/* Die gepunktete Linie an der Oberkante. EIN Mittel, überall dasselbe —
+   vorher hatte die Karte Linien oben und unten, Bestellen nur oben, der Laden
+   gar keine. */
+.sektion--kante {
+  background-image: var(--linie-punkt);
+  background-position: top;
+  background-size: 100% 1px;
+  background-repeat: no-repeat;
+}
+
+/* Grund UND Kante zusammen: der Grund muss als zweite Ebene mit. */
+.sektion--kante.sektion--papier {
+  background-image: var(--linie-punkt), linear-gradient(var(--papier), var(--papier));
+  background-position: top, top;
+  background-size: 100% 1px, 100% 100%;
+  background-repeat: no-repeat, no-repeat;
+}
+
+.sektion--kante.sektion--creme-tief {
+  background-image: var(--linie-punkt), linear-gradient(var(--creme-tief), var(--creme-tief));
+  background-position: top, top;
+  background-size: 100% 1px, 100% 100%;
+  background-repeat: no-repeat, no-repeat;
+}
+
+/* ── Etikett ──────────────────────────────────────────────────────────────── */
+
+/**
+ * DAS Etikett. Eine Form für die ganze Seite.
+ *
+ * Der kurze Strich davor ist das Erkennungszeichen: wo er steht, steht ein
+ * Etikett. Vorher trugen fünf Stellen fünf verschiedene Formen derselben Sache.
+ */
+.etikett {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--font-text);
+  font-size: var(--text-micro);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.3;
+  color: var(--terra);
+}
+
+.etikett::before {
+  content: '';
+  width: 1.1rem;
+  height: 1px;
+  background: currentColor;
+  flex: none;
+}
+
+/* ── Sektionskopf ─────────────────────────────────────────────────────────── */
+
+.kopfblock {
+  max-width: 34rem;
+  margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+/* Über einer Überschrift steht das Etikett etwas grösser und mit längerem
+   Strich — dieselbe Sprache, nur betont. */
+.kopfblock .etikett {
+  font-size: var(--text-meta);
+  margin-bottom: 0.8rem;
+}
+.kopfblock .etikett::before { width: 1.7rem; }
+
+.kopfblock h2 { margin-bottom: 1rem; }
+.kopfblock__lead { margin: 0; }
+
+/* ── Bild ─────────────────────────────────────────────────────────────────── */
+
+.bild { margin: 0; }
+.bild img { width: 100%; height: auto; }
+
+.bild figcaption {
+  margin-top: 0.7rem;
+  font-size: var(--text-micro);
+  color: var(--russ-mtl);
+  max-width: 30ch;
+  letter-spacing: 0.01em;
+}
+
+/**
+ * Unterschrift ÜBER dem Bild.
+ *
+ * Für Bilder, die nach unten aus ihrer Sektion herausragen: dort landete die
+ * Unterschrift sonst auf der nächsten Fläche — im Hero auf dem orangen Band,
+ * wo `--russ-mtl` auf 2,2 kommt und unlesbar ist. Eine Bildunterschrift über
+ * dem Bild ist eine Konvention aus dem Zeitungssatz, kein Notbehelf.
+ */
+.bild--umgedreht { display: flex; flex-direction: column-reverse; }
+.bild--umgedreht figcaption { margin: 0 0 0.7rem; }
+
+/* ── Datenzeile ───────────────────────────────────────────────────────────── */
+
+.datenzeile {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr);
+  gap: 1rem;
+  padding-block: 0.9rem;
+  background-image: var(--linie-punkt);
+  background-position: top;
+  background-size: 100% 1px;
+  background-repeat: no-repeat;
+}
+
+.datenzeile dt { padding-top: 0.35em; }
+.datenzeile dd { margin: 0; }
+
+@media (max-width: 700px) {
+  .datenzeile { grid-template-columns: minmax(0, 1fr); gap: 0.3rem; }
+
+  /* Der Sektionskopf war nach dem Umbau überall gleich weit — und dadurch am
+     Handy 0,2 Bildschirmhöhen zu hoch. Ein Baustein zu ändern reicht jetzt für
+     alle sieben Abschnitte; vorher wären es sieben Stellen gewesen. */
+  .kopfblock { margin-bottom: 1.75rem; }
+  .kopfblock h2 { margin-bottom: 0.7rem; }
+  .sektion { padding-block: clamp(2.5rem, 2rem + 5vw, 9rem); }
+}
+
+/* `.fuss__titel` und `.dienste__titel` sind keine eigenen Etikettstile mehr —
+   nur noch Abstände an einem `<Etikett>`. */
+.fuss__titel { margin-bottom: 0.8rem; }

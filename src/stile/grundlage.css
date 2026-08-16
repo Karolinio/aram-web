@@ -163,55 +163,14 @@ p { max-width: var(--breite-satz); }
 a { color: var(--terra); text-underline-offset: 0.2em; }
 
 /**
- * DAS Etikett. Eines für die ganze Seite.
+ * Das Etikett wohnt jetzt in bausteine.css.
  *
- * ═══ Warum das der Kern von „nicht konsistent" war ═══
- *
- * Vorher trug jede Sektion ihr eigenes Etikett: die Augenbraue mit Strich, die
- * Beschriftungen im Fuss, die Spaltenköpfe der Adressdaten, der Titel über den
- * Lieferdiensten, die Art des Bestellwegs. Fünf Varianten derselben Sache, in
- * vier Grössen und drei Farben. Niemand sieht das einzeln — man sieht es als
- * Unruhe über die ganze Seite.
- *
- * Jetzt gibt es EINEN Stil, und jedes Etikett trägt denselben kurzen Strich
- * davor. Der Strich ist das Erkennungszeichen: wo er steht, steht ein Etikett.
+ * Hier stand bis zum 16.08. eine Sammelregel für `.augenbraue`, `.daten dt`,
+ * `.dienste__titel`, `.fuss__titel` und `.weg__art`. Nach dem Umbau auf
+ * Bausteine setzte sie ihren Strich ZUSÄTZLICH zu dem des `<Etikett>` darin —
+ * sichtbar als doppelter Strich vor „Wo" im Laden. Genau solche Doppelungen
+ * meint „nicht konsistent", und genau deshalb darf es nur eine Quelle geben.
  */
-.augenbraue,
-.daten dt,
-.dienste__titel,
-.fuss__titel,
-.weg__art {
-  display: flex;
-  align-items: center;
-  gap: 0.55rem;
-  font-family: var(--font-text);
-  font-size: var(--text-micro);
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  line-height: 1.3;
-  color: var(--terra);
-  text-transform: none;
-}
-
-.augenbraue::before,
-.daten dt::before,
-.dienste__titel::before,
-.fuss__titel::before,
-.weg__art::before {
-  content: '';
-  width: 1.1rem;
-  height: 1px;
-  background: currentColor;
-  flex: none;
-}
-
-/* Über einer Überschrift steht es etwas grösser und mit längerem Strich —
-   dieselbe Sprache, nur betont. */
-.augenbraue {
-  font-size: var(--text-meta);
-  margin-bottom: 0.8rem;
-}
-.augenbraue::before { width: 1.7rem; }
 
 .lead {
   font-size: var(--text-lead);

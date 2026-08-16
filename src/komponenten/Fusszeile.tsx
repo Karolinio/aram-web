@@ -1,4 +1,5 @@
 import { ARAM, lueckenVorLive } from '../aram.config.ts'
+import { Etikett } from './ui/bausteine.tsx'
 
 /**
  * Der Fuss.
@@ -36,7 +37,7 @@ export default function Fusszeile() {
         </div>
 
         <nav className="fuss__navi" aria-label="Rechtliches und Kontakt">
-          <p className="fuss__titel">Kontakt</p>
+          <Etikett klasse="fuss__titel">Kontakt</Etikett>
           <ul>
             <li>
               <a href={ARAM.kontakt.telefonHref}>{ARAM.kontakt.telefon}</a>
@@ -57,7 +58,7 @@ export default function Fusszeile() {
         </nav>
 
         <nav className="fuss__navi" aria-label="Rechtliches">
-          <p className="fuss__titel">Rechtliches</p>
+          <Etikett klasse="fuss__titel">Rechtliches</Etikett>
           <ul>
             <li>
               <span className="luecke">Impressum fehlt noch</span>

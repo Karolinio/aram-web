@@ -1,5 +1,6 @@
 import { useBildfolge, useFlug, useVersatz } from '../bewegung.ts'
 import { GEBAECKE, type Gebaeck } from '../gebaecke.ts'
+import { Bild, Etikett, Kopf, Sektion } from './ui/bausteine.tsx'
 
 /**
  * Der Weg zum Fata’er — die Savor-Sequenz.
@@ -61,18 +62,15 @@ function Rechteck({ s, i }: { s: (typeof RECHTECKE)[number]; i: number }) {
 
   return (
     <li className={`schritt schritt--${i + 1}`} ref={ref}>
-      <figure className="schritt__bild">
-        <img
-          src={s.quelle}
-          alt={s.alt}
-          width={s.breite}
-          height={s.hoehe}
-          loading="lazy"
-          decoding="async"
-        />
-      </figure>
+      <Bild
+        klasse="schritt__bild"
+        quelle={s.quelle}
+        alt={s.alt}
+        breite={s.breite}
+        hoehe={s.hoehe}
+      />
       <div className="schritt__wort">
-        <span className="schritt__zahl">{s.zahl}</span>
+        <Etikett klasse="schritt__zahl">{s.zahl}</Etikett>
         <h3 className="schritt__titel">{s.titel}</h3>
         <p className="schritt__text">{s.text}</p>
       </div>
@@ -139,19 +137,21 @@ export default function Handarbeit() {
         <p className="band__satz schale">Du siehst zu, wie dein Fata’er entsteht.</p>
       </div>
 
-      <section className="prozess" aria-labelledby="prozess-titel">
+      <Sektion klasse="prozess" beschriftetVon="prozess-titel">
         <div className="schale prozess__buehne">
-          <header className="prozess__kopf">
-            <span className="augenbraue">Rollen, belegen, in den heissen Ofen</span>
-            <h2 id="prozess-titel" className="lebt">Alles entsteht vor deinen Augen</h2>
-          </header>
+          <Kopf
+            id="prozess-titel"
+            etikett="Rollen, belegen, in den heissen Ofen"
+            titel="Alles entsteht vor deinen Augen"
+            klasse="prozess__kopf"
+          />
 
           <div className="prozess__gitter">
             {/* Die linke Spur. Sie ist so hoch wie die Folge daneben — nur
                 deshalb haben die Gebäcke einen Weg zum Fliegen. */}
             <div className="spur">
               <p className="klebt flieger__wort">
-                <span className="schritt__zahl">03</span>
+                <Etikett klasse="schritt__zahl">03</Etikett>
                 <span className="flieger__titel">Erst dann belegt</span>
                 <span className="flieger__text">
                   Und in den heissen Ofen. Deshalb dauert es ein paar Minuten.
@@ -179,7 +179,7 @@ export default function Handarbeit() {
             auf der erlaubten Seite der Grenze. Ein erzeugtes Gericht wäre es
             nicht. */}
         <Koerner />
-      </section>
+      </Sektion>
     </>
   )
 }

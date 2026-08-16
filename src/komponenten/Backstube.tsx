@@ -2,6 +2,7 @@ import { ARAM } from '../aram.config.ts'
 import { useVersatz } from '../bewegung.ts'
 import Oeffnung from './ui/Oeffnung.tsx'
 import Ladenschild from './Ladenschild.tsx'
+import { Bild } from './ui/bausteine.tsx'
 
 /**
  * Die Backstube — der Anfang.
@@ -26,7 +27,7 @@ import Ladenschild from './Ladenschild.tsx'
  * Produkt, das der Gast gleich in der Hand hält.
  */
 export default function Backstube() {
-  const bild = useVersatz<HTMLElement>(-0.06)
+  const bild = useVersatz<HTMLDivElement>(-0.06)
 
   return (
     <section className="backstube" id="start" aria-labelledby="backstube-titel">
@@ -54,17 +55,15 @@ export default function Backstube() {
             Laden gibt. Sie läuft links aus dem Bild heraus: von Savor geklaut,
             wo genau diese Asymmetrie den Unterschied zwischen einer Seite und
             einem Raster macht. */}
-        <figure className="backstube__laden">
-          <img
-            src="/bilder/echt/team-laden.webp"
-            alt="Fünf Männer vor dem Laden von Aram, mit Nudelholz, einem Blech mit Teigscheiben und zwei hölzernen Ofenschiebern"
-            width={1024}
-            height={784}
-            loading="eager"
-            decoding="async"
-          />
-          <figcaption>Der Inhaber und seine Brüder, vor der Tür in Bonn-Hardtberg</figcaption>
-        </figure>
+        <Bild
+          klasse="backstube__laden"
+          quelle="/bilder/echt/team-laden.webp"
+          alt="Fünf Männer vor dem Laden von Aram, mit Nudelholz, einem Blech mit Teigscheiben und zwei hölzernen Ofenschiebern"
+          breite={1024}
+          hoehe={784}
+          unterschrift="Der Inhaber und seine Brüder, vor der Tür in Bonn-Hardtberg"
+          eilig
+        />
 
         <div className="backstube__satz">
           <Ladenschild />
@@ -98,17 +97,15 @@ export default function Backstube() {
             Ohne Bildunterschrift: das Element liegt frei über der Sektion, und
             eine Unterschrift landete dadurch mitten im Fliesstext. Was es ist,
             sagt der Alternativtext — und die Karte zwei Sektionen weiter. */}
-        <figure className="backstube__bild" ref={bild}>
-          <img
-            src="/bilder/echt/fatayer-frei.webp"
+        <div className="backstube__bild" ref={bild}>
+          <Bild
+            quelle="/bilder/echt/fatayer-frei.webp"
             alt="Ein Fata’er von Aram, gewölbt und glänzend, dicht mit Sesam und Schwarzkümmel bestreut"
-            width={1000}
-            height={799}
-            loading="eager"
-            fetchPriority="high"
-            decoding="async"
+            breite={1000}
+            hoehe={799}
+            eilig
           />
-        </figure>
+        </div>
       </div>
     </section>
   )

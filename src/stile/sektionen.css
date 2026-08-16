@@ -251,12 +251,6 @@
   height: auto;
 }
 
-.backstube__laden figcaption {
-  margin-top: 0.7rem;
-  font-size: var(--text-micro);
-  color: var(--russ-mtl);
-  max-width: 26ch;
-}
 
 /**
  * Das Ladenschild.
@@ -384,13 +378,7 @@
   flex-direction: column-reverse;
 }
 
-.backstube__bild figcaption { margin-bottom: 0.7rem; }
 
-.backstube__bild figcaption {
-  font-size: var(--text-micro);
-  color: var(--russ-mtl);
-  letter-spacing: 0.01em;
-}
 
 /* ── Das Band: das eine gesättigte Farbfeld ───────────────────────────────── */
 
@@ -445,7 +433,6 @@
 
 .prozess {
   position: relative;
-  padding-block: var(--raum-sektion);
   /* Die Bahn des Fliegers und die Körnerschichten reichen über die Kante
      hinaus; ohne `clip` entstünde daraus eine waagerechte Scrollleiste. */
   overflow: clip;
@@ -466,13 +453,6 @@
 
 .prozess__buehne { position: relative; z-index: 1; }
 
-/* `rem`, nicht `ch`. `ch` rechnet gegen die Schriftgrösse DIESES Elements — das
-   ist die Fliesstextgrösse, nicht die der Überschrift darin. 24ch ergaben so
-   204 px statt der gemeinten ~770, und die Überschrift brach nach jedem Wort um. */
-.prozess__kopf {
-  max-width: 34rem;
-  margin-bottom: clamp(2.5rem, 6vw, 6rem);
-}
 
 .prozess__gitter {
   display: grid;
@@ -686,19 +666,8 @@
 
 /* ── Die Karte ────────────────────────────────────────────────────────────── */
 
-.karte {
-  background: var(--papier);
-  border-block: 0;
-  /* Die gepunktete Linie auch an den Sektionskanten. */
-  background-image: var(--linie-punkt), var(--linie-punkt);
-  background-position: top, bottom;
-  background-size: 100% 1px, 100% 1px;
-  background-repeat: no-repeat, no-repeat;
-}
 
-.karte__kopf { margin-bottom: clamp(2rem, 4vw, 3rem); }
-.karte__kopf h2 { margin-bottom: 1rem; }
-.karte__preishinweis { color: var(--russ-mtl); }
+
 
 .filter { margin-bottom: clamp(2rem, 4vw, 3.5rem); }
 
@@ -926,7 +895,6 @@
 .laden__bild img { width: 100%; height: auto; }
 
 .laden__wort { grid-column: 6 / 13; }
-.laden__wort h2 { margin-bottom: 1.2rem; }
 
 /* Die Datenzeilen liefen über sieben Spalten und wurden dadurch zu dünnen
    Balken. Auf Lesebreite gebracht stehen sie als Block. */
@@ -934,20 +902,7 @@
 
 .daten { margin-top: 2rem; }
 
-.daten__paar {
-  display: grid;
-  grid-template-columns: 7.5rem minmax(0, 1fr);
-  gap: 1rem;
-  padding-block: 0.9rem;
-  border-top: 0;
-  background-image: var(--linie-punkt);
-  background-position: top;
-  background-size: 100% 1px;
-  background-repeat: no-repeat;
-}
 
-.daten dd { margin: 0; }
-.daten dt { padding-top: 0.35em; }
 
 .zeiten { list-style: none; padding: 0; margin: 0; }
 .zeiten li {
@@ -960,11 +915,7 @@
 
 /* ── Bestellen ────────────────────────────────────────────────────────────── */
 
-.bestellen {
-  position: relative;
-  background: var(--creme-tief);
-  border-top: 0;
-}
+
 
 .bestellen__grund { position: absolute; inset: 0; z-index: 0; overflow: clip; }
 
@@ -1172,8 +1123,7 @@
   /* Am Handy wird zusammengelegt, nicht gestrichen: die Schritte behalten ihren
      Versatz, nur kleiner, und der Flieger reist weiter — er bekommt nur weniger
      Weg und mehr Platz, damit er die Rechtecke nicht verdeckt. */
-  .prozess__kopf { max-width: none; text-align: start; margin-inline-start: 0; }
-  .schritt { flex-direction: column; align-items: stretch; gap: 0.9rem; }
+    .schritt { flex-direction: column; align-items: stretch; gap: 0.9rem; }
   .schritt--1 { width: 78%; margin-inline-start: 22%; }
   .schritt--2 { width: 70%; margin-inline-start: 8%; margin-top: -2.5rem; }
   .schritt__wort { flex: none; padding-bottom: 0; }
@@ -1243,8 +1193,7 @@
     object-fit: cover;
     object-position: center 42%;
   }
-  .backstube__laden figcaption { display: none; }
-
+  
   /* Der Preis rutscht unter den Namen, der Zähler bleibt rechts daneben. Eine
      dreispaltige Zeile mit 44px-Knopf passt auf 393px nicht ohne Quetschen. */
   .zeile {
@@ -1268,9 +1217,33 @@
      diese sechs Zeilen sind der Rest. Zusammengelegt, nicht gestrichen: kein
      Abschnitt fällt weg, sie stehen nur enger beieinander. */
   .folge { row-gap: 1.5rem; }
-  .karte__kopf { margin-bottom: 1.5rem; }
-  .filter { margin-bottom: 1.75rem; }
+    .filter { margin-bottom: 1.75rem; }
   .bestellen__wege { margin-top: 1.5rem; }
   .dienste { margin-top: 2rem; }
   .daten { margin-top: 1.5rem; }
 }
+
+
+/* ── Was nach dem Umbau auf Bausteine noch sektionseigen ist ─────────────── */
+
+/* Der Prozesskopf steht schmaler als der Standard, weil links die Flugbahn
+   frei bleiben muss. Alles andere an ihm kommt aus dem Baustein. */
+.prozess__kopf { max-width: 30rem; }
+
+/* Die Schrittzahl ist ein Etikett — aber ohne Strich, weil sie in einer
+   nummerierten Folge steht und der Strich dort wie ein Minus läse. */
+.schritt__zahl::before,
+.weg__art::before { display: none; }
+
+.schritt__zahl {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-variation-settings: var(--wonk-klein);
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 0.5rem;
+}
+
+.weg__art { margin-bottom: 0.15rem; }
+
+.dienste__titel { margin-bottom: 0.4rem; }
+.dienste__stand { margin: 0 0 0.9rem; }

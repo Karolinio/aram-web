@@ -1,6 +1,7 @@
 import { ARAM } from '../aram.config.ts'
 import { ZEITEN } from '../oeffnung.ts'
 import { useVersatz } from '../bewegung.ts'
+import { Bild, Datenzeile, Kopf, Sektion } from './ui/bausteine.tsx'
 
 const WOCHENTAGE = ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag']
 
@@ -22,80 +23,69 @@ const WOCHENTAGE = ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', '
  * ein Fehler: es macht aus einem Beweis eine Wiederholung.
  */
 export default function Laden() {
-  const bild = useVersatz<HTMLElement>(-0.05)
+  const bild = useVersatz<HTMLDivElement>(-0.05)
 
   return (
-    <section className="laden" id="laden" aria-labelledby="laden-titel">
+    <Sektion id="laden" kante klasse="laden" beschriftetVon="laden-titel">
       <div className="schale laden__gitter">
-        <figure className="laden__bild" ref={bild}>
-          <img
-            src="/bilder/echt/brueder.webp"
+        <div className="laden__bild" ref={bild}>
+          <Bild
+            quelle="/bilder/echt/brueder.webp"
             alt="Zwei der Brüder vor dem Laden, unter dem orangefarbenen Schild"
-            width={500}
-            height={600}
-            loading="lazy"
-            decoding="async"
+            breite={500}
+            hoehe={600}
+            unterschrift="Zwei der Brüder, vor der Tür"
           />
-        </figure>
+        </div>
 
         <div className="laden__wort">
-          <span className="augenbraue">Der Laden</span>
-          <h2 id="laden-titel" className="lebt">Ein kleiner Laden in Bonn-Hardtberg</h2>
-          <p>
-            Geführt wird der Laden vom Inhaber und seinen Brüdern. Wer hereinkommt, sieht die
-            Arbeitsfläche, das Blech mit den Teigscheiben und den Ofen — es gibt nichts, was
-            hinter einer Tür passiert.
-          </p>
+          <Kopf
+            id="laden-titel"
+            etikett="Der Laden"
+            titel="Ein kleiner Laden in Bonn-Hardtberg"
+            lead="Geführt wird der Laden vom Inhaber und seinen Brüdern. Wer hereinkommt, sieht die Arbeitsfläche, das Blech mit den Teigscheiben und den Ofen — es gibt nichts, was hinter einer Tür passiert."
+          />
 
           <dl className="daten">
-            <div className="daten__paar">
-              <dt>Wo</dt>
-              <dd>
-                {ARAM.ort.strasse ? (
-                  <>
-                    {ARAM.ort.strasse}
-                    <br />
-                    {ARAM.ort.plz} {ARAM.ort.stadt}
-                  </>
-                ) : (
-                  <>
-                    <span className="luecke">Anschrift fehlt noch</span>
-                    <br />
-                    {ARAM.ort.stadt}
-                  </>
-                )}
-              </dd>
-            </div>
+            <Datenzeile was="Wo">
+              {ARAM.ort.strasse ? (
+                <>
+                  {ARAM.ort.strasse}
+                  <br />
+                  {ARAM.ort.plz} {ARAM.ort.stadt}
+                </>
+              ) : (
+                <>
+                  <span className="luecke">Anschrift fehlt noch</span>
+                  <br />
+                  {ARAM.ort.stadt}
+                </>
+              )}
+            </Datenzeile>
 
-            <div className="daten__paar">
-              <dt>Telefon</dt>
-              <dd>
-                <a href={ARAM.kontakt.telefonHref}>{ARAM.kontakt.telefon}</a>
-              </dd>
-            </div>
+            <Datenzeile was="Telefon">
+              <a href={ARAM.kontakt.telefonHref}>{ARAM.kontakt.telefon}</a>
+            </Datenzeile>
 
-            <div className="daten__paar">
-              <dt>Wann</dt>
-              <dd>
-                {ZEITEN.length === 0 ? (
-                  <span className="luecke">Öffnungszeiten fehlen noch</span>
-                ) : (
-                  <ul className="zeiten">
-                    {ZEITEN.map((z, i) => (
-                      <li key={`${z.tag}-${z.von}-${i}`}>
-                        <span>{WOCHENTAGE[z.tag]}</span>
-                        <span className="preis">
-                          {z.von}–{z.bis}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </dd>
-            </div>
+            <Datenzeile was="Wann">
+              {ZEITEN.length === 0 ? (
+                <span className="luecke">Öffnungszeiten fehlen noch</span>
+              ) : (
+                <ul className="zeiten">
+                  {ZEITEN.map((z, i) => (
+                    <li key={`${z.tag}-${z.von}-${i}`}>
+                      <span>{WOCHENTAGE[z.tag]}</span>
+                      <span className="preis">
+                        {z.von}–{z.bis}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </Datenzeile>
           </dl>
         </div>
       </div>
-    </section>
+    </Sektion>
   )
 }
