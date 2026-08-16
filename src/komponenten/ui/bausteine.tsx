@@ -37,8 +37,22 @@ import Auftritt from './Auftritt.tsx'
  *
  * Der Typ ist die Durchsetzung. Wer einen dritten Grund will, muss ihn hier
  * eintragen — und dabei merken, dass er einen dritten Grund will.
+ *
+ * ═══ Und genau das ist am 16.08. passiert ═══
+ *
+ * `glut` ist der dritte, und er ist eine AUSNAHME, kein dritter Regelfall:
+ * ihr Orange als vollflächiger Grund für GENAU EINE Sektion. Er nimmt am
+ * Wechsel zwischen Hell und Clay nicht teil, er unterbricht ihn.
+ *
+ * Zweimal ist Orange auf dieser Seite vorher gescheitert — als Band im Hero,
+ * als Kachel im Bestellen. Nicht die Farbe war das Problem, sondern die Dosis:
+ * ein kleines gesättigtes Feld auf ruhigem Grund liest als Imbissschild, eine
+ * ganze Fläche als Entscheidung.
+ *
+ * Wer einen ZWEITEN Glutgrund einträgt, macht daraus wieder eine Grundfarbe
+ * und nimmt der Ausnahme ihren Sinn.
  */
-export type Grund = 'hell' | 'tief'
+export type Grund = 'hell' | 'tief' | 'glut'
 
 type SektionProps = {
   id?: string

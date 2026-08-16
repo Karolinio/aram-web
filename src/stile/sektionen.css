@@ -664,7 +664,20 @@
 .schaustueck__kopf { grid-column: 1; grid-row: 1; }
 .schaustueck__kopf .etikett { font-size: var(--text-lead); margin-bottom: 0.9rem; }
 .schaustueck__kopf .etikett::before { width: 1.7rem; }
-.schaustueck__kopf h2 { margin: 0; }
+
+/**
+ * Grösser als jede andere Überschrift der Seite.
+ *
+ * Bei Eat Hungry Tiger nachgesehen: eine gesättigte Fläche trägt keine
+ * normalgrosse Schlagzeile. Entweder die Schrift ist so gross, dass sie die
+ * Fläche BEHERRSCHT — dann liest man Marke —, oder sie schwimmt darin, und
+ * dann liest man Aushang. Dazwischen gibt es nichts.
+ */
+.schaustueck__kopf h2 {
+  margin: 0;
+  font-size: var(--text-band);
+  line-height: 0.98;
+}
 
 /**
  * Die Bühne — ein Ausschnitt, der nach rechts aus der Seite läuft.
@@ -770,7 +783,9 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  background: oklch(30% 0.055 55 / 0.045);
+  /* Eine Spur dunkler als der Glutgrund, damit der Ausschnitt eine Vertiefung
+     ist und kein Loch. Kein zweiter Farbton — dieselbe Glut, abgedunkelt. */
+  background: oklch(24% 0.09 40 / 0.35);
 }
 
 /**

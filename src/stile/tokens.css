@@ -48,8 +48,38 @@
   --linie: oklch(84% 0.030 70);        /* Haarlinien, immer 1px */
 
   --akzent: oklch(40% 0.130 35);       /* DAS Signal. Knopf, Anker, Fokus */
-  --glut: oklch(66% 0.180 45);         /* IHR Orange. NUR als Akzentfläche */
-  --tinte-glut: oklch(26% 0.045 52);   /* Schrift auf Glut — 4,73, AA */
+  --glut: oklch(66% 0.180 45);         /* IHR Orange, wie im Logo */
+  --tinte-glut: oklch(26% 0.045 52);   /* Schrift auf hellem Glut */
+
+  /**
+   * ── Der GLUTGRUND: ihr Orange als ganze Fläche ──────────────────────────
+   *
+   * ═══ Warum das die Kehrtwende ist ═══
+   *
+   * Zweimal ist Orange auf dieser Seite gescheitert — als Band im Hero und als
+   * Kachel im Bestellen. Beide Male hat Karol es zu Recht rausgeworfen. Der
+   * Schluss daraus war bisher: Orange darf keine Fläche sein.
+   *
+   * Das war der falsche Schluss. Nicht die Farbe war das Problem, sondern die
+   * DOSIS. Ein kleines gesättigtes Feld auf ruhigem Grund liest immer als
+   * Imbissschild; eine ganze gesättigte Fläche liest als Entscheidung. Bei
+   * Eat Hungry Tiger (Mobbin) trägt gebranntes Orange die komplette
+   * Startseite, mit einer riesigen goldenen Schlagzeile darauf — und es sieht
+   * nach Marke aus, nicht nach Imbiss.
+   *
+   * Also: EINE Sektion steht vollflächig darin, der Rest bleibt Hell und Clay.
+   * Ein zweiter Glutgrund macht daraus wieder eine Grundfarbe.
+   *
+   * Gebrannt, nicht leuchtend: ihr Logo-Orange (L 66 %) als Fläche ist zu hell
+   * für helle Schrift und zu bunt für dunkle. L 42 % trägt Creme mit Abstand.
+   */
+  --glut-grund: oklch(42% 0.140 41);   /* Die Fläche */
+  --glut-schrift: oklch(96.5% 0.020 76); /* Creme darauf */
+  --glut-marke: oklch(84% 0.140 75);   /* Gold für Etikett und Marken */
+  /* 45 % und nicht 28 %: gemessen kam die gepunktete Linie bei 28 % auf 1,87
+     gegen den Grund und war praktisch weg. Sie ist das Bindemittel der ganzen
+     Seite — ausgerechnet auf der auffälligsten Fläche darf sie nicht fehlen. */
+  --glut-linie: oklch(96.5% 0.02 76 / 0.45);
 
   /* Alte Namen zeigen auf die neuen, damit nichts stumm bricht. */
   --papier: var(--ton-hell);

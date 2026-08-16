@@ -209,7 +209,9 @@ export default function Schaustueck() {
   }, [])
 
   return (
-    <Sektion grund="tief" kante klasse="schaustueck" beschriftetVon="schaustueck-titel">
+    /* Der Glutgrund, und KEINE gepunktete Kante: der Farbwechsel ist die
+       Kante. Eine Linie dazu wäre ein zweiter Schnitt an derselben Stelle. */
+    <Sektion grund="glut" klasse="schaustueck" beschriftetVon="schaustueck-titel">
       <div className="schaustueck__klebt" ref={wurzel}>
         <div className="schale schaustueck__innen">
           <header className="schaustueck__kopf">

@@ -33,6 +33,43 @@
 .sektion--hell { background: var(--ton-hell); }
 .sektion--tief { background: var(--ton-tief); }
 
+/**
+ * ── Der Glutgrund: die eine Ausnahme ──────────────────────────────────────
+ *
+ * Ihr Orange als vollflächiger Grund, GENAU EINMAL auf der Seite. Er nimmt am
+ * Wechsel zwischen Hell und Clay nicht teil, er unterbricht ihn — deshalb
+ * braucht die Sektion daneben keine gepunktete Kante: der Farbwechsel IST die
+ * Kante, und eine Linie dazu wäre ein zweiter Schnitt an derselben Stelle.
+ *
+ * Alles, was darauf liegt, dreht sich um: Creme statt Tinte, Gold statt
+ * Terrakotta, helle Haarlinien statt dunkler. Das steht hier gesammelt und
+ * nicht in der Sektion, damit ein zweiter Glutabschnitt — sollte es je einen
+ * geben — nicht seine eigene Auffassung davon mitbringt.
+ */
+.sektion--glut {
+  background: var(--glut-grund);
+  color: var(--glut-schrift);
+}
+
+.sektion--glut .etikett { color: var(--glut-marke); }
+.sektion--glut h1,
+.sektion--glut h2,
+.sektion--glut h3 { color: var(--glut-schrift); }
+.sektion--glut .leise,
+.sektion--glut .lead { color: oklch(96.5% 0.02 76 / 0.82); }
+
+/* Die gepunktete Linie ist das Bindemittel der Seite — auf dunklem Grund
+   braucht sie den umgekehrten Ton, sonst verschwindet sie. */
+.sektion--glut {
+  --linie: var(--glut-linie);
+}
+
+/* Auf Glut leuchten die Achsen nicht mehr terrakotta — dort wäre der
+   Unterschied kaum zu sehen. Der Zeiger hellt stattdessen auf. */
+@media (hover: hover) {
+  .sektion--glut .lebt:hover { color: var(--glut-marke); }
+}
+
 /* Alte Namen zeigen auf den Zweiklang. */
 .sektion--creme,
 .sektion--papier { background: var(--ton-hell); }
