@@ -4,6 +4,7 @@ import { inhalt, type Gericht } from '../inhalt.ts'
 import { anzahlVon, minus, plus } from '../bestellung.ts'
 import { useBestellung } from '../useBestellung.ts'
 import { Kopf, Sektion } from './ui/bausteine.tsx'
+import Collage from './ui/Collage.tsx'
 
 /**
  * Die Speisekarte — ein Werkzeug, kein Aushang.
@@ -71,6 +72,9 @@ export default function Karte() {
 
   return (
     <Sektion id="karte" grund="tief" kante klasse="karte" beschriftetVon="karte-titel">
+      {/* Ihre Gerichte blass im Grund — damit die Fläche hinter der Karte etwas
+          trägt, ohne dass man beim Lesen darüber stolpert. */}
+      <Collage />
       <div className="schale">
         <Kopf
           id="karte-titel"

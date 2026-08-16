@@ -187,3 +187,35 @@
 /* `.fuss__titel` und `.dienste__titel` sind keine eigenen Etikettstile mehr —
    nur noch Abstände an einem `<Etikett>`. */
 .fuss__titel { margin-bottom: 0.8rem; }
+
+/* ── Die stille Collage ───────────────────────────────────────────────────── */
+
+/**
+ * Ihre Gerichte, sehr blass, verstreut über den Clay-Grund.
+ *
+ * Sie liegt GANZ unten — unter dem Papierkorn, unter dem Schwarm, unter allem.
+ * Und sie bewegt sich nicht: der Schwarm fliegt, die Collage liegt still. Zwei
+ * bewegte Ebenen aus demselben Material heben sich gegenseitig auf.
+ */
+.collage {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: clip;
+  pointer-events: none;
+}
+
+.collage__stueck {
+  position: absolute;
+  height: auto;
+  /* Kein Schatten, kein Radius: was fast unsichtbar ist, braucht keine Kante. */
+  filter: none;
+  border-radius: 0;
+}
+
+/* Bei reduzierter Bewegung bleibt sie — sie bewegt sich ohnehin nicht. Auf
+   sehr schmalen Schirmen entfällt sie: dort ist die Fläche klein genug, dass
+   Leere nicht als Leere auffällt, und jedes Bild kostet Daten. */
+@media (max-width: 560px) {
+  .collage { display: none; }
+}

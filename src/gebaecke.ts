@@ -9,12 +9,16 @@
  * brauchen einen Plan; zufällige Werte ergeben immer irgendwo drei, die sich
  * überdecken.
  *
- * ═══ Warum die obersten beiden nicht ganz links liegen ═══
+ * ═══ Die Lagen sind Prozent der SEKTION, nicht der Spalte ═══
  *
- * Oben links klebt die Beschriftung „03 Erst dann belegt". Gemessen: mit
- * `li: 6` flog das echte Fata’er genau darüber und machte den Text unlesbar.
- * Die oberen Bahnen weichen deshalb nach rechts aus — unten, wo kein Text
- * steht, dürfen sie wieder an den Rand.
+ * Bis zum 16.08. lag der Schwarm in der linken Gitterspalte und war damit auf
+ * deren Breite beschränkt — 44 % davon sind auf 1440 px gerade 260 px, und das
+ * ist kein fliegendes Gericht, das ist ein Aufkleber. Jetzt liegt er auf
+ * Sektionsebene: dieselben Prozente bedeuten das Doppelte.
+ *
+ * Sie wechseln sich links/rechts ab und rücken von oben nach unten weiter. Acht
+ * Gegenstände auf einer Bahn brauchen einen Plan; zufällige Werte ergeben immer
+ * irgendwo drei, die sich überdecken.
  *
  * ═══ Echt und erzeugt, und warum das hier steht ═══
  *
@@ -85,9 +89,9 @@ export const GEBAECKE: Gebaeck[] = [
     bilder: ['/bilder/echt/fatayer-frei.webp'],
     echt: true,
     alt: 'Ein Fata’er von Aram, gewölbt und glänzend, dicht mit Sesam und Schwarzkümmel bestreut',
-    li: 28,
-    ob: 2,
-    gr: 44,
+    li: 4,
+    ob: 8,
+    gr: 26,
     breite: 1000,
     hoehe: 799,
     /* Das echte fliegt am weitesten und am grössten — es ist das einzige, das
@@ -110,9 +114,9 @@ export const GEBAECKE: Gebaeck[] = [
     ],
     echt: false,
     alt: 'Ein Käseschiffchen in Bootsform, mit geschmolzenem Käse gefüllt',
-    li: 20,
-    ob: 34,
-    gr: 38,
+    li: 68,
+    ob: 18,
+    gr: 24,
     breite: 1000,
     hoehe: 746,
     y: [-0.48, 0.34],
@@ -133,9 +137,9 @@ export const GEBAECKE: Gebaeck[] = [
     ],
     echt: false,
     alt: 'Ein Lahmacun, dünn ausgerollt, mit Hackfleisch, Petersilie und einer Zitronenspalte',
-    li: 38,
-    ob: 38,
-    gr: 34,
+    li: 14,
+    ob: 40,
+    gr: 21,
     breite: 1000,
     hoehe: 1000,
     y: [-0.28, 0.62],
@@ -152,9 +156,9 @@ export const GEBAECKE: Gebaeck[] = [
     bilder: ['/bilder/erzeugt/manakisch.webp', '/bilder/erzeugt/manakisch-2.webp'],
     echt: false,
     alt: 'Ein Manakisch, rundes Fladenbrot mit Zaatar und Olivenöl',
-    li: 72,
-    ob: 62,
-    gr: 30,
+    li: 78,
+    ob: 52,
+    gr: 17,
     breite: 1000,
     hoehe: 1000,
     y: [-0.4, 0.28],
@@ -175,9 +179,9 @@ export const GEBAECKE: Gebaeck[] = [
     ],
     echt: false,
     alt: 'Ein Fata’er mit Spinat, gewölbt und glänzend, mit Sesam und Schwarzkümmel',
-    li: 54,
-    ob: 88,
-    gr: 26,
+    li: 86,
+    ob: 84,
+    gr: 14,
     breite: 1000,
     hoehe: 746,
     y: [-0.22, 0.44],
@@ -198,9 +202,9 @@ export const GEBAECKE: Gebaeck[] = [
     ],
     echt: false,
     alt: 'Eine Pizza Margherita mit Tomate, Mozzarella und Basilikum',
-    li: 8,
-    ob: 52,
-    gr: 32,
+    li: 2,
+    ob: 66,
+    gr: 23,
     breite: 1000,
     hoehe: 1000,
     y: [-0.34, 0.4],
@@ -221,9 +225,9 @@ export const GEBAECKE: Gebaeck[] = [
     ],
     echt: false,
     alt: 'Ein Fata’er mit Hackfleisch, gewölbt und glänzend, mit Sesam und Schwarzkümmel',
-    li: 66,
-    ob: 14,
-    gr: 24,
+    li: 58,
+    ob: 76,
+    gr: 15,
     breite: 1000,
     hoehe: 746,
     y: [-0.2, 0.5],
@@ -244,9 +248,9 @@ export const GEBAECKE: Gebaeck[] = [
     ],
     echt: false,
     alt: 'Ein Lahm bi Ajin, kleines dickrandiges Fladenbrot mit würzigem Hackfleisch',
-    li: 30,
-    ob: 76,
-    gr: 28,
+    li: 28,
+    ob: 86,
+    gr: 19,
     breite: 1000,
     hoehe: 1000,
     y: [-0.44, 0.24],

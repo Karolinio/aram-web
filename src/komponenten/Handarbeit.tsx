@@ -1,6 +1,7 @@
 import { useBildfolge, useFlug, useVersatz } from '../bewegung.ts'
 import { GEBAECKE, type Gebaeck } from '../gebaecke.ts'
 import { Bild, Etikett, Kopf, Sektion } from './ui/bausteine.tsx'
+import Collage from './ui/Collage.tsx'
 
 /**
  * Der Weg zum Fata’er — die Savor-Sequenz.
@@ -134,6 +135,7 @@ export default function Handarbeit() {
   return (
     <>
       <div className="band">
+        <Collage />
         <p className="band__satz schale">Du siehst zu, wie dein Fata’er entsteht.</p>
       </div>
 
@@ -158,11 +160,6 @@ export default function Handarbeit() {
                 </span>
               </p>
 
-              <div className="schwarm">
-                {GEBAECKE.map((g) => (
-                  <Gebaeckstueck key={g.id} g={g} />
-                ))}
-              </div>
             </div>
 
             <ol className="folge">
@@ -173,11 +170,21 @@ export default function Handarbeit() {
           </div>
         </div>
 
+        {/* Der Schwarm liegt jetzt auf SEKTIONSEBENE, nicht mehr in der linken
+            Spalte. Dort war er auf deren Breite beschränkt und konnte nie gross
+            werden — Karol: „aber schon grösser machen als aktuell". Jetzt
+            fliegen die Gerichte über die ganze Sektion, von unten nach oben,
+            und ziehen hinter dem Text vorbei. */}
+        <div className="schwarm">
+          {GEBAECKE.map((g) => (
+            <Gebaeckstueck key={g.id} g={g} />
+          ))}
+        </div>
+
         {/* Vierzehn freigestellte Sesam- und Schwarzkümmelkörner, jedes mit
-            eigenem Tempo. Sie liegen hinter der Bühne und geben dem Raum eine
+            eigenem Tempo. Sie liegen hinter dem Schwarm und geben dem Raum eine
             Ausdehnung. Erzeugt — aber Material ohne erkennbaren Ort, und damit
-            auf der erlaubten Seite der Grenze. Ein erzeugtes Gericht wäre es
-            nicht. */}
+            auf der erlaubten Seite der Grenze. */}
         <Koerner />
       </Sektion>
     </>

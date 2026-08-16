@@ -404,12 +404,15 @@
 .band {
   position: relative;
   z-index: 1;
+  overflow: clip;
   background: var(--ton-tief);
   padding-block: clamp(2.25rem, 1.5rem + 4vw, 6rem);
   margin-top: 0;
 }
 
 .band__satz {
+  position: relative;
+  z-index: 1;
   margin: 0;
   max-width: 20ch;
   font-family: var(--font-display);
@@ -457,25 +460,16 @@
 
 .prozess {
   position: relative;
+  /* Acht Gerichte brauchen Weg zum Fliegen. Ohne diese Mindesthöhe ist die
+     Sektion nur so hoch wie ihre zwei Bilder, und die halbe Bahn fällt aus. */
+  min-height: 168vh;
   /* Die Bahn des Fliegers und die Körnerschichten reichen über die Kante
      hinaus; ohne `clip` entstünde daraus eine waagerechte Scrollleiste. */
   overflow: clip;
-  /**
-   * Die Tiefe der Bühne.
-   *
-   * OHNE diese Zeile passiert bei `rotateY`, `rotateX` und `translateZ`
-   * praktisch nichts — die Drehungen werden flach projiziert und das Gericht
-   * wird beim Kippen nur schmaler. Erst die Perspektive macht aus einer
-   * Drehung eine Drehung IM RAUM.
-   *
-   * 1400 px ist weit genug, dass die Verzerrung an den Rändern nicht
-   * auffällt, und nah genug, dass man das Kippen sieht. Bei 600 px sähe es
-   * aus wie ein Fischauge.
-   */
-  perspective: 1400px;
+  /* Die Perspektive sitzt NICHT hier, sondern am Schwarm — siehe dort. */
 }
 
-.prozess__buehne { position: relative; z-index: 1; }
+.prozess__buehne { position: relative; z-index: 2; }
 
 
 .prozess__gitter {
@@ -500,9 +494,8 @@
 .spur {
   position: relative;
   align-self: stretch;
-  /* Fünf Bahnen brauchen Weg. Ohne diese Mindesthöhe ist die Spur nur so hoch
-     wie die zwei Bilder daneben, und die unteren Gebäcke stehen ausserhalb. */
-  min-height: 106vh;
+  /* Der Schwarm hängt nicht mehr an der Spur, sondern an der Sektion — die
+     Mindesthöhe steht deshalb jetzt dort. */
   /* Damit die Gebäcke einen Raum haben, in dem sie sich drehen können, statt
      flach projiziert zu werden. Die Sektion setzt die Perspektive, dieser
      Kasten reicht sie an seine Kinder weiter. */
@@ -539,10 +532,33 @@
   color: var(--russ-mtl);
 }
 
+/**
+ * Der Schwarm liegt über dem Grund und UNTER dem Text.
+ *
+ * ═══ Warum die Perspektive HIER sitzt und nicht an der Sektion ═══
+ *
+ * Zuerst stand `perspective` an `.prozess`. Damit wurde die ganze Sektion zum
+ * 3D-Raum — und in einem 3D-Raum sortiert der Browser nach ECHTER Tiefe, nicht
+ * nach `z-index`. Die Gerichte haben `translateZ` bis +160 px, und damit flogen
+ * sie VOR der Überschrift, obwohl der Text die höhere Stapelnummer trug.
+ * Gemessen an „Alles entsteht vor deinen Augen", das von einem Fata'er
+ * angeschnitten wurde.
+ *
+ * Jetzt ist der Schwarm sein eigener 3D-Raum: innen drehen sich die Gerichte
+ * weiter im Raum, nach aussen ist er eine einzige flache Ebene mit `z-index: 1`
+ * — und die liegt sauber unter dem Text.
+ *
+ * Das ist die Schichtung von Goldsand: die Gegenstände sind im Raum, die
+ * Schrift liegt davor.
+ */
 .schwarm {
   position: absolute;
   inset: 0;
-  transform-style: preserve-3d;
+  z-index: 1;
+  /* 1400 px ist weit genug, dass die Verzerrung an den Rändern nicht auffällt,
+     und nah genug, dass man das Kippen sieht. Bei 600 px sähe es aus wie ein
+     Fischauge. */
+  perspective: 1400px;
   pointer-events: none;
 }
 
@@ -1180,14 +1196,21 @@
   /* Aus dem Schwarm wird eine Auslage: die Gebäcke stehen nebeneinander statt
      zu fliegen. Fliegend verdeckten sie auf 393 px die Beschriftungen der
      Schritte, und beides war unlesbar — es gibt hier keine freie Bahn neben
-     dem Inhalt. Zusammengelegt, nicht gestrichen. */
+     dem Inhalt. Zusammengelegt, nicht gestrichen.
+
+     Und die Flughöhe der Sektion fällt weg: 168 vh sind hier eine ganze leere
+     Bildschirmhöhe für einen Flug, den es nicht gibt. */
+  .prozess { min-height: 0; }
+
   .schwarm {
     position: static;
     display: flex;
     flex-wrap: wrap;
     align-items: flex-end;
+    justify-content: center;
     gap: 0.75rem;
-    margin-top: 1.5rem;
+    margin-top: 2rem;
+    padding-inline: var(--rinne);
   }
   /* Drei nebeneinander statt zwei: gemessen kam das Handy mit 46 % auf 10,3
      Bildschirmhöhen, und der Auftrag deckelt bei 10. */
