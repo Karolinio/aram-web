@@ -71,7 +71,7 @@ export default function Karte() {
     setVersteckt((v) => (v.includes(a) ? v.filter((x) => x !== a) : [...v, a]))
 
   return (
-    <Sektion id="karte" grund="tief" kante klasse="karte" beschriftetVon="karte-titel">
+    <Sektion id="karte" grund="hell" kante klasse="karte" beschriftetVon="karte-titel">
       {/* Ihre Gerichte blass im Grund — damit die Fläche hinter der Karte etwas
           trägt, ohne dass man beim Lesen darüber stolpert. */}
       <Collage />

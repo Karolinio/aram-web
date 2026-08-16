@@ -485,6 +485,166 @@
 
 
 
+/* ── Das Schaustück ───────────────────────────────────────────────────────
+ *
+ * Der einzige gepinnte Abschnitt der Seite. Genau EIN Showpiece — so steht es
+ * in der Direktion, und der Grund ist nicht Sparsamkeit: zwei gepinnte
+ * Abschnitte heben sich gegenseitig auf, weil dann keiner mehr die Ausnahme ist.
+ */
+
+.schaustueck {
+  /* Kein `padding-block` von `.sektion`: die Bühne bestimmt hier die Höhe,
+     und der gepinnte Kasten bringt seinen Innenabstand selbst mit. */
+  padding-block: 0;
+  /* Der Dampf und das gekippte Gebäck laufen seitlich über die Kante. Wie im
+     Hero: waagerecht beschnitten, senkrecht offen. */
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
+.schaustueck__klebt {
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  /* Oben die Höhe der klebenden Kopfzeile PLUS Luft. Ohne diese Zeile lag am
+     Handy die erste Zeile der Überschrift unter der Kopfzeile — gemessen: der
+     Inhalt begann bei 54 px, die Kopfzeile ist 60 px hoch. Solange nicht
+     gepinnt ist, fällt das nicht auf; im Pin steht es fest. */
+  padding-block: calc(var(--kopf-hoehe) + 1rem) clamp(2rem, 4vw, 4rem);
+}
+
+.schaustueck__innen {
+  display: grid;
+  /* Links der Satz, rechts die Bühne — und die Bühne bekommt mehr, weil sie
+     das Argument ist. */
+  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 4rem);
+  width: 100%;
+}
+
+.schaustueck__kopf { grid-column: 1; grid-row: 1; }
+.schaustueck__kopf .etikett { font-size: var(--text-lead); margin-bottom: 0.9rem; }
+.schaustueck__kopf .etikett::before { width: 1.7rem; }
+.schaustueck__kopf h2 { margin: 0; }
+
+/**
+ * Die Bühne — ein Ausschnitt, der nach rechts aus der Seite läuft.
+ *
+ * ═══ Warum kein schwebender Gegenstand ═══
+ *
+ * Erster Entwurf: das Gebäck richtet sich aus der Waagerechten auf, mit einem
+ * Schatten, der mitschrumpft. Gebaut, angesehen, verworfen — und der Grund
+ * steckt im Bild, nicht im Code.
+ *
+ * `fatayer-frei.webp` ist KEIN Freisteller, sondern ein enger Ausschnitt.
+ * Gemessen: der Inhalt berührt links und rechts den Rand (0 % Luft) und endet
+ * unten bei 98,4 %, mitsamt der dunklen Blechkante. Klein in einer Ecke sieht
+ * das niemand. Auf 34 rem aufgerichtet ist es das Erste, was auffällt: ein
+ * Gegenstand, der an drei Seiten abgesägt ist.
+ *
+ * Also wird der Ausschnitt zur Absicht. Das Gebäck läuft nach rechts und unten
+ * aus dem Bild — dort liegen die harten Kanten, und dort sieht sie niemand.
+ * Sichtbar bleibt seine linke Flanke, und die ist im Foto rund.
+ *
+ * Was die Bewegung trägt, ist dafür etwas anderes: die Bühne WISCHT AUF. Ein
+ * Ausschnitt, der sich öffnet, ist ein Schnitt aus dem Film — und `clip-path`
+ * kostet den Compositor nichts.
+ */
+.schaustueck__buehne {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  position: relative;
+  /* Über die Rinne hinaus bis an die Fensterkante. Die Sektion beschneidet
+     waagerecht, also kann hier nichts die Seite breiter machen. */
+  margin-right: calc(-1 * var(--rinne));
+  /* Flacher als der erste Versuch (4/3,5): dort lag das Gebäck im unteren
+     Drittel und darüber stand eine leere Fläche. Ein Ausschnitt, der zur
+     Hälfte leer ist, ist kein Ausschnitt. */
+  aspect-ratio: 4 / 2.75;
+  overflow: clip;
+  border-start-start-radius: var(--radius-gross);
+  border-end-start-radius: var(--radius-gross);
+  /* Der Startzustand steht auch hier, nicht nur in der Zeitleiste: schlägt das
+     Nachladen von GSAP fehl, ist die Bühne offen statt für immer zugeklappt. */
+  clip-path: inset(0 0 0 0);
+}
+
+/**
+ * Das Gebäck in der Bühne.
+ *
+ * Grösser als sein Rahmen und nach rechts unten hinausgeschoben: dort liegen
+ * die harten Schnittkanten des Ausschnitts, dort schneidet sie die Bühne weg.
+ * Sichtbar bleiben die Wölbung, der Sesam und die linke Flanke.
+ */
+.schaustueck__stueck {
+  position: absolute;
+  z-index: 2;
+  left: -6%;
+  bottom: -26%;
+  width: 128%;
+  height: auto;
+  transform-origin: 30% 70%;
+}
+
+/* Der Grund der Bühne: eine Spur tiefer als der Sektionsgrund, damit der
+   Ausschnitt eine Fläche ist und kein Loch. Kein zweiter Farbton — dieselbe
+   Tinte mit sehr wenig Deckkraft über demselben Clay. */
+.schaustueck__buehne::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: oklch(30% 0.055 55 / 0.045);
+}
+
+.schaustueck__dampf {
+  position: absolute;
+  z-index: 3;
+  left: 0;
+  right: 0;
+  bottom: 30%;
+  height: 88%;
+  opacity: 0;
+}
+
+.schaustueck__saetze {
+  grid-column: 1;
+  grid-row: 2;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.9rem;
+  align-self: start;
+}
+
+.schaustueck__satz {
+  /* Gepunktet wie alles Aufzählende auf dieser Seite — dieselbe Linie wie in
+     der Karte, im Fuss und an den Sektionskanten. */
+  padding-top: 0.85rem;
+  background-image: var(--linie-punkt);
+  background-position: top;
+  background-size: 100% 1px;
+  background-repeat: no-repeat;
+  font-size: var(--text-lead);
+  max-width: 26ch;
+  opacity: 0;
+}
+
+@media (max-width: 1000px) {
+  /* Einspaltig, und die Reihenfolge ist die des Blicks: Überschrift, dann das
+     Stück, dann was dazu zu sagen ist. */
+  .schaustueck__innen { grid-template-columns: minmax(0, 1fr); gap: 1.25rem; }
+  .schaustueck__kopf { grid-column: 1; grid-row: 1; }
+  .schaustueck__buehne { grid-column: 1; grid-row: 2; }
+  .schaustueck__saetze { grid-column: 1; grid-row: 3; }
+  .schaustueck__stueck { width: min(100%, 22rem); }
+  .schaustueck__satz { font-size: var(--text-base); padding-top: 0.6rem; max-width: none; }
+  .schaustueck__saetze { gap: 0.6rem; }
+  .schaustueck__kopf .etikett { font-size: var(--text-meta); margin-bottom: 0.5rem; }
+}
+
 /* ── Der Satz zwischen den Sektionen ──────────────────────────────────────
  *
  * Hier lag bis zum 16.08. ein vollflächiges Band in ihrem Orange. Karol:
@@ -1077,10 +1237,13 @@
 
 /* Dichter als im Hero. Hier wird gelesen und getippt, nicht geschaut — die
    Textur darf die Zeilen nicht stören, sie soll die Fläche nur beleben. */
+/* Auf `--ton-hell`, nicht mehr auf `--ton-tief`: mit dem Schaustück ist eine
+   Sektion dazugekommen, und damit die beiden Gründe sich weiter abwechseln,
+   sind Karte, Laden und Bestellen jeweils um eine Stufe weitergerückt. */
 .bestellen__schleier {
   position: absolute;
   inset: 0;
-  background: color-mix(in oklch, var(--creme-tief) 92%, transparent);
+  background: color-mix(in oklch, var(--ton-hell) 92%, transparent);
 }
 
 .bestellen h2 { margin-bottom: 1rem; }

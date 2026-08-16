@@ -17,6 +17,7 @@ import Kopfzeile from './komponenten/Kopfzeile.tsx'
 import Hinweisband from './komponenten/Hinweisband.tsx'
 import Backstube from './komponenten/Backstube.tsx'
 import Handarbeit from './komponenten/Handarbeit.tsx'
+import Schaustueck from './komponenten/Schaustueck.tsx'
 import Karte from './komponenten/Karte.tsx'
 import Laden from './komponenten/Laden.tsx'
 import Bestellen from './komponenten/Bestellen.tsx'
@@ -118,6 +119,9 @@ function Seite() {
           bestücken — und ein erzeugtes Fatayer kommt nicht in Frage.
         */}
         <Handarbeit />
+        {/* Das Schaustück steht ZWISCHEN Prozess und Karte: erst wie es
+            entsteht, dann was dabei herauskommt, dann was es kostet. */}
+        <Schaustueck />
         <Karte />
         <Laden />
         <Bestellen />

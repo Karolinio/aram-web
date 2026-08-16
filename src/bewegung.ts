@@ -46,7 +46,7 @@ let lader: Promise<Werkzeug | null> | null = null
  * der Konsole und ein Bild, das nie erscheint. Die Seite muss ohne diese
  * Bibliothek vollständig lesbar sein — sie ist Schmuck, nicht Inhalt.
  */
-const werkzeugHolen = (): Promise<Werkzeug | null> => {
+export const werkzeugHolen = (): Promise<Werkzeug | null> => {
   lader ??= Promise.all([import('gsap'), import('gsap/ScrollTrigger')])
     .then(([{ gsap }, { ScrollTrigger }]) => {
       gsap.registerPlugin(ScrollTrigger)
