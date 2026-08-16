@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react'
 
+import Auftritt from './Auftritt.tsx'
+
 /**
  * Die Bausteine — der Stilbogen als CODE, nicht als Abbildung.
  *
@@ -107,8 +109,12 @@ export function Kopf({ id, etikett, titel, lead, klasse }: KopfProps) {
   return (
     <header className={`kopfblock${klasse ? ' ' + klasse : ''}`}>
       <Etikett>{etikett}</Etikett>
+      {/* JEDE Sektionsüberschrift bekommt den Auftritt — automatisch, weil sie
+          alle durch diesen Baustein gehen. Genau dafür gibt es ihn: eine
+          Animation, die man pro Sektion von Hand setzen müsste, wird irgendwo
+          vergessen, und dann ist sie keine Regel mehr, sondern ein Zufall. */}
       <h2 id={id} className="lebt">
-        {titel}
+        <Auftritt>{titel}</Auftritt>
       </h2>
       {lead && <p className="lead kopfblock__lead">{lead}</p>}
     </header>

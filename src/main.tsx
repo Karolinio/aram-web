@@ -14,7 +14,6 @@ import './stile/bausteine.css'
 import './stile/sektionen.css'
 
 import Kopfzeile from './komponenten/Kopfzeile.tsx'
-import Hinweisband from './komponenten/Hinweisband.tsx'
 import Backstube from './komponenten/Backstube.tsx'
 import Handarbeit from './komponenten/Handarbeit.tsx'
 import Schaustueck from './komponenten/Schaustueck.tsx'
@@ -101,7 +100,6 @@ function Seite() {
       <a className="sprung" href="#start">
         Zum Inhalt springen
       </a>
-      <Hinweisband />
       <Kopfzeile />
       <Mehlstaub />
       <main>

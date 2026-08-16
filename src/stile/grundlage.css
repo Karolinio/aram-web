@@ -79,32 +79,19 @@ body::before {
 }
 
 /**
- * Der eingerückte Rahmen — von Yellowbird geklaut.
+ * ═══ Hier lag der eingerückte Rahmen ═══
  *
- * ═══ Warum ausgerechnet diese eine Linie ═══
+ * Eine dünne Linie rings um das Fenster, von Yellowbird geklaut. Sie sollte aus
+ * der Seite ein BLATT machen. Karol, mehrfach: „mach mal bitte diesen hässlichen
+ * schwarzen Rahmen weg."
  *
- * Yellowbird zieht eine dünne schwarze Linie rings um das Fenster, ein Stück
- * vom Rand eingerückt, und lässt sie über allem liegen: über dem Farbfeld, über
- * den Fotos, über der Navigation. Es kostet eine Zeile CSS und macht aus einer
- * Seite ein BLATT — etwas Gesetztes mit einem Rand, statt Inhalt, der bis an
- * die Bildschirmkante ausläuft.
+ * Er hat recht, und im Rückblick war der Griff hier falsch geliehen: bei
+ * Yellowbird umschliesst die Linie ein Farbfeld und gehört zu einem lauten,
+ * flächigen Register. Über einer randlosen Fotografie schneidet dieselbe Linie
+ * das Bild an — sie macht kein Blatt, sie macht einen Rahmen um ein Foto.
  *
- * Das ist der Griff, den diese Seite von Yellowbird übernimmt. NICHT übernommen
- * wird deren Register: Knallfarbe, dicke Umrisse, Comicfiguren. Deren
- * Selbstsicherheit kommt aus Aufdruck, Arams aus Material — dieselbe Haltung,
- * anderes Mittel.
- *
- * Über allem, aber unter der Sprungmarke: wer mit der Tastatur ankommt, muss
- * den ersten Fokus vollständig sehen.
+ * Ersatzlos. Nicht auskommentiert.
  */
-body::after {
-  content: '';
-  position: fixed;
-  inset: clamp(6px, 0.9vw, 13px);
-  z-index: 55;
-  border: 1px solid var(--russ);
-  pointer-events: none;
-}
 
 /* Fokus ist sichtbar, immer, in der Signalfarbe. Ein unsichtbarer Fokus ist
    hier kein Stilfehler — er macht die Seite mit der Tastatur unbenutzbar. */

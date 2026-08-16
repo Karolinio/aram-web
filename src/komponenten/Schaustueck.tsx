@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 
 import { werkzeugHolen } from '../bewegung.ts'
+import Auftritt from './ui/Auftritt.tsx'
 import Dampf from './ui/Dampf.tsx'
 import { Etikett, Sektion } from './ui/bausteine.tsx'
 
@@ -214,7 +215,7 @@ export default function Schaustueck() {
           <header className="schaustueck__kopf">
             <Etikett>Ofenfrisch</Etikett>
             <h2 id="schaustueck-titel" className="lebt">
-              Ein Fata’er, aus der Nähe
+              <Auftritt>Ein Fata’er, aus der Nähe</Auftritt>
             </h2>
           </header>
 

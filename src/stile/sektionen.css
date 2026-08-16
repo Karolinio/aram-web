@@ -144,9 +144,27 @@
   position: sticky;
   top: 0;
   z-index: 40;
-  /* Deckend, nicht durchscheinend. Eine Kopfzeile, durch die man die Seite
-     schimmern sieht, braucht einen Weichzeichner — und den gibt es hier nicht. */
-  background: var(--ton-hell);
+  /**
+   * ═══ GLÄSERN — und das hebt eine Regel der Direktion auf ═══
+   *
+   * Dort stand: „kein Weichzeichner, keine durchscheinende Karte". Die Regel
+   * kam aus Fassung 1, wo durchscheinende Karten mit Weichzeichner ÜBERALL
+   * lagen und die Seite deshalb wie ein Betriebssystem-Fenster aussah.
+   *
+   * Karol, mehrfach: „mach den Header einfach gläsern." Er hat recht, und die
+   * Regel war zu breit gefasst. Der Unterschied ist die Anzahl: EIN gläsernes
+   * Element auf einer sonst deckenden Seite ist eine Scheibe, durch die man
+   * den Inhalt vorbeiziehen sieht — das ist der Sinn einer klebenden
+   * Kopfzeile. ZWANZIG davon sind eine Optik.
+   *
+   * Die Zahlen sind gewählt, nicht abgeschrieben:
+   *   72 %       Deckung. Darunter wird der Text auf dem Foto unlesbar.
+   *   18 px      Unschärfe. Genug, dass Gesichter darunter zu Flächen werden.
+   *   140 %      Sättigung — Glas, das entsättigt, sieht nach Milchglas aus.
+   */
+  background: color-mix(in oklch, var(--ton-hell) 72%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  backdrop-filter: blur(18px) saturate(140%);
   /* Die gepunktete Linie statt der durchgezogenen. Sie ist das Bindemittel der
      ganzen Seite; ausgerechnet der Kopf sprach sie bisher nicht. */
   background-image: var(--linie-punkt);
@@ -158,9 +176,10 @@
     box-shadow var(--dauer-mikro) var(--ease-teig);
 }
 
-/* Der zusammengefahrene Zustand. */
+/* Zusammengefahren wird das Glas dichter: unter dem Hero zieht Inhalt vorbei,
+   und ein zu klares Glas lässt Überschriften durch die Navigation laufen. */
 .kopf[data-eng='ja'] {
-  background-color: var(--ton-tief);
+  background-color: color-mix(in oklch, var(--ton-tief) 84%, transparent);
   box-shadow: var(--clay-ruhe);
 }
 
@@ -857,18 +876,9 @@
 /* Gemessen: ihr Orange auf dem Clay-Grund kommt auf 2,50 — als Fläche zu
    schwach, um sich abzusetzen. Ein feiner Ring in der Tinte gibt ihm die Kante,
    ohne die Markenfarbe anzufassen. */
-.band__satz::before {
-  content: '';
-  display: block;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 50%;
-  background: var(--glut);
-  box-shadow:
-    var(--clay-ruhe),
-    0 0 0 1px oklch(30% 0.055 55 / 0.22);
-  margin-bottom: 1.5rem;
-}
+/* Hier sass ein oranger Punkt von 2,5 rem. Karol: „den orangenen Punkt raus."
+   Er war der letzte Rest von Glut als Fläche — und ein Punkt, der nichts
+   markiert, ist ein Fleck. Der Satz trägt sich allein. */
 
 /* ── Der Prozess: die Savor-Sequenz ───────────────────────────────────────── */
 

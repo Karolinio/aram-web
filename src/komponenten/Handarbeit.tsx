@@ -3,6 +3,7 @@ import type { CSSProperties } from 'react'
 import { useBildfolge, useFlug, useMedienabfrageBreit, useVersatz } from '../bewegung.ts'
 import { GEBAECKE, type Gebaeck } from '../gebaecke.ts'
 import { Bild, Etikett, Kopf, Sektion } from './ui/bausteine.tsx'
+import Auftritt from './ui/Auftritt.tsx'
 import Collage from './ui/Collage.tsx'
 
 /**
@@ -158,7 +159,9 @@ export default function Handarbeit() {
     <>
       <div className="band">
         <Collage />
-        <p className="band__satz schale">Du siehst zu, wie dein Fata’er entsteht.</p>
+        <p className="band__satz schale">
+          <Auftritt versatz={0.075}>Du siehst zu, wie dein Fata’er entsteht.</Auftritt>
+        </p>
       </div>
 
       <Sektion grund="hell" klasse="prozess" beschriftetVon="prozess-titel">

@@ -188,6 +188,55 @@
    nur noch Abstände an einem `<Etikett>`. */
 .fuss__titel { margin-bottom: 0.8rem; }
 
+/* ── Der Auftritt der Überschriften ──────────────────────────────────────── */
+
+/**
+ * Die Maske, aus der ein Wort steigt.
+ *
+ * `overflow: clip` und nicht `hidden`: `hidden` erzeugt einen Scrollbereich,
+ * und ein Wort mit Scrollbereich fängt Tastatur-Fokus ein.
+ *
+ * Der Innenabstand unten fängt die Unterlängen — ohne ihn schneidet die Maske
+ * das g von „gibt" ab. Der gleich grosse negative Aussenabstand nimmt die Höhe
+ * wieder weg, damit die Zeile dort steht, wo sie ohne Auftritt stünde.
+ */
+.auftritt { display: inline; }
+
+.auftritt__wort {
+  display: inline-block;
+  overflow: clip;
+  padding-bottom: 0.16em;
+  margin-bottom: -0.16em;
+  /* Sonst schneidet die Maske bei schrägen Alternativzeichen (WONK) auch
+     seitlich an. */
+  padding-inline: 0.04em;
+  margin-inline: -0.04em;
+  vertical-align: bottom;
+}
+
+/**
+ * Der Startzustand: unterhalb der Maske und leicht gekippt.
+ *
+ * 112 % statt 100: bei genau 100 blitzt bei manchen Schnitten die Oberkante
+ * der Buchstaben durch. Die zwei Grad Neigung sind der Unterschied zwischen
+ * „fährt hoch" und „wird gesetzt" — eine Bewegung, die exakt senkrecht läuft,
+ * liest sich mechanisch.
+ */
+.auftritt__in {
+  display: inline-block;
+  transform: translateY(112%) rotate(2deg);
+  transform-origin: 0% 100%;
+  will-change: transform;
+}
+
+/* Wer weniger Bewegung will, sieht die Zeile sofort — die Komponente deckt sie
+   im selben Fall auch von Hand auf, doppelt hält hier besser: bei blockiertem
+   JavaScript bliebe sonst eine unsichtbare Überschrift stehen. */
+@media (prefers-reduced-motion: reduce) {
+  .auftritt__in { transform: none; will-change: auto; }
+  .auftritt__wort { overflow: visible; }
+}
+
 /* ── Dampf ────────────────────────────────────────────────────────────────── */
 
 /**
