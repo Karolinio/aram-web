@@ -88,3 +88,9 @@
 .stil__daten { margin: 2rem 0 0; max-width: 34rem; }
 /* Die Gerichtebilder im Bogen sind Belege, keine Gegenstände — kein Schatten. */
 .stil__gerichte .bild img { filter: none; }
+
+.stil__radien { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; gap: 0.75rem; }
+.stil__radien li { display: flex; align-items: center; gap: 1rem; }
+.stil__radius { width: 4rem; height: 2.5rem; background: var(--creme-tief); outline: 1px solid var(--linie); }
+.stil__radius--klein { border-radius: var(--radius-klein); }
+.stil__radius--gross { border-radius: var(--radius-gross); }

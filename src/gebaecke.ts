@@ -191,7 +191,11 @@ export const GEBAECKE: Gebaeck[] = [
   {
     id: 'pizza',
     name: 'Pizza Margherita',
-    bilder: ['/bilder/erzeugt/pizza.webp'],
+    bilder: [
+      '/bilder/erzeugt/pizza.webp',
+      '/bilder/erzeugt/pizza-2.webp',
+      '/bilder/erzeugt/pizza-3.webp',
+    ],
     echt: false,
     alt: 'Eine Pizza Margherita mit Tomate, Mozzarella und Basilikum',
     li: 8,
@@ -210,7 +214,11 @@ export const GEBAECKE: Gebaeck[] = [
   {
     id: 'fatayer-hack',
     name: "Fata’er mit Hackfleisch",
-    bilder: ['/bilder/erzeugt/fatayer-hack.webp'],
+    bilder: [
+      '/bilder/erzeugt/fatayer-hack.webp',
+      '/bilder/erzeugt/fatayer-hack-2.webp',
+      '/bilder/erzeugt/fatayer-hack-3.webp',
+    ],
     echt: false,
     alt: 'Ein Fata’er mit Hackfleisch, gewölbt und glänzend, mit Sesam und Schwarzkümmel',
     li: 66,
@@ -229,7 +237,11 @@ export const GEBAECKE: Gebaeck[] = [
   {
     id: 'lahm-bi-ajin',
     name: 'Lahm bi Ajin',
-    bilder: ['/bilder/erzeugt/lahm-bi-ajin.webp'],
+    bilder: [
+      '/bilder/erzeugt/lahm-bi-ajin.webp',
+      '/bilder/erzeugt/lahm-bi-ajin-2.webp',
+      '/bilder/erzeugt/lahm-bi-ajin-3.webp',
+    ],
     echt: false,
     alt: 'Ein Lahm bi Ajin, kleines dickrandiges Fladenbrot mit würzigem Hackfleisch',
     li: 30,

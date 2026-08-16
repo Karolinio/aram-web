@@ -95,9 +95,16 @@ export default function Stilbogen() {
             </p>
           ))}
           <p className="stil__regel">
-            Display ist <strong>Fraunces</strong> mit hohem <code>SOFT</code> — die fette,
-            gerundete Form ihres Logos. Fliesstext ist <strong>Archivo</strong>. Zwei Familien,
-            und dabei bleibt es.
+            <strong>Wer welche Schrift trägt.</strong> <strong>Fraunces</strong> — die fette,
+            gerundete Form ihres Logos — trägt alles KURZE: Überschriften, Unterschriften,
+            Etiketten, Preise, Knöpfe, Navigation, Zahlen. <strong>Archivo</strong> trägt nur
+            laufenden Fliesstext: Vorspann, Absätze, Gerichtbeschreibungen.
+          </p>
+          <p className="stil__regel">
+            Die Grenze ist nicht Grösse, sondern Funktion: eine Zeile, die man{' '}
+            <em>überfliegt</em>, gehört der Marke; ein Satz, den man <em>liest</em>, gehört der
+            Lesbarkeit. Eine gerundete Serife über drei Zeilen Fliesstext wäre anstrengend —
+            über zwei Wörtern ist sie die Marke.
           </p>
         </section>
 
@@ -120,6 +127,22 @@ export default function Stilbogen() {
               <span className="luecke">So sieht eine Lücke aus</span>
             </Datenzeile>
           </dl>
+
+          <div className="stil__punkte" />
+          <p className="leise stil__hinweis">
+            Die gepunktete Linie trennt überall — Sektionskanten, Kartenzeilen, Adressdaten.
+          </p>
+
+          <ul className="stil__radien">
+            <li>
+              <span className="stil__radius stil__radius--klein" />
+              <code>--radius-klein</code> <span className="leise">Knöpfe, Filter, Zähler</span>
+            </li>
+            <li>
+              <span className="stil__radius stil__radius--gross" />
+              <code>--radius-gross</code> <span className="leise">Fotos und Flächen</span>
+            </li>
+          </ul>
 
           <div className="stil__knoepfe">
             <span className="knopf">Anrufen</span>

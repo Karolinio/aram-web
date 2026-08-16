@@ -62,10 +62,12 @@
   display: flex;
   align-items: center;
   gap: 0.55rem;
-  font-family: var(--font-text);
-  font-size: var(--text-micro);
-  font-weight: 600;
-  letter-spacing: 0.01em;
+  /* Fraunces, nicht Archivo: ein Etikett wird überflogen, nicht gelesen. */
+  font-family: var(--font-display);
+  font-variation-settings: var(--wonk-klein);
+  font-size: var(--text-meta);
+  font-weight: 620;
+  letter-spacing: 0;
   line-height: 1.3;
   color: var(--terra);
 }
@@ -88,8 +90,8 @@
 /* Über einer Überschrift steht das Etikett etwas grösser und mit längerem
    Strich — dieselbe Sprache, nur betont. */
 .kopfblock .etikett {
-  font-size: var(--text-meta);
-  margin-bottom: 0.8rem;
+  font-size: var(--text-lead);
+  margin-bottom: 0.9rem;
 }
 .kopfblock .etikett::before { width: 1.7rem; }
 
@@ -99,14 +101,27 @@
 /* ── Bild ─────────────────────────────────────────────────────────────────── */
 
 .bild { margin: 0; }
-.bild img { width: 100%; height: auto; }
 
+/* EINE Zeile, und sie trifft jedes Foto der Seite: Hero, Ladenfront, Brüder,
+   Prozessschritte, Stilbogen. Genau dafür gibt es die Bausteine — vorher
+   wären es sechs Stellen gewesen, und eine davon hätte man vergessen. */
+.bild img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-gross);
+}
+
+/* Die Unterschrift trägt dieselbe Schrift wie die Überschrift — nur klein und
+   gedämpft. Vorher war sie Archivo, und genau da riss die Stimme ab. */
 .bild figcaption {
   margin-top: 0.7rem;
-  font-size: var(--text-micro);
+  font-family: var(--font-display);
+  font-variation-settings: var(--wonk-klein);
+  font-size: var(--text-meta);
+  font-weight: 500;
   color: var(--russ-mtl);
-  max-width: 30ch;
-  letter-spacing: 0.01em;
+  max-width: 32ch;
+  line-height: 1.4;
 }
 
 /**
@@ -142,8 +157,9 @@
   /* Der Sektionskopf war nach dem Umbau überall gleich weit — und dadurch am
      Handy 0,2 Bildschirmhöhen zu hoch. Ein Baustein zu ändern reicht jetzt für
      alle sieben Abschnitte; vorher wären es sieben Stellen gewesen. */
-  .kopfblock { margin-bottom: 1.75rem; }
-  .kopfblock h2 { margin-bottom: 0.7rem; }
+  .kopfblock { margin-bottom: 1.5rem; }
+  .kopfblock h2 { margin-bottom: 0.6rem; }
+  .kopfblock .etikett { font-size: var(--text-meta); margin-bottom: 0.6rem; }
   .sektion { padding-block: clamp(2.5rem, 2rem + 5vw, 9rem); }
 }
 

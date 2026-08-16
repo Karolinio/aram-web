@@ -92,6 +92,28 @@
   --font-display: 'Fraunces Variable', Georgia, serif;
   --font-text: 'Archivo Variable', system-ui, sans-serif;
 
+  /**
+   * ═══ Die Regel, wer welche Schrift trägt ═══
+   *
+   * Bis zum 16.08. trug Fraunces nur die Überschriften. Alles darunter —
+   * Etiketten, Bildunterschriften, Preise, Knöpfe, Navigation, Zähler — lief in
+   * Archivo. Das sind zwei Stimmen auf einer Seite, und man hört sie, ohne sie
+   * benennen zu können.
+   *
+   * Ab jetzt:
+   *
+   *   FRAUNCES trägt alles KURZE — Überschriften, Unterschriften, Etiketten,
+   *   Preise, Knöpfe, Navigation, Zahlen. Alles, was man ansieht.
+   *
+   *   ARCHIVO trägt nur laufenden FLIESSTEXT — Vorspann, Absätze,
+   *   Gerichtbeschreibungen. Alles, was man liest.
+   *
+   * Die Grenze ist nicht Grösse, sondern Funktion: eine Zeile, die man
+   * ÜBERFLIEGT, gehört der Marke; ein Satz, den man LIEST, gehört der
+   * Lesbarkeit. Eine gerundete Serife über drei Zeilen Fliesstext wäre
+   * anstrengend — über zwei Wörtern ist sie die Marke.
+   */
+
   /* Fraunces führt `opsz` mit der Schriftgrösse mit — eine Schlagzeile in
      144 pt bekommt feinere Haarstriche als eine Zwischenüberschrift. Das ist der
      Unterschied zwischen einer skalierten und einer gesetzten Schrift. */
@@ -178,8 +200,26 @@
   --hebung-karte: 6px;
   --neigung-max: 6deg;
 
-  /* Pillen (999px) lesen als Software-Oberfläche. Ein Laden hat keine Pillen. */
-  --radius-knopf: 3px;
+  /**
+   * Die Radius-Skala — zwei Werte, und sie gelten überall.
+   *
+   * ═══ Warum es sie gibt ═══
+   *
+   * Bis zum 16.08. hatte die Seite genau einen Radius (3 px an Knöpfen) und
+   * sonst nur harte Rechtecke. Das war nicht falsch, aber es war auch keine
+   * Entscheidung — es war die Abwesenheit einer. Ihr Logo ist rund, die Schrift
+   * ist rund (SOFT 95), und die Fotos waren scharfkantig: die dritte Stimme.
+   *
+   * Ein Radius ist kein Rahmen, kein Schatten und kein Kasten — die drei Dinge,
+   * die die Direktion verbietet. Er ist eine Kante, und Kanten hat alles.
+   *
+   * Zwei Werte, nicht fünf. Fünf Radien sind wieder keine Entscheidung.
+   */
+  --radius-klein: 6px;   /* Knöpfe, Filter, Zähler */
+  --radius-gross: clamp(10px, 1vw, 16px);  /* Fotos, Flächen */
+
+  /* Alter Name, damit nichts bricht. Zeigt jetzt auf die Skala. */
+  --radius-knopf: var(--radius-klein);
 
   /* Höhe der Kopfzeile. Steht hier, weil zwei Dinge davon abhängen: der Abstand
      der Sprungmarken (scroll-margin-top) und der Platz oben im Hero. Zwei

@@ -98,8 +98,8 @@ body::after {
   color: var(--papier);
   padding: 0.7em 1.2em;
   border-radius: var(--radius-knopf);
-  font-family: var(--font-text);
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-weight: 660;
   text-decoration: none;
 }
 .sprung:focus-visible { top: 0.6rem; }
@@ -179,12 +179,14 @@ a { color: var(--terra); text-underline-offset: 0.2em; }
 
 .leise { color: var(--russ-mtl); }
 
-/* Preise. Eine Zahlenkolonne, die wackelt, sieht selbstgemacht aus. */
+/* Preise. Eine Zahlenkolonne, die wackelt, sieht selbstgemacht aus. Auf einer
+   Speisekarte gehört der Preis derselben Schrift wie das Gericht. */
 .preis {
   font-variant-numeric: tabular-nums;
-  font-family: var(--font-text);
+  font-family: var(--font-display);
+  font-variation-settings: var(--wonk-klein);
   font-size: var(--text-base);
-  font-weight: 550;
+  font-weight: 620;
   color: var(--russ);
   white-space: nowrap;
 }
@@ -218,11 +220,14 @@ section {
   justify-content: center;
   gap: 0.55em;
   min-height: 44px; /* Tippziel. Am Handy wird mit einer Hand bestellt. */
-  font-family: var(--font-text);
-  font-weight: 600;
+  /* Ein Knopf wird überflogen, nicht gelesen — also Fraunces. Yellowbird macht
+     dasselbe, und genau daher kommt dort die Selbstsicherheit. */
+  font-family: var(--font-display);
+  font-variation-settings: var(--wonk-klein);
+  font-weight: 660;
   font-size: 1.0625rem;
-  letter-spacing: -0.005em;
-  padding: 0.75em 1.4em;
+  letter-spacing: 0;
+  padding: 0.7em 1.4em;
   border-radius: var(--radius-knopf);
   border: 1px solid transparent;
   cursor: pointer;
@@ -283,9 +288,10 @@ section {
 .luecke {
   display: inline-block;
   color: var(--terra);
-  font-family: var(--font-text);
+  font-family: var(--font-display);
+  font-variation-settings: var(--wonk-klein);
   font-size: var(--text-meta);
-  font-weight: 550;
+  font-weight: 600;
   border-bottom: 1px solid var(--terra);
   padding-bottom: 1px;
 }

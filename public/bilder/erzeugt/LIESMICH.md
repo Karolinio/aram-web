@@ -9,9 +9,9 @@ anschliessend freigestellt worden. **Es sind keine Fotos ihres Essens.**
 | Lahmacun | `lahmacun*.webp` | 3 |
 | Fata'er mit Spinat | `fatayer-spinat*.webp` | 3 |
 | Manakisch mit Zaatar | `manakisch*.webp` | 2 |
-| Pizza Margherita | `pizza.webp` | 1 |
-| Fata'er mit Hackfleisch | `fatayer-hack.webp` | 1 |
-| Lahm bi Ajin | `lahm-bi-ajin.webp` | 1 |
+| Pizza Margherita | `pizza*.webp` | 3 |
+| Fata'er mit Hackfleisch | `fatayer-hack*.webp` | 3 |
+| Lahm bi Ajin | `lahm-bi-ajin*.webp` | 3 |
 
 **Die Nummern sind Ansichten desselben Gerichts, rundherum.** Beim Scrollen wird
 durchgeschaltet — daraus entsteht die Drehung. Sie sind per image-to-image aus der

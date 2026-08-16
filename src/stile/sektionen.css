@@ -39,9 +39,10 @@
   align-items: center;
   gap: 0.55em;
   margin: 0;
-  font-family: var(--font-text);
+  font-family: var(--font-display);
+  font-variation-settings: var(--wonk-klein);
   font-size: var(--text-meta);
-  font-weight: 600;
+  font-weight: 620;
   
   color: var(--russ);
   max-width: none;
@@ -101,6 +102,9 @@
 .hinweisband__text {
   margin: 0;
   max-width: none;
+  font-family: var(--font-display);
+  font-variation-settings: var(--wonk-klein);
+  font-weight: 520;
   font-size: var(--text-meta);
   color: var(--russ);
 }
@@ -142,9 +146,10 @@
 }
 
 .kopf__anker {
-  font-family: var(--font-text);
+  font-family: var(--font-display);
+  font-variation-settings: var(--wonk-klein);
   font-size: var(--text-meta);
-  font-weight: 600;
+  font-weight: 620;
   
   color: var(--russ);
   text-decoration: none;
@@ -310,10 +315,11 @@
 }
 
 .backstube__unter {
-  margin-top: 0.8rem;
-  font-family: var(--font-text);
-  font-size: clamp(0.95rem, 0.85rem + 0.4vw, 1.15rem);
-  font-weight: 500;
+  margin-top: 0.9rem;
+  font-family: var(--font-display);
+  font-variation-settings: var(--wonk-klein);
+  font-size: clamp(1rem, 0.9rem + 0.5vw, 1.3rem);
+  font-weight: 600;
   color: var(--terra);
   max-width: none;
 }
@@ -357,10 +363,13 @@
 
 /* Der Eigenschatten des freigestellten Gerichts — der EINZIGE Schatten der
    ganzen Seite. Er fällt nach unten rechts, weil das Licht vom Fenster links
-   oben kommt, und er macht aus einem Aufkleber einen Gegenstand. */
+   oben kommt, und er macht aus einem Aufkleber einen Gegenstand.
+
+   Kein Radius: ein Freisteller hat keine Kante, an der einer sitzen könnte. */
 .backstube__bild img {
   width: 100%;
   height: auto;
+  border-radius: 0;
   filter: var(--schatten-speise);
 }
 
@@ -542,9 +551,12 @@
   filter: var(--schatten-speise);
 }
 
+/* Freigestellte Gerichte bekommen KEINEN Radius: sie haben keine Kante, an der
+   einer sitzen könnte. Ein Radius auf einem Freisteller schneidet ihn an. */
 .gebaeck__folge img {
   width: 100%;
   height: auto;
+  border-radius: 0;
 }
 
 .gebaeck__folge img + img {
@@ -691,10 +703,10 @@
   border: 1px solid var(--linie);
   background: transparent;
   color: var(--russ);
-  font-family: var(--font-text);
+  font-family: var(--font-display);
+  font-variation-settings: var(--wonk-klein);
   font-size: var(--text-meta);
-  font-weight: 600;
-  
+  font-weight: 620;
   cursor: pointer;
   transition:
     border-color var(--dauer-mikro) var(--ease-teig),
@@ -717,9 +729,9 @@
   border: 0;
   background: transparent;
   color: var(--terra);
-  font-family: var(--font-text);
+  font-family: var(--font-display);
   font-size: var(--text-meta);
-  font-weight: 600;
+  font-weight: 620;
   text-decoration: underline;
   text-underline-offset: 0.25em;
   cursor: pointer;
@@ -820,9 +832,10 @@
 
 .zeile__allergene {
   margin: 0.3rem 0 0;
-  font-family: var(--font-text);
+  font-family: var(--font-display);
+  font-variation-settings: var(--wonk-klein);
   font-size: var(--text-micro);
-  font-weight: 450;
+  font-weight: 500;
   color: var(--russ-mtl);
   max-width: none;
 }
@@ -846,7 +859,7 @@
   border: 1px solid var(--linie);
   background: transparent;
   color: var(--russ);
-  font-family: var(--font-text);
+  font-family: var(--font-display);
   font-size: 1.25rem;
   font-weight: 600;
   line-height: 1;
@@ -862,7 +875,8 @@
 .zaehler__stand {
   min-width: 1.6ch;
   text-align: center;
-  font-family: var(--font-text);
+  font-family: var(--font-display);
+  font-variation-settings: var(--wonk-klein);
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
@@ -1031,7 +1045,8 @@
 
 .leiste__zahl {
   margin: 0;
-  font-family: var(--font-text);
+  font-family: var(--font-display);
+  font-variation-settings: var(--wonk-klein);
   font-size: var(--text-micro);
   font-weight: 600;
   
@@ -1056,7 +1071,7 @@
   border: 0;
   background: transparent;
   color: var(--russ-mtl);
-  font-family: var(--font-text);
+  font-family: var(--font-display);
   font-size: var(--text-meta);
   cursor: pointer;
   text-decoration: underline;
@@ -1094,7 +1109,7 @@
 }
 
 .nichtlive__titel {
-  font-family: var(--font-text);
+  font-family: var(--font-display);
   font-weight: 600;
   color: var(--terra);
   margin-bottom: 0.6rem;
