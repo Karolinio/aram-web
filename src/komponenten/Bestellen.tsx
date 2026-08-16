@@ -33,7 +33,7 @@ export default function Bestellen() {
           und getippt wird, nicht geschaut. */}
       <div className="bestellen__grund" aria-hidden="true">
         <img
-          src="/bilder/textur/holz-makro.jpg"
+          src="/bilder/textur/holz-makro.webp"
           alt=""
           width={1500}
           height={837}

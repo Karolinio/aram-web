@@ -221,6 +221,63 @@
   gap: clamp(2rem, 4vw, 4rem);
 }
 
+/**
+ * Das Ladenschild.
+ *
+ * ═══ Die Flanke ═══
+ *
+ * Zehn gestapelte `drop-shadow`-Durchgänge, jeder ein Pixel weiter nach unten
+ * rechts und dunkler. Weil `drop-shadow` der Alphakante folgt und nicht dem
+ * Rechteck, entsteht daraus die Seitenfläche einer ausgeschnittenen Platte —
+ * bei einem Rasterbild der einzige Weg zu einer sauberen Kante.
+ *
+ * Der letzte, weiche Durchgang ist kein Teil der Platte: das ist ihr Schatten
+ * auf der Arbeitsfläche, und er fällt nach unten rechts wie alles auf dieser
+ * Seite, weil das Licht vom Fenster links oben kommt.
+ */
+.schild-buehne {
+  perspective: 900px;
+  /* Der Zeiger soll auch dann noch führen, wenn er neben dem Schild steht —
+     sonst kippt es nur, solange man genau darauf zeigt. */
+  padding-block: 1rem;
+  margin-block: -1rem;
+}
+
+.schild-titel {
+  margin: 0;
+  font-size: 0;
+  line-height: 0;
+}
+
+.schild {
+  /* Markant heisst gross: 38rem statt der 34 des ersten Versuchs. Weiter geht
+     nicht, ohne dass das Schild den Fliesstext darunter erdrückt. */
+  width: min(100%, 38rem);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.schild img {
+  width: 100%;
+  height: auto;
+  filter:
+    drop-shadow(1px 1px 0 oklch(38% 0.10 40))
+    drop-shadow(1px 1px 0 oklch(36% 0.10 40))
+    drop-shadow(1px 1px 0 oklch(34% 0.09 40))
+    drop-shadow(1px 1px 0 oklch(32% 0.09 42))
+    drop-shadow(1px 1px 0 oklch(30% 0.08 42))
+    drop-shadow(1px 1px 0 oklch(28% 0.08 44))
+    drop-shadow(1px 1px 0 oklch(26% 0.07 44))
+    drop-shadow(1px 1px 0 oklch(24% 0.06 46))
+    drop-shadow(1px 1px 0 oklch(22% 0.05 46))
+    drop-shadow(1px 1px 0 oklch(20% 0.04 48))
+    drop-shadow(0 16px 22px oklch(24% 0.03 50 / 0.3));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .schild { will-change: auto; }
+}
+
 .backstube__unter {
   margin-top: 0.8rem;
   font-family: var(--font-text);
@@ -501,7 +558,7 @@
 .korn {
   position: absolute;
   display: block;
-  background-image: url('/bilder/textur/koerner.png');
+  background-image: url('/bilder/textur/koerner.webp');
   background-size: 380% 380%;
   background-repeat: no-repeat;
 }

@@ -62,7 +62,7 @@ export const GEBAECKE: Gebaeck[] = [
   {
     id: 'fatayer',
     name: "Fata’er",
-    quelle: '/bilder/echt/fatayer-frei.png',
+    quelle: '/bilder/echt/fatayer-frei.webp',
     echt: true,
     alt: 'Ein Fata’er von Aram, gewölbt und glänzend, dicht mit Sesam und Schwarzkümmel bestreut',
     li: 30,
@@ -83,7 +83,7 @@ export const GEBAECKE: Gebaeck[] = [
   {
     id: 'kaeseschiffchen',
     name: 'Käseschiffchen',
-    quelle: '/bilder/erzeugt/kaeseschiffchen.png',
+    quelle: '/bilder/erzeugt/kaeseschiffchen.webp',
     echt: false,
     alt: 'Ein Käseschiffchen in Bootsform, mit geschmolzenem Käse gefüllt',
     li: 2,
@@ -102,7 +102,7 @@ export const GEBAECKE: Gebaeck[] = [
   {
     id: 'lahmacun',
     name: 'Lahmacun',
-    quelle: '/bilder/erzeugt/lahmacun.png',
+    quelle: '/bilder/erzeugt/lahmacun.webp',
     echt: false,
     alt: 'Ein Lahmacun, dünn ausgerollt, mit Hackfleisch, Petersilie und einer Zitronenspalte',
     li: 52,
@@ -121,7 +121,7 @@ export const GEBAECKE: Gebaeck[] = [
   {
     id: 'manakisch',
     name: 'Manakisch',
-    quelle: '/bilder/erzeugt/manakisch.png',
+    quelle: '/bilder/erzeugt/manakisch.webp',
     echt: false,
     alt: 'Ein Manakisch, rundes Fladenbrot mit Zaatar und Olivenöl',
     li: 12,
@@ -140,7 +140,7 @@ export const GEBAECKE: Gebaeck[] = [
   {
     id: 'fatayer-spinat',
     name: "Fata’er mit Spinat",
-    quelle: '/bilder/erzeugt/fatayer-spinat.png',
+    quelle: '/bilder/erzeugt/fatayer-spinat.webp',
     echt: false,
     alt: 'Ein Fata’er mit Spinat, gewölbt und glänzend, mit Sesam und Schwarzkümmel',
     li: 44,

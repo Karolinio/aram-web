@@ -38,7 +38,7 @@ const RECHTECKE = [
     zahl: '01',
     titel: 'Mehl auf die Fläche',
     text: 'Morgens um sieben, bevor der erste Gast kommt.',
-    quelle: '/bilder/textur/mehl-holz.jpg',
+    quelle: '/bilder/textur/mehl-holz.webp',
     alt: '',
     breite: 1700,
     hoehe: 949,

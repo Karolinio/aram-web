@@ -1,6 +1,7 @@
 import { ARAM } from '../aram.config.ts'
 import { useVersatz } from '../bewegung.ts'
 import Oeffnung from './ui/Oeffnung.tsx'
+import Ladenschild from './Ladenschild.tsx'
 
 /**
  * Die Backstube — der Anfang.
@@ -31,9 +32,9 @@ export default function Backstube() {
     <section className="backstube" id="start" aria-labelledby="backstube-titel">
       <div className="backstube__grund" aria-hidden="true">
         <picture>
-          <source media="(max-width: 640px)" srcSet="/bilder/textur/mehl-holz-klein.jpg" />
+          <source media="(max-width: 640px)" srcSet="/bilder/textur/mehl-holz-klein.webp" />
           <img
-            src="/bilder/textur/mehl-holz.jpg"
+            src="/bilder/textur/mehl-holz.webp"
             alt=""
             width={1700}
             height={949}
@@ -50,7 +51,7 @@ export default function Backstube() {
 
       <div className="schale backstube__gitter">
         <div className="backstube__satz">
-          <h1 id="backstube-titel">Aram</h1>
+          <Ladenschild />
           <p className="backstube__unter">Orientalisches Gebäck &amp; Pizza · Bonn-Hardtberg</p>
 
           <p className="lead backstube__lead">
@@ -80,7 +81,7 @@ export default function Backstube() {
             Hintergrundentfernung an IHREM Foto; erzeugt ist daran nichts. */}
         <figure className="backstube__bild" ref={bild}>
           <img
-            src="/bilder/echt/fatayer-frei.png"
+            src="/bilder/echt/fatayer-frei.webp"
             alt="Ein Fata’er von Aram, gewölbt und glänzend, dicht mit Sesam und Schwarzkümmel bestreut"
             width={1000}
             height={799}
