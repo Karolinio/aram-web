@@ -226,14 +226,19 @@
   display: inline-block;
   transform: translateY(112%) rotate(2deg);
   transform-origin: 0% 100%;
-  will-change: transform;
+  /* KEIN `will-change` hier — und das ist die Lehre aus einem Prüferbefund:
+     „30 Elemente halten eine Compositor-Ebene, ohne im Bild zu sein." Bei
+     dreissig Wörtern in sieben Überschriften reserviert das ab dem Laden
+     dreissig Ebenen, von denen keine gebraucht wird. Die Ebene wird beim
+     EINTRETEN gesetzt (ScrollTrigger onEnter) und danach wieder abgeräumt;
+     beides steht in Auftritt.tsx. */
 }
 
 /* Wer weniger Bewegung will, sieht die Zeile sofort — die Komponente deckt sie
    im selben Fall auch von Hand auf, doppelt hält hier besser: bei blockiertem
    JavaScript bliebe sonst eine unsichtbare Überschrift stehen. */
 @media (prefers-reduced-motion: reduce) {
-  .auftritt__in { transform: none; will-change: auto; }
+  .auftritt__in { transform: none; }
   .auftritt__wort { overflow: visible; }
 }
 

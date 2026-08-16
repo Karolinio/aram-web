@@ -63,6 +63,7 @@ export default function Auftritt({ children, versatz = 0.06 }: Props) {
     const aufdecken = () => {
       for (const w of woerter) {
         w.style.transform = 'none'
+        w.style.willChange = ''
         const kasten = w.parentElement
         if (kasten) kasten.style.overflow = 'visible'
       }
@@ -101,6 +102,18 @@ export default function Auftritt({ children, versatz = 0.06 }: Props) {
           /* Erst wenn die Zeile wirklich im Blick ist. Bei 100 % liefe der
              Auftritt ab, während sie noch unter der Falz steht. */
           start: 'top 88%',
+          /**
+           * Die Ebene wird HIER reserviert, nicht im Stilblatt.
+           *
+           * Der Fabrikprüfer hat den Unterschied gemessen: mit `will-change`
+           * im CSS hielten 30 Wörter ab dem Laden eine eigene
+           * Compositor-Ebene, ohne je im Bild gewesen zu sein. Jetzt bekommt
+           * sie ein Wort in dem Moment, in dem es tatsächlich losläuft — und
+           * `aufdecken` nimmt sie danach wieder weg.
+           */
+          onEnter: () => {
+            for (const w of woerter) w.style.willChange = 'transform'
+          },
           /* EINMAL. Eine Überschrift, die bei jedem Vorbeiscrollen neu
              auftaucht, ist ein Wackelkontakt, kein Auftritt. */
           once: true,
