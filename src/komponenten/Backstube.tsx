@@ -1,5 +1,6 @@
 import { ARAM } from '../aram.config.ts'
 import { useKamerafahrt, useVersatz } from '../bewegung.ts'
+import Dampf from './ui/Dampf.tsx'
 import Oeffnung from './ui/Oeffnung.tsx'
 import Ladenschild from './Ladenschild.tsx'
 import { Bild } from './ui/bausteine.tsx'
@@ -146,6 +147,12 @@ export default function Backstube() {
             eine Unterschrift landete dadurch mitten im Fliesstext. Was es ist,
             sagt der Alternativtext — und die Karte zwei Sektionen weiter. */}
         <div className="backstube__bild" ref={bild}>
+          {/* Der Dampf steigt HINTER dem Gebäck auf, nicht davor. Vorne wäre er
+              ein Schleier über dem Produkt; hinten kommt er von der Oberseite,
+              und genau so sieht man ihn an einem Blech, das gerade aus dem Ofen
+              kommt. Er steht hier und nicht in der Sektion, weil er zu DIESEM
+              Gegenstand gehört — er wandert mit ihm, wenn er sich verschiebt. */}
+          <Dampf klasse="backstube__dampf" ton="warm" />
           <Bild
             quelle="/bilder/echt/fatayer-frei.webp"
             alt="Ein Fata’er von Aram, gewölbt und glänzend, dicht mit Sesam und Schwarzkümmel bestreut"

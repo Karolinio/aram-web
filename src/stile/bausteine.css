@@ -188,6 +188,22 @@
    nur noch Abstände an einem `<Etikett>`. */
 .fuss__titel { margin-bottom: 0.8rem; }
 
+/* ── Dampf ────────────────────────────────────────────────────────────────── */
+
+/**
+ * Die Leinwand ist immer nur so gross wie ihr Ausschnitt — nie fensterfüllend.
+ * Der Mehlstaub liegt über der ganzen Seite, weil Staub überall ist; Dampf
+ * gehört zu EINEM heissen Gegenstand und hört einen halben Meter darüber auf.
+ *
+ * Die Leinwand hat keine eigene Position: sie erbt sie von der Klasse, die der
+ * Aufrufer mitgibt. So gibt es hier keine Annahme darüber, wo ein heisser
+ * Gegenstand auf dieser Seite liegt.
+ */
+.dampf {
+  pointer-events: none;
+  display: block;
+}
+
 /* ── Das Wasserzeichen ────────────────────────────────────────────────────── */
 
 /**

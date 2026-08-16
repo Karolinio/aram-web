@@ -180,6 +180,20 @@
   /* Höher als vorher (84): der Grund ist jetzt ihr Laden, und eine
      Ladenfront braucht Fläche, sonst ist sie ein Briefmarkenbild. */
   min-height: 92svh;
+  /**
+   * Waagerecht beschnitten, senkrecht NICHT — und dieses Paar ist der Punkt.
+   *
+   * `overflow: clip` auf beiden Achsen hätte die Überlappung des Gebäcks nach
+   * unten abgeschnitten, und die IST die Tiefe dieser Seite. `hidden` wäre
+   * ebenfalls falsch: sobald eine Achse `hidden` ist, wird die andere zu
+   * `auto` und scrollt. Nur `clip` lässt die Gegenachse wirklich `visible` —
+   * deshalb steht hier genau diese Kombination und keine andere.
+   *
+   * Sie ist das Netz unter dem Dampf: was seitlich hinausragt, kann die Seite
+   * nicht mehr breiter machen.
+   */
+  overflow-x: clip;
+  overflow-y: visible;
   /* Der untere Innenabstand ist klein, weil das Foto ihn sonst nur auffüllt
      statt über die Kante zu ragen. Gemessen: mit 9rem blieben 11 px Überlappung
      übrig — also gar keine. */
@@ -435,6 +449,31 @@
  * um wirklich auf dem Band zu liegen. Eine Bildunterschrift über dem Bild ist
  * eine Konvention aus dem Zeitungssatz, kein Notbehelf.
  */
+/**
+ * Der Dampf über dem Gebäck.
+ *
+ * Er beginnt bei 42 % der Höhe von unten — das ist ungefähr die Oberkante des
+ * Fata'er — und reicht bis weit darüber hinaus. Seitlich läuft er über die
+ * Kante des Bildes hinaus, weil Dampf sich ausbreitet und nicht in der Breite
+ * seines Gegenstands bleibt.
+ *
+ * `z-index: 0` gegen `1` an der Figur: dahinter, nicht davor. Davor wäre er
+ * ein Schleier über dem Produkt.
+ */
+/* Der Überstand war zuerst ±22 %. Der Prüfer hat es sofort gefunden: die
+   Leinwand ragte am Rechner 57 px über den Bildschirmrand und die Seite
+   wackelte seitlich. ±10 % bleiben innerhalb der Rinne. */
+.backstube__dampf {
+  position: absolute;
+  left: -10%;
+  right: -10%;
+  bottom: 42%;
+  height: 105%;
+  z-index: 0;
+}
+
+.backstube__bild figure { position: relative; z-index: 1; }
+
 .backstube__bild {
   display: flex;
   flex-direction: column-reverse;
