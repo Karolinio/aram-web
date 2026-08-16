@@ -878,10 +878,29 @@
   align-items: start;
 }
 
-.laden__bild { grid-column: 1 / 7; }
+/**
+ * Der Laden — die letzte Sektion, die halbe/halbe war.
+ *
+ * Bei Savor nachgesehen: dort liegen die Bilder mit WILDEN Grössenunterschieden
+ * und viel Leere dazwischen. Ein Foto, das genau die halbe Breite einnimmt, und
+ * ein Text, der die andere Hälfte füllt, ist ein Raster — kein Satz.
+ *
+ * Also: das Foto schmal (4 von 12 Spalten statt 6) und TIEF gesetzt, der Text
+ * breit und hoch. Der Versatz nach unten ist das eigentliche Mittel; er nimmt
+ * der Zeile die Symmetrie, ohne dass etwas überlappen muss.
+ */
+.laden__bild {
+  grid-column: 1 / 5;
+  margin-top: clamp(3rem, 7vw, 7rem);
+}
 .laden__bild img { width: 100%; height: auto; }
-.laden__wort { grid-column: 8 / 13; }
+
+.laden__wort { grid-column: 6 / 13; }
 .laden__wort h2 { margin-bottom: 1.2rem; }
+
+/* Die Datenzeilen liefen über sieben Spalten und wurden dadurch zu dünnen
+   Balken. Auf Lesebreite gebracht stehen sie als Block. */
+.laden__wort .daten { max-width: 34rem; }
 
 .daten { margin-top: 2rem; }
 
@@ -1195,7 +1214,9 @@
 
   .laden__bild,
   .laden__wort { grid-column: 1 / -1; }
-  .laden__bild { width: min(92%, 34rem); }
+  /* Der Tiefversatz ist am Handy nur leerer Raum — dort steht ohnehin alles
+     untereinander. Gemessen: er kostete 0,1 Bildschirmhöhen über der Grenze. */
+  .laden__bild { width: min(78%, 26rem); margin-top: 0; }
 }
 
 @media (max-width: 700px) {

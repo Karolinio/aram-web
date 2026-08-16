@@ -89,6 +89,35 @@ Dateiname jeweils: `public/bilder/<kennung>.webp`
 
 ---
 
+## Rundum: die vier Aufnahmen, an denen alles hängt
+
+**Entschieden am 16.08.2026.** Diese eine Aufnahmerunde schaltet BEIDE Wege frei —
+deshalb lohnt sie sich doppelt:
+
+| Weg | was er braucht | was er kostet |
+|---|---|---|
+| Bildfolge durchschalten (geplant) | 3–4 Ansichten je Gericht | nichts |
+| Echte 3D-Modelle (offen) | dieselben 3–4 Ansichten | 30 Credits je Gericht |
+
+Das bessere 3D-Verfahren rechnet aus **mehreren** Ansichten; aus einer einzigen wird
+die Rückseite geraten. Wer also rundum fotografiert, hält sich beides offen, ohne
+sich für eines zu entscheiden.
+
+### So geht die Runde
+
+1. Gericht auf **Backpapier** in die Mitte, kein Teller, rundherum Platz.
+2. Handy auf einen Stapel Kartons legen, **Höhe nicht mehr verändern** — etwa 35 Grad
+   von schräg oben.
+3. **Das Blech drehen, nicht die Kamera.** Vier Aufnahmen: 0°, 90°, 180°, 270°.
+   Wer die Kamera bewegt, bekommt vier verschiedene Perspektiven statt vier
+   Ansichten desselben Gegenstands — und daraus lässt sich nichts durchschalten.
+4. Fenster links, kein Blitz, keine Deckenlampe als einzige Quelle.
+5. Zwischen den Gerichten nichts umbauen. Gleiches Licht über alle Gerichte hinweg
+   ist wichtiger als das perfekte Einzelbild.
+
+Dauer für alle elf Gerichte: **ein halber Vormittag.** Das ist der grösste Hebel
+des ganzen Projekts — grösser als jeder Effekt auf der Seite.
+
 ## Was für alle gilt
 
 - Handy reicht, aber **als Datei schicken, nicht als Galerie-Bild** — WhatsApp rechnet sonst herunter.
