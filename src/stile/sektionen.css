@@ -80,7 +80,7 @@
 .hinweisband {
   position: relative;
   z-index: 41;
-  background: var(--creme-tief);
+  background: var(--ton-tief);
   border-bottom: 1px solid var(--linie);
 }
 
@@ -117,7 +117,7 @@
   z-index: 40;
   /* Deckend, nicht durchscheinend. Eine Kopfzeile, durch die man die Seite
      schimmern sieht, braucht einen Weichzeichner — und den gibt es hier nicht. */
-  background: var(--creme);
+  background: var(--ton-hell);
   border-bottom: 1px solid var(--linie);
 }
 
@@ -389,41 +389,56 @@
 
 
 
-/* ── Das Band: das eine gesättigte Farbfeld ───────────────────────────────── */
+/* ── Der Satz zwischen den Sektionen ──────────────────────────────────────
+ *
+ * Hier lag bis zum 16.08. ein vollflächiges Band in ihrem Orange. Karol:
+ * „dieses Orangene kann man nicht irgendwie machen, das sieht viel zu viel
+ * wie keine Übergänge". Er hat recht — ein Farbfeld über die ganze Breite ist
+ * ein SCHNITT, kein Übergang. Es zerteilte die Seite in ein Davor und ein
+ * Danach.
+ *
+ * Der Satz bleibt, die Fläche geht. Er steht jetzt gross auf dem Clay-Grund,
+ * und das einzige Orange daran ist der Punkt davor.
+ */
 
 .band {
   position: relative;
   z-index: 1;
-  background: var(--glut);
-  color: var(--russ);
-  padding-block: clamp(2rem, 1.5rem + 4vw, 5rem);
-  /* Am Handy liegt das Foto fast über die volle Breite — dort darf das Band
-     nicht hochrutschen, sonst landet es auf der Schlagzeile. */
-  margin-top: clamp(1rem, 3vw, 2rem);
+  background: var(--ton-tief);
+  padding-block: clamp(2.25rem, 1.5rem + 4vw, 6rem);
+  margin-top: 0;
 }
 
-/* Ab Tabletbreite rutscht das Band unter das Hero-Foto, sodass das Foto auf dem
-   Orange liegt. Gemessen: ohne diese Zeile blieb genau der positive Abstand von
-   57 px als Lücke stehen, und die Überlappung fand nicht statt. */
-@media (min-width: 1000px) {
-  .band { margin-top: clamp(-5rem, -5vw, -2rem); }
-}
-
-/* Ruß auf Glut hält gemessen 4,97. Das reicht für Schrift dieser Grösse — und
-   deshalb steht auf dieser Fläche genau ein Satz und sonst nichts. */
 .band__satz {
   margin: 0;
-  max-width: 18ch;
+  max-width: 20ch;
   font-family: var(--font-display);
   font-size: var(--text-band);
-  font-weight: 600;
-  font-variation-settings: var(--wonk-display);
-  line-height: 1;
-  letter-spacing: -0.015em;
-  /* Die eigene Tinte für Orange. Mit --russ wären es 4,14 — für diese
-     Schriftgrösse noch zulässig, aber dann gilt auf derselben Fläche zweierlei
-     Recht. Eine Fläche, eine Tinte. */
-  color: var(--tinte-glut);
+  /* DIESELBEN Achsen wie jede andere Überschrift. Vorher stand hier
+     `--wonk-display` mit opsz 144 und Gewicht 600, während die Überschrift
+     darunter opsz 96 und Gewicht 760 trug — dieselbe Familie, zwei
+     Einstellungen, und deshalb las es als zwei Schriften. */
+  font-variation-settings: var(--wonk-kopf);
+  font-weight: 760;
+  line-height: var(--leading-kopf);
+  letter-spacing: var(--sperr-kopf);
+  color: var(--tinte);
+}
+
+/* Gemessen: ihr Orange auf dem Clay-Grund kommt auf 2,50 — als Fläche zu
+   schwach, um sich abzusetzen. Ein feiner Ring in der Tinte gibt ihm die Kante,
+   ohne die Markenfarbe anzufassen. */
+.band__satz::before {
+  content: '';
+  display: block;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: var(--glut);
+  box-shadow:
+    var(--clay-ruhe),
+    0 0 0 1px oklch(30% 0.055 55 / 0.22);
+  margin-bottom: 1.5rem;
 }
 
 /* ── Der Prozess: die Savor-Sequenz ───────────────────────────────────────── */
@@ -987,7 +1002,13 @@
 }
 
 /* Ihr Orange als Fläche mit dunkler Schrift. Nie andersherum. */
-.weg--glut { background: var(--glut); border-color: transparent; }
+/* Die einzige Akzentfläche der ganzen Seite. Genau eine — sonst ist es kein
+   Akzent mehr, sondern eine zweite Grundfarbe. */
+.weg--glut {
+  background: var(--glut);
+  border-color: transparent;
+  box-shadow: var(--clay-ruhe);
+}
 .weg--glut:hover { border-color: var(--tinte-glut); }
 
 .weg--glut .weg__art { color: var(--tinte-glut); }
@@ -1084,7 +1105,7 @@
 .fuss {
   position: relative;
   z-index: 1;
-  background: var(--creme-tief);
+  background: var(--ton-tief);
   border-top: 0;
   padding-block: clamp(3rem, 5vw, 5rem);
   /* Platz, damit die Bestellleiste den Fuss nicht überdeckt. */
@@ -1197,6 +1218,13 @@
   .kopf__anruf-kurz { display: inline; }
 
   .backstube { min-height: 70svh; padding-block: 2rem 1.5rem; }
+
+  /* Der Punkt vor dem Satz ist am Handy kleiner — 2,5 rem sind dort ein Fleck.
+     Diese Regel stand zuerst in bausteine.css und wurde von der Grundregel
+     hier überschrieben: bausteine.css lädt FRÜHER. Eine Ausnahme zu einer
+     Regel gehört in dieselbe Datei wie die Regel. */
+  .band { padding-block: 1.75rem; }
+  .band__satz::before { width: 1.6rem; height: 1.6rem; margin-bottom: 0.9rem; }
 
   /* Der Hero ist am Handy durch das Ladenfoto auf 10,2 Bildschirmhöhen
      gewachsen; der Auftrag deckelt bei 10. Das Foto wird deshalb quer

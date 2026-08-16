@@ -25,8 +25,18 @@ import type { ReactNode } from 'react'
  * vorbeibaut, baut die Uneinheitlichkeit zurück, die er gerade beseitigt hat.
  */
 
-/** Auf welchem Grund eine Sektion steht. Mehr Gründe gibt es nicht. */
-export type Grund = 'creme' | 'papier' | 'creme-tief'
+/**
+ * Auf welchem Grund eine Sektion steht. ZWEI, und mehr gibt es nicht.
+ *
+ * Vorher waren es vier — `papier` für die Karte, `creme` für Hero und Prozess,
+ * `creme-tief` für Bestellen und Fuss, dazu ein vollflächiges Orangeband. Vier
+ * Gründe auf sieben Abschnitten, und keiner davon war entschieden: jede
+ * Sektion hatte ihren eigenen gewählt.
+ *
+ * Der Typ ist die Durchsetzung. Wer einen dritten Grund will, muss ihn hier
+ * eintragen — und dabei merken, dass er einen dritten Grund will.
+ */
+export type Grund = 'hell' | 'tief'
 
 type SektionProps = {
   id?: string
@@ -49,7 +59,7 @@ type SektionProps = {
  */
 export function Sektion({
   id,
-  grund = 'creme',
+  grund = 'hell',
   kante = false,
   klasse,
   beschriftetVon,

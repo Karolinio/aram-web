@@ -26,7 +26,7 @@ export default function Laden() {
   const bild = useVersatz<HTMLDivElement>(-0.05)
 
   return (
-    <Sektion id="laden" kante klasse="laden" beschriftetVon="laden-titel">
+    <Sektion id="laden" grund="hell" kante klasse="laden" beschriftetVon="laden-titel">
       <div className="schale laden__gitter">
         <div className="laden__bild" ref={bild}>
           <Bild

@@ -20,42 +20,63 @@
  */
 
 :root {
-  /* ── Farbe ───────────────────────────────────────────────────────────────
-     Gemessen am 15.08.2026 mit packages/shared/src/kontrast.ts. Die Zahlen in
-     den Kommentaren sind Messwerte, keine Schätzungen. */
-  --papier: oklch(97.5% 0.018 82);      /* hellste Fläche. Die Speisekarte */
-  --creme: oklch(95% 0.030 78);         /* Grund. Teig, Mehl, Sonne auf Holz */
-  --creme-tief: oklch(90% 0.045 72);    /* zweite Fläche, Sektionswechsel */
-  --russ: oklch(30% 0.055 55);          /* Tinte. Espresso — 11,93 auf Creme, AAA */
-  --russ-mtl: oklch(48% 0.050 52);      /* Sekundärtext — 5,74 auf Creme, AA */
-  --linie: oklch(84% 0.030 70);         /* Haarlinien, immer 1px */
-  --terra: oklch(40% 0.130 35);         /* DAS Signal — 8,47 auf Creme, AAA */
-  --glut: oklch(66% 0.180 45);          /* IHR Orange. NUR Fläche */
+  /**
+   * ── Farbe: ZWEI Gründe, eine Tinte, ein Akzent ──────────────────────────
+   *
+   * ═══ Was hier gestorben ist ═══
+   *
+   * Vorher: --papier, --creme, --creme-tief UND ein vollflächiges --glut-Band.
+   * Vier Gründe auf sieben Abschnitten, dazu fünf Knopffarben. Karols Urteil:
+   * „zu viele verschiedene Farbübergänge", „das Orange kann man nicht irgendwie
+   * machen", „zu viele Buttonfarben". Er hat in allen drei Punkten recht — und
+   * der Fehler war, dass jede Sektion ihren Grund selbst entschieden hat.
+   *
+   * Jetzt: ZWEI Gründe, die sich abwechseln. Mehr gibt es nicht.
+   *
+   *   --ton-hell   das warme Off-White
+   *   --ton-tief   der Clay-Ton, eine Stufe dunkler
+   *
+   * Und Orange ist AKZENT, nicht Fläche: die WhatsApp-Karte, der aktive Anker,
+   * kleine Marken. Kein vollflächiges Band mehr. Ein Farbfeld über die ganze
+   * Breite ist ein Schnitt, kein Übergang.
+   */
+  --ton-hell: oklch(96.5% 0.020 76);   /* Grund 1. Warmes Off-White */
+  --ton-tief: oklch(90.5% 0.038 68);   /* Grund 2. Clay, eine Stufe tiefer */
+
+  --tinte: oklch(30% 0.055 55);        /* Espresso — 12,3 auf hell, AAA */
+  --tinte-leise: oklch(48% 0.050 52);  /* Sekundär — 5,9 auf hell, AA */
+  --linie: oklch(84% 0.030 70);        /* Haarlinien, immer 1px */
+
+  --akzent: oklch(40% 0.130 35);       /* DAS Signal. Knopf, Anker, Fokus */
+  --glut: oklch(66% 0.180 45);         /* IHR Orange. NUR als Akzentfläche */
+  --tinte-glut: oklch(26% 0.045 52);   /* Schrift auf Glut — 4,73, AA */
+
+  /* Alte Namen zeigen auf die neuen, damit nichts stumm bricht. */
+  --papier: var(--ton-hell);
+  --creme: var(--ton-hell);
+  --creme-tief: var(--ton-tief);
+  --russ: var(--tinte);
+  --russ-mtl: var(--tinte-leise);
+  --terra: var(--akzent);
 
   /**
-   * Warum die Tinte 30 % hell ist und nicht 24 %.
+   * ── Clay: Tiefe aus Licht, nicht aus Linien ─────────────────────────────
    *
-   * Fassung 2 hatte hier oklch(24% 0.030 50) und nannte es „dunkles warmes Braun".
-   * Der Wert war braun, die Wahrnehmung nicht: bei 24 % Helligkeit ist so wenig
-   * Buntheit nicht mehr unterscheidbar, das Auge sieht Schwarz. Karol hat genau das
-   * gemeldet — „ich weiss nicht, ob Schwarz die richtige Farbe ist" — auf einer
-   * Seite, die gar kein Schwarz enthielt.
+   * Claymorphismus heisst: matte Oberflächen, weiche grosse Schatten,
+   * grosszügige Rundungen. Kein Glanz, kein Verlauf, kein Spielzeug.
    *
-   * Bei 30 % mit fast doppelter Buntheit liest sie als Espresso. Der Kontrast fällt
-   * von 14,34 auf 11,93 und bleibt damit AAA.
+   * Das hebt eine Regel der Direktion auf — „kein Schlagschatten unter einem
+   * Kasten". Sie stand dort, weil Schatten meist als Ersatz für eine fehlende
+   * Ordnung benutzt werden. Hier tragen sie die Ordnung: zwei Gründe, und was
+   * darauf liegt, hebt sich weich ab. Der Schatten ist warm und nie grau —
+   * ein grauer Schatten auf Creme sieht aus wie Schmutz.
    */
-
-  /**
-   * Die eine Ausnahme: Schrift auf ihrem Orange.
-   *
-   * Die hellere Tinte verliert auf Glut Kontrast — 4,14 statt 4,97, und damit unter
-   * der Schwelle für normalen Text. Gemessen wurde auch der andere Weg: das Orange
-   * abzudunkeln macht es SCHLIMMER, weil es sich der Tinte annähert (3,51 bei 62 %
-   * Helligkeit). Also trägt Glut als einzige Fläche eine eigene, dunklere Tinte.
-   *
-   * Auf gesättigtem Orange liest auch 26 % nicht als Schwarz — die Umgebung färbt.
-   */
-  --tinte-glut: oklch(26% 0.045 52);    /* NUR auf --glut — 4,73, AA */
+  --clay-ruhe:
+    0 1px 2px oklch(30% 0.055 55 / 0.05),
+    0 8px 18px -6px oklch(30% 0.055 55 / 0.10);
+  --clay-hoch:
+    0 2px 4px oklch(30% 0.055 55 / 0.06),
+    0 16px 32px -10px oklch(30% 0.055 55 / 0.16);
 
   /* ── Ebenen ohne durchscheinende Flächen ─────────────────────────────────
      Die Tiefenstrategie der Direktion. Tiefe entsteht durch ÜBERLAPPUNG und

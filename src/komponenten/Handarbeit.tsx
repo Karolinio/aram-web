@@ -137,7 +137,7 @@ export default function Handarbeit() {
         <p className="band__satz schale">Du siehst zu, wie dein Fata’er entsteht.</p>
       </div>
 
-      <Sektion klasse="prozess" beschriftetVon="prozess-titel">
+      <Sektion grund="hell" klasse="prozess" beschriftetVon="prozess-titel">
         <div className="schale prozess__buehne">
           <Kopf
             id="prozess-titel"

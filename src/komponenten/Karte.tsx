@@ -70,7 +70,7 @@ export default function Karte() {
     setVersteckt((v) => (v.includes(a) ? v.filter((x) => x !== a) : [...v, a]))
 
   return (
-    <Sektion id="karte" grund="papier" kante klasse="karte" beschriftetVon="karte-titel">
+    <Sektion id="karte" grund="tief" kante klasse="karte" beschriftetVon="karte-titel">
       <div className="schale">
         <Kopf
           id="karte-titel"

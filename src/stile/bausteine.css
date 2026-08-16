@@ -21,9 +21,22 @@
   padding-block: var(--raum-sektion);
 }
 
-.sektion--creme { background: var(--creme); }
-.sektion--papier { background: var(--papier); }
-.sektion--creme-tief { background: var(--creme-tief); }
+/**
+ * ZWEI Gründe, die sich abwechseln. Mehr gibt es nicht.
+ *
+ * Karol: „das sind zu viele verschiedene Farbübergänge, vielleicht zwei Farben
+ * geben". Genau so. Vorher: --papier für die Karte, --creme für Hero und
+ * Prozess, --creme-tief für Bestellen und Fuss, plus ein orangenes Vollband.
+ * Vier Gründe, und keiner davon war entschieden — jede Sektion hatte ihren
+ * eigenen gewählt.
+ */
+.sektion--hell { background: var(--ton-hell); }
+.sektion--tief { background: var(--ton-tief); }
+
+/* Alte Namen zeigen auf den Zweiklang. */
+.sektion--creme,
+.sektion--papier { background: var(--ton-hell); }
+.sektion--creme-tief { background: var(--ton-tief); }
 
 /* Die gepunktete Linie an der Oberkante. EIN Mittel, überall dasselbe —
    vorher hatte die Karte Linien oben und unten, Bestellen nur oben, der Laden
@@ -36,15 +49,18 @@
 }
 
 /* Grund UND Kante zusammen: der Grund muss als zweite Ebene mit. */
-.sektion--kante.sektion--papier {
-  background-image: var(--linie-punkt), linear-gradient(var(--papier), var(--papier));
+.sektion--kante.sektion--hell,
+.sektion--kante.sektion--papier,
+.sektion--kante.sektion--creme {
+  background-image: var(--linie-punkt), linear-gradient(var(--ton-hell), var(--ton-hell));
   background-position: top, top;
   background-size: 100% 1px, 100% 100%;
   background-repeat: no-repeat, no-repeat;
 }
 
+.sektion--kante.sektion--tief,
 .sektion--kante.sektion--creme-tief {
-  background-image: var(--linie-punkt), linear-gradient(var(--creme-tief), var(--creme-tief));
+  background-image: var(--linie-punkt), linear-gradient(var(--ton-tief), var(--ton-tief));
   background-position: top, top;
   background-size: 100% 1px, 100% 100%;
   background-repeat: no-repeat, no-repeat;
@@ -105,10 +121,14 @@
 /* EINE Zeile, und sie trifft jedes Foto der Seite: Hero, Ladenfront, Brüder,
    Prozessschritte, Stilbogen. Genau dafür gibt es die Bausteine — vorher
    wären es sechs Stellen gewesen, und eine davon hätte man vergessen. */
+/* Clay: die Fotos liegen weich auf dem Grund statt hart darauf zu schneiden.
+   Der Schatten ist warm und nie grau — ein grauer Schatten auf Creme sieht aus
+   wie Schmutz. */
 .bild img {
   width: 100%;
   height: auto;
   border-radius: var(--radius-gross);
+  box-shadow: var(--clay-ruhe);
 }
 
 /* Die Unterschrift trägt dieselbe Schrift wie die Überschrift — nur klein und
@@ -157,9 +177,10 @@
   /* Der Sektionskopf war nach dem Umbau überall gleich weit — und dadurch am
      Handy 0,2 Bildschirmhöhen zu hoch. Ein Baustein zu ändern reicht jetzt für
      alle sieben Abschnitte; vorher wären es sieben Stellen gewesen. */
-  .kopfblock { margin-bottom: 1.5rem; }
-  .kopfblock h2 { margin-bottom: 0.6rem; }
-  .kopfblock .etikett { font-size: var(--text-meta); margin-bottom: 0.6rem; }
+  .kopfblock { margin-bottom: 1.35rem; }
+  .kopfblock h2 { margin-bottom: 0.5rem; }
+  .kopfblock .etikett { font-size: var(--text-meta); margin-bottom: 0.5rem; }
+
   .sektion { padding-block: clamp(2.5rem, 2rem + 5vw, 9rem); }
 }
 

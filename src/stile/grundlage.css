@@ -212,66 +212,77 @@ section {
 /* Sprungmarken landen unter der Kopfzeile, nicht darunter abgeschnitten. */
 [id] { scroll-margin-top: calc(var(--kopf-hoehe) + 1.5rem); }
 
-/* ── Knöpfe ───────────────────────────────────────────────────────────────── */
+/* ── Knöpfe: ZWEI, mehr nicht ─────────────────────────────────────────────
+ *
+ * Vorher gab es fünf: gefüllt in Terrakotta, gefüllt in Glut, umrandet, tot,
+ * und die Filterknöpfe als sechste Sorte. Karol: „es gibt noch generell zu
+ * viele Buttonfarben". Stimmt — und mit fünf Sorten weiss niemand mehr, welcher
+ * der wichtige ist.
+ *
+ * Jetzt: EINER ist gefüllt und heisst „mach das hier". Alle anderen sind
+ * umrandet. Das ist die ganze Hierarchie.
+ */
 
 .knopf {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.55em;
-  min-height: 44px; /* Tippziel. Am Handy wird mit einer Hand bestellt. */
-  /* Ein Knopf wird überflogen, nicht gelesen — also Fraunces. Yellowbird macht
-     dasselbe, und genau daher kommt dort die Selbstsicherheit. */
+  min-height: 46px;
   font-family: var(--font-display);
   font-variation-settings: var(--wonk-klein);
   font-weight: 660;
   font-size: 1.0625rem;
   letter-spacing: 0;
-  padding: 0.7em 1.4em;
-  border-radius: var(--radius-knopf);
+  padding: 0.7em 1.5em;
+  border-radius: var(--radius-klein);
   border: 1px solid transparent;
   cursor: pointer;
   text-decoration: none;
-  background: var(--terra);
-  color: var(--papier); /* 8,47 gegen Terrakotta — AAA */
+  /* Der eine gefüllte Knopf. */
+  background: var(--akzent);
+  color: var(--ton-hell);
+  box-shadow: var(--clay-ruhe);
   transition:
     transform var(--dauer-mikro) var(--ease-teig),
-    background-color var(--dauer-mikro) var(--ease-teig);
+    box-shadow var(--dauer-mikro) var(--ease-teig);
 }
-/**
- * Hebungen nur für echte Zeiger.
- *
- * Auf einem Touchgerät gibt es kein Überfahren. Was der Browser dort trotzdem
- * als `:hover` auslöst, ist der Tipp selbst — und der Zustand bleibt danach
- * hängen, bis irgendwo anders hingetippt wird. Ein Knopf, der nach dem Antippen
- * dauerhaft angehoben stehen bleibt, sieht kaputt aus.
- */
+
 @media (hover: hover) {
-  .knopf:hover { transform: translateY(-2px); }
+  .knopf:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--clay-hoch);
+  }
 }
 
-/* Ihr Orange als Fläche, mit dunkler Schrift darauf. Die einzige erlaubte
-   Verwendung von --glut auf einem Bedienelement — und die Schrift ist groß
-   genug für die gemessenen 4,97. */
-/* Die eigene, dunklere Tinte — sonst fällt dieser Knopf mit 4,14 durch. */
+/* Alles andere ist umrandet. `--glut` wird hier NICHT mehr als Knopffläche
+   benutzt: ihr Orange ist Akzent, und ein zweiter gefüllter Knopf daneben
+   nimmt dem ersten die Bedeutung. */
+.knopf--leise,
 .knopf--glut {
-  background: var(--glut);
-  color: var(--tinte-glut);
+  background: transparent;
+  color: var(--tinte);
+  border-color: var(--linie);
+  box-shadow: none;
 }
 
-.knopf--leise {
-  background: transparent;
-  color: var(--russ);
-  border-color: var(--linie);
+@media (hover: hover) {
+  .knopf--leise:hover,
+  .knopf--glut:hover {
+    border-color: var(--akzent);
+    color: var(--akzent);
+    box-shadow: none;
+    transform: translateY(-2px);
+  }
 }
-.knopf--leise:hover { border-color: var(--terra); color: var(--terra); }
 
 /* Ein Knopf, der noch nichts tut, sieht auch so aus und ist nicht anklickbar.
    Ein toter Bestellknopf kostet eine Bestellung, nicht einen Klick. */
 .knopf[aria-disabled='true'] {
   background: transparent;
   border-color: var(--linie);
-  color: var(--russ-mtl);
+  color: var(--tinte-leise);
+  box-shadow: none;
   cursor: default;
   pointer-events: none;
 }

@@ -27,7 +27,7 @@ const DIENSTE = [
  */
 export default function Bestellen() {
   return (
-    <Sektion id="bestellen" grund="creme-tief" kante klasse="bestellen" beschriftetVon="bestellen-titel">
+    <Sektion id="bestellen" grund="tief" kante klasse="bestellen" beschriftetVon="bestellen-titel">
       {/* Dieselbe Technik wie im Hero: echte Fotografie, darüber ein deckender
           Cremeschleier. Sie schliesst den Kreis — die Seite beginnt und endet
           auf demselben Holz. Der Schleier ist hier dichter, weil hier gelesen
