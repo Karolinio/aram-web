@@ -111,6 +111,35 @@
 
 /* ── Kopfzeile ────────────────────────────────────────────────────────────── */
 
+/**
+ * Die Kopfzeile.
+ *
+ * ═══ Der einzige Bereich, der nie überarbeitet wurde ═══
+ *
+ * Karol, dreimal: „der Header ist immer noch nicht gelöst". Er hatte recht —
+ * das hier war bis zum 16.08. das Generischste der Seite: Logo, drei Links,
+ * eine dunkelrote Pille. Ein Baukasten-Kopf.
+ *
+ * ═══ Was aus Mobbin kommt ═══
+ *
+ * Nachgesehen bei Monte und Yellowbird. Beide machen dasselbe, und es ist das
+ * Gegenteil dessen, was hier stand: KEINE Knopf-Chrom in der Kopfzeile. Monte
+ * setzt „MENU", die Wortmarke und „BOOK A TABLE" als blanke Textmarken — und
+ * daneben, klein und ruhig, „OPEN TODAY TIL 1:30PM". Der Status gehört in den
+ * Kopf, nicht der Kasten.
+ *
+ * Übernommen wird der Griff, nicht das Register: die Telefonnummer bleibt eine
+ * Fläche, weil sie auf einer Gastro-Seite DIE Handlung ist — aber eine ruhige
+ * aus dem eigenen Zweiklang statt eines roten Blocks.
+ *
+ * ═══ Und sie fährt beim Scrollen zusammen ═══
+ *
+ * Oben steht sie hoch und offen. Sobald der Hero durch ist, wird sie flacher,
+ * das Logo kleiner und der Grund eine Stufe tiefer. Zwei Zustände, kein
+ * Verschwinden: eine Kopfzeile, die sich wegduckt und wiederkommt, ist auf
+ * einer Seite, deren wichtigste Zeile eine Telefonnummer ist, das Letzte, was
+ * man will.
+ */
 .kopf {
   position: sticky;
   top: 0;
@@ -118,7 +147,21 @@
   /* Deckend, nicht durchscheinend. Eine Kopfzeile, durch die man die Seite
      schimmern sieht, braucht einen Weichzeichner — und den gibt es hier nicht. */
   background: var(--ton-hell);
-  border-bottom: 1px solid var(--linie);
+  /* Die gepunktete Linie statt der durchgezogenen. Sie ist das Bindemittel der
+     ganzen Seite; ausgerechnet der Kopf sprach sie bisher nicht. */
+  background-image: var(--linie-punkt);
+  background-position: bottom;
+  background-size: 100% 1px;
+  background-repeat: no-repeat;
+  transition:
+    background-color var(--dauer-mikro) var(--ease-teig),
+    box-shadow var(--dauer-mikro) var(--ease-teig);
+}
+
+/* Der zusammengefahrene Zustand. */
+.kopf[data-eng='ja'] {
+  background-color: var(--ton-tief);
+  box-shadow: var(--clay-ruhe);
 }
 
 .kopf__zeile {
@@ -126,7 +169,16 @@
   align-items: center;
   gap: clamp(0.75rem, 2vw, 2rem);
   min-height: var(--kopf-hoehe);
+  transition: min-height var(--dauer-mikro) var(--ease-teig);
 }
+
+.kopf[data-eng='ja'] .kopf__zeile { min-height: 3.1rem; }
+
+/* Der Status im Kopf — Montes „OPEN TODAY TIL 1:30PM". Er steht rechts neben
+   der Navigation und vor der Nummer: erst ob offen ist, dann wie man anruft.
+   Solange keine Zeiten hinterlegt sind, steht hier NICHTS statt einer
+   Vermutung — das entscheidet die Komponente, nicht dieses Stilblatt. */
+.kopf__oeffnung { margin-inline-start: auto; }
 
 .kopf__marke { display: flex; flex: none; }
 
@@ -137,7 +189,10 @@
 .kopf__logo {
   height: 38px;
   width: auto;
+  transition: height var(--dauer-mikro) var(--ease-teig);
 }
+
+.kopf[data-eng='ja'] .kopf__logo { height: 30px; }
 
 .kopf__navi {
   display: flex;
@@ -162,7 +217,70 @@
   border-bottom-color: var(--terra);
 }
 
-.kopf__anruf { padding: 0.5em 1.1em; font-size: var(--text-meta); }
+/**
+ * Die Telefonnummer im Kopf — ZWEI Fassungen zur Wahl.
+ *
+ * Karol: „nimm mal diese dunkelrote Hintergrundfarbe hinter der Telefonnummer,
+ * das sieht unpassend aus. Mach einmal mit der roten Farbe vom Logo und einmal
+ * mit der Clay."
+ *
+ * Beide stehen hier, umschaltbar über `data-probe` am `<html>`. Ausgeliefert
+ * wird `clay` — die Begründung steht unten. Die rote bleibt im Code, bis Karol
+ * entschieden hat; danach fliegt die Verliererin raus, damit hier nicht zwei
+ * Wahrheiten nebeneinander stehen bleiben.
+ */
+.kopf__anruf {
+  padding: 0.5em 1.1em;
+  font-size: var(--text-meta);
+}
+
+/**
+ * FASSUNG CLAY — ausgeliefert.
+ *
+ * Der zweite Grund der Seite als Fläche, die Tinte darauf, eine Haarlinie
+ * herum. Gemessen 8,9:1. Sie ist ruhig, weil sie aus dem Zweiklang kommt, den
+ * die Seite ohnehin spricht — und trotzdem als Bedienelement zu erkennen,
+ * weil sie die einzige Fläche im Kopf ist.
+ */
+:root:not([data-probe='rot']) .kopf__anruf {
+  background: var(--ton-tief);
+  color: var(--tinte);
+  border: 1px solid var(--linie);
+}
+
+:root:not([data-probe='rot']) .kopf__anruf:hover {
+  background: var(--ton-hell);
+  border-color: var(--akzent);
+  color: var(--akzent);
+}
+
+/* Auf dem zusammengefahrenen Kopf steht Clay auf Clay. Dort dreht sich das
+   Verhältnis um: helle Fläche auf tiefem Grund. */
+:root:not([data-probe='rot']) .kopf[data-eng='ja'] .kopf__anruf {
+  background: var(--ton-hell);
+}
+
+/**
+ * FASSUNG ROT — ihr Logorot, aus der Datei gemessen.
+ *
+ * Nicht geschätzt: die häufigste kräftige Rotstufe in `logo.webp` liegt bei
+ * rgb(184, 24, 24), 18,1 % aller Rotpunkte. Das ist der Ton der Wortmarke
+ * selbst, nicht ein danebenliegender Markenton.
+ *
+ * Er ist deutlich wärmer und satter als `--akzent` (das bisherige Dunkelrot,
+ * das Karol als unpassend empfindet) — dafür ist er die einzige gesättigte
+ * Fläche der Seite und zieht den Blick nach oben rechts, weg vom Inhalt.
+ */
+:root[data-probe='rot'] .kopf__anruf {
+  background: oklch(47% 0.19 29);
+  color: oklch(97% 0.02 60);
+  border: 1px solid transparent;
+}
+
+:root[data-probe='rot'] .kopf__anruf:hover {
+  background: oklch(41% 0.17 29);
+}
+
 .kopf__anruf-kurz { display: none; }
 
 /* Die kurze Fassung des Status ist am Rechner überflüssig. */
@@ -353,9 +471,10 @@
 }
 
 .schild {
-  /* Markant heisst gross: 38rem statt der 34 des ersten Versuchs. Weiter geht
-     nicht, ohne dass das Schild den Fliesstext darunter erdrückt. */
-  width: min(100%, 38rem);
+  /* Markant heisst gross. 34 → 38 → jetzt 42 rem: Karol hat dreimal nach mehr
+     gefragt, und seit der Grund eine Fotografie ist, trägt die Fläche es auch.
+     Weiter geht nicht — bei 46 rem stösst das Schild in den Vorspann. */
+  width: min(100%, 42rem);
   transform-style: preserve-3d;
   will-change: transform;
 }
@@ -1284,17 +1403,41 @@
   .weg:hover { transform: translateY(-3px); border-color: var(--terra); }
 }
 
-/* Ihr Orange als Fläche mit dunkler Schrift. Nie andersherum. */
-/* Die einzige Akzentfläche der ganzen Seite. Genau eine — sonst ist es kein
-   Akzent mehr, sondern eine zweite Grundfarbe. */
+/**
+ * Der WhatsApp-Weg — die empfohlene Handlung.
+ *
+ * ═══ Was hier gestorben ist ═══
+ *
+ * Bis zum 16.08. war das eine vollflächige Kachel in `--glut`, ihrem Orange.
+ * Karol: „hier ist immer noch so ein dunkles Orange, was nicht reinpasst. Das
+ * müssen wir austauschen und den Style bitte konsistent durchziehen."
+ *
+ * Er hat recht, und der Fehler war derselbe wie beim Orangeband im Hero: eine
+ * gesättigte Vollfläche ist auf dieser Seite ein Fremdkörper, weil die ganze
+ * übrige Seite aus zwei Cremetönen und Haarlinien besteht. Sie fiel nicht auf,
+ * WEIL sie wichtig war, sondern weil sie aus einer anderen Seite stammte.
+ *
+ * ═══ Was stattdessen hervorhebt ═══
+ *
+ * Dieselben Mittel wie überall, nur eine Stufe kräftiger: der zweite Grund als
+ * Fläche, ein Akzentstrich an der Kante, der Akzent in der Überschrift. Damit
+ * ist der Weg deutlich der empfohlene, ohne dass ein Farbfeld die Sektion
+ * zerschneidet.
+ *
+ * `--glut` ist damit auf der ganzen Seite keine Fläche mehr.
+ */
 .weg--glut {
-  background: var(--glut);
-  border-color: transparent;
+  background: var(--ton-tief);
+  border-color: var(--linie);
   box-shadow: var(--clay-ruhe);
+  /* Der Strich an der Startkante ist das einzige, was diesen Weg vom anderen
+     unterscheidet — und er spricht die Sprache der Etiketten, die überall auf
+     dieser Seite mit einem kurzen Strich beginnen. */
+  border-inline-start: 3px solid var(--akzent);
 }
-.weg--glut:hover { border-color: var(--tinte-glut); }
+.weg--glut:hover { border-color: var(--akzent); }
 
-.weg--glut .weg__art { color: var(--tinte-glut); }
+.weg--glut .weg__art { color: var(--akzent); }
 
 .weg__wert {
   font-family: var(--font-display);
@@ -1306,9 +1449,8 @@
 }
 
 .weg__zusatz { font-size: var(--text-meta); color: var(--russ-mtl); }
-/* Auf Glut trägt auch der Kleintext das dunkle Braun — 4,97 gemessen. Das
-   gedämpfte --russ-mtl käme dort auf 2,2 und wäre unlesbar. */
-.weg--glut .weg__zusatz { color: var(--tinte-glut); }
+/* Auf dem Clay-Grund trägt der Kleintext dieselbe gedämpfte Tinte wie überall.
+   Die Sonderregel für Glut ist mit der Glutfläche verschwunden. */
 
 .dienste { margin-top: clamp(2.5rem, 5vw, 4rem); }
 

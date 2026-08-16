@@ -44,11 +44,41 @@ function useAktiverAnker(): string | null {
   return aktiv
 }
 
+/**
+ * Ist der Hero durch?
+ *
+ * Ein Wächter-Element unmittelbar unter der Kopfzeile wäre die Lehrbuchlösung.
+ * Hier gibt es schon einen besseren Anker: die Backstube selbst. Sobald sie
+ * nicht mehr im Bild ist, fährt der Kopf zusammen.
+ *
+ * IntersectionObserver und kein Scroll-Zähler — aus demselben Grund wie beim
+ * aktiven Anker darüber: ein Handler, der bei jedem Scrollschritt misst, ist
+ * genau die Arbeit, die eine Seite am Handy holprig macht.
+ */
+function useEngerKopf(): boolean {
+  const [eng, setEng] = useState(false)
+
+  useEffect(() => {
+    const hero = document.querySelector('.backstube')
+    if (!hero) return
+    const b = new IntersectionObserver(([e]) => setEng(!(e?.isIntersecting ?? true)), {
+      /* Nicht bei null: sonst schaltet es genau an der Kante hin und her,
+         solange jemand dort langsam scrollt. */
+      threshold: 0.08,
+    })
+    b.observe(hero)
+    return () => b.disconnect()
+  }, [])
+
+  return eng
+}
+
 export default function Kopfzeile() {
   const aktiv = useAktiverAnker()
+  const eng = useEngerKopf()
 
   return (
-    <header className="kopf">
+    <header className="kopf" data-eng={eng ? 'ja' : 'nein'}>
       <div className="kopf__zeile schale">
         <a className="kopf__marke" href="#start">
           {/* Ihr Logo, klein und in fester Grösse. Es kollidiert mit der ruhigen

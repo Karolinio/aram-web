@@ -1,24 +1,29 @@
 /**
  * Der Schwarm — was links durch die Sektion fliegt.
  *
- * ═══ Die Lagen sind gesetzt, nicht gewürfelt ═══
+ * ═══ EINE Bahn links, nicht acht Punkte im Feld ═══
  *
- * Sie wechseln sich links/rechts ab und rücken von oben nach unten weiter —
- * gemessen, weil beim ersten Versuch Pizza, Manakisch und Lahm bi Ajin unten
- * links zu einem Klumpen zusammenfielen. Acht Gegenstände auf einer Bahn
- * brauchen einen Plan; zufällige Werte ergeben immer irgendwo drei, die sich
- * überdecken.
+ * Karol: „die Parallax-Animation mit den ganzen Gerichten links oder rechts auf
+ * der Seite von unten nach oben."
  *
- * ═══ Die Lagen sind Prozent der SEKTION, nicht der Spalte ═══
+ * Vorher lagen die acht über die ganze Sektionsbreite verstreut — vier links,
+ * vier rechts, dazwischen Leere. Verstreut ist aber kein Strom: man sieht acht
+ * einzelne Gegenstände, die zufällig gleichzeitig unterwegs sind. Ein Strom
+ * entsteht erst, wenn sie DIESELBE Bahn nehmen und sich darin überholen.
  *
- * Bis zum 16.08. lag der Schwarm in der linken Gitterspalte und war damit auf
- * deren Breite beschränkt — 44 % davon sind auf 1440 px gerade 260 px, und das
- * ist kein fliegendes Gericht, das ist ein Aufkleber. Jetzt liegt er auf
- * Sektionsebene: dieselben Prozente bedeuten das Doppelte.
+ * Also liegen alle `li` jetzt zwischen 0 und 30 % — eine Spur am linken Rand,
+ * halb über die Kante hinaus. Die rechte Seite gehört dem Text und den beiden
+ * Prozessbildern; dort war vorher die Hälfte des Schwarms und musste ihnen
+ * ausweichen.
  *
- * Sie wechseln sich links/rechts ab und rücken von oben nach unten weiter. Acht
- * Gegenstände auf einer Bahn brauchen einen Plan; zufällige Werte ergeben immer
- * irgendwo drei, die sich überdecken.
+ * Die Lagen sind Prozent der SEKTION, nicht der Spalte. Bis zum 16.08. lag der
+ * Schwarm in der linken Gitterspalte und war damit auf deren Breite beschränkt
+ * — 44 % davon sind auf 1440 px gerade 260 px, und das ist kein fliegendes
+ * Gericht, das ist ein Aufkleber.
+ *
+ * Die `ob`-Werte staffeln sich gleichmässig von 6 auf 92 %: acht Gegenstände
+ * auf EINER Bahn brauchen einen Plan, sonst fallen drei zu einem Klumpen
+ * zusammen. Genau das war beim ersten Versuch passiert.
  *
  * ═══ Echt und erzeugt, und warum das hier steht ═══
  *
@@ -37,9 +42,28 @@
  *
  * Siehe public/bilder/erzeugt/LIESMICH.md und DIRECTION.md, Amendement 2.3.
  *
- * ═══ Die Bahnen ═══
+ * ═══ Die Bahnen: von UNTEN nach OBEN ═══
  *
- * Alle fliegen von OBEN nach UNTEN — `y` beginnt negativ und endet positiv.
+ * Bis zum 16.08. fielen sie von oben nach unten. Karol: „ich möchte, dass diese
+ * Parallax-Animation mit den ganzen Gerichten von unten nach oben
+ * scroll-driven mit GSAP umgesetzt wird."
+ *
+ * Er hat recht, und der Grund ist nicht Geschmack. Ein Gegenstand, der beim
+ * Herunterscrollen mitfällt, bewegt sich MIT dem Scroll — man sieht ihn kaum,
+ * weil er relativ zur Seite fast stillsteht. Einer, der dabei aufsteigt,
+ * bewegt sich GEGEN den Scroll und wird dadurch doppelt so schnell. Genau
+ * daher kommt bei Savor das Gefühl von Tiefe.
+ *
+ * Deshalb beginnt `y` jetzt positiv (unterhalb) und endet negativ (oberhalb).
+ *
+ * ═══ Und sie drehen sich sichtbar ═══
+ *
+ * Karol: „und sich nicht dreht". Die Drehung war da — sie war nur zu klein,
+ * um sie zu bemerken: 22 Grad über eine ganze Sektion sind pro Bildschirmhöhe
+ * kaum zehn. Alle `dreh`-Werte sind auf das 2,8-Fache gegangen, `drehY` aufs
+ * 1,5-Fache. Jetzt macht ein Gebäck über die Sektion eine gute Halbdrehung in
+ * der Bildebene, und die Hochachse kippt weit genug, dass man die Kante sieht.
+ *
  * Verschiedene Weiten, Drehungen und Grössen; wer nah ist, ist gross und dreht
  * sich weiter. Die Zahlen sind nicht beliebig: zusammen ergeben sie ein Feld,
  * in dem sich nichts überholt und nichts überlappt.
@@ -101,8 +125,8 @@ export const GEBAECKE: Gebaeck[] = [
     bilder: ['/bilder/echt/fatayer-frei.webp'],
     echt: true,
     alt: 'Ein Fata’er von Aram, gewölbt und glänzend, dicht mit Sesam und Schwarzkümmel bestreut',
-    li: 4,
-    ob: 8,
+    li: 2,
+    ob: 6,
     gr: 26,
     liM: 58,
     grM: 52,
@@ -110,11 +134,11 @@ export const GEBAECKE: Gebaeck[] = [
     hoehe: 799,
     /* Das echte fliegt am weitesten und am grössten — es ist das einzige, das
        zeigt, was der Gast bekommt. */
-    y: [-0.34, 0.5],
+    y: [0.5, -0.34],
     x: [-0.04, 0.08],
-    dreh: [-12, 10],
-    drehY: [-26, 22],
-    drehX: [10, -8],
+    dreh: [-34, 28],
+    drehY: [-39, 33],
+    drehX: [14, -11],
     z: [-140, 150],
     skala: [0.88, 1.06],
   },
@@ -128,18 +152,18 @@ export const GEBAECKE: Gebaeck[] = [
     ],
     echt: false,
     alt: 'Ein Käseschiffchen in Bootsform, mit geschmolzenem Käse gefüllt',
-    li: 68,
-    ob: 18,
+    li: 24,
+    ob: 20,
     gr: 24,
     liM: 72,
     grM: 44,
     breite: 1000,
     hoehe: 746,
-    y: [-0.48, 0.34],
+    y: [0.34, -0.48],
     x: [0.03, -0.06],
-    dreh: [9, -13],
-    drehY: [20, -24],
-    drehX: [-7, 11],
+    dreh: [25, -36],
+    drehY: [30, -36],
+    drehX: [-10, 15],
     z: [-260, 40],
     skala: [0.8, 0.98],
   },
@@ -153,18 +177,18 @@ export const GEBAECKE: Gebaeck[] = [
     ],
     echt: false,
     alt: 'Ein Lahmacun, dünn ausgerollt, mit Hackfleisch, Petersilie und einer Zitronenspalte',
-    li: 14,
-    ob: 40,
+    li: 6,
+    ob: 36,
     gr: 21,
     liM: 54,
     grM: 48,
     breite: 1000,
     hoehe: 1000,
-    y: [-0.28, 0.62],
+    y: [0.62, -0.28],
     x: [-0.05, 0.1],
-    dreh: [-16, 8],
-    drehY: [-18, 26],
-    drehX: [12, -6],
+    dreh: [-45, 22],
+    drehY: [-27, 39],
+    drehX: [17, -8],
     z: [-340, -60],
     skala: [0.72, 0.9],
   },
@@ -174,18 +198,18 @@ export const GEBAECKE: Gebaeck[] = [
     bilder: ['/bilder/erzeugt/manakisch.webp', '/bilder/erzeugt/manakisch-2.webp'],
     echt: false,
     alt: 'Ein Manakisch, rundes Fladenbrot mit Zaatar und Olivenöl',
-    li: 78,
-    ob: 52,
+    li: 28,
+    ob: 48,
     gr: 17,
     liM: 76,
     grM: 38,
     breite: 1000,
     hoehe: 1000,
-    y: [-0.4, 0.28],
+    y: [0.28, -0.4],
     x: [0.06, -0.04],
-    dreh: [13, -9],
-    drehY: [24, -16],
-    drehX: [-9, 7],
+    dreh: [36, -25],
+    drehY: [36, -24],
+    drehX: [-13, 10],
     z: [-420, -140],
     skala: [0.64, 0.8],
   },
@@ -199,18 +223,18 @@ export const GEBAECKE: Gebaeck[] = [
     ],
     echt: false,
     alt: 'Ein Fata’er mit Spinat, gewölbt und glänzend, mit Sesam und Schwarzkümmel',
-    li: 86,
-    ob: 84,
+    li: 10,
+    ob: 62,
     gr: 14,
     liM: 74,
     grM: 36,
     breite: 1000,
     hoehe: 746,
-    y: [-0.22, 0.44],
+    y: [0.44, -0.22],
     x: [-0.03, 0.07],
-    dreh: [-8, 16],
-    drehY: [-14, 22],
-    drehX: [7, -12],
+    dreh: [-22, 45],
+    drehY: [-21, 33],
+    drehX: [10, -17],
     z: [-500, -200],
     skala: [0.58, 0.74],
   },
@@ -224,18 +248,18 @@ export const GEBAECKE: Gebaeck[] = [
     ],
     echt: false,
     alt: 'Eine Pizza Margherita mit Tomate, Mozzarella und Basilikum',
-    li: 2,
-    ob: 66,
+    li: 0,
+    ob: 74,
     gr: 23,
     liM: 60,
     grM: 50,
     breite: 1000,
     hoehe: 1000,
-    y: [-0.34, 0.4],
+    y: [0.4, -0.34],
     x: [0.04, -0.08],
-    dreh: [11, -14],
-    drehY: [18, -22],
-    drehX: [-8, 10],
+    dreh: [31, -39],
+    drehY: [27, -33],
+    drehX: [-11, 14],
     z: [-300, -40],
     skala: [0.7, 0.88],
   },
@@ -249,18 +273,18 @@ export const GEBAECKE: Gebaeck[] = [
     ],
     echt: false,
     alt: 'Ein Fata’er mit Hackfleisch, gewölbt und glänzend, mit Sesam und Schwarzkümmel',
-    li: 58,
-    ob: 76,
+    li: 30,
+    ob: 84,
     gr: 15,
     liM: 78,
     grM: 34,
     breite: 1000,
     hoehe: 746,
-    y: [-0.2, 0.5],
+    y: [0.5, -0.2],
     x: [-0.06, 0.04],
-    dreh: [-10, 12],
-    drehY: [-20, 18],
-    drehX: [9, -11],
+    dreh: [-28, 34],
+    drehY: [-30, 27],
+    drehX: [13, -15],
     z: [-380, -100],
     skala: [0.6, 0.78],
   },
@@ -274,18 +298,18 @@ export const GEBAECKE: Gebaeck[] = [
     ],
     echt: false,
     alt: 'Ein Lahm bi Ajin, kleines dickrandiges Fladenbrot mit würzigem Hackfleisch',
-    li: 28,
-    ob: 86,
+    li: 12,
+    ob: 92,
     gr: 19,
     liM: 56,
     grM: 44,
     breite: 1000,
     hoehe: 1000,
-    y: [-0.44, 0.24],
+    y: [0.24, -0.44],
     x: [0.05, -0.05],
-    dreh: [14, -8],
-    drehY: [22, -14],
-    drehX: [-10, 8],
+    dreh: [39, -22],
+    drehY: [33, -21],
+    drehX: [-14, 11],
     z: [-460, -180],
     skala: [0.56, 0.72],
   },
