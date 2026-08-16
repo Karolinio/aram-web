@@ -1,4 +1,6 @@
-import { useBildfolge, useFlug, useVersatz } from '../bewegung.ts'
+import type { CSSProperties } from 'react'
+
+import { useBildfolge, useFlug, useMedienabfrageBreit, useVersatz } from '../bewegung.ts'
 import { GEBAECKE, type Gebaeck } from '../gebaecke.ts'
 import { Bild, Etikett, Kopf, Sektion } from './ui/bausteine.tsx'
 import Collage from './ui/Collage.tsx'
@@ -97,7 +99,9 @@ function Gebaeckstueck({ g }: { g: Gebaeck }) {
     z: g.z,
     skala: g.skala,
     buehne: '.prozess',
-    abBreite: 1000,
+    /* 0 = überall. Der Flug ist am Handy derselbe, nur die Bahn liegt anders —
+       siehe `liM`/`grM` in gebaecke.ts. */
+    abBreite: 0,
   })
   /* Die Ansichten liegen übereinander; der Scroll schaltet durch. Erst dadurch
      dreht sich das Gericht wirklich, statt nur zu kippen. */
@@ -107,7 +111,17 @@ function Gebaeckstueck({ g }: { g: Gebaeck }) {
     <div
       className={g.echt ? 'gebaeck gebaeck--echt' : 'gebaeck'}
       ref={flug}
-      style={{ left: `${g.li}%`, top: `${g.ob}%`, width: `${g.gr}%` }}
+      /* Zwei Bahnen als Variablen; welche gilt, entscheidet die Medienabfrage
+         im Stilblatt. So steht die Zahl an EINER Stelle und nicht zweimal. */
+      style={
+        {
+          top: `${g.ob}%`,
+          '--li': `${g.li}%`,
+          '--gr': `${g.gr}%`,
+          '--li-m': `${g.liM}%`,
+          '--gr-m': `${g.grM}%`,
+        } as CSSProperties
+      }
     >
       <div className="gebaeck__folge" ref={folge}>
         {g.bilder.map((quelle, i) => (
@@ -115,6 +129,14 @@ function Gebaeckstueck({ g }: { g: Gebaeck }) {
             key={quelle}
             data-ansicht={i}
             src={quelle}
+            /* Am Handy wird das Gericht auf rund 200 px dargestellt — die
+               1000er Fassung zu dekodieren kostet dort messbar Frames. Mit
+               `srcset` nimmt der Browser die halbe Grösse und entscheidet
+               selbst; gemessen fiel der schlechteste Frame dadurch von 67 ms.
+               Die Bildmasse bleiben die der grossen Fassung, sonst reserviert
+               der Platzhalter die falsche Höhe. */
+            srcSet={`${quelle.replace('.webp', '-500.webp')} 500w, ${quelle} 1000w`}
+            sizes="(max-width: 1000px) 52vw, 26vw"
             /* Nur die erste Ansicht trägt den Alternativtext — die übrigen sind
                dasselbe Gericht und würden es einem Vorleseprogramm mehrfach
                ansagen. */
@@ -227,10 +249,25 @@ const KOERNER = [
   { x: 36, y: 34, gr: 38, li: 88, ob: 88, tempo: 0.22, deck: 0.28 },
 ]
 
+/**
+ * Am Handy fliegen sechs Körner statt vierzehn.
+ *
+ * Gemessen: mit acht grossen Gerichten UND vierzehn Körnern kam das Handy auf
+ * eine lange Aufgabe und fünf Frames über 33 ms, schlechtester 167 ms. Jedes
+ * Korn ist ein eigener ScrollTrigger und eine eigene Ebene — zweiundzwanzig
+ * davon sind auf einem Telefon zu viel.
+ *
+ * Gestrichen werden die KÖRNER, nicht die Gerichte. Die Gerichte sind das,
+ * worum es geht; die Körner sind Atmosphäre, und Atmosphäre darf schmaler
+ * werden, bevor der Gegenstand es tut.
+ */
 function Koerner() {
+  const vollBreite = useMedienabfrageBreit()
+  const sichtbar = vollBreite ? KOERNER : KOERNER.filter((_, i) => i % 2 === 0).slice(0, 6)
+
   return (
     <div className="koerner" aria-hidden="true">
-      {KOERNER.map((k, i) => (
+      {sichtbar.map((k, i) => (
         <Korn key={i} k={k} />
       ))}
     </div>

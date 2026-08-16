@@ -67,8 +67,20 @@ export type Gebaeck = {
   /** Position in der linken Spur, in Prozent. */
   li: number
   ob: number
-  /** Breite in Prozent der Spur. */
+  /** Breite in Prozent der Sektion. */
   gr: number
+  /**
+   * Dieselbe Bahn am Handy — eigene Werte, gleiche Mechanik.
+   *
+   * Karol: „ich wollte eig von anfang an das mobil genauso 1:1 mitgebaut
+   * wird." Bis zum 16.08. stand der Schwarm am Handy still, weil neben dem
+   * Inhalt keine freie Bahn ist. Das war meine Entscheidung, nicht seine
+   * Vorgabe — und sie war falsch: es gibt eine Bahn, sie liegt nur AUF der
+   * rechten Kante statt daneben. Die Gerichte fliegen halb aus dem Bild, und
+   * genau das lässt sie gross wirken statt gedrängt.
+   */
+  liM: number
+  grM: number
   /** Die ECHTEN Masse der Datei. Nicht geschätzt — der Prüfer misst nach, und
       ein falsch deklariertes Verhältnis reserviert die falsche Höhe. */
   breite: number
@@ -92,6 +104,8 @@ export const GEBAECKE: Gebaeck[] = [
     li: 4,
     ob: 8,
     gr: 26,
+    liM: 58,
+    grM: 52,
     breite: 1000,
     hoehe: 799,
     /* Das echte fliegt am weitesten und am grössten — es ist das einzige, das
@@ -117,6 +131,8 @@ export const GEBAECKE: Gebaeck[] = [
     li: 68,
     ob: 18,
     gr: 24,
+    liM: 72,
+    grM: 44,
     breite: 1000,
     hoehe: 746,
     y: [-0.48, 0.34],
@@ -140,6 +156,8 @@ export const GEBAECKE: Gebaeck[] = [
     li: 14,
     ob: 40,
     gr: 21,
+    liM: 54,
+    grM: 48,
     breite: 1000,
     hoehe: 1000,
     y: [-0.28, 0.62],
@@ -159,6 +177,8 @@ export const GEBAECKE: Gebaeck[] = [
     li: 78,
     ob: 52,
     gr: 17,
+    liM: 76,
+    grM: 38,
     breite: 1000,
     hoehe: 1000,
     y: [-0.4, 0.28],
@@ -182,6 +202,8 @@ export const GEBAECKE: Gebaeck[] = [
     li: 86,
     ob: 84,
     gr: 14,
+    liM: 74,
+    grM: 36,
     breite: 1000,
     hoehe: 746,
     y: [-0.22, 0.44],
@@ -205,6 +227,8 @@ export const GEBAECKE: Gebaeck[] = [
     li: 2,
     ob: 66,
     gr: 23,
+    liM: 60,
+    grM: 50,
     breite: 1000,
     hoehe: 1000,
     y: [-0.34, 0.4],
@@ -228,6 +252,8 @@ export const GEBAECKE: Gebaeck[] = [
     li: 58,
     ob: 76,
     gr: 15,
+    liM: 78,
+    grM: 34,
     breite: 1000,
     hoehe: 746,
     y: [-0.2, 0.5],
@@ -251,6 +277,8 @@ export const GEBAECKE: Gebaeck[] = [
     li: 28,
     ob: 86,
     gr: 19,
+    liM: 56,
+    grM: 44,
     breite: 1000,
     hoehe: 1000,
     y: [-0.44, 0.24],

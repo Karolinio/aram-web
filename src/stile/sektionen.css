@@ -571,6 +571,8 @@
  */
 .gebaeck {
   position: absolute;
+  left: var(--li);
+  width: var(--gr);
   transform-style: preserve-3d;
 }
 
@@ -1193,38 +1195,26 @@
   .spur { display: block; min-height: 0; }
   .klebt { position: static; top: auto; max-width: none; }
 
-  /* Aus dem Schwarm wird eine Auslage: die Gebäcke stehen nebeneinander statt
-     zu fliegen. Fliegend verdeckten sie auf 393 px die Beschriftungen der
-     Schritte, und beides war unlesbar — es gibt hier keine freie Bahn neben
-     dem Inhalt. Zusammengelegt, nicht gestrichen.
-
-     Und die Flughöhe der Sektion fällt weg: 168 vh sind hier eine ganze leere
-     Bildschirmhöhe für einen Flug, den es nicht gibt. */
-  .prozess { min-height: 0; }
-
-  .schwarm {
-    position: static;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    justify-content: center;
-    gap: 0.75rem;
-    margin-top: 2rem;
-    padding-inline: var(--rinne);
-  }
-  /* Drei nebeneinander statt zwei: gemessen kam das Handy mit 46 % auf 10,3
-     Bildschirmhöhen, und der Auftrag deckelt bei 10. */
-  /* Vier je Reihe statt drei: mit acht Gerichten wurden aus zwei Reihen drei,
-     und das Handy stand bei 10,1 statt der erlaubten 10. */
+  /**
+   * Am Handy fliegt DASSELBE, nur auf einer anderen Bahn.
+   *
+   * Bis zum 16.08. stand der Schwarm hier still — mit der Begründung, neben
+   * dem Inhalt sei keine freie Bahn. Das stimmt und war trotzdem der falsche
+   * Schluss: die Bahn liegt nicht NEBEN dem Inhalt, sondern AUF der rechten
+   * Kante. Die Gerichte fliegen halb aus dem Bild heraus, und genau das lässt
+   * sie gross wirken statt gedrängt.
+   *
+   * Sie liegen weiterhin unter dem Text (z-index 1 gegen 2), und die Spalte
+   * bekommt rechts Luft, damit sich Schrift und Gericht nicht überlagern.
+   */
   .gebaeck {
-    position: static;
-    width: 22% !important;
-    left: auto !important;
-    top: auto !important;
+    left: var(--li-m);
+    width: var(--gr-m);
   }
-  /* Am Handy wird nicht gedreht — dort steht die Auslage still. Die weiteren
-     Ansichten wären dann nur Gewicht ohne Wirkung. */
-  .gebaeck__folge img + img { display: none; }
+
+  .prozess__buehne { padding-inline-end: 32%; }
+
+  /* Die weiteren Ansichten bleiben: es wird auch hier gedreht. */
 
   .laden__bild,
   .laden__wort { grid-column: 1 / -1; }

@@ -270,7 +270,7 @@ type Flug = {
  * beim ersten Rendern fest, und beim Drehen des Geräts kommt sie ohne zweiten
  * Durchlauf nach.
  */
-function useMedienabfrage(abfrage: string): boolean {
+export function useMedienabfrage(abfrage: string): boolean {
   return useSyncExternalStore(
     (melden) => {
       const mq = window.matchMedia(abfrage)
@@ -385,3 +385,7 @@ export function useFlug<T extends HTMLElement>(f: Flug) {
 
   return ref
 }
+
+
+/** Kurzform für „breiter als ein Telefon". Spart die Zeichenkette an drei Stellen. */
+export const useMedienabfrageBreit = (): boolean => useMedienabfrage('(min-width: 1000px)')

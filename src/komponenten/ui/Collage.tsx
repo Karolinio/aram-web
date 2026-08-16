@@ -56,7 +56,15 @@ export default function Collage() {
       {STUECKE.map((s, i) => {
         const g = GEBAECKE[s.g]
         if (!g) return null
-        const quelle = g.bilder[Math.min(s.a, g.bilder.length - 1)]
+        /* Die kleine Fassung, immer. Ein Stück liegt bei 6 % Deckkraft und
+           höchstens 20 % Breite — die 1000er Fassung zu dekodieren wäre für
+           etwas, das man kaum sieht, teuer bezahlt. Gemessen: zwanzig grosse
+           Stücke kosteten am Rechner fünf Frames über 33 ms. */
+        const quelle = g.bilder[Math.min(s.a, g.bilder.length - 1)]?.replace(
+          '.webp',
+          '-500.webp',
+        )
+        if (!quelle) return null
         return (
           <img
             key={i}
