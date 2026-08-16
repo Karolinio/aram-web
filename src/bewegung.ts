@@ -176,6 +176,72 @@ export function useAbgang<T extends HTMLElement>(buehneWahl: string) {
   return ref
 }
 
+/**
+ * Durch eine Bildfolge schalten, getrieben vom Scrollfortschritt.
+ *
+ * ═══ Warum gestapelt und nicht getauscht ═══
+ *
+ * Der naheliegende Weg wäre, `src` umzusetzen. Dann muss der Browser beim
+ * ersten Wechsel jedes Bild erst dekodieren — mitten in der Bewegung, und genau
+ * dort kostet es den Frame, den man sieht. Stattdessen liegen alle Ansichten
+ * übereinander und werden nur ein- und ausgeblendet: dekodiert wird beim Laden,
+ * geschaltet wird mit `opacity`, und das kostet nichts.
+ *
+ * ═══ Warum keine React-Zustände ═══
+ *
+ * Der Fortschritt ändert sich in jedem Frame. Ein `useState` darin würde die
+ * Komponente sechzigmal pro Sekunde neu rendern. Hier wird direkt am Knoten
+ * geschrieben — React sieht davon nichts, und das ist der Sinn.
+ */
+export function useBildfolge<T extends HTMLElement>(anzahl: number, buehneWahl: string) {
+  const ref = useRef<T>(null)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el || anzahl < 2) return
+
+    const bilder = [...el.querySelectorAll<HTMLElement>('[data-ansicht]')]
+    if (bilder.length < 2) return
+
+    const buehne = el.closest(buehneWahl) ?? el
+    let tot = false
+    let abraeumen: (() => void) | undefined
+    let zuletzt = -1
+
+    const zeigen = (i: number) => {
+      if (i === zuletzt) return
+      zuletzt = i
+      bilder.forEach((b, k) => {
+        b.style.opacity = k === i ? '1' : '0'
+      })
+    }
+
+    zeigen(0)
+
+    void werkzeugHolen().then((werkzeug) => {
+      if (tot || !werkzeug) return
+      const st = werkzeug.ScrollTrigger.create({
+        trigger: buehne,
+        start: 'top bottom',
+        end: 'bottom top',
+        onUpdate: ({ progress }) => {
+          /* Der letzte Index darf nur bei genau 1 erreicht werden, sonst
+             flackert die letzte Ansicht am Rand ein einzelnes Bild lang auf. */
+          zeigen(Math.min(bilder.length - 1, Math.floor(progress * bilder.length)))
+        },
+      })
+      abraeumen = () => st.kill()
+    })
+
+    return () => {
+      tot = true
+      abraeumen?.()
+    }
+  }, [anzahl, buehneWahl])
+
+  return ref
+}
+
 type Flug = {
   /** Von wo nach wo, in Anteilen der Fensterhöhe. Negativ = weiter oben. */
   y: [von: number, bis: number]

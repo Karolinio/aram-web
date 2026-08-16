@@ -3,12 +3,20 @@
 Die vier Bilder in diesem Ordner sind am 15.08.2026 mit `nano_banana_pro` erzeugt und
 anschliessend freigestellt worden. **Es sind keine Fotos ihres Essens.**
 
-| Datei | Gericht |
-|---|---|
-| `kaeseschiffchen.png` | Käseschiffchen / Pide |
-| `lahmacun.png` | Lahmacun |
-| `manakisch.png` | Manakisch mit Zaatar |
-| `fatayer-spinat.png` | Fata'er mit Spinat |
+| Gericht | Dateien | Ansichten |
+|---|---|---|
+| Käseschiffchen / Pide | `kaeseschiffchen*.webp` | 3 |
+| Lahmacun | `lahmacun*.webp` | 3 |
+| Fata'er mit Spinat | `fatayer-spinat*.webp` | 3 |
+| Manakisch mit Zaatar | `manakisch*.webp` | 2 |
+| Pizza Margherita | `pizza.webp` | 1 |
+| Fata'er mit Hackfleisch | `fatayer-hack.webp` | 1 |
+| Lahm bi Ajin | `lahm-bi-ajin.webp` | 1 |
+
+**Die Nummern sind Ansichten desselben Gerichts, rundherum.** Beim Scrollen wird
+durchgeschaltet — daraus entsteht die Drehung. Sie sind per image-to-image aus der
+jeweils ersten Ansicht abgeleitet, damit es dasselbe Gericht bleibt und nicht ein
+zweites wird.
 
 ## Warum sie trotzdem hier liegen
 

@@ -1,4 +1,4 @@
-import { useFlug, useVersatz } from '../bewegung.ts'
+import { useBildfolge, useFlug, useVersatz } from '../bewegung.ts'
 import { GEBAECKE, type Gebaeck } from '../gebaecke.ts'
 
 /**
@@ -89,7 +89,7 @@ function Rechteck({ s, i }: { s: (typeof RECHTECKE)[number]; i: number }) {
  * rechnung, die auf jedem Bildschirm etwas anderes ergäbe.
  */
 function Gebaeckstueck({ g }: { g: Gebaeck }) {
-  const ref = useFlug<HTMLImageElement>({
+  const flug = useFlug<HTMLDivElement>({
     y: g.y,
     x: g.x,
     dreh: g.dreh,
@@ -100,19 +100,35 @@ function Gebaeckstueck({ g }: { g: Gebaeck }) {
     buehne: '.prozess',
     abBreite: 1000,
   })
+  /* Die Ansichten liegen übereinander; der Scroll schaltet durch. Erst dadurch
+     dreht sich das Gericht wirklich, statt nur zu kippen. */
+  const folge = useBildfolge<HTMLDivElement>(g.bilder.length, '.prozess')
 
   return (
-    <img
-      ref={ref}
+    <div
       className={g.echt ? 'gebaeck gebaeck--echt' : 'gebaeck'}
-      src={g.quelle}
-      alt={g.alt}
-      width={g.breite}
-      height={g.hoehe}
-      loading="lazy"
-      decoding="async"
+      ref={flug}
       style={{ left: `${g.li}%`, top: `${g.ob}%`, width: `${g.gr}%` }}
-    />
+    >
+      <div className="gebaeck__folge" ref={folge}>
+        {g.bilder.map((quelle, i) => (
+          <img
+            key={quelle}
+            data-ansicht={i}
+            src={quelle}
+            /* Nur die erste Ansicht trägt den Alternativtext — die übrigen sind
+               dasselbe Gericht und würden es einem Vorleseprogramm mehrfach
+               ansagen. */
+            alt={i === 0 ? g.alt : ''}
+            aria-hidden={i === 0 ? undefined : true}
+            width={g.breite}
+            height={g.hoehe}
+            loading="lazy"
+            decoding="async"
+          />
+        ))}
+      </div>
+    </div>
   )
 }
 

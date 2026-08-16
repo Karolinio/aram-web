@@ -498,7 +498,7 @@
   align-self: stretch;
   /* Fünf Bahnen brauchen Weg. Ohne diese Mindesthöhe ist die Spur nur so hoch
      wie die zwei Bilder daneben, und die unteren Gebäcke stehen ausserhalb. */
-  min-height: 108vh;
+  min-height: 106vh;
   /* Damit die Gebäcke einen Raum haben, in dem sie sich drehen können, statt
      flach projiziert zu werden. Die Sektion setzt die Perspektive, dieser
      Kasten reicht sie an seine Kinder weiter. */
@@ -551,8 +551,26 @@
  */
 .gebaeck {
   position: absolute;
-  height: auto;
+  transform-style: preserve-3d;
+}
+
+/* Die Ansichten liegen exakt übereinander; geschaltet wird mit `opacity`.
+   Ein Wechsel von `src` müsste mitten in der Bewegung dekodieren — genau dort
+   kostet er den Frame, den man sieht. */
+.gebaeck__folge {
+  position: relative;
   filter: var(--schatten-speise);
+}
+
+.gebaeck__folge img {
+  width: 100%;
+  height: auto;
+}
+
+.gebaeck__folge img + img {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
 }
 
 /* Ihr echtes Gericht liegt vorn. Die erzeugten sind Beiwerk und gehören nach
@@ -1205,12 +1223,17 @@
   }
   /* Drei nebeneinander statt zwei: gemessen kam das Handy mit 46 % auf 10,3
      Bildschirmhöhen, und der Auftrag deckelt bei 10. */
+  /* Vier je Reihe statt drei: mit acht Gerichten wurden aus zwei Reihen drei,
+     und das Handy stand bei 10,1 statt der erlaubten 10. */
   .gebaeck {
     position: static;
-    width: 30% !important;
+    width: 22% !important;
     left: auto !important;
     top: auto !important;
   }
+  /* Am Handy wird nicht gedreht — dort steht die Auslage still. Die weiteren
+     Ansichten wären dann nur Gewicht ohne Wirkung. */
+  .gebaeck__folge img + img { display: none; }
 
   .laden__bild,
   .laden__wort { grid-column: 1 / -1; }

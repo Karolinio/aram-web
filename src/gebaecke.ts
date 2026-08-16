@@ -1,6 +1,14 @@
 /**
  * Der Schwarm — was links durch die Sektion fliegt.
  *
+ * ═══ Die Lagen sind gesetzt, nicht gewürfelt ═══
+ *
+ * Sie wechseln sich links/rechts ab und rücken von oben nach unten weiter —
+ * gemessen, weil beim ersten Versuch Pizza, Manakisch und Lahm bi Ajin unten
+ * links zu einem Klumpen zusammenfielen. Acht Gegenstände auf einer Bahn
+ * brauchen einen Plan; zufällige Werte ergeben immer irgendwo drei, die sich
+ * überdecken.
+ *
  * ═══ Warum die obersten beiden nicht ganz links liegen ═══
  *
  * Oben links klebt die Beschriftung „03 Erst dann belegt". Gemessen: mit
@@ -36,7 +44,19 @@
 export type Gebaeck = {
   id: string
   name: string
-  quelle: string
+  /**
+   * Die Ansichten desselben Gerichts, rundherum.
+   *
+   * Beim Scrollen wird durchgeschaltet — und genau daraus entsteht die
+   * Drehung. Das ist die Mechanik, die die Direktion von Anfang an vorsah
+   * („Die Drehung entsteht aus Bildfolgen, 3–4 Aufnahmen rundherum, per
+   * Scrollfortschritt durchgeschaltet") und die bei nacho-macho aussah wie
+   * echtes 3D.
+   *
+   * EIN Bild ist erlaubt: dann dreht sich nur die CSS-Ebene, und das Gericht
+   * kippt, ohne seine Rückseite zu zeigen.
+   */
+  bilder: string[]
   /** Zeigt es IHR Essen? */
   echt: boolean
   alt: string
@@ -62,11 +82,11 @@ export const GEBAECKE: Gebaeck[] = [
   {
     id: 'fatayer',
     name: "Fata’er",
-    quelle: '/bilder/echt/fatayer-frei.webp',
+    bilder: ['/bilder/echt/fatayer-frei.webp'],
     echt: true,
     alt: 'Ein Fata’er von Aram, gewölbt und glänzend, dicht mit Sesam und Schwarzkümmel bestreut',
-    li: 30,
-    ob: 6,
+    li: 28,
+    ob: 2,
     gr: 44,
     breite: 1000,
     hoehe: 799,
@@ -83,10 +103,14 @@ export const GEBAECKE: Gebaeck[] = [
   {
     id: 'kaeseschiffchen',
     name: 'Käseschiffchen',
-    quelle: '/bilder/erzeugt/kaeseschiffchen.webp',
+    bilder: [
+      '/bilder/erzeugt/kaeseschiffchen.webp',
+      '/bilder/erzeugt/kaeseschiffchen-2.webp',
+      '/bilder/erzeugt/kaeseschiffchen-3.webp',
+    ],
     echt: false,
     alt: 'Ein Käseschiffchen in Bootsform, mit geschmolzenem Käse gefüllt',
-    li: 2,
+    li: 20,
     ob: 34,
     gr: 38,
     breite: 1000,
@@ -102,11 +126,15 @@ export const GEBAECKE: Gebaeck[] = [
   {
     id: 'lahmacun',
     name: 'Lahmacun',
-    quelle: '/bilder/erzeugt/lahmacun.webp',
+    bilder: [
+      '/bilder/erzeugt/lahmacun.webp',
+      '/bilder/erzeugt/lahmacun-2.webp',
+      '/bilder/erzeugt/lahmacun-3.webp',
+    ],
     echt: false,
     alt: 'Ein Lahmacun, dünn ausgerollt, mit Hackfleisch, Petersilie und einer Zitronenspalte',
-    li: 52,
-    ob: 40,
+    li: 38,
+    ob: 38,
     gr: 34,
     breite: 1000,
     hoehe: 1000,
@@ -121,11 +149,11 @@ export const GEBAECKE: Gebaeck[] = [
   {
     id: 'manakisch',
     name: 'Manakisch',
-    quelle: '/bilder/erzeugt/manakisch.webp',
+    bilder: ['/bilder/erzeugt/manakisch.webp', '/bilder/erzeugt/manakisch-2.webp'],
     echt: false,
     alt: 'Ein Manakisch, rundes Fladenbrot mit Zaatar und Olivenöl',
-    li: 12,
-    ob: 58,
+    li: 72,
+    ob: 62,
     gr: 30,
     breite: 1000,
     hoehe: 1000,
@@ -140,11 +168,15 @@ export const GEBAECKE: Gebaeck[] = [
   {
     id: 'fatayer-spinat',
     name: "Fata’er mit Spinat",
-    quelle: '/bilder/erzeugt/fatayer-spinat.webp',
+    bilder: [
+      '/bilder/erzeugt/fatayer-spinat.webp',
+      '/bilder/erzeugt/fatayer-spinat-2.webp',
+      '/bilder/erzeugt/fatayer-spinat-3.webp',
+    ],
     echt: false,
     alt: 'Ein Fata’er mit Spinat, gewölbt und glänzend, mit Sesam und Schwarzkümmel',
-    li: 44,
-    ob: 76,
+    li: 54,
+    ob: 88,
     gr: 26,
     breite: 1000,
     hoehe: 746,
@@ -156,7 +188,66 @@ export const GEBAECKE: Gebaeck[] = [
     z: [-500, -200],
     skala: [0.58, 0.74],
   },
+  {
+    id: 'pizza',
+    name: 'Pizza Margherita',
+    bilder: ['/bilder/erzeugt/pizza.webp'],
+    echt: false,
+    alt: 'Eine Pizza Margherita mit Tomate, Mozzarella und Basilikum',
+    li: 8,
+    ob: 52,
+    gr: 32,
+    breite: 1000,
+    hoehe: 1000,
+    y: [-0.34, 0.4],
+    x: [0.04, -0.08],
+    dreh: [11, -14],
+    drehY: [18, -22],
+    drehX: [-8, 10],
+    z: [-300, -40],
+    skala: [0.7, 0.88],
+  },
+  {
+    id: 'fatayer-hack',
+    name: "Fata’er mit Hackfleisch",
+    bilder: ['/bilder/erzeugt/fatayer-hack.webp'],
+    echt: false,
+    alt: 'Ein Fata’er mit Hackfleisch, gewölbt und glänzend, mit Sesam und Schwarzkümmel',
+    li: 66,
+    ob: 14,
+    gr: 24,
+    breite: 1000,
+    hoehe: 746,
+    y: [-0.2, 0.5],
+    x: [-0.06, 0.04],
+    dreh: [-10, 12],
+    drehY: [-20, 18],
+    drehX: [9, -11],
+    z: [-380, -100],
+    skala: [0.6, 0.78],
+  },
+  {
+    id: 'lahm-bi-ajin',
+    name: 'Lahm bi Ajin',
+    bilder: ['/bilder/erzeugt/lahm-bi-ajin.webp'],
+    echt: false,
+    alt: 'Ein Lahm bi Ajin, kleines dickrandiges Fladenbrot mit würzigem Hackfleisch',
+    li: 30,
+    ob: 76,
+    gr: 28,
+    breite: 1000,
+    hoehe: 1000,
+    y: [-0.44, 0.24],
+    x: [0.05, -0.05],
+    dreh: [14, -8],
+    drehY: [22, -14],
+    drehX: [-10, 8],
+    z: [-460, -180],
+    skala: [0.56, 0.72],
+  },
 ]
-
 /** Wie viele der ausgelieferten Gerichtebilder sind erzeugt? */
 export const erzeugteGerichte = (): number => GEBAECKE.filter((g) => !g.echt).length
+
+/** Wie viele Ansichten liegen insgesamt aus? Sagt, wie weit die Drehung trägt. */
+export const ansichten = (): number => GEBAECKE.reduce((s, g) => s + g.bilder.length, 0)
