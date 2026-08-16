@@ -143,7 +143,7 @@ export default function Handarbeit() {
         <div className="schale prozess__buehne">
           <header className="prozess__kopf">
             <span className="augenbraue">Rollen, belegen, in den heissen Ofen</span>
-            <h2 id="prozess-titel">Alles entsteht vor deinen Augen</h2>
+            <h2 id="prozess-titel" className="lebt">Alles entsteht vor deinen Augen</h2>
           </header>
 
           <div className="prozess__gitter">

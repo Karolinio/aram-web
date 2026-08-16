@@ -108,10 +108,11 @@ body::after {
 
 h1, h2, h3 {
   font-family: var(--font-display);
-  /* 570, nicht 650. Fraunces wird bei hohem Gewicht zur Plakatschrift und
-     erschlägt eine Seite, die von Material leben soll. Die Wirkung soll aus
-     Grösse und Strichkontrast kommen, nicht aus Fettigkeit. */
-  font-weight: 570;
+  /* 760 statt 570. Die frühere Begründung („Wirkung aus Grösse und
+     Strichkontrast, nicht aus Fettigkeit") galt für eine scharfkantige Serife.
+     Mit hohem SOFT ist das Gegenteil richtig: die Form lebt von der Fülle,
+     und ihr Logo ist fett. */
+  font-weight: 760;
   line-height: var(--leading-kopf);
   letter-spacing: var(--sperr-kopf);
   text-wrap: balance;
@@ -120,7 +121,7 @@ h1, h2, h3 {
 
 h1 {
   font-size: var(--text-hero);
-  font-weight: 600;
+  font-weight: 820;
   line-height: var(--leading-eng);
   letter-spacing: var(--sperr-hero);
   font-variation-settings: var(--wonk-display);
@@ -129,37 +130,88 @@ h1 {
 h2 { font-size: var(--text-sektion); }
 h3 { font-size: var(--text-gericht); font-variation-settings: var(--wonk-klein); }
 
+/**
+ * Überschriften, die auf den Zeiger reagieren — mit den ACHSEN der Schrift.
+ *
+ * Nicht Farbe, nicht Grösse, nicht ein Unterstrich: die Buchstabenformen selbst
+ * werden fester. `SOFT` fällt von 85 auf 25, `WONK` bleibt. Das ist ein Effekt,
+ * den nur eine variable Schrift kann, und er lässt sich mit keinem Bild und
+ * keiner Bibliothek nachahmen — genau deshalb steht er hier.
+ *
+ * `font-variation-settings` ist animierbar; der Browser interpoliert die Achsen
+ * einzeln. Nur für echte Zeiger: auf Touch bliebe der Zustand hängen.
+ */
+.lebt {
+  transition:
+    font-variation-settings var(--dauer-reise) var(--ease-teig),
+    color var(--dauer-mikro) var(--ease-teig);
+}
+
+@media (hover: hover) {
+  .lebt:hover {
+    font-variation-settings: 'opsz' 96, 'SOFT' 25, 'WONK' 1;
+    color: var(--terra);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lebt { transition: color var(--dauer-mikro) var(--ease-teig); }
+}
+
 p { max-width: var(--breite-satz); }
 
 a { color: var(--terra); text-underline-offset: 0.2em; }
 
 /**
- * Das Etikett über einer Überschrift.
+ * DAS Etikett. Eines für die ganze Seite.
  *
- * Fassung 2 setzte es in weit gesperrten Versalien — der Baustein, den jede
- * Landingpage-Vorlage seit 2015 trägt und der die Seite mit altaussehen lässt.
- * Jetzt: normale Schreibweise, keine Sperrung, dafür ein kurzer Strich davor.
- * Der Strich macht die Arbeit, die vorher die Sperrung machen sollte — er
- * markiert das Etikett als Etikett, ohne es zu schreien.
+ * ═══ Warum das der Kern von „nicht konsistent" war ═══
+ *
+ * Vorher trug jede Sektion ihr eigenes Etikett: die Augenbraue mit Strich, die
+ * Beschriftungen im Fuss, die Spaltenköpfe der Adressdaten, der Titel über den
+ * Lieferdiensten, die Art des Bestellwegs. Fünf Varianten derselben Sache, in
+ * vier Grössen und drei Farben. Niemand sieht das einzeln — man sieht es als
+ * Unruhe über die ganze Seite.
+ *
+ * Jetzt gibt es EINEN Stil, und jedes Etikett trägt denselben kurzen Strich
+ * davor. Der Strich ist das Erkennungszeichen: wo er steht, steht ein Etikett.
  */
-.augenbraue {
+.augenbraue,
+.daten dt,
+.dienste__titel,
+.fuss__titel,
+.weg__art {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.55rem;
   font-family: var(--font-text);
-  font-size: var(--text-meta);
-  font-weight: 500;
+  font-size: var(--text-micro);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.3;
   color: var(--terra);
-  margin-bottom: 0.8rem;
+  text-transform: none;
 }
 
-.augenbraue::before {
+.augenbraue::before,
+.daten dt::before,
+.dienste__titel::before,
+.fuss__titel::before,
+.weg__art::before {
   content: '';
-  width: 1.6rem;
+  width: 1.1rem;
   height: 1px;
-  background: var(--terra);
+  background: currentColor;
   flex: none;
 }
+
+/* Über einer Überschrift steht es etwas grösser und mit längerem Strich —
+   dieselbe Sprache, nur betont. */
+.augenbraue {
+  font-size: var(--text-meta);
+  margin-bottom: 0.8rem;
+}
+.augenbraue::before { width: 1.7rem; }
 
 .lead {
   font-size: var(--text-lead);

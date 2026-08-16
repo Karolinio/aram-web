@@ -45,7 +45,7 @@ export default function Bestellen() {
 
       <div className="schale">
         <span className="augenbraue">Bestellen</span>
-        <h2 id="bestellen-titel">Ruf an oder schreib uns</h2>
+        <h2 id="bestellen-titel" className="lebt">Ruf an oder schreib uns</h2>
         <p className="lead">
           Beides geht sofort und kostet uns keine Provision. Wir sagen dir am Telefon, wie
           lange es dauert.

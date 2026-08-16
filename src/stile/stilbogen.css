@@ -1,0 +1,85 @@
+/**
+ * Der Stilbogen.
+ *
+ * Diese Datei darf KEINE Farbe und KEINE Schriftgrösse setzen — sonst zeigt der
+ * Bogen etwas anderes als die Seite, und dann ist er schlimmer als keiner.
+ * Erlaubt sind nur Anordnung und Abstand.
+ */
+
+.stil { padding-block: var(--raum-sektion); }
+.stil__kopf { max-width: 40rem; margin-bottom: var(--raum-block); }
+
+.stil__block {
+  padding-block: var(--raum-block);
+  background-image: var(--linie-punkt);
+  background-position: top;
+  background-size: 100% 1px;
+  background-repeat: no-repeat;
+}
+
+.stil__block h2 { margin-bottom: 1.5rem; }
+
+.stil__farben { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.5rem; }
+
+.stil__farben li {
+  display: grid;
+  grid-template-columns: 3rem 11rem 1fr;
+  align-items: center;
+  gap: 1rem;
+}
+
+.stil__fleck {
+  width: 3rem;
+  height: 2rem;
+  border-radius: 2px;
+  outline: 1px solid var(--linie);
+}
+
+.stil__zeile {
+  margin: 0 0 0.4rem;
+  max-width: none;
+  line-height: 1.1;
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.stil__code { font-size: var(--text-micro); font-family: ui-monospace, monospace; }
+.stil code { font-family: ui-monospace, monospace; font-size: 0.9em; }
+
+.stil__punkte {
+  height: 1px;
+  margin: 1.2rem 0 0.6rem;
+  background-image: var(--linie-punkt);
+}
+
+.stil__knoepfe { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; }
+
+.stil__regel {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  max-width: var(--breite-satz);
+  background-image: var(--linie-punkt);
+  background-position: top;
+  background-size: 100% 1px;
+  background-repeat: no-repeat;
+}
+
+.stil__gerichte {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+  gap: 1.5rem;
+}
+
+.stil__gerichte img { width: 100%; height: auto; filter: var(--schatten-speise); }
+.stil__name { margin: 0.6rem 0 0; font-family: var(--font-display); font-size: var(--text-meta); }
+.stil__echt { margin: 0; font-size: var(--text-micro); color: var(--terra); }
+.stil__erzeugt { margin: 0; font-size: var(--text-micro); color: var(--russ-mtl); }
+
+/* Der Bogen ist kein Hero. Seine Überschrift in `--text-hero` zu setzen war
+   der erste Fehler, den er selbst sichtbar gemacht hat. */
+.stil__kopf h1 { font-size: var(--text-sektion); }

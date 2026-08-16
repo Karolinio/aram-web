@@ -95,14 +95,25 @@
   /* Fraunces führt `opsz` mit der Schriftgrösse mit — eine Schlagzeile in
      144 pt bekommt feinere Haarstriche als eine Zwischenüberschrift. Das ist der
      Unterschied zwischen einer skalierten und einer gesetzten Schrift. */
-  /* SOFT niedrig, nicht hoch. Stark gerundete Enden lassen eine Serife
-     gemütlich-retro wirken — und „gemütlich-retro" ist eine Nachbarschaft von
-     „altbacken". Scharfe Enden bei hohem `opsz` geben stattdessen feine
-     Haarstriche und damit den Kontrast, der eine Schlagzeile gesetzt aussehen
-     lässt statt nur gross. */
-  --wonk-display: 'opsz' 144, 'SOFT' 12, 'WONK' 1;
-  --wonk-kopf: 'opsz' 72, 'SOFT' 10, 'WONK' 1;
-  --wonk-klein: 'opsz' 28, 'SOFT' 14, 'WONK' 0;
+  /**
+   * SOFT HOCH — und das ist eine Kehrtwende gegenüber Fassung 2.1.
+   *
+   * Dort stand SOFT auf 12, mit der Begründung: stark gerundete Enden wirken
+   * gemütlich-retro, und das sei die Nachbarschaft von „altbacken".
+   *
+   * Das war richtig gedacht und am falschen Ziel gemessen. Ihr Logo IST
+   * gemütlich-retro: eine fette, gerundete Wortmarke in der Familie von Cooper
+   * Black. Eine Seite, deren Schlagzeilen scharfkantig sind, während ihr Logo
+   * rund und fett ist, hat zwei Stimmen — und genau das meint „nicht
+   * konsistent".
+   *
+   * Fraunces hat diese Achse. Bei SOFT 95 und Gewicht 800 kommt sie den
+   * Buchstabenformen des Logos sehr nahe, ohne dass eine dritte Schriftfamilie
+   * dazukommt. Zwei Familien bleiben zwei Familien.
+   */
+  --wonk-display: 'opsz' 144, 'SOFT' 95, 'WONK' 1;
+  --wonk-kopf: 'opsz' 96, 'SOFT' 85, 'WONK' 1;
+  --wonk-klein: 'opsz' 36, 'SOFT' 70, 'WONK' 0;
 
   /* Grössere Sprünge als in Fassung 2. Dort lagen Sektionsüberschrift (3,5rem)
      und Gerichtname (1,75rem) so dicht am Fliesstext, dass die Seite überall
@@ -121,10 +132,26 @@
   --leading-kopf: 1.04;
   --leading-text: 1.58;
 
-  /* Serifen brauchen weniger Enge als Grotesken. -0.035em war für Bricolage
-     richtig und würde Fraunces zusammenkleben. */
-  --sperr-hero: -0.02em;
-  --sperr-kopf: -0.012em;
+  /* Fette gerundete Formen brauchen etwas mehr Luft als schmale — sonst
+     verschmelzen die Innenräume. */
+  --sperr-hero: -0.012em;
+  --sperr-kopf: -0.006em;
+
+  /**
+   * Die gepunktete Linie — das Konsistenzmittel der ganzen Seite.
+   *
+   * Von Eat Hungry Tiger geklaut: eine gepunktete Linie, die sich durch alle
+   * Abschnitte zieht. Sie kostet nichts, ist auf einer Speisekarte zu Hause
+   * (Perforation, Bonrolle, Backpapier) und macht aus sieben Abschnitten EIN
+   * Dokument — genau das, was durchgehende Haarlinien nicht schaffen, weil
+   * eine durchgezogene Linie überall gleich aussieht und deshalb nirgends
+   * auffällt.
+   */
+  --linie-punkt: repeating-linear-gradient(
+    to right,
+    var(--linie) 0 3px,
+    transparent 3px 8px
+  );
 
   --breite-satz: 56ch;
   --breite-satz-eng: 42ch;

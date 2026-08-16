@@ -688,7 +688,12 @@
 
 .karte {
   background: var(--papier);
-  border-block: 1px solid var(--linie);
+  border-block: 0;
+  /* Die gepunktete Linie auch an den Sektionskanten. */
+  background-image: var(--linie-punkt), var(--linie-punkt);
+  background-position: top, bottom;
+  background-size: 100% 1px, 100% 1px;
+  background-repeat: no-repeat, no-repeat;
 }
 
 .karte__kopf { margin-bottom: clamp(2rem, 4vw, 3rem); }
@@ -810,7 +815,14 @@
   align-items: center;
   column-gap: clamp(0.75rem, 2vw, 1.5rem);
   padding-block: 0.9rem;
-  border-bottom: 1px solid var(--linie);
+  /* Gepunktet, nicht durchgezogen — dieselbe Linie wie im Fuss, bei den
+     Adressdaten und an den Sektionskanten. Sie ist auf einer Speisekarte zu
+     Hause und macht aus sieben Abschnitten ein Dokument. */
+  border-bottom: 0;
+  background-image: var(--linie-punkt);
+  background-position: bottom;
+  background-size: 100% 1px;
+  background-repeat: no-repeat;
 }
 
 /* Der Name des Gerichts ist gross, der Preis daneben klein und ruhig. Von der
@@ -924,23 +936,18 @@
 
 .daten__paar {
   display: grid;
-  grid-template-columns: 6.5rem minmax(0, 1fr);
+  grid-template-columns: 7.5rem minmax(0, 1fr);
   gap: 1rem;
   padding-block: 0.9rem;
-  border-top: 1px solid var(--linie);
-}
-
-.daten dt {
-  font-family: var(--font-text);
-  font-size: var(--text-micro);
-  font-weight: 600;
-  
-  letter-spacing: 0.005em;
-  color: var(--russ-mtl);
-  padding-top: 0.25em;
+  border-top: 0;
+  background-image: var(--linie-punkt);
+  background-position: top;
+  background-size: 100% 1px;
+  background-repeat: no-repeat;
 }
 
 .daten dd { margin: 0; }
+.daten dt { padding-top: 0.35em; }
 
 .zeiten { list-style: none; padding: 0; margin: 0; }
 .zeiten li {
@@ -956,7 +963,7 @@
 .bestellen {
   position: relative;
   background: var(--creme-tief);
-  border-top: 1px solid var(--linie);
+  border-top: 0;
 }
 
 .bestellen__grund { position: absolute; inset: 0; z-index: 0; overflow: clip; }
@@ -1018,14 +1025,6 @@
 .weg--glut { background: var(--glut); border-color: transparent; }
 .weg--glut:hover { border-color: var(--tinte-glut); }
 
-.weg__art {
-  font-family: var(--font-text);
-  font-size: var(--text-micro);
-  font-weight: 600;
-  
-  letter-spacing: 0.005em;
-  color: var(--terra);
-}
 .weg--glut .weg__art { color: var(--tinte-glut); }
 
 .weg__wert {
@@ -1043,13 +1042,6 @@
 .weg--glut .weg__zusatz { color: var(--tinte-glut); }
 
 .dienste { margin-top: clamp(2.5rem, 5vw, 4rem); }
-
-.dienste__titel {
-  font-family: var(--font-text);
-  font-size: var(--text-meta);
-  font-weight: 600;
-  margin-bottom: 0.9rem;
-}
 
 .dienste__liste {
   display: flex;
@@ -1127,7 +1119,7 @@
   position: relative;
   z-index: 1;
   background: var(--creme-tief);
-  border-top: 1px solid var(--linie);
+  border-top: 0;
   padding-block: clamp(3rem, 5vw, 5rem);
   /* Platz, damit die Bestellleiste den Fuss nicht überdeckt. */
   padding-bottom: clamp(7rem, 10vw, 9rem);
@@ -1140,16 +1132,6 @@
 }
 
 .fuss__logo { height: 34px; width: auto; margin-bottom: 1rem; }
-
-.fuss__titel {
-  font-family: var(--font-text);
-  font-size: var(--text-micro);
-  font-weight: 600;
-  
-  letter-spacing: 0.005em;
-  color: var(--russ-mtl);
-  margin-bottom: 0.8rem;
-}
 
 .fuss__navi ul { list-style: none; padding: 0; margin: 0; }
 .fuss__navi li { padding-block: 0.3rem; }

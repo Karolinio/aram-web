@@ -73,7 +73,7 @@ export default function Karte() {
       <div className="schale">
         <header className="karte__kopf">
           <span className="augenbraue">Speisekarte</span>
-          <h2 id="karte-titel">Was es gibt</h2>
+          <h2 id="karte-titel" className="lebt">Was es gibt</h2>
           {ohnePreis > 0 && (
             <p className="karte__preishinweis">
               <span className="luecke">Die Preise tragen wir nach</span> — sie liegen uns noch

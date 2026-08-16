@@ -40,7 +40,7 @@ export default function Laden() {
 
         <div className="laden__wort">
           <span className="augenbraue">Der Laden</span>
-          <h2 id="laden-titel">Ein kleiner Laden in Bonn-Hardtberg</h2>
+          <h2 id="laden-titel" className="lebt">Ein kleiner Laden in Bonn-Hardtberg</h2>
           <p>
             Geführt wird der Laden vom Inhaber und seinen Brüdern. Wer hereinkommt, sieht die
             Arbeitsfläche, das Blech mit den Teigscheiben und den Ofen — es gibt nichts, was
