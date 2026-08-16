@@ -114,6 +114,68 @@ export function useVersatz<T extends HTMLElement>(tempo: number) {
   return ref
 }
 
+/**
+ * Ein Element verabschiedet sich beim Scrollen.
+ *
+ * Es hebt ab, kippt nach hinten weg und wird durchsichtig — fertig, bevor die
+ * Sektion halb durch ist. Gedacht für das Ladenschild: es begrüsst und geht
+ * dann aus dem Weg, statt bis zum Seitenende mitzufahren.
+ *
+ * Der Auslöser ist die Sektion, nicht das Element: hinge er am Schild, änderte
+ * sich sein eigener Bereich mit dem Fortschritt.
+ */
+export function useAbgang<T extends HTMLElement>(buehneWahl: string) {
+  const ref = useRef<T>(null)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    const buehne = el.closest(buehneWahl) ?? el
+    let tot = false
+    let abraeumen: (() => void) | undefined
+
+    void werkzeugHolen().then((werkzeug) => {
+      if (tot || !werkzeug) return
+      const { gsap } = werkzeug
+
+      const tween = gsap.to(el, {
+        y: () => -window.innerHeight * 0.3,
+        rotateX: 26,
+        opacity: 0,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: buehne,
+          start: 'top top',
+          /* Nach sechzig Prozent der Sektion ist es weg. Bis zum Ende
+             mitzufahren hiesse, es bis in die nächste Sektion zu schleppen. */
+          end: '60% top',
+          scrub: 1,
+          invalidateOnRefresh: true,
+          onToggle: ({ isActive }) => {
+            el.style.willChange = isActive ? 'transform, opacity' : ''
+          },
+        },
+      })
+
+      abraeumen = () => {
+        tween.scrollTrigger?.kill()
+        tween.kill()
+        el.style.willChange = ''
+        gsap.set(el, { clearProps: 'all' })
+      }
+    })
+
+    return () => {
+      tot = true
+      abraeumen?.()
+    }
+  }, [buehneWahl])
+
+  return ref
+}
+
 type Flug = {
   /** Von wo nach wo, in Anteilen der Fensterhöhe. Negativ = weiter oben. */
   y: [von: number, bis: number]

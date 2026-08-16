@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 
 import { ARAM } from '../aram.config.ts'
+import { useAbgang } from '../bewegung.ts'
 
 /**
  * Ihr Logo als Ladenschild — ein Gegenstand, keine Grafik.
@@ -44,6 +45,9 @@ const DAEMPFUNG = 0.08
 export default function Ladenschild() {
   const buehne = useRef<HTMLDivElement>(null)
   const schild = useRef<HTMLDivElement>(null)
+  /* Beim Herunterscrollen hebt das Schild ab und kippt weg. Ein Schild begrüsst
+     und geht dann aus dem Weg — es fährt nicht die ganze Seite mit. */
+  const abgang = useAbgang<HTMLHeadingElement>('.backstube')
 
   useEffect(() => {
     const b = buehne.current
@@ -96,7 +100,7 @@ export default function Ladenschild() {
           zweites gesetztes „Aram" daneben wären zwei Wortmarken, die um
           dieselbe Stelle kämpfen. Für Vorleseprogramme und Suchmaschinen steht
           der Name als Text da, nur unsichtbar. */}
-      <h1 id="backstube-titel" className="schild-titel">
+      <h1 id="backstube-titel" className="schild-titel" ref={abgang}>
         <span className="visuell-versteckt">{ARAM.langname}</span>
         <div className="schild" ref={schild} aria-hidden="true">
           <img

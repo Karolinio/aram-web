@@ -216,9 +216,46 @@
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  /* Links das Ladenfoto, rechts Schild und Text. Nicht halbe/halbe: die
+     Asymmetrie ist der Unterschied zwischen einer Seite und einem Raster. */
+  grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
   align-items: center;
-  gap: clamp(2rem, 4vw, 4rem);
+  gap: clamp(2rem, 5vw, 5rem);
+}
+
+/**
+ * Die Ladenfront im Hero.
+ *
+ * Sie läuft nach LINKS aus dem Bild heraus — bei Savor nachgesehen: dort steht
+ * ein schmales Bild halb ausserhalb der linken Kante, und genau dieses
+ * Überlaufen nimmt dem Raster das Brave. Ein Bild, das an beiden Seiten
+ * ordentlich endet, ist eine Abbildung; eines, das hinausläuft, ist ein
+ * Ausschnitt aus etwas Grösserem.
+ */
+.backstube__laden {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  /* KEIN Überlaufen nach links. Erster Versuch war ein negativer Aussenabstand
+     bis an die Fensterkante — Savors Griff. Er kämpft hier aber mit dem
+     Yellowbird-Rahmen: der erklärt die Seite zum Blatt, und ein Foto, das über
+     die Rahmenlinie hinausläuft, macht aus dem Blatt einen Fehler. Zwei
+     geliehene Griffe, die sich widersprechen; dieser hier weicht.
+     Die Asymmetrie kommt stattdessen aus dem Spaltenverhältnis und daraus,
+     dass das Foto unten sitzt, während das Schild oben steht. */
+  align-self: end;
+}
+
+.backstube__laden img {
+  width: 100%;
+  height: auto;
+}
+
+.backstube__laden figcaption {
+  margin-top: 0.7rem;
+  font-size: var(--text-micro);
+  color: var(--russ-mtl);
+  max-width: 26ch;
 }
 
 /**
@@ -299,8 +336,17 @@
 
 /* Das Foto ragt nach unten aus der Sektion heraus und überlappt die nächste.
    Diese Überlappung IST die Tiefe — sie ersetzt den Schatten, den es nicht gibt. */
+/**
+ * Das schwebende Gericht liegt jetzt FREI über der Sektion, nicht mehr als
+ * dritte Gitterspalte. Mit Foto links und Text rechts war im Gitter kein Platz
+ * mehr für eine dritte Spalte — und ein Gegenstand, der schwebt, gehört ohnehin
+ * nicht in eine Tabellenzelle.
+ */
 .backstube__bild {
-  position: relative;
+  position: absolute;
+  right: var(--rinne);
+  bottom: clamp(-9rem, -9vw, -4rem);
+  width: min(38%, 26rem);
   z-index: 2;
   justify-self: end;
   /* Unten verankert, nicht mittig. Gemessen: mittig zentriert endete das Foto
@@ -1099,9 +1145,9 @@
 
   .backstube__gitter { grid-template-columns: minmax(0, 1fr); }
   .backstube__bild {
-    justify-self: end;
-    width: min(82%, 24rem);
-    margin-block-end: clamp(-6rem, -6vw, -3rem);
+    width: min(56%, 15rem);
+    right: 0;
+    bottom: clamp(-4rem, -5vw, -2rem);
   }
 
   /* Am Handy wird zusammengelegt, nicht gestrichen: die Schritte behalten ihren
@@ -1159,7 +1205,19 @@
   .kopf__anruf-text { display: none; }
   .kopf__anruf-kurz { display: inline; }
 
-  .backstube { min-height: 70svh; }
+  .backstube { min-height: 70svh; padding-block: 2rem 1.5rem; }
+
+  /* Der Hero ist am Handy durch das Ladenfoto auf 10,2 Bildschirmhöhen
+     gewachsen; der Auftrag deckelt bei 10. Das Foto wird deshalb quer
+     beschnitten statt verkleinert — die fünf Männer bleiben gleich gross, nur
+     der Himmel über der Markise fällt weg. Die Bildunterschrift entfällt hier:
+     denselben Satz sagt die Sektion „Der Laden" ohnehin noch einmal. */
+  .backstube__laden img {
+    aspect-ratio: 16 / 8.5;
+    object-fit: cover;
+    object-position: center 42%;
+  }
+  .backstube__laden figcaption { display: none; }
 
   /* Der Preis rutscht unter den Namen, der Zähler bleibt rechts daneben. Eine
      dreispaltige Zeile mit 44px-Knopf passt auf 393px nicht ohne Quetschen. */

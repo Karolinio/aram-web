@@ -50,6 +50,22 @@ export default function Backstube() {
       </div>
 
       <div className="schale backstube__gitter">
+        {/* Ihre Ladenfront mit den fünf Männern davor — der Beweis, dass es den
+            Laden gibt. Sie läuft links aus dem Bild heraus: von Savor geklaut,
+            wo genau diese Asymmetrie den Unterschied zwischen einer Seite und
+            einem Raster macht. */}
+        <figure className="backstube__laden">
+          <img
+            src="/bilder/echt/team-laden.webp"
+            alt="Fünf Männer vor dem Laden von Aram, mit Nudelholz, einem Blech mit Teigscheiben und zwei hölzernen Ofenschiebern"
+            width={1024}
+            height={784}
+            loading="eager"
+            decoding="async"
+          />
+          <figcaption>Der Inhaber und seine Brüder, vor der Tür in Bonn-Hardtberg</figcaption>
+        </figure>
+
         <div className="backstube__satz">
           <Ladenschild />
           <p className="backstube__unter">Orientalisches Gebäck &amp; Pizza · Bonn-Hardtberg</p>
@@ -76,9 +92,12 @@ export default function Backstube() {
         </div>
 
         {/* Freigestellt, nicht rechteckig: „Das Essen liegt nicht auf dieser
-            Seite, es schwebt darüber" — der erste Satz der Direktion, und bis
-            jetzt war er nicht eingelöst. Der Freisteller entsteht durch
-            Hintergrundentfernung an IHREM Foto; erzeugt ist daran nichts. */}
+            Seite, es schwebt darüber" — der erste Satz der Direktion. Der
+            Freisteller entsteht durch Hintergrundentfernung an IHREM Foto.
+
+            Ohne Bildunterschrift: das Element liegt frei über der Sektion, und
+            eine Unterschrift landete dadurch mitten im Fliesstext. Was es ist,
+            sagt der Alternativtext — und die Karte zwei Sektionen weiter. */}
         <figure className="backstube__bild" ref={bild}>
           <img
             src="/bilder/echt/fatayer-frei.webp"
@@ -89,7 +108,6 @@ export default function Backstube() {
             fetchPriority="high"
             decoding="async"
           />
-          <figcaption>Fata’er, frisch aus dem Ofen</figcaption>
         </figure>
       </div>
     </section>

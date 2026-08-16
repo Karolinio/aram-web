@@ -15,9 +15,11 @@ const WOCHENTAGE = ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', '
  * Öffnungszeiten steht sonst jemand vor einer verschlossenen Tür, und bei einer
  * Anschrift schickt man ihn in die falsche Strasse.
  *
- * Das Foto ist echt und ihres: fünf Männer vor dem Laden, mit Nudelholz, einem
- * Blech Teigscheiben und zwei hölzernen Ofenschiebern. Es ist der Beweis, dass
- * es den Laden gibt — deshalb darf genau dieses Bild nie erzeugt werden.
+ * Das Foto ist echt und ihres: zwei der Brüder vor der Ladentür.
+ *
+ * Es war bis zum 16.08. das Teamfoto mit allen fünf Männern — bis dieses in den
+ * Hero wanderte. Dasselbe Bild zweimal auf einer Seite ist kein Motiv, sondern
+ * ein Fehler: es macht aus einem Beweis eine Wiederholung.
  */
 export default function Laden() {
   const bild = useVersatz<HTMLElement>(-0.05)
@@ -27,10 +29,10 @@ export default function Laden() {
       <div className="schale laden__gitter">
         <figure className="laden__bild" ref={bild}>
           <img
-            src="/bilder/echt/team-laden.webp"
-            alt="Fünf Männer vor dem Laden von Aram, mit Nudelholz, einem Blech mit Teigscheiben und zwei hölzernen Ofenschiebern"
-            width={1024}
-            height={784}
+            src="/bilder/echt/brueder.webp"
+            alt="Zwei der Brüder vor dem Laden, unter dem orangefarbenen Schild"
+            width={500}
+            height={600}
             loading="lazy"
             decoding="async"
           />
