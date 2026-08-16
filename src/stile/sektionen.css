@@ -177,7 +177,9 @@
   z-index: 2;
   display: flex;
   align-items: center;
-  min-height: 84svh;
+  /* Höher als vorher (84): der Grund ist jetzt ihr Laden, und eine
+     Ladenfront braucht Fläche, sonst ist sie ein Briefmarkenbild. */
+  min-height: 92svh;
   /* Der untere Innenabstand ist klein, weil das Foto ihn sonst nur auffüllt
      statt über die Kante zu ragen. Gemessen: mit 9rem blieben 11 px Überlappung
      übrig — also gar keine. */
@@ -189,71 +191,122 @@
    diese Überlappung IST die Tiefe dieser Seite. */
 .backstube__grund { position: absolute; inset: 0; z-index: 0; overflow: clip; }
 
+.backstube__rahmen { position: absolute; inset: 0; }
+
+.backstube__grund picture,
 .backstube__grund img {
   width: 100%;
   height: 100%;
+  display: block;
+}
+
+.backstube__grund img {
   object-fit: cover;
-  object-position: 60% 40%;
+  /**
+   * Ganz nach UNTEN ausgerichtet — und das ist die wichtigste Zeile dieser
+   * Sektion.
+   *
+   * Erster Versuch stand bei 42 % und zeigte die Signaltafel über ihrer Tür.
+   * Darauf steht in weissen Buchstaben „Aram". Unser Ladenschild steht
+   * daneben. Zwei Wortmarken derselben Marke im selben Bild kämpfen um
+   * dieselbe Stelle, und die gedruckte gewinnt, weil sie grösser ist.
+   *
+   * Bei 100 % wandert die Tafel aus dem Ausschnitt: übrig bleiben die orange
+   * Front, die Tür und die fünf Männer. Damit hängt unser Schild darüber —
+   * genau die Rolle, für die es gebaut wurde.
+   */
+  object-position: 50% 100%;
+  /* GSAP setzt hier beim Scrollen `scale` und `yPercent`. Der Startwert steht
+     trotzdem hier, damit das Bild auch ohne die Bibliothek — Funkloch,
+     reduzierte Bewegung — den Rand nicht freigibt. */
+  transform: scale(1.04);
+}
+
+/**
+ * Die Einfahrt beim Laden.
+ *
+ * Das Foto steht einen Moment zu gross und läuft in seine Ruhelage. Das ist der
+ * einzige Ersatz für die Drohnenfahrt, den es ohne fremdes Material gibt: eine
+ * Kamera, die zur Ruhe kommt. Sie läuft EINMAL und danach nie wieder — eine
+ * dauerhaft atmende Startseite ist ein Bildschirmschoner.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .backstube__rahmen {
+    animation: einfahrt 2400ms var(--ease-teig) both;
+  }
+}
+
+@keyframes einfahrt {
+  from { transform: scale(1.09); }
+  to { transform: scale(1); }
 }
 
 /**
  * Der Cremeschleier.
  *
- * Eine deckende Fläche mit Alpha, kein Weichzeichner. Er ist links dichter, wo
- * die Schrift steht, und rechts dünner, wo das Foto atmen darf. Das ist der
- * Unterschied zwischen Papier und einer durchscheinenden Scheibe: die Struktur
- * des Fotos bleibt stehen, nur sein Kontrast geht zurück.
+ * Eine deckende Fläche mit Alpha, kein Weichzeichner. Er ist links dicht, wo
+ * die Schrift steht, und rechts DÜNN — dünner als bisher: solange er überall
+ * bei 0,72 lag, war das Foto nur zu ahnen. Karol wollte den Laden sehen, und
+ * ein Foto, das man erraten muss, ist kein Beweis.
+ *
+ * Die Grenze ist gemessen, nicht gewählt: der Satz links reicht bis 46 rem,
+ * und bis dorthin bleibt der Schleier auf voller Dichte. Was rechts davon
+ * aufklart, trägt keine Schrift — nur das schwebende Gebäck, und das hat
+ * seinen eigenen Schatten.
  */
 .backstube__schleier {
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(
-      100deg,
-      var(--schleier-dicht) 0%,
-      var(--schleier-dicht) 34%,
-      var(--schleier) 68%,
-      var(--schleier) 100%
-    );
+  background: linear-gradient(
+    100deg,
+    var(--schleier-dicht) 0%,
+    var(--schleier-dicht) 46%,
+    var(--schleier) 62%,
+    oklch(95% 0.03 78 / 0.42) 100%
+  );
 }
 
 .backstube__gitter {
   position: relative;
   z-index: 1;
   display: grid;
-  /* Links das Ladenfoto, rechts Schild und Text. Nicht halbe/halbe: die
-     Asymmetrie ist der Unterschied zwischen einer Seite und einem Raster. */
-  grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
-  align-items: center;
-  gap: clamp(2rem, 5vw, 5rem);
+  /* EINE Spalte. Das Ladenfoto war die zweite und ist in den Grund gewandert;
+     eine leere zweite Spalte stehen zu lassen hiesse, das Gitter zu behalten
+     und den Grund dafür zu vergessen. */
+  grid-template-columns: minmax(0, 1fr);
 }
 
 /**
- * Die Ladenfront im Hero.
+ * Der Satz links.
  *
- * Sie läuft nach LINKS aus dem Bild heraus — bei Savor nachgesehen: dort steht
- * ein schmales Bild halb ausserhalb der linken Kante, und genau dieses
- * Überlaufen nimmt dem Raster das Brave. Ein Bild, das an beiden Seiten
- * ordentlich endet, ist eine Abbildung; eines, das hinausläuft, ist ein
- * Ausschnitt aus etwas Grösserem.
+ * Er begrenzt sich selbst auf 46 rem, und dieser Wert ist mit dem Schleier oben
+ * verzahnt: was breiter liefe, käme in die aufklarende Zone und stünde auf dem
+ * Foto statt auf Creme.
  */
-.backstube__laden {
-  position: relative;
-  z-index: 1;
-  margin: 0;
-  /* KEIN Überlaufen nach links. Erster Versuch war ein negativer Aussenabstand
-     bis an die Fensterkante — Savors Griff. Er kämpft hier aber mit dem
-     Yellowbird-Rahmen: der erklärt die Seite zum Blatt, und ein Foto, das über
-     die Rahmenlinie hinausläuft, macht aus dem Blatt einen Fehler. Zwei
-     geliehene Griffe, die sich widersprechen; dieser hier weicht.
-     Die Asymmetrie kommt stattdessen aus dem Spaltenverhältnis und daraus,
-     dass das Foto unten sitzt, während das Schild oben steht. */
-  align-self: end;
-}
+.backstube__satz { max-width: min(100%, 46rem); }
 
-.backstube__laden img {
-  width: 100%;
-  height: auto;
+/**
+ * Der Bildnachweis zum Grund.
+ *
+ * Er steht unten links auf dem dichten Teil des Schleiers. Ihn wegzulassen wäre
+ * bequem — aber wer auf diesem Foto steht, IST die Aussage des Fotos, und ein
+ * unbeschriftetes Bild von fünf Menschen ist Dekoration.
+ */
+.backstube__nachweis {
+  margin: clamp(2rem, 4vw, 3.5rem) 0 0;
+  max-width: 34ch;
+  font-family: var(--font-display);
+  font-variation-settings: var(--wonk-klein);
+  font-size: var(--text-micro);
+  font-weight: 500;
+  /**
+   * Eine Stufe dunkler als `--tinte-leise`, und der Wert ist gemessen:
+   * mit dem Standardton kam die Zeile auf 4,53 gegen den komponierten Grund
+   * (Schleier über dunkler Kleidung im Foto). 4,5 ist die Grenze für normalen
+   * Text — daran vorbeizuschrammen ist kein Bestehen, sondern Glück.
+   * Bei L 43 % sind es 5,5. Leise bleibt sie trotzdem.
+   */
+  color: oklch(43% 0.05 52);
 }
 
 
@@ -385,6 +438,10 @@
 .backstube__bild {
   display: flex;
   flex-direction: column-reverse;
+  /* Schmuck fängt keine Klicks. Ohne diese Zeile lag am Handy ein
+     freigestelltes Gebäck vor dem WhatsApp-Knopf und schluckte jede
+     Berührung — sichtbar war der Knopf, drückbar nicht. */
+  pointer-events: none;
 }
 
 
@@ -814,10 +871,16 @@
   border-bottom: 1px solid var(--russ);
 }
 
+/* KEINE Kursive mehr. Reem Kufi hat keine — der Browser hätte sie geneigt,
+   und eine geneigte Kufi ist eine Schrift, die es nicht gibt. Der Hinweis
+   unterscheidet sich jetzt so vom Gerichtnamen darüber, wie sich auf dieser
+   Seite alles Kurze unterscheidet: durch die andere Familie. */
 .gruppe__hinweis {
   margin-top: 0.7rem;
+  font-family: var(--font-display);
+  font-variation-settings: var(--wonk-klein);
   font-size: var(--text-meta);
-  font-style: italic;
+  font-weight: 500;
   color: var(--russ-mtl);
 }
 
@@ -842,7 +905,7 @@
 /* Der Name des Gerichts ist gross, der Preis daneben klein und ruhig. Von der
    Karte an der Wand geklaut: eine Seite, die den Preis grösser setzt als das
    Essen, verkauft Preise. */
-/* Die Gerichtnamen tragen Fraunces, der Rest der Zeile Archivo. Das ist der
+/* Die Gerichtnamen tragen Fraunces, der Rest der Zeile Reem Kufi. Das ist der
    ganze Trick der neuen Paarung: die Serife markiert, was gelesen werden SOLL,
    die Grotesk das, was gelesen werden MUSS. */
 .zeile__name {
@@ -1167,12 +1230,60 @@
   .kopf__navi { display: none; }
   .kopf__anruf { margin-inline-start: auto; }
 
-  .backstube__gitter { grid-template-columns: minmax(0, 1fr); }
+  /**
+   * Das schwebende Gebäck am Handy.
+   *
+   * Gemessen und korrigiert: mit 56 % Breite lag es auf dem WhatsApp-Knopf —
+   * nicht nur optisch, es FING DESSEN KLICKS AB. Ein Schmuckbild vor einem
+   * Bestellknopf ist der teuerste Fehler, den diese Seite machen kann.
+   *
+   * Drei Zeilen lösen es zusammen: schmaler, weiter nach unten, und die
+   * Sektion bekommt unten Platz, damit die Knöpfe darüber frei bleiben.
+   * `pointer-events` steht bei der Grundregel — dort gilt es für alle Breiten.
+   */
   .backstube__bild {
-    width: min(56%, 15rem);
-    right: 0;
-    bottom: clamp(-4rem, -5vw, -2rem);
+    width: min(46%, 12rem);
+    right: -0.5rem;
+    bottom: -2.5rem;
+    margin-block-end: -2.5rem;
   }
+  .backstube { padding-block: 2rem 7rem; }
+
+  /**
+   * Unter 1000 px dreht der Schleier von schräg auf SENKRECHT.
+   *
+   * Der schräge Verlauf setzt voraus, dass die Schrift eine linke Spalte
+   * belegt und rechts Platz frei bleibt. Auf einer einspaltigen Breite gibt es
+   * kein Rechts — der Satz läuft über die ganze Breite, und der aufklarende
+   * Teil landete mitten in der Zeile. Senkrecht: oben klar, damit die
+   * Ladenfront zu sehen ist; unten dicht, wo Schild, Satz und Knöpfe stehen.
+   */
+  .backstube__schleier {
+    background: linear-gradient(
+      to top,
+      var(--schleier-dicht) 0%,
+      var(--schleier-dicht) 52%,
+      var(--schleier) 70%,
+      oklch(95% 0.03 78 / 0.34) 100%
+    );
+  }
+
+  /* Und deshalb sitzt der Satz unten statt mittig: er muss in den dichten
+     Teil, nicht der dichte Teil zu ihm. */
+  .backstube { align-items: end; }
+
+  /* Auf schmalen Flächen füllt `cover` nach HÖHE — der senkrechte Anteil von
+     `object-position` läuft dann ins Leere, weil nichts oben überhängt. Der
+     Ausschnitt wird deshalb nicht hier entschieden, sondern über das zweite
+     Bild im `<picture>`. Waagerecht bleibt die Mitte: dort stehen die Männer. */
+  .backstube__grund img { object-position: 50% 100%; }
+
+  /* Die Unterzeile bricht sonst nach „Bonn-" um. Ausgeglichen statt gestückelt. */
+  .backstube__unter { text-wrap: balance; }
+
+  /* Kürzer umbrechen, damit das schwebende Gebäck rechts unten keine Zeile
+     anschneidet. Gemessen: bei 34 ch lag es auf „vor ihrer Tür in". */
+  .backstube__nachweis { max-width: 21ch; }
 
   /* Am Handy wird zusammengelegt, nicht gestrichen: die Schritte behalten ihren
      Versatz, nur kleiner, und der Flieger reist weiter — er bekommt nur weniger
@@ -1239,17 +1350,10 @@
   .band { padding-block: 1.75rem; }
   .band__satz::before { width: 1.6rem; height: 1.6rem; margin-bottom: 0.9rem; }
 
-  /* Der Hero ist am Handy durch das Ladenfoto auf 10,2 Bildschirmhöhen
-     gewachsen; der Auftrag deckelt bei 10. Das Foto wird deshalb quer
-     beschnitten statt verkleinert — die fünf Männer bleiben gleich gross, nur
-     der Himmel über der Markise fällt weg. Die Bildunterschrift entfällt hier:
-     denselben Satz sagt die Sektion „Der Laden" ohnehin noch einmal. */
-  .backstube__laden img {
-    aspect-ratio: 16 / 8.5;
-    object-fit: cover;
-    object-position: center 42%;
-  }
-  
+  /* Der Nachweis entfällt am Handy nicht — er rückt nur näher heran. Wer die
+     fünf Männer sieht, soll lesen können, wer sie sind. */
+  .backstube__nachweis { margin-top: 1.5rem; }
+
   /* Der Preis rutscht unter den Namen, der Zähler bleibt rechts daneben. Eine
      dreispaltige Zeile mit 44px-Knopf passt auf 393px nicht ohne Quetschen. */
   .zeile {

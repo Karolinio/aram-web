@@ -1,6 +1,31 @@
 @import './tokens.css';
 
 /**
+ * Die vermessene Ersatzschrift.
+ *
+ * ═══ Wofür ═══
+ *
+ * Reem Kufi wird nachgeladen (`font-display: swap`). Bis sie da ist, setzt der
+ * Browser die Systemschrift — und die läuft 5 % schmaler. Beim Umschalten
+ * brechen die Zeilen neu um, Absätze werden kürzer oder länger, und die Seite
+ * ruckt. Gemessen hat das der Fabrikprüfer: CLS 0,028 beim Laden, vorher 0,000.
+ *
+ * `size-adjust` skaliert die Ersatzschrift so, dass sie DIESELBE Laufweite
+ * bekommt. Dann steht schon vor dem Umschalten jede Zeile dort, wo sie nachher
+ * steht — der Wechsel ist noch zu sehen, aber nichts bewegt sich mehr.
+ *
+ * Die 105,4 % sind gemessen, nicht geraten: „Handgerollter Teig 0123" ist bei
+ * 100 px in Reem Kufi 1052 px breit, in der Systemschrift 998 px.
+ * 1052 / 998 = 1,054.
+ */
+@font-face {
+  font-family: 'Reem Ersatz';
+  src: local('Helvetica Neue'), local('Helvetica'), local('Arial');
+  size-adjust: 105.4%;
+  font-display: swap;
+}
+
+/**
  * Die Grundlage: Reset, Typografie, Knöpfe, Lücken.
  *
  * Fassung 1 hatte hier eine Klasse für durchscheinende Karten mit Weichzeichner.

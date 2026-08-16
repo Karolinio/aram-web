@@ -97,8 +97,14 @@ export default function Stilbogen() {
           <p className="stil__regel">
             <strong>Wer welche Schrift trägt.</strong> <strong>Fraunces</strong> — die fette,
             gerundete Form ihres Logos — trägt alles KURZE: Überschriften, Unterschriften,
-            Etiketten, Preise, Knöpfe, Navigation, Zahlen. <strong>Archivo</strong> trägt nur
+            Etiketten, Preise, Knöpfe, Navigation, Zahlen. <strong>Reem Kufi</strong> trägt nur
             laufenden Fliesstext: Vorspann, Absätze, Gerichtbeschreibungen.
+          </p>
+          <p className="stil__regel">
+            <strong>Warum Reem Kufi.</strong> Sie ist die lateinische Begleitung einer arabischen
+            Kufi-Schrift: flache Endungen, gerade Achsen, kaum Strichstärkenwechsel. Der
+            Einschlag steckt in den lateinischen Formen selbst und nicht in Dekoration — die
+            Seite bleibt deutsch und klingt trotzdem nach Herkunft.
           </p>
           <p className="stil__regel">
             Die Grenze ist nicht Grösse, sondern Funktion: eine Zeile, die man{' '}

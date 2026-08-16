@@ -5,7 +5,10 @@ import { createRoot } from 'react-dom/client'
    und ohne WONK ist Fraunces eine gewöhnliche Serife — genau das, was hier nicht
    gebraucht wird. */
 import '@fontsource-variable/fraunces/full.css'
-import '@fontsource-variable/archivo'
+/* Reem Kufi bringt vier Untermengen mit, darunter die arabische. Geladen wird
+   davon nur, was vorkommt — die Seite ist deutsch, also kommt die lateinische.
+   Der `unicode-range` der Schrift entscheidet das, nicht wir. */
+import '@fontsource-variable/reem-kufi'
 import './stile/grundlage.css'
 import './stile/bausteine.css'
 import './stile/sektionen.css'
@@ -19,6 +22,7 @@ import Laden from './komponenten/Laden.tsx'
 import Bestellen from './komponenten/Bestellen.tsx'
 import Fusszeile from './komponenten/Fusszeile.tsx'
 import Bestellleiste from './komponenten/Bestellleiste.tsx'
+import Wasserzeichen from './komponenten/Wasserzeichen.tsx'
 import Mehlstaub from './komponenten/ui/Mehlstaub.tsx'
 
 import { scrollenStarten } from './scrollen.ts'
@@ -119,6 +123,7 @@ function Seite() {
         <Bestellen />
       </main>
       <Fusszeile />
+      <Wasserzeichen />
       <Bestellleiste />
     </>
   )

@@ -387,5 +387,89 @@ export function useFlug<T extends HTMLElement>(f: Flug) {
 }
 
 
+/**
+ * Die Kamerafahrt über dem Ladenfoto.
+ *
+ * ═══ Wofür das hier der Ersatz ist ═══
+ *
+ * Karol wollte auf der Startseite „ein Bild vom Laden ganzflächig oder sogar
+ * ein Video von oben wie Drohnenfahrt". Eine Drohnenaufnahme ihres Ladens gibt
+ * es nicht, und aus dem Netz genommenes Material ist fremdes Material — dafür
+ * fehlt jedes Nutzungsrecht. Was BLEIBT, ist ihr eigenes Foto und die Frage,
+ * wie man ihm Bewegung gibt, ohne etwas zu erfinden.
+ *
+ * Die Antwort ist eine Kamerafahrt statt eines Films: das Foto steht beim
+ * Laden zu gross und läuft in seine Ruhelage — das ist die CSS-Animation am
+ * Rahmen, nicht hier — und schiebt beim Scrollen weiter hinein. Der Zuschauer
+ * liest daraus eine Kamera, obwohl sich nur ein Standbild skaliert.
+ *
+ * ═══ Warum zwei Ebenen ═══
+ *
+ * Die Einfahrt beim Laden gehört dem Rahmen (CSS), die Fahrt beim Scrollen dem
+ * Bild (GSAP). Lägen beide auf demselben Knoten, würde die eine `transform`
+ * die andere überschreiben — und zwar still, ohne Fehlermeldung.
+ *
+ * Anders als `useFlug` läuft das hier AUCH am Handy. Es verdeckt keinen Text
+ * und braucht keine freie Bahn; es ist der Grund selbst.
+ */
+export function useKamerafahrt<T extends HTMLElement>(
+  buehneWahl: string,
+  von = 1.04,
+  bis = 1.13,
+) {
+  const ref = useRef<T>(null)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    const buehne = el.closest(buehneWahl) ?? el
+    let tot = false
+    let abraeumen: (() => void) | undefined
+
+    void werkzeugHolen().then((werkzeug) => {
+      if (tot || !werkzeug) return
+      const { gsap } = werkzeug
+
+      const tween = gsap.fromTo(
+        el,
+        { scale: von },
+        {
+          scale: bis,
+          /* Ein Hauch Versatz nach oben. Ohne ihn wirkt das Zoomen wie eine
+             Lupe; mit ihm wie eine Kamera, die sich hebt. */
+          yPercent: -2.5,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: buehne,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 1,
+            invalidateOnRefresh: true,
+            onToggle: ({ isActive }) => {
+              el.style.willChange = isActive ? 'transform' : ''
+            },
+          },
+        },
+      )
+
+      abraeumen = () => {
+        tween.scrollTrigger?.kill()
+        tween.kill()
+        el.style.willChange = ''
+        gsap.set(el, { clearProps: 'all' })
+      }
+    })
+
+    return () => {
+      tot = true
+      abraeumen?.()
+    }
+  }, [buehneWahl, von, bis])
+
+  return ref
+}
+
 /** Kurzform für „breiter als ein Telefon". Spart die Zeichenkette an drei Stellen. */
 export const useMedienabfrageBreit = (): boolean => useMedienabfrage('(min-width: 1000px)')

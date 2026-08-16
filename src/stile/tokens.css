@@ -111,7 +111,35 @@
    * nachahmen.
    */
   --font-display: 'Fraunces Variable', Georgia, serif;
-  --font-text: 'Archivo Variable', system-ui, sans-serif;
+  /* „Reem Ersatz" ist die auf Reem Kufis Laufweite vermessene Systemschrift.
+     Sie steht VOR system-ui, damit der Umbruch schon vor dem Nachladen stimmt —
+     siehe den @font-face-Block oben in grundlage.css. */
+  --font-text: 'Reem Kufi Variable', 'Reem Ersatz', system-ui, sans-serif;
+
+  /**
+   * ── Warum Reem Kufi und nicht Archivo ──────────────────────────────────
+   *
+   * Karol hat am 16.08. aus sechs Kandidaten gewählt, jeder in beiden Rollen
+   * vorgeführt: „Reem Kufi B … ich würde gern die rechte Seite übernehmen."
+   * Rechte Seite hiess: Fraunces bleibt oben, der Kandidat übernimmt UNTEN.
+   *
+   * Reem Kufi ist die Latein-Begleitung einer arabischen Kufi-Schrift. Der
+   * Einschlag steckt in den lateinischen Formen selbst — flache Endungen,
+   * gerade Achsen, kaum Strichstärkenwechsel — und nicht in Dekoration. Das
+   * war die Vorgabe: „nicht wirklich arabisch, nur angehaucht, soll schon
+   * deutsche Sprache sein."
+   *
+   * Archivo ist damit RAUS, nicht dazu. Drei Familien wären Unentschiedenheit;
+   * die Direktion erlaubt zwei. Das Paket ist deinstalliert, damit niemand
+   * versehentlich zurückgreift.
+   *
+   * ═══ Was die Umstellung an Masse gekostet hat ═══
+   *
+   * Reem Kufi läuft deutlich WEITER und hat eine kleinere x-Höhe als Archivo.
+   * Dieselbe Punktgrösse liest sich dadurch kleiner und braucht mehr Zeilen.
+   * Deshalb sind unten drei Werte nachgezogen — sie sind gemessen, nicht
+   * geschätzt: --text-base, --leading-text und --breite-satz.
+   */
 
   /**
    * ═══ Die Regel, wer welche Schrift trägt ═══
@@ -126,7 +154,7 @@
    *   FRAUNCES trägt alles KURZE — Überschriften, Unterschriften, Etiketten,
    *   Preise, Knöpfe, Navigation, Zahlen. Alles, was man ansieht.
    *
-   *   ARCHIVO trägt nur laufenden FLIESSTEXT — Vorspann, Absätze,
+   *   REEM KUFI trägt laufenden FLIESSTEXT — Vorspann, Absätze,
    *   Gerichtbeschreibungen. Alles, was man liest.
    *
    * Die Grenze ist nicht Grösse, sondern Funktion: eine Zeile, die man
@@ -166,14 +194,29 @@
   --text-band: clamp(1.9rem, 1rem + 3.8vw, 4.5rem);
   --text-sektion: clamp(2.1rem, 1.2rem + 3.2vw, 4rem);
   --text-gericht: clamp(1.2rem, 1.05rem + 0.7vw, 1.55rem);
-  --text-lead: clamp(1.125rem, 1.02rem + 0.42vw, 1.375rem);
-  --text-base: 1.0625rem;
-  --text-meta: 0.9375rem;
-  --text-micro: 0.8125rem;
+  /**
+   * ═══ Diese vier Grade sind wegen Reem Kufi gewachsen ═══
+   *
+   * Gemessen im Browser, nicht geschätzt: bei 100 px Schriftgrad hat Reem Kufi
+   * eine x-Höhe von 41,8 px, die abgelöste Grotesk eine von 50,8 px. Das sind
+   * 18 % weniger Kleinbuchstabe bei gleicher Punktgrösse — derselbe Wert liest
+   * sich also deutlich kleiner.
+   *
+   * Voll ausgeglichen wird das NICHT: 18 % mehr wären 20,7 px Fliesstext, und
+   * das ist ein Grossdruck. Ausgeglichen wird die Hälfte. Den Rest trägt die
+   * Schrift selbst — sie läuft 10 % breiter und hat höhere Versalien, und
+   * breite Formen bei kleiner x-Höhe lesen sich besser als schmale.
+   */
+  --text-lead: clamp(1.25rem, 1.12rem + 0.45vw, 1.5rem);
+  --text-base: 1.15rem;
+  --text-meta: 1rem;
+  --text-micro: 0.875rem;
 
   --leading-eng: 0.92;
   --leading-kopf: 1.04;
-  --leading-text: 1.58;
+  /* WENIGER Durchschuss, nicht mehr. Eine kleine x-Höhe mit langen Versalien
+     trennt die Zeilen schon von selbst; 1,58 riss sie auseinander. */
+  --leading-text: 1.5;
 
   /* Fette gerundete Formen brauchen etwas mehr Luft als schmale — sonst
      verschmelzen die Innenräume. */

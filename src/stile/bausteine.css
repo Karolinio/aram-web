@@ -78,7 +78,7 @@
   display: flex;
   align-items: center;
   gap: 0.55rem;
-  /* Fraunces, nicht Archivo: ein Etikett wird überflogen, nicht gelesen. */
+  /* Fraunces, nicht Reem Kufi: ein Etikett wird überflogen, nicht gelesen. */
   font-family: var(--font-display);
   font-variation-settings: var(--wonk-klein);
   font-size: var(--text-meta);
@@ -187,6 +187,62 @@
 /* `.fuss__titel` und `.dienste__titel` sind keine eigenen Etikettstile mehr —
    nur noch Abstände an einem `<Etikett>`. */
 .fuss__titel { margin-bottom: 0.8rem; }
+
+/* ── Das Wasserzeichen ────────────────────────────────────────────────────── */
+
+/**
+ * Das Logo unten rechts, sobald das Ladenschild aus dem Hero gegangen ist.
+ *
+ * ═══ Die Ebene ═══
+ *
+ * `z-index: 4` — über dem Inhalt (der Hero liegt auf 2, der Mehlstaub auf 3),
+ * aber UNTER Kopfzeile (40), Bestellleiste (50) und dem Yellowbird-Rahmen (55).
+ * Ein Wasserzeichen, das über dem Bestellknopf liegt, ist kein Wasserzeichen,
+ * sondern ein Hindernis.
+ *
+ * `pointer-events: none` ist deshalb nicht Kosmetik: ohne die Zeile fingen die
+ * 13 rem in der Ecke jeden Klick ab, der dort landet.
+ */
+.wasserzeichen {
+  position: fixed;
+  z-index: 4;
+  right: clamp(1.25rem, 3vw, 3rem);
+  bottom: clamp(1.25rem, 3vw, 3rem);
+  width: clamp(6.5rem, 11vw, 12rem);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(0.9rem);
+  transition:
+    opacity 700ms var(--ease-teig),
+    transform 700ms var(--ease-teig);
+}
+
+/**
+ * 46 % — gemessen, nicht gewählt.
+ *
+ * Darunter verschwindet die Wortmarke auf dem Clay-Grund; darüber wird aus dem
+ * Wasserzeichen ein zweites Logo, das mit der Kopfzeile um Aufmerksamkeit
+ * streitet. Es soll da sein und nicht rufen.
+ */
+.wasserzeichen[data-da='ja'] {
+  opacity: 0.46;
+  transform: none;
+}
+
+.wasserzeichen img { width: 100%; height: auto; }
+
+/* Sobald etwas in der Bestellung liegt, klebt die Leiste am unteren Rand. Dann
+   rückt das Wasserzeichen darüber. `:has()` statt einer gemeinsamen Zustands-
+   variable: die beiden Bauteile müssen nichts voneinander wissen. */
+body:has(.leiste) .wasserzeichen {
+  bottom: clamp(5.5rem, 4rem + 4vw, 7.5rem);
+}
+
+/* Wer weniger Bewegung will, bekommt kein Einblenden — aber sehr wohl das
+   Wasserzeichen. Es ist Inhalt, nicht Bewegung. */
+@media (prefers-reduced-motion: reduce) {
+  .wasserzeichen { transition: none; transform: none; }
+}
 
 /* ── Die stille Collage ───────────────────────────────────────────────────── */
 
