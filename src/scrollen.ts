@@ -26,6 +26,35 @@ type Aufräumen = () => void
 
 let laeuft = false
 
+/**
+ * Die laufende Instanz — nur für die Sperre unten, für nichts sonst.
+ *
+ * Sie ist bewusst nicht exportiert: wer Lenis von aussen bedienen darf, baut
+ * früher oder später eine zweite Stelle, die den Scroll anfasst, und dann
+ * kämpfen zwei Regler um dasselbe Rad.
+ */
+let instanz: { stop: () => void; start: () => void } | null = null
+
+/**
+ * Den Scroll sperren, solange etwas darüber liegt.
+ *
+ * ═══ Warum das zwei Dinge tun muss ═══
+ *
+ * Hinter einem geöffneten Menü darf die Seite nicht mitscrollen. Nur
+ * `overflow: hidden` zu setzen genügt hier NICHT: Lenis bewegt die Seite mit
+ * eigener Mechanik weiter und ignoriert das. Nur Lenis anzuhalten genügt
+ * ebenfalls nicht: bei reduzierter Bewegung oder ausgefallenem Nachladen läuft
+ * Lenis gar nicht, und dann scrollt der Browser wie immer.
+ *
+ * Also beides — und `overflow` am `<html>`, nicht am `<body>`: am Body
+ * springt iOS beim Schliessen an den Seitenanfang zurück.
+ */
+export function scrollenSperren(sperren: boolean): void {
+  if (sperren) instanz?.stop()
+  else instanz?.start()
+  document.documentElement.style.overflow = sperren ? 'hidden' : ''
+}
+
 export async function scrollenStarten(): Promise<Aufräumen | null> {
   if (laeuft) return null
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return null
@@ -48,10 +77,12 @@ export async function scrollenStarten(): Promise<Aufräumen | null> {
     const takt = (zeit: number) => lenis.raf(zeit * 1000)
     gsap.ticker.add(takt)
     gsap.ticker.lagSmoothing(0)
+    instanz = lenis
 
     return () => {
       gsap.ticker.remove(takt)
       lenis.destroy()
+      instanz = null
       laeuft = false
     }
   } catch {

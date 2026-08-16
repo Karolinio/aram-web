@@ -242,8 +242,13 @@
 .auftritt__wort {
   display: inline-block;
   overflow: clip;
-  padding-bottom: 0.16em;
-  margin-bottom: -0.16em;
+  /* 0,24 em, nicht 0,16: Fraunces reicht mit dem g rund 0,21 em unter die
+     Grundlinie, und die Maske BLEIBT jetzt dauerhaft bestehen (siehe
+     Auftritt.tsx — sie nachträglich zu lösen kostete einen Sprung). Was
+     dauerhaft beschneidet, muss mit Abstand genug Luft haben. Der gleich
+     grosse negative Aussenabstand nimmt die Höhe wieder weg. */
+  padding-bottom: 0.24em;
+  margin-bottom: -0.24em;
   /* Sonst schneidet die Maske bei schrägen Alternativzeichen (WONK) auch
      seitlich an. */
   padding-inline: 0.04em;

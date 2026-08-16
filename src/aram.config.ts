@@ -75,6 +75,30 @@ export const ARAM = {
     instagram: null as string | Luecke,
     facebook: null as string | Luecke,
   },
+
+  /**
+   * Wo die Seite wohnt.
+   *
+   * ═══ Warum eine einzige Zeile so viel freischaltet ═══
+   *
+   * Ohne Domäne kann diese Seite drei Dinge NICHT:
+   *
+   *   1. Vorschaubilder in WhatsApp, Instagram und iMessage. Deren Scraper
+   *      führen kein JavaScript aus und akzeptieren keine relativen Pfade —
+   *      `og:image` braucht eine vollständige Adresse, sonst wird ein
+   *      geteilter Link ein grauer Kasten.
+   *   2. Einen kanonischen Verweis, damit nicht Vorschau- und Livefassung als
+   *      zwei Seiten gezählt werden.
+   *   3. Strukturierte Daten für Google mit einem `url`-Feld.
+   *
+   * Sobald hier eine Adresse steht, erzeugt das Vite-Plugin in vite.config.ts
+   * alles drei beim Bauen. Solange sie fehlt, meldet der Bau es laut und lässt
+   * die Angaben weg — eine halbe Angabe ist bei strukturierten Daten
+   * schlimmer als keine.
+   */
+  web: {
+    domain: null as string | Luecke,
+  },
 } as const
 
 /** Fehlt etwas, das vor dem Livegang stehen muss? */

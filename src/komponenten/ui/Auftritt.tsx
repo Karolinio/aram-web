@@ -39,6 +39,11 @@ import { werkzeugHolen } from '../../bewegung.ts'
  *                 Ende eines `inline-block` verschluckt: die Zeile könnte dort
  *                 nicht mehr umbrechen, und ein Vorleseprogramm läse
  *                 „Wasesgibt".
+ *   Sprung        Die Maske darf am Ende NICHT aufgehoben werden: `overflow`
+ *                 bestimmt bei einem `inline-block` mit, wo seine Grundlinie
+ *                 liegt. Sie nachträglich zu lösen rechnet die Zeilenhöhe neu
+ *                 und schiebt alles darunter. Der Innenabstand allein fängt
+ *                 die Unterlängen.
  *   Kein GSAP     Der Startzustand steht im CSS. Kommt die Bibliothek nicht
  *                 (Funkloch, blockierendes Netz), bliebe die Überschrift für
  *                 immer unsichtbar — deshalb wird sie in genau dem Fall von
@@ -60,12 +65,23 @@ export default function Auftritt({ children, versatz = 0.06 }: Props) {
     const woerter = [...el.querySelectorAll<HTMLElement>('.auftritt__in')]
     if (woerter.length === 0) return
 
+    /**
+     * Aufdecken heisst: Verwandlung weg, Ebene weg. Die MASKE BLEIBT.
+     *
+     * Erster Versuch hob am Ende auch `overflow: clip` auf, gegen das
+     * Beschneiden von Unterlängen. Das war doppelt gemoppelt — dafür gibt es
+     * schon den Innenabstand — und es kostete einen Sprung: bei einem
+     * `inline-block` bestimmt `overflow` mit, wo seine Grundlinie liegt. Fällt
+     * die Beschneidung weg, rechnet der Browser die Zeilenhöhe neu, und alles
+     * darunter rutscht.
+     *
+     * Gemessen hat es der Fabrikprüfer: CLS 0,080 am Handy, grösster Sprung
+     * 0,070 — und als Quelle standen genau diese Wortkästen im Befund.
+     */
     const aufdecken = () => {
       for (const w of woerter) {
         w.style.transform = 'none'
         w.style.willChange = ''
-        const kasten = w.parentElement
-        if (kasten) kasten.style.overflow = 'visible'
       }
     }
 
@@ -118,9 +134,7 @@ export default function Auftritt({ children, versatz = 0.06 }: Props) {
              auftaucht, ist ein Wackelkontakt, kein Auftritt. */
           once: true,
         },
-        /* Danach die Maske aufheben: sonst schneidet sie dauerhaft an
-           Unterlängen, und der Browser hält für jede Überschrift eine eigene
-           Ebene vor. */
+        /* Danach die Ebene wieder abräumen — siehe `aufdecken`. */
         onComplete: aufdecken,
       })
 

@@ -302,6 +302,111 @@
 
 .kopf__anruf-kurz { display: none; }
 
+/* ── Der Menüknopf und das Handymenü ─────────────────────────────────────── */
+
+/**
+ * Am Rechner gibt es beides nicht: dort steht die Navigation ausgeschrieben in
+ * der Kopfzeile, und ein Knopf, der ein Menü öffnet, das schon offen daneben
+ * liegt, ist ein Rätsel.
+ */
+.kopf__menue { display: none; }
+
+/* Drei Striche, die sich zum Kreuz drehen. Kein Bild, kein Zeichensatz — drei
+   Spannen und zwei Drehungen: bei einem Symbol, das sich VERWANDELT, sieht man
+   den Unterschied zwischen gebaut und heruntergeladen sofort. */
+.kopf__menue-striche {
+  display: grid;
+  gap: 4px;
+  width: 20px;
+}
+
+.kopf__menue-striche > span {
+  display: block;
+  height: 2px;
+  background: var(--tinte);
+  border-radius: 1px;
+  transition: transform var(--dauer-mikro) var(--ease-teig),
+    opacity var(--dauer-mikro) var(--ease-teig);
+}
+
+.kopf__menue-striche[data-offen='ja'] > span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.kopf__menue-striche[data-offen='ja'] > span:nth-child(2) { opacity: 0; }
+.kopf__menue-striche[data-offen='ja'] > span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+/**
+ * Das Menü selbst.
+ *
+ * Es hängt UNTER der Kopfzeile und füllt den Rest des Bildschirms — nicht den
+ * ganzen. Die Kopfzeile bleibt sichtbar, damit der Knopf, mit dem man es
+ * geöffnet hat, dort steht, wo man ihn wieder sucht.
+ *
+ * Gläsern wie die Kopfzeile, aber dichter: hier wird gelesen und getippt.
+ */
+.handymenue {
+  position: fixed;
+  inset: var(--kopf-hoehe) 0 0;
+  z-index: 39;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: clamp(1.5rem, 6vw, 2.5rem) var(--rinne) calc(2rem + env(safe-area-inset-bottom, 0));
+  background: color-mix(in oklch, var(--ton-hell) 94%, transparent);
+  -webkit-backdrop-filter: blur(22px) saturate(140%);
+  backdrop-filter: blur(22px) saturate(140%);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.handymenue__wege { display: grid; }
+
+/* Gross, in der Schrift der Überschriften, mit der gepunkteten Linie darüber.
+   Ein Menü in Fliesstextgrösse ist eine Liste; in Überschriftgrösse ist es
+   eine Wahl. */
+.handymenue__anker {
+  display: block;
+  padding-block: clamp(0.9rem, 3vw, 1.3rem);
+  font-family: var(--font-display);
+  font-variation-settings: var(--wonk-kopf);
+  font-size: clamp(1.9rem, 1.2rem + 4vw, 2.8rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: var(--sperr-kopf);
+  color: var(--tinte);
+  text-decoration: none;
+  background-image: var(--linie-punkt);
+  background-position: top;
+  background-size: 100% 1px;
+  background-repeat: no-repeat;
+}
+
+.handymenue__anker:first-child { background-image: none; }
+
+@media (hover: hover) {
+  .handymenue__anker:hover { color: var(--akzent); }
+}
+
+.handymenue__fuss { display: grid; gap: 0.75rem; }
+.handymenue__oeffnung { margin-bottom: 0.4rem; }
+.handymenue__knopf { justify-content: center; }
+
+@media (max-width: 1000px) {
+  .kopf__menue {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    /* 44 px, nicht weniger: darunter ist es kein Ziel für einen Daumen. */
+    width: 44px;
+    height: 44px;
+    flex: none;
+    padding: 0;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    color: inherit;
+  }
+}
+
 /* Die kurze Fassung des Status ist am Rechner überflüssig. */
 .kopf__oeffnung-kurz { display: none; }
 

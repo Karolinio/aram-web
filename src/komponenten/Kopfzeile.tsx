@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { ARAM } from '../aram.config.ts'
+import Handymenue from './Handymenue.tsx'
 import Oeffnung from './ui/Oeffnung.tsx'
 
 const ANKER = [
@@ -76,6 +77,8 @@ function useEngerKopf(): boolean {
 export default function Kopfzeile() {
   const aktiv = useAktiverAnker()
   const eng = useEngerKopf()
+  const [menue, setMenue] = useState(false)
+  const schliessen = useCallback(() => setMenue(false), [])
 
   return (
     <header className="kopf" data-eng={eng ? 'ja' : 'nein'}>
@@ -120,7 +123,25 @@ export default function Kopfzeile() {
           <span className="kopf__anruf-text">{ARAM.kontakt.telefon}</span>
           <span className="kopf__anruf-kurz">Anrufen</span>
         </a>
+
+        {/* Der Knopf steht NACH der Nummer, nicht davor. Auf einer Gastro-Seite
+            ist Anrufen die Handlung und das Menü der Umweg; die wichtigere
+            Sache gehört unter den Daumen, nicht das Verzeichnis. */}
+        <button
+          type="button"
+          className="kopf__menue"
+          aria-expanded={menue}
+          aria-controls="handymenue"
+          onClick={() => setMenue((m) => !m)}
+        >
+          <span className="kopf__menue-striche" aria-hidden="true" data-offen={menue ? 'ja' : 'nein'}>
+            <span /><span /><span />
+          </span>
+          <span className="visuell-versteckt">{menue ? 'Menü schliessen' : 'Menü öffnen'}</span>
+        </button>
       </div>
+
+      <Handymenue anker={ANKER} offen={menue} schliessen={schliessen} />
     </header>
   )
 }
