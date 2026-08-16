@@ -1,6 +1,6 @@
 # ERZEUGTE GERICHTE — kein Foto
 
-Die vier Bilder in diesem Ordner sind am 15.08.2026 mit `nano_banana_pro` erzeugt und
+Die Bilder in diesem Ordner sind am 15. und 16.08.2026 mit `nano_banana_pro` erzeugt und
 anschliessend freigestellt worden. **Es sind keine Fotos ihres Essens.**
 
 | Gericht | Dateien | Ansichten |
