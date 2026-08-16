@@ -114,12 +114,39 @@ export default function Schaustueck() {
           end: () =>
             '+=' + window.innerHeight * (window.matchMedia('(min-width: 1000px)').matches ? 1.35 : 0.95),
           pin: '.schaustueck__klebt',
+          /**
+           * `transform` statt `fixed` — und das ist kein Feinschliff.
+           *
+           * Standardmässig setzt ScrollTrigger den gepinnten Kasten auf
+           * `position: fixed` und wieder zurück. Jeder dieser Wechsel nimmt das
+           * Element aus dem Fluss und stellt es zurück hinein: alles darunter
+           * springt. Der Fabrikprüfer hat genau das gemessen — CLS 0,525 am
+           * Handy, grösster Sprung 0,456 bei 2500 px auf der Karte, also
+           * unmittelbar UNTER dem Schaustück.
+           *
+           * Mit `pinType: 'transform'` bleibt der Kasten im Fluss und wird nur
+           * verschoben. Eine Verschiebung kann kein Layout ändern.
+           *
+           * Zusätzlicher Grund: diese Seite scrollt über Lenis. Ein
+           * `position: fixed`-Pin und eine Bibliothek, die den Scroll selbst
+           * fährt, treten sich gegenseitig auf die Füsse.
+           */
+          pinType: 'transform',
           /* `1` statt `true`: eine Sekunde Nachlauf. Starr gescrubbt ist
              technisch richtig und liest sich mechanisch. */
           scrub: 1,
           /* Ohne das springt der Pin bei schnellem Scrollen um einen Frame. */
           anticipatePin: 1,
           invalidateOnRefresh: true,
+          /* `will-change` NUR solange der Abschnitt läuft. Gemessen: ohne diese
+             Zeile kostete das Skalieren des grossen Ausschnitts am Handy eine
+             lange Aufgabe von 56 ms und vier Frames über 33 ms. Dauerhaft
+             gesetzt reserviert es dagegen für immer eine eigene Ebene — auf
+             einer langen Seite ist das der Grund, warum Handys heiss werden. */
+          onToggle: ({ isActive }) => {
+            stueck.style.willChange = isActive ? 'transform' : ''
+            fenster.style.willChange = isActive ? 'clip-path' : ''
+          },
         },
       })
 
@@ -145,8 +172,10 @@ export default function Schaustueck() {
            Standbild. */
         .fromTo(
           stueck,
-          { scale: 1.16, xPercent: 3, yPercent: 3 },
-          { scale: 1, xPercent: 0, yPercent: 0, ease: 'none', duration: 1 },
+          { scale: 1.32, xPercent: 3, yPercent: 3 },
+          /* Ruhelage ist 1,14, nicht 1 — siehe den Kommentar an
+             `.schaustueck__stueck`: darunter kommt die Blechkante ins Bild. */
+          { scale: 1.14, xPercent: 0, yPercent: 0, ease: 'none', duration: 1 },
           0,
         )
         /* Der Dampf kommt später und schnell: 0,35 bis 0,6 des Weges. Von
@@ -166,6 +195,8 @@ export default function Schaustueck() {
       abraeumen = () => {
         tl.scrollTrigger?.kill()
         tl.kill()
+        stueck.style.willChange = ''
+        fenster.style.willChange = ''
         gsap.set([stueck, fenster, dampf, ...saetze], { clearProps: 'all' })
       }
     })

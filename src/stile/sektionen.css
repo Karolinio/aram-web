@@ -677,10 +677,20 @@
   /* Über die Rinne hinaus bis an die Fensterkante. Die Sektion beschneidet
      waagerecht, also kann hier nichts die Seite breiter machen. */
   margin-right: calc(-1 * var(--rinne));
-  /* Flacher als der erste Versuch (4/3,5): dort lag das Gebäck im unteren
-     Drittel und darüber stand eine leere Fläche. Ein Ausschnitt, der zur
-     Hälfte leer ist, ist kein Ausschnitt. */
-  aspect-ratio: 4 / 2.75;
+  /**
+   * Drei Anläufe, und der Grund für den letzten steht nicht in der Bühne,
+   * sondern im Pin.
+   *
+   * 4/3,5 war zu hoch: das Gebäck lag im unteren Drittel, darüber leere
+   * Fläche. 4/2,75 war zu flach: der Ausschnitt füllte sich zwar, aber der
+   * gepinnte Kasten ist 100 svh hoch, und der Inhalt kam auf 554 von 900 px.
+   * Die restlichen 346 px standen als leeres Clay darunter — sichtbar, weil
+   * beim Pin nichts nachrückt.
+   *
+   * 4/3,3 füllt beides: das Gebäck steht bis knapp unter die Oberkante, und
+   * der gepinnte Kasten hat kein totes Feld mehr.
+   */
+  aspect-ratio: 4 / 3.3;
   overflow: clip;
   border-start-start-radius: var(--radius-gross);
   border-end-start-radius: var(--radius-gross);
@@ -696,14 +706,41 @@
  * die harten Schnittkanten des Ausschnitts, dort schneidet sie die Bühne weg.
  * Sichtbar bleiben die Wölbung, der Sesam und die linke Flanke.
  */
+/**
+ * Das Gebäck füllt die Bühne — mit `cover`, nicht mit Prozentwerten.
+ *
+ * Erst hing es an `bottom` und einer Prozentbreite. Das ging bei jedem
+ * Seitenverhältnis der Bühne anders aus: bei 4/2,75 überstand es oben, bei
+ * 4/3,3 blieb die obere Hälfte leer. Zwei Werte, die sich gegenseitig
+ * bedingen, sind eine Falle — jede Änderung am einen verlangt eine am anderen.
+ *
+ * `object-fit: cover` mit fester Lage nimmt die Rechnerei raus: die Bühne ist
+ * IMMER gefüllt, egal wie hoch sie ist, und `object-position` entscheidet
+ * allein, welcher Ausschnitt zu sehen ist. Die harten Schnittkanten des
+ * Freistellers liegen damit per Konstruktion ausserhalb.
+ */
 .schaustueck__stueck {
   position: absolute;
   z-index: 2;
-  left: -6%;
-  bottom: -26%;
-  width: 128%;
-  height: auto;
-  transform-origin: 30% 70%;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 45%;
+  transform-origin: 50% 45%;
+  /**
+   * 14 % übergross, und das ist der Ausschnitt, nicht die Kamerafahrt.
+   *
+   * Bühne (4/3,3) und Bild (1000/799) haben fast dasselbe Seitenverhältnis —
+   * `cover` beschneidet dann so gut wie nichts, und unten kam die dunkle
+   * Blechkante des Freistellers wieder ins Bild. Die 14 % erzeugen den
+   * Überstand, den `cover` von allein nicht hat: rund 8 % fallen unten weg,
+   * genau dort, wo die Kante sitzt.
+   *
+   * Der Wert steht auch hier und nicht nur in der Zeitleiste, damit die Kante
+   * auch dann draussen bleibt, wenn GSAP nicht nachlädt.
+   */
+  transform: scale(1.14);
 }
 
 /* Der Grund der Bühne: eine Spur tiefer als der Sektionsgrund, damit der
@@ -717,13 +754,27 @@
   background: oklch(30% 0.055 55 / 0.045);
 }
 
+/**
+ * Der Dampf über dem Ausschnitt — klein gehalten, und das ist eine
+ * Leistungsentscheidung.
+ *
+ * Erst lief die Leinwand über die volle Breite und 88 % der Höhe. Auf 1440 px
+ * sind das 812 × 590 CSS-Punkte, bei doppelter Pixeldichte 1624 × 1180 Punkte,
+ * die JEDEN Frame geleert und neu gezeichnet werden. Gemessen kostete das
+ * Frames über 33 ms.
+ *
+ * Dampf braucht die Fläche nicht: er steigt aus der Mitte auf und ist nach
+ * einer halben Bühnenhöhe verzogen. Ein Drittel weniger Breite und ein Drittel
+ * weniger Höhe sind über die Hälfte weniger Punkte — und man sieht keinen
+ * Unterschied.
+ */
 .schaustueck__dampf {
   position: absolute;
   z-index: 3;
-  left: 0;
-  right: 0;
-  bottom: 30%;
-  height: 88%;
+  left: 16%;
+  right: 16%;
+  bottom: 40%;
+  height: 60%;
   opacity: 0;
 }
 
@@ -1204,20 +1255,67 @@
 
 .gruppe__liste { list-style: none; padding: 0; margin: 1rem 0 0; }
 
+/**
+ * Eine Zeile der Speisekarte.
+ *
+ * ═══ Was sich am 16.08. geändert hat ═══
+ *
+ * Bei Monte und Corgi nachgesehen (Mobbin). Beide setzen dieselbe Sache, und
+ * sie ist der Unterschied zwischen einer LISTE und einer gesetzten KARTE: eine
+ * Punktlinie führt vom Gericht zum Preis, auf derselben Grundlinie.
+ *
+ * Vorher lag die Punktlinie UNTER der ganzen Zeile. Sie trennte damit — und
+ * das ist genau die Aufgabe, die sie hier NICHT hat. Der Preis stand
+ * irgendwo rechts in der Zeile, ohne dass etwas ihn mit seinem Gericht verband;
+ * bei kurzen Namen klaffte dazwischen die halbe Spalte.
+ *
+ * Zwei Spalten statt drei: links das Wort mitsamt Preis, rechts der Zähler.
+ * Der Preis gehört zum Gericht, nicht zum Knopf.
+ */
 .zeile {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   column-gap: clamp(0.75rem, 2vw, 1.5rem);
-  padding-block: 0.9rem;
-  /* Gepunktet, nicht durchgezogen — dieselbe Linie wie im Fuss, bei den
-     Adressdaten und an den Sektionskanten. Sie ist auf einer Speisekarte zu
-     Hause und macht aus sieben Abschnitten ein Dokument. */
-  border-bottom: 0;
+  padding-block: 1rem;
+}
+
+/* Name — Punktlinie — Preis, auf einer Grundlinie. */
+.zeile__kopf {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+}
+
+/**
+ * Die Führungslinie.
+ *
+ * Sie sitzt an der Grundlinie, nicht in der Mitte: `align-items: baseline`
+ * richtet ihre UNTERKANTE an der Schriftgrundlinie aus, weil das Element
+ * keinen eigenen Text hat. Deshalb die Höhe von 0,5 em — sie schiebt die Linie
+ * genau auf die Höhe, auf der sie in einer gedruckten Karte liegt.
+ */
+.zeile__leiter {
+  flex: 1 1 auto;
+  min-width: 1.5rem;
+  height: 0.5em;
+  align-self: baseline;
   background-image: var(--linie-punkt);
   background-position: bottom;
   background-size: 100% 1px;
   background-repeat: no-repeat;
+}
+
+.preis {
+  flex: none;
+  margin: 0;
+  font-family: var(--font-display);
+  font-variation-settings: var(--wonk-klein);
+  font-size: var(--text-gericht);
+  font-weight: 600;
+  /* Ziffern in fester Breite: sonst tanzen neun Preise untereinander. */
+  font-variant-numeric: tabular-nums;
+  max-width: none;
 }
 
 /* Der Name des Gerichts ist gross, der Preis daneben klein und ruhig. Von der
@@ -1254,10 +1352,10 @@
   max-width: none;
 }
 
+/* Der Gedankenstrich für „noch kein Preis" steht ruhiger als eine Zahl —
+   er ist eine Leerstelle, keine Angabe. */
 .preis--folgt {
-  font-size: var(--text-micro);
   font-weight: 500;
-  letter-spacing: 0.04em;
   color: var(--russ-mtl);
 }
 
@@ -1293,6 +1391,34 @@
   font-variation-settings: var(--wonk-klein);
   font-weight: 600;
   font-variant-numeric: tabular-nums;
+}
+
+/**
+ * Überschrift links, Allergenfilter rechts.
+ *
+ * Vorher stand der Filter unter dem Kopf und die rechte Hälfte des Bildschirms
+ * blieb über eine halbe Bildschirmhöhe leer — bei einer Sektion, die ohnehin
+ * die längste der Seite ist. Ein Werkzeug gehört neben das, was es bedient.
+ */
+.karte__kopfzeile {
+  display: grid;
+  /* Der Abstand zur ersten Gruppe wandert vom Kopfblock hierher — sonst
+     stösst „Am Telefon nennen wir sie dir sofort." direkt an „Syrische
+     Fata'er". Gemessen: null Abstand, die Zeilen berührten sich. */
+  margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+@media (min-width: 1000px) {
+  .karte__kopfzeile {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
+    column-gap: var(--rinne);
+    align-items: start;
+  }
+  /* Der Kopfblock bringt seinen eigenen Abstand nach unten mit; hier trennt
+     ihn die Spalte, nicht der Raum. */
+  .karte__kopfzeile .kopfblock { margin-bottom: 0; }
+  .karte__kopfzeile .filter { margin-top: 0; justify-self: end; text-align: right; }
+  .karte__kopfzeile .filter__knoepfe { justify-content: flex-end; }
 }
 
 /* ── Der Laden ────────────────────────────────────────────────────────────── */
@@ -1698,15 +1824,19 @@
      fünf Männer sieht, soll lesen können, wer sie sind. */
   .backstube__nachweis { margin-top: 1.5rem; }
 
-  /* Der Preis rutscht unter den Namen, der Zähler bleibt rechts daneben. Eine
-     dreispaltige Zeile mit 44px-Knopf passt auf 393px nicht ohne Quetschen. */
-  .zeile {
-    grid-template-columns: minmax(0, 1fr) auto;
-    row-gap: 0.4rem;
-  }
-  .zeile__wort { grid-column: 1; }
-  .preis { grid-column: 1; grid-row: 2; }
-  .zaehler { grid-column: 2; grid-row: 1 / 3; }
+  /**
+   * Am Handy KEINE eigene Zeile mehr für den Preis.
+   *
+   * Vorher rutschte er unter den Namen, weil eine dreispaltige Zeile mit
+   * 44-px-Knopf auf 393 px nicht ohne Quetschen passte. Mit der Führungslinie
+   * gibt es die dritte Spalte nicht mehr — Name, Punkte und Preis teilen sich
+   * eine Grundlinie, und die Linie schrumpft einfach mit.
+   *
+   * Gespart: eine Zeile je Gericht, neunmal. Und die Karte liest sich am Handy
+   * wie eine Karte statt wie ein Formular.
+   */
+  .zeile__leiter { min-width: 1rem; }
+  .zeile__kopf { gap: 0.5rem; }
 
   .leiste__liste { font-size: var(--text-micro); }
   .leiste__leeren { display: none; }

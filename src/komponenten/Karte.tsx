@@ -76,6 +76,11 @@ export default function Karte() {
           trägt, ohne dass man beim Lesen darüber stolpert. */}
       <Collage />
       <div className="schale">
+        {/* Überschrift links, Allergenfilter rechts. Vorher stand der Filter
+            UNTER dem Kopf, und die rechte Hälfte des Bildschirms blieb über
+            eine halbe Bildschirmhöhe leer. Ein Werkzeug gehört neben das, was
+            es bedient. */}
+        <div className="karte__kopfzeile">
         <Kopf
           id="karte-titel"
           etikett="Speisekarte"
@@ -126,6 +131,7 @@ export default function Karte() {
               : `${sichtbar} von ${gesamt} Gerichten · ausgeblendet: ${versteckt.join(', ')}`}
           </p>
         </div>
+        </div>
 
         {sichtbar === 0 ? (
           <p className="karte__leer">
@@ -145,23 +151,38 @@ export default function Karte() {
                   return (
                     <li className="zeile" id={id} key={id}>
                       <div className="zeile__wort">
-                        <p className="zeile__name">{g.name}</p>
+                        {/* Name, Punktlinie, Preis — auf EINER Grundlinie.
+                            Bei Monte und Corgi nachgesehen: in einer gesetzten
+                            Speisekarte führt eine Punktlinie das Auge vom
+                            Gericht zum Preis. Vorher stand der Preis irgendwo
+                            rechts in der Zeile und die Punktlinie UNTER allem —
+                            sie trennte, statt zu verbinden. */}
+                        <div className="zeile__kopf">
+                          <p className="zeile__name">{g.name}</p>
+                          <span className="zeile__leiter" aria-hidden="true" />
+                          <p className={g.preis === null ? 'preis preis--folgt' : 'preis'}>
+                            {g.preis === null ? (
+                              <>
+                                {/* Neunmal „Preis folgt" untereinander liest
+                                    sich als unfertige Seite. Der Gedankenstrich
+                                    ist die Konvention für „kein Wert", und den
+                                    Grund sagt der Vorspann über der Karte in
+                                    einem Satz — einmal statt neunmal. Für
+                                    Vorleseprogramme steht er trotzdem hier. */}
+                                <span className="visuell-versteckt">Preis folgt</span>
+                                <span aria-hidden="true">—</span>
+                              </>
+                            ) : (
+                              g.preis.toFixed(2).replace('.', ',') + ' €'
+                            )}
+                          </p>
+                        </div>
                         <p className="zeile__beschreibung">{g.beschreibung}</p>
                         <p className="zeile__allergene">
                           <span className="visuell-versteckt">Enthält: </span>
                           {g.allergene.join(' · ')}
                         </p>
                       </div>
-
-                      {/* Ein blosser Gedankenstrich ist in einer Tabelle die
-                          Konvention für „kein Wert" — am Handy steht er aber in
-                          einer eigenen Zeile und liest sich dort als Fehler.
-                          Zwei Wörter lesen sich als Absicht. */}
-                      <p className={g.preis === null ? 'preis preis--folgt' : 'preis'}>
-                        {g.preis === null
-                          ? 'Preis folgt'
-                          : g.preis.toFixed(2).replace('.', ',') + ' €'}
-                      </p>
 
                       <div className="zaehler">
                         {anzahl > 0 && (
