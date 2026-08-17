@@ -96,6 +96,12 @@ export default defineConfig({
       input: {
         seite: 'index.html',
         stil: 'stil.html',
+        /* Pflichtseiten. Eigene Einstiege und keine Ansichten innerhalb der
+           Startseite: beide brauchen eine eigene Adresse, weil sie einzeln
+           verlinkbar und auffindbar sein müssen. Ein Aufklapper im Fuss hat
+           keine — und genau darauf zielt eine Abmahnung. */
+        impressum: 'impressum.html',
+        datenschutz: 'datenschutz.html',
       },
     },
   },

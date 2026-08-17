@@ -69,6 +69,15 @@ export const ARAM = {
     inhaber: null as string | Luecke,
     anschrift: null as string | Luecke,
     steuernummer: null as string | Luecke,
+    /* Wer die Seite ausliefert, ist datenschutzrechtlich Auftragsverarbeiter
+       und muss in der Erklärung stehen — mit Namen und Sitz. Solange es keinen
+       Server gibt, gibt es auch keinen Hoster; die Erklärung sagt das offen,
+       statt einen zu erfinden. */
+    hoster: null as string | Luecke,
+    /* Für Verbraucherstreitbeilegung: § 36 VSBG verlangt eine Aussage, ob man
+       teilnimmt. Die übliche Antwort kleiner Betriebe ist „nein" — aber das
+       muss der Betrieb sagen, nicht ich. */
+    streitbeilegung: null as 'ja' | 'nein' | Luecke,
   },
 
   sozial: {
@@ -109,5 +118,12 @@ export const lueckenVorLive = (): string[] => {
   if (!ARAM.recht.firma) l.push('Impressum: Firma')
   if (!ARAM.recht.anschrift) l.push('Impressum: ladungsfähige Anschrift')
   if (!ARAM.kontakt.mail) l.push('E-Mail für Anfragen')
+  /* Seit dem 17.08. gibt es Impressum und Datenschutz als eigene Seiten. Damit
+     werden zwei weitere Werte zur Livegang-Bedingung: ohne Hoster fehlt in der
+     Datenschutzerklärung der Auftragsverarbeiter, ohne die VSBG-Aussage eine
+     Pflichtangabe im Impressum. Beide Seiten ZEIGEN die Lücke — aber gezeigt
+     heisst nicht erlaubt. */
+  if (!ARAM.recht.hoster) l.push('Datenschutz: Name und Sitz des Hosters')
+  if (!ARAM.recht.streitbeilegung) l.push('Impressum: Aussage zur Streitbeilegung')
   return l
 }

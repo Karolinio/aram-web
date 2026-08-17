@@ -1,0 +1,105 @@
+/**
+ * Impressum und Datenschutz.
+ *
+ * ═══ Was diese Seiten von der Startseite übernehmen ═══
+ *
+ * Die Schrift, die zwei Gründe, die gepunktete Linie, das Etikett. Sonst
+ * nichts: keine Kamerafahrt, kein Auftritt, kein Dampf, kein Glas.
+ *
+ * Wer hier landet, sucht eine Angabe und will sie sofort lesen. Eine
+ * Pflichtseite, die sich erst aufbauen muss, ist die Art von Missverständnis,
+ * an der man erkennt, dass jemand Gestaltung mit Schmuck verwechselt.
+ *
+ * Sie sollen trotzdem zu diesem Laden gehören — deshalb dieselbe Schrift und
+ * dieselben Farben, nicht die Standardansicht des Browsers.
+ */
+
+.rechtskopf {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--ton-hell);
+  background-image: var(--linie-punkt);
+  background-position: bottom;
+  background-size: 100% 1px;
+  background-repeat: no-repeat;
+}
+
+.rechtskopf__zeile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: var(--kopf-hoehe);
+}
+
+.rechtskopf__zurueck {
+  font-family: var(--font-display);
+  font-variation-settings: var(--wonk-klein);
+  font-size: var(--text-meta);
+  font-weight: 620;
+  color: var(--tinte);
+  text-decoration: none;
+}
+.rechtskopf__zurueck:hover { color: var(--akzent); }
+
+.rechtskopf__anruf { padding: 0.45em 1em; font-size: var(--text-meta); }
+
+.rechtsseite {
+  background: var(--ton-hell);
+  padding-block: clamp(2.5rem, 6vw, 5rem) clamp(4rem, 9vw, 8rem);
+  /* Nicht die volle Sektionshöhe der Startseite: dort trennt der Raum
+     Ereignisse, hier trennt er Absätze. */
+}
+
+/* Eine Spalte, in Lesebreite. Zwei Spalten wären auf einer Pflichtseite eine
+   Zumutung: man springt zwischen ihnen und verliert die Stelle. */
+.rechtsseite__satz { max-width: 42rem; }
+
+.rechtsseite h1 {
+  margin: 0.9rem 0 1.5rem;
+  /* Kleiner als die Schlagzeilen der Startseite. Ein Impressum, dessen
+     Überschrift so laut ist wie „Was es gibt", hat die falsche Rangfolge. */
+  font-size: clamp(2rem, 1.4rem + 2.4vw, 3rem);
+}
+
+.rechtsseite h2 {
+  margin: clamp(2rem, 4vw, 3rem) 0 0.6rem;
+  font-size: clamp(1.2rem, 1.05rem + 0.7vw, 1.5rem);
+  /* Die gepunktete Linie darüber — dasselbe Bindemittel wie überall. */
+  padding-top: 0.9rem;
+  background-image: var(--linie-punkt);
+  background-position: top;
+  background-size: 100% 1px;
+  background-repeat: no-repeat;
+}
+
+.rechtsseite p { margin-block: 0 0.9rem; max-width: none; }
+.rechtsseite .lead { margin-bottom: 1.5rem; max-width: none; }
+
+.rechtsseite ul {
+  margin: 0 0 0.9rem;
+  padding-left: 1.2rem;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.rechtsseite a { color: var(--akzent); }
+
+.rechtsseite code {
+  font-family: ui-monospace, monospace;
+  font-size: 0.92em;
+  background: var(--ton-tief);
+  padding: 0.1em 0.35em;
+  border-radius: var(--radius-klein);
+}
+
+.rechtsseite__fuss {
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+  padding-top: 1rem;
+  font-size: var(--text-meta);
+  background-image: var(--linie-punkt);
+  background-position: top;
+  background-size: 100% 1px;
+  background-repeat: no-repeat;
+}

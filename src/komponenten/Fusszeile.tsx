@@ -60,11 +60,16 @@ export default function Fusszeile() {
         <nav className="fuss__navi" aria-label="Rechtliches">
           <Etikett klasse="fuss__titel">Rechtliches</Etikett>
           <ul>
+            {/* Verlinkt, nicht als Lücke. Die Seiten EXISTIEREN jetzt — und
+                sie zeigen selbst, welche Angabe darauf noch fehlt. Das ist der
+                richtige Ort dafür: eine Pflichtseite, die eine Lücke benennt,
+                ist ehrlich; ein Fuss, der die Pflichtseite verschweigt, ist es
+                nicht. Den Livegang blockiert weiterhin `lueckenVorLive()`. */}
             <li>
-              <span className="luecke">Impressum fehlt noch</span>
+              <a href="/impressum.html">Impressum</a>
             </li>
             <li>
-              <span className="luecke">Datenschutz fehlt noch</span>
+              <a href="/datenschutz.html">Datenschutz</a>
             </li>
           </ul>
         </nav>
