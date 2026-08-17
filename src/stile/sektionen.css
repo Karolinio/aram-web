@@ -141,8 +141,25 @@
  * man will.
  */
 .kopf {
-  position: sticky;
+  /**
+   * FEST, nicht klebend — und das ist eine Fehlerbehebung, keine Vorliebe.
+   *
+   * Eine klebende Kopfzeile behält ihren Platz im Fluss. Sobald sie beim
+   * Scrollen zusammenfährt (3,75 rem auf 3,1 rem, Logo 38 px auf 30 px),
+   * schrumpft dieser Platz — und ALLES darunter rutscht um zehn Pixel nach
+   * oben. Bei jedem Durchgang, an derselben Stelle.
+   *
+   * Gemessen hat es der Fabrikprüfer, und er hat mit dem Finger genau darauf
+   * gezeigt: als Quelle des Sprungs stand `header>div>button` im Befund.
+   *
+   * `fixed` nimmt die Kopfzeile aus dem Fluss. Dann kostet ihre Höhenänderung
+   * kein Layout mehr, und der Platz darunter kommt einmalig vom Innenabstand
+   * am `<body>` — ein Wert, der sich nie ändert.
+   */
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 40;
   /**
    * ═══ GLÄSERN — und das hebt eine Regel der Direktion auf ═══
@@ -356,6 +373,27 @@
   backdrop-filter: blur(22px) saturate(140%);
   overflow-y: auto;
   overscroll-behavior: contain;
+}
+
+/**
+ * ═══ Die Zeile, ohne die alles kaputt war ═══
+ *
+ * Das `hidden`-Attribut wirkt über die Browser-Grundregel `[hidden] { display:
+ * none }`. Eine eigene `display`-Angabe im Stilblatt SCHLÄGT sie — und oben
+ * steht `display: flex`. Ergebnis: das geschlossene Menü war nicht geschlossen.
+ * Es lag bildschirmfüllend über der Seite, auch am Rechner, wo es den Hero
+ * vollständig verdeckte.
+ *
+ * Wer `display` an einem Element setzt, das `hidden` tragen kann, muss diesen
+ * Fall mitschreiben. Immer.
+ */
+.handymenue[hidden] { display: none; }
+
+/* Über 1000 px gibt es das Menü überhaupt nicht: dort steht die Navigation
+   ausgeschrieben in der Kopfzeile. Der Knopf ist dort schon ausgeblendet — das
+   hier ist der Riegel dahinter, falls jemand ihn je sichtbar macht. */
+@media (min-width: 1001px) {
+  .handymenue { display: none; }
 }
 
 .handymenue__wege { display: grid; }

@@ -47,6 +47,11 @@ html {
 }
 
 body {
+  /* Der Platz für die feste Kopfzeile. Ein einziger, unveränderlicher Wert —
+     siehe die Begründung an `.kopf` in sektionen.css: die Kopfzeile ändert
+     ihre Höhe beim Scrollen, und solange sie im Fluss lag, rutschte dabei die
+     ganze Seite. */
+  padding-top: var(--kopf-hoehe);
   background: var(--creme);
   color: var(--russ);
   font-family: var(--font-text);

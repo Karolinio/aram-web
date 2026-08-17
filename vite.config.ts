@@ -24,13 +24,50 @@ import { luecketStrukturdaten, strukturdaten } from './src/strukturdaten.ts'
  * das laut. Eine halbe Angabe ist bei strukturierten Daten schlimmer als
  * keine: sie erscheint im Suchergebnis, wo niemand sie mehr richtigstellt.
  */
+/**
+ * Die beiden lateinischen Schriftschnitte vorladen.
+ *
+ * ═══ Der Sprung, den das behebt ═══
+ *
+ * Gemessen unter gedrosseltem Mobilfunk: in etwa jedem dritten Durchgang
+ * meldete der Prüfer CLS um 0,067 — als Quelle standen Fliesstext-Absätze im
+ * Befund, an wechselnden Stellen. Das ist die Unterschrift eines späten
+ * Schriftwechsels: die Schrift trifft ein, während jemand schon mitten in der
+ * Seite ist, und ein Absatz bricht neu um.
+ *
+ * Die vermessene Ersatzschrift („Reem Ersatz", size-adjust 105,4 %) dämpft das
+ * schon — sie trifft die Laufweite im MITTEL. Ein einzelner Absatz kann
+ * trotzdem eine Zeile springen.
+ *
+ * Vorladen verschiebt den Zeitpunkt: ohne diese Zeilen entdeckt der Browser
+ * die Schriften erst, nachdem er das Stilblatt geparst hat. Mit ihnen lädt er
+ * sie parallel dazu.
+ *
+ * NUR die lateinischen Schnitte. Reem Kufi bringt auch einen arabischen mit,
+ * Fraunces einen vietnamesischen — die kommen auf einer deutschen Seite nie
+ * vor, und eine Vorladung, die nicht gebraucht wird, belegt genau die
+ * Verbindung, die der Hero braucht.
+ */
+function schriftenVorladen(bundle: unknown): string[] {
+  if (!bundle || typeof bundle !== 'object') return []
+  return Object.keys(bundle as Record<string, unknown>)
+    .filter((d) => /-latin-(full|wght)-normal-[^.]+\.woff2$/.test(d))
+    .map(
+      (d) =>
+        `<link rel="preload" as="font" type="font/woff2" href="/${d}" crossorigin />`,
+    )
+}
+
 function strukturdatenPlugin(): Plugin {
   return {
     name: 'aram-strukturdaten',
     /* `pre`, damit die Marken im HTML stehen, bevor Vite seine eigenen
        Skript- und Stilverweise einsetzt. */
     transformIndexHtml: {
-      order: 'pre',
+      /* `post`, damit `ctx.bundle` gefüllt ist: nur dort stehen die
+         gehashten Dateinamen der Schriften, und ohne sie kann man sie nicht
+         vorladen. */
+      order: 'post',
       handler(html, ctx) {
         /* Nur die Seite, nicht der Stilbogen: der trägt `noindex` und gehört
            zur Werkstatt. */
@@ -55,6 +92,7 @@ function strukturdatenPlugin(): Plugin {
               ]
             : []),
           `<script type="application/ld+json">${JSON.stringify(strukturdaten())}</script>`,
+          ...schriftenVorladen(ctx.bundle),
         ].join('\n    ')
 
         const offen = luecketStrukturdaten()

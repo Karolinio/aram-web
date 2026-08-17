@@ -39,6 +39,15 @@ import { werkzeugHolen } from '../../bewegung.ts'
  *                 Ende eines `inline-block` verschluckt: die Zeile könnte dort
  *                 nicht mehr umbrechen, und ein Vorleseprogramm läse
  *                 „Wasesgibt".
+ *   Kein will-change  Zweimal hat es hier Schaden angerichtet. Im Stilblatt
+ *                 gesetzt hielten dreissig Wörter ab dem Laden eine eigene
+ *                 Compositor-Ebene, ohne je im Bild zu sein — Prüferbefund.
+ *                 Beim Eintreten gesetzt promoviert es den Wortkasten, und
+ *                 die veränderte Rundung seiner Breite lässt eine mit
+ *                 `text-wrap: balance` gesetzte Überschrift neu umbrechen:
+ *                 gemessen CLS 0,068 an „Ruf an oder schreib uns". Für eine
+ *                 Sekunde Bewegung auf fünf Wörtern ist die Ebene den Preis
+ *                 nicht wert.
  *   Sprung        Die Maske darf am Ende NICHT aufgehoben werden: `overflow`
  *                 bestimmt bei einem `inline-block` mit, wo seine Grundlinie
  *                 liegt. Sie nachträglich zu lösen rechnet die Zeilenhöhe neu
@@ -79,10 +88,7 @@ export default function Auftritt({ children, versatz = 0.06 }: Props) {
      * 0,070 — und als Quelle standen genau diese Wortkästen im Befund.
      */
     const aufdecken = () => {
-      for (const w of woerter) {
-        w.style.transform = 'none'
-        w.style.willChange = ''
-      }
+      for (const w of woerter) w.style.transform = 'none'
     }
 
     /* Bei reduzierter Bewegung steht die Zeile einfach da. Der Auftritt ist
@@ -118,18 +124,6 @@ export default function Auftritt({ children, versatz = 0.06 }: Props) {
           /* Erst wenn die Zeile wirklich im Blick ist. Bei 100 % liefe der
              Auftritt ab, während sie noch unter der Falz steht. */
           start: 'top 88%',
-          /**
-           * Die Ebene wird HIER reserviert, nicht im Stilblatt.
-           *
-           * Der Fabrikprüfer hat den Unterschied gemessen: mit `will-change`
-           * im CSS hielten 30 Wörter ab dem Laden eine eigene
-           * Compositor-Ebene, ohne je im Bild gewesen zu sein. Jetzt bekommt
-           * sie ein Wort in dem Moment, in dem es tatsächlich losläuft — und
-           * `aufdecken` nimmt sie danach wieder weg.
-           */
-          onEnter: () => {
-            for (const w of woerter) w.style.willChange = 'transform'
-          },
           /* EINMAL. Eine Überschrift, die bei jedem Vorbeiscrollen neu
              auftaucht, ist ein Wackelkontakt, kein Auftritt. */
           once: true,
