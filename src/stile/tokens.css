@@ -320,3 +320,72 @@
      Zahlen, die auseinanderlaufen, sind ein abgeschnittenes Gericht. */
   --kopf-hoehe: 3.75rem;
 }
+
+/**
+ * ══════════════════════════════════════════════════════════════════════════
+ * DREI FARBFASSUNGEN ZUR WAHL — umschaltbar über `data-farbe` am <html>
+ * ══════════════════════════════════════════════════════════════════════════
+ *
+ * Karol am 17.08.: „nimm dir den Style Guide, Farben nur … Orange und Schwarz
+ * vor allem, du kennst die ältere Seite. Iteriere, welche Farbkombi am meisten
+ * bringt. Ich sage: dieser helle Clay-Ton plus Orange."
+ *
+ * ═══ Was ihre echten Markenfarben sind, und was sie können ═══
+ *
+ * Aus dem Scan ihrer alten Seite, nicht geschätzt:
+ *
+ *   Orange   #fe6201   rgb(254, 98, 1)
+ *   Schwarz  #1d140e   rgb(29, 20, 14) — warmes Fast-Schwarz
+ *   Schrift  #ffffff
+ *
+ * Und hier ist die Messung, die alles entscheidet:
+ *
+ *   ihr Orange als SCHRIFT auf Clay        2,27   durchgefallen
+ *   ihr Orange als SCHRIFT auf Creme       2,72   durchgefallen
+ *   Tinte auf ihrem Orange als FLÄCHE      4,57   knapp bestanden
+ *   Weiss auf ihrem Orange als FLÄCHE      3,02   durchgefallen
+ *   ihr Orange auf IHREM Schwarz           6,01   sitzt
+ *   Creme auf ihrem Schwarz               16,34   sitzt
+ *
+ * Daraus folgt eine Regel, die keine Geschmacksfrage ist: **ihr Orange wird
+ * erst auf dunklem Grund zur Markenfarbe.** Auf hellem Grund ist es entweder
+ * unsichtbar (als Schrift) oder eine kleine gesättigte Kachel — und genau die
+ * hat Karol auf dieser Seite dreimal zu Recht rausgeworfen.
+ *
+ * Die alte Seite wusste das: Orange auf Fast-Schwarz. Ihr Fehler war nicht die
+ * Kombination, sondern dass sie ÜBERALL stand — und dann liest sie als Imbiss.
+ */
+
+/* ── B · „clay" — Karols Vorschlag ───────────────────────────────────────
+   Beide Gründe eine Stufe wärmer: Clay wird der Hauptgrund, ein helleres Clay
+   der zweite. Creme verschwindet. Die Glutsektion bleibt, wie sie ist. */
+:root[data-farbe='clay'] {
+  --ton-hell: oklch(93% 0.030 72);
+  --ton-tief: oklch(87% 0.045 66);
+  --linie: oklch(80% 0.038 68);
+  /* Eine Stufe dunkler, und der Grund ist gemessen: auf dem wärmeren tiefen
+     Grund kam die gedämpfte Schrift auf 4,44 und damit UNTER die Grenze von
+     4,5 für normalen Text. Bei L 44 % sind es 4,84. Ein wärmerer Grund kostet
+     Kontrast — wer ihn nimmt, muss die Tinte nachziehen. */
+  --tinte-leise: oklch(44% 0.050 52);
+}
+
+/* ── C · „ofen" — meine Empfehlung ───────────────────────────────────────
+   Gründe wie bei B, aber die eine Ausnahmesektion steht in IHREM Schwarz mit
+   IHREM Orange statt in meinem erfundenen gebrannten Ton.
+
+   Der Unterschied ist nicht Nuance: das gebrannte Orange (L 42 %) ist ein Ton,
+   den ich gewählt habe. Diese Fassung nimmt die zwei Werte, die auf ihrem
+   Ladenschild und ihrer alten Seite stehen — in dem einzigen Verhältnis, in
+   dem sie messbar funktionieren. */
+:root[data-farbe='ofen'] {
+  --ton-hell: oklch(93% 0.030 72);
+  --ton-tief: oklch(87% 0.045 66);
+  --linie: oklch(80% 0.038 68);
+  --tinte-leise: oklch(44% 0.050 52);
+
+  --glut-grund: #1d140e;
+  --glut-schrift: oklch(96.5% 0.020 76);
+  --glut-marke: #fe6201;
+  --glut-linie: oklch(96.5% 0.02 76 / 0.30);
+}
