@@ -179,24 +179,52 @@
    *   18 px      Unschärfe. Genug, dass Gesichter darunter zu Flächen werden.
    *   140 %      Sättigung — Glas, das entsättigt, sieht nach Milchglas aus.
    */
-  background: color-mix(in oklch, var(--ton-hell) 72%, transparent);
-  -webkit-backdrop-filter: blur(18px) saturate(140%);
-  backdrop-filter: blur(18px) saturate(140%);
-  /* Die gepunktete Linie statt der durchgezogenen. Sie ist das Bindemittel der
-     ganzen Seite; ausgerechnet der Kopf sprach sie bisher nicht. */
-  background-image: var(--linie-punkt);
-  background-position: bottom;
-  background-size: 100% 1px;
-  background-repeat: no-repeat;
+  /**
+   * ═══ Zwei Gläser, weil es zwei Gründe gibt ═══
+   *
+   * Karol: „den Glasheader nochmal schärfer machen und anpassen."
+   *
+   * Schärfer heisst hier weniger Unschärfe, nicht mehr: 18 px verwischten das
+   * Foto darunter zu Brei, und ein Glas, hinter dem man nichts mehr erkennt,
+   * ist eine Milchscheibe. 12 px lassen die Ladenfront durchziehen und bleiben
+   * ruhig genug für die Navigation.
+   *
+   * Und es passt sich an, statt einen Kompromiss zu suchen: über dem dunklen
+   * Hero ist es DUNKLES Glas mit heller Schrift, ab der ersten hellen Sektion
+   * helles Glas mit Tinte. Ein einziges Glas für beide Gründe müsste in der
+   * Mitte liegen — und dort ist es auf keinem von beiden gut.
+   */
+  /* 0,62 statt 0,42: gemessen kam Creme auf dem helleren Glas auf 2,91 gegen
+     rgb(153,143,131) — ein grauer Brei, in dem weder Foto noch Navigation
+     etwas gewinnen. Dichteres Glas ist hier nicht weniger gläsern, sondern
+     lesbar. */
+  background: oklch(14% 0.02 55 / 0.62);
+  color: oklch(97% 0.015 78);
+  -webkit-backdrop-filter: blur(12px) saturate(135%);
+  backdrop-filter: blur(12px) saturate(135%);
+  /**
+   * KEINE Linie an der Unterkante.
+   *
+   * Hier stand die gepunktete Linie, weil sie das Bindemittel der Seite ist.
+   * Über einer randlosen Fotografie ist sie aber kein Bindemittel, sondern ein
+   * Schnitt — Karol: „da oben beim Header ist noch eine Striche-Linie, die
+   * definiert, wo die Linie verläuft. Die muss raus, das sieht unprofessionell
+   * aus."
+   *
+   * Was den Kopf vom Inhalt trennt, ist jetzt das Glas selbst. Eine Scheibe
+   * braucht keinen Strich, um als Scheibe zu gelten.
+   */
   transition:
     background-color var(--dauer-mikro) var(--ease-teig),
     box-shadow var(--dauer-mikro) var(--ease-teig);
 }
 
-/* Zusammengefahren wird das Glas dichter: unter dem Hero zieht Inhalt vorbei,
-   und ein zu klares Glas lässt Überschriften durch die Navigation laufen. */
+/* Ab der ersten hellen Sektion dreht das Glas um: heller Grund, Tinte darauf,
+   und eine Spur dichter — unter dem Hero zieht Inhalt vorbei, und ein zu
+   klares Glas lässt Überschriften durch die Navigation laufen. */
 .kopf[data-eng='ja'] {
-  background-color: color-mix(in oklch, var(--ton-tief) 84%, transparent);
+  background-color: color-mix(in oklch, var(--ton-tief) 86%, transparent);
+  color: var(--tinte);
   box-shadow: var(--clay-ruhe);
 }
 
@@ -241,8 +269,9 @@
   font-variation-settings: var(--wonk-klein);
   font-size: var(--text-meta);
   font-weight: 620;
-  
-  color: var(--russ);
+  /* Erbt die Farbe des Kopfes — dunkles Glas trägt Creme, helles trägt Tinte.
+     Ein fester Wert hier hiesse, einen der beiden Zustände aufzugeben. */
+  color: inherit;
   text-decoration: none;
   padding-block: 0.4rem;
   border-bottom: 2px solid transparent;
@@ -278,10 +307,19 @@
  * die Seite ohnehin spricht — und trotzdem als Bedienelement zu erkennen,
  * weil sie die einzige Fläche im Kopf ist.
  */
+/* Über dem dunklen Hero: Glasknopf mit heller Kante. Eine Clay-Fläche wäre
+   dort ein heller Klotz auf einem Foto. */
 :root:not([data-probe='rot']) .kopf__anruf {
-  background: var(--ton-tief);
+  background: oklch(97% 0.015 78 / 0.12);
+  color: oklch(97% 0.015 78);
+  border: 1px solid oklch(97% 0.015 78 / 0.45);
+}
+
+/* Ab der hellen Sektion wieder Clay mit Tinte — wie bisher. */
+:root:not([data-probe='rot']) .kopf[data-eng='ja'] .kopf__anruf {
+  background: var(--ton-hell);
   color: var(--tinte);
-  border: 1px solid var(--linie);
+  border-color: var(--linie);
 }
 
 :root:not([data-probe='rot']) .kopf__anruf:hover {
@@ -290,11 +328,7 @@
   color: var(--akzent);
 }
 
-/* Auf dem zusammengefahrenen Kopf steht Clay auf Clay. Dort dreht sich das
-   Verhältnis um: helle Fläche auf tiefem Grund. */
-:root:not([data-probe='rot']) .kopf[data-eng='ja'] .kopf__anruf {
-  background: var(--ton-hell);
-}
+
 
 /**
  * FASSUNG ROT — ihr Logorot, aus der Datei gemessen.
@@ -340,7 +374,7 @@
 .kopf__menue-striche > span {
   display: block;
   height: 2px;
-  background: var(--tinte);
+  background: currentColor;
   border-radius: 1px;
   transition: transform var(--dauer-mikro) var(--ease-teig),
     opacity var(--dauer-mikro) var(--ease-teig);
@@ -548,16 +582,49 @@
  * aufklart, trägt keine Schrift — nur das schwebende Gebäck, und das hat
  * seinen eigenen Schatten.
  */
+/**
+ * ═══ Der Cremeschleier ist tot. Es lebe der Schattenverlauf. ═══
+ *
+ * Karol: „nicht mit diesem weissen Blur, sondern komplettes Bild mit 100 %,
+ * grossflächig als Hintergrund."
+ *
+ * Er hat recht, und der Fehler war grundsätzlich: eine helle Fläche über einer
+ * Fotografie nimmt ihr den Kontrast, um Text darauf lesbar zu machen. Das
+ * Ergebnis ist ein GEBLEICHTES Foto — man sieht, dass es da ist, aber nicht,
+ * was darauf ist. Für ein Foto, das der einzige Beweis der Seite ist, ist das
+ * der teuerste Kompromiss überhaupt.
+ *
+ * Der richtige Weg ist derselbe, den jeder Film benutzt: nicht das Bild
+ * aufhellen, sondern den TEXTBEREICH abdunkeln. Zwei Verläufe, beide aus ihrem
+ * eigenen Schwarz:
+ *
+ *   waagerecht   von links dicht nach rechts durchsichtig — dort steht die
+ *                Schrift, rechts bleibt das Foto unberührt
+ *   senkrecht    ein Fuss von unten, damit das Gebäck und der Bildnachweis
+ *                nicht auf einer hellen Pflasterstelle landen
+ *
+ * Rechts oben ist das Foto damit bei VOLLER Stärke. Kein Wert liegt dort über
+ * dem Bild — das ist der Unterschied zwischen „Foto als Hintergrund" und
+ * „Foto als Textur".
+ */
 .backstube__schleier {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    100deg,
-    var(--schleier-dicht) 0%,
-    var(--schleier-dicht) 46%,
-    var(--schleier) 62%,
-    oklch(95% 0.03 78 / 0.42) 100%
-  );
+  background:
+    linear-gradient(
+      100deg,
+      oklch(12% 0.02 55 / 0.93) 0%,
+      oklch(12% 0.02 55 / 0.84) 34%,
+      oklch(12% 0.02 55 / 0.34) 62%,
+      oklch(12% 0.02 55 / 0.06) 88%,
+      transparent 100%
+    ),
+    linear-gradient(
+      to top,
+      oklch(12% 0.02 55 / 0.55) 0%,
+      oklch(12% 0.02 55 / 0.12) 26%,
+      transparent 52%
+    );
 }
 
 .backstube__gitter {
@@ -594,13 +661,13 @@
   font-size: var(--text-micro);
   font-weight: 500;
   /**
-   * Eine Stufe dunkler als `--tinte-leise`, und der Wert ist gemessen:
-   * mit dem Standardton kam die Zeile auf 4,53 gegen den komponierten Grund
-   * (Schleier über dunkler Kleidung im Foto). 4,5 ist die Grenze für normalen
-   * Text — daran vorbeizuschrammen ist kein Bestehen, sondern Glück.
-   * Bei L 43 % sind es 5,5. Leise bleibt sie trotzdem.
+   * Auf dem dunklen Fuss des Verlaufs: Creme mit gedämpfter Deckkraft.
+   *
+   * Frühere Fassung (dunkles Braun auf Creme) steht darunter — sie galt,
+   * solange der Hero hell war. Der Wert ist geblieben, die Begründung auch:
+   * eine Bildunterschrift ist leise, aber sie muss lesbar bleiben.
    */
-  color: oklch(43% 0.05 52);
+  color: oklch(97% 0.015 78 / 0.78);
 }
 
 
@@ -662,13 +729,26 @@
   .schild { will-change: auto; }
 }
 
+/**
+ * ═══ Der Hero schreibt jetzt HELL ═══
+ *
+ * Mit dem Schattenverlauf dreht sich der Grund um: was vorher auf Creme stand,
+ * steht jetzt auf einem dunklen Foto. Alle Werte hier sind gegen das
+ * ZUSAMMENGESETZTE Pixel gemessen, nicht gegen einen Token — unter einem
+ * Verlauf über einer Fotografie hilft keine Rechnung, nur der Screenshot.
+ *
+ * Und die Marke ist ihr echtes Orange (#fe6201). Auf hellem Grund konnte es
+ * nie Schrift sein (2,27 gemessen); hier ist es endlich in seiner Rolle.
+ */
+.backstube__satz { color: oklch(97% 0.015 78); }
+
 .backstube__unter {
   margin-top: 0.9rem;
   font-family: var(--font-display);
   font-variation-settings: var(--wonk-klein);
   font-size: clamp(1rem, 0.9rem + 0.5vw, 1.3rem);
   font-weight: 600;
-  color: var(--terra);
+  color: #fe6201;
   max-width: none;
 }
 
@@ -680,6 +760,45 @@
   flex-wrap: wrap;
   gap: 0.75rem;
   margin-top: 1.6rem;
+}
+
+/**
+ * ═══ Die zwei Knöpfe im Hero, auf dunklem Grund ═══
+ *
+ * Karol: „die Startseite viel hochwertiger machen, indem man einzelne
+ * UI-Komponenten, also die Telefonnummer, noch hinein hat."
+ *
+ * Der gefüllte trägt IHR Orange (#fe6201) mit ihrem Schwarz darauf — 4,57
+ * gemessen, und das ist die einzige Paarung, in der ihr Orange als Fläche
+ * bestanden hat. Auf dem dunklen Foto liest es wie ein beleuchtetes Schild.
+ *
+ * Der zweite ist eine Scheibe: Glas mit heller Kante, kein zweiter Farbklotz.
+ * Zwei gefüllte Knöpfe nebeneinander nehmen einander die Bedeutung — das war
+ * schon der Befund, als es fünf Knopffarben gab.
+ */
+.backstube__knoepfe .knopf {
+  background: #fe6201;
+  color: #1d140e;
+  border-color: transparent;
+  box-shadow: 0 10px 24px -10px oklch(12% 0.02 55 / 0.7);
+}
+
+.backstube__knoepfe .knopf--leise {
+  background: oklch(97% 0.015 78 / 0.10);
+  color: oklch(97% 0.015 78);
+  border-color: oklch(97% 0.015 78 / 0.42);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: none;
+}
+
+@media (hover: hover) {
+  .backstube__knoepfe .knopf:hover { background: oklch(74% 0.19 48); }
+  .backstube__knoepfe .knopf--leise:hover {
+    background: oklch(97% 0.015 78 / 0.2);
+    border-color: oklch(97% 0.015 78 / 0.7);
+    color: oklch(97% 0.015 78);
+  }
 }
 
 /* Das Foto ragt nach unten aus der Sektion heraus und überlappt die nächste.
@@ -1896,13 +2015,29 @@
    * Teil landete mitten in der Zeile. Senkrecht: oben klar, damit die
    * Ladenfront zu sehen ist; unten dicht, wo Schild, Satz und Knöpfe stehen.
    */
+  /**
+   * Am Handy senkrecht statt schräg — aber mit DEMSELBEN Schatten.
+   *
+   * Hier stand bis zuletzt noch der alte Cremeschleier. Gemessen war das der
+   * schwerste Fehler des Umbaus: die Schrift war schon auf hell gedreht und
+   * stand damit auf einem hellen Grund — 1,06 gegen rgb(249,237,215),
+   * praktisch unsichtbar. Wer eine Grundregel dreht, muss ihre Ausnahmen
+   * mitdrehen.
+   */
   .backstube__schleier {
+    /* Der dichte Teil reicht weiter hinauf als am Rechner, und der Grund ist
+       gemessen: am Handy steht der ganze Satzblock untereinander statt neben
+       dem Foto, und seine oberste Zeile — die Unterzeile in IHREM Orange —
+       landete bei 46 % auf rgb(112,111,114) und kam auf 1,66. Ihr Orange
+       braucht einen dunklen Grund, sonst ist es keine Marke, sondern ein
+       Fleck. */
     background: linear-gradient(
       to top,
-      var(--schleier-dicht) 0%,
-      var(--schleier-dicht) 52%,
-      var(--schleier) 70%,
-      oklch(95% 0.03 78 / 0.34) 100%
+      oklch(12% 0.02 55 / 0.93) 0%,
+      oklch(12% 0.02 55 / 0.89) 58%,
+      oklch(12% 0.02 55 / 0.74) 76%,
+      oklch(12% 0.02 55 / 0.28) 92%,
+      oklch(12% 0.02 55 / 0.10) 100%
     );
   }
 
