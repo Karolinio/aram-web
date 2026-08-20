@@ -52,9 +52,18 @@
      Ereignisse, hier trennt er Absätze. */
 }
 
-/* Eine Spalte, in Lesebreite. Zwei Spalten wären auf einer Pflichtseite eine
-   Zumutung: man springt zwischen ihnen und verliert die Stelle. */
-.rechtsseite__satz { max-width: 42rem; }
+/**
+ * Eine Spalte, in Lesebreite. Zwei Spalten wären auf einer Pflichtseite eine
+ * Zumutung: man springt zwischen ihnen und verliert die Stelle.
+ *
+ * LINKSBÜNDIG, nicht mittig — und das war der zweite Grund für „sieht scheisse
+ * aus". Die Spalte stand zentriert, die Kopfzeile darüber linksbündig. Damit
+ * hatte die Seite zwei linke Kanten, 265 px auseinander, und nichts richtete
+ * sich an irgendetwas aus. Ein Dokument hat EINE Kante, an der die Zeile
+ * beginnt; das ist der Unterschied zwischen einem Schriftstück und einer
+ * Textmenge auf einer Fläche.
+ */
+.rechtsseite__satz { max-width: 42rem; margin-inline: 0; }
 
 .rechtsseite h1 {
   margin: 0.9rem 0 1.5rem;

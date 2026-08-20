@@ -46,28 +46,26 @@
  * nicht in der Sektion, damit ein zweiter Glutabschnitt — sollte es je einen
  * geben — nicht seine eigene Auffassung davon mitbringt.
  */
-.sektion--glut {
-  background: var(--glut-grund);
-  color: var(--glut-schrift);
+.sektion--nacht {
+  background: var(--nacht-grund);
+  color: var(--nacht-schrift);
+  /* Die gepunktete Linie ist das Bindemittel der Seite — auf dunklem Grund
+     braucht sie den umgekehrten Ton, sonst verschwindet sie. */
+  --linie: var(--nacht-linie);
 }
 
-.sektion--glut .etikett { color: var(--glut-marke); }
-.sektion--glut h1,
-.sektion--glut h2,
-.sektion--glut h3 { color: var(--glut-schrift); }
-.sektion--glut .leise,
-.sektion--glut .lead { color: oklch(96.5% 0.02 76 / 0.82); }
+/* Hier, und nur hier, ist ihr Orange ungedämpft. Auf Creme kam es auf 2,27
+   und war unbrauchbar; auf ihrem Schwarz sind es 6,01. Dieselbe Farbe, ein
+   anderer Grund — das ist der ganze Unterschied. */
+.sektion--nacht .etikett { color: var(--nacht-marke); }
+.sektion--nacht h1,
+.sektion--nacht h2,
+.sektion--nacht h3 { color: var(--nacht-schrift); }
+.sektion--nacht .leise,
+.sektion--nacht .lead { color: var(--nacht-leise); }
 
-/* Die gepunktete Linie ist das Bindemittel der Seite — auf dunklem Grund
-   braucht sie den umgekehrten Ton, sonst verschwindet sie. */
-.sektion--glut {
-  --linie: var(--glut-linie);
-}
-
-/* Auf Glut leuchten die Achsen nicht mehr terrakotta — dort wäre der
-   Unterschied kaum zu sehen. Der Zeiger hellt stattdessen auf. */
 @media (hover: hover) {
-  .sektion--glut .lebt:hover { color: var(--glut-marke); }
+  .sektion--nacht .lebt:hover { color: var(--nacht-marke); }
 }
 
 /* Alte Namen zeigen auf den Zweiklang. */

@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 
+import { useVersatz } from '../../bewegung.ts'
 import Auftritt from './Auftritt.tsx'
 
 /**
@@ -38,21 +39,26 @@ import Auftritt from './Auftritt.tsx'
  * Der Typ ist die Durchsetzung. Wer einen dritten Grund will, muss ihn hier
  * eintragen — und dabei merken, dass er einen dritten Grund will.
  *
- * ═══ Und genau das ist am 16.08. passiert ═══
+ * ═══ Der dritte heisst `nacht`, und er hiess bis zum 20.08. `glut` ═══
  *
- * `glut` ist der dritte, und er ist eine AUSNAHME, kein dritter Regelfall:
- * ihr Orange als vollflächiger Grund für GENAU EINE Sektion. Er nimmt am
- * Wechsel zwischen Hell und Clay nicht teil, er unterbricht ihn.
+ * `nacht` ist eine AUSNAHME, kein dritter Regelfall: IHR Schwarz als
+ * vollflächiger Grund für GENAU EINE Sektion. Er nimmt am Wechsel zwischen
+ * Hell und Clay nicht teil, er unterbricht ihn.
  *
- * Zweimal ist Orange auf dieser Seite vorher gescheitert — als Band im Hero,
- * als Kachel im Bestellen. Nicht die Farbe war das Problem, sondern die Dosis:
- * ein kleines gesättigtes Feld auf ruhigem Grund liest als Imbissschild, eine
- * ganze Fläche als Entscheidung.
+ * Vorher stand hier ihr Orange als Fläche. Dreimal ist Orange auf dieser Seite
+ * als Fläche gescheitert — als Band im Hero, als Kachel im Bestellen, zuletzt
+ * als ganze Sektion. Beim dritten Mal war klar, dass es nicht an der Dosis lag:
+ * eine tragende Fläche muss dunkel sein, und ein dunkles Orange ist ein
+ * Rostbraun. Karol, jedes Mal mit demselben Wort: „passt nicht rein."
  *
- * Wer einen ZWEITEN Glutgrund einträgt, macht daraus wieder eine Grundfarbe
+ * Schwarz löst es, weil es das ist, was die Fläche eigentlich leisten sollte —
+ * einen Schnitt setzen — und weil ihr Orange erst darauf wieder ihr Orange ist:
+ * 2,27 auf Creme, 6,01 auf ihrem Schwarz.
+ *
+ * Wer einen ZWEITEN Nachtgrund einträgt, macht daraus wieder eine Grundfarbe
  * und nimmt der Ausnahme ihren Sinn.
  */
-export type Grund = 'hell' | 'tief' | 'glut'
+export type Grund = 'hell' | 'tief' | 'nacht'
 
 type SektionProps = {
   id?: string
@@ -120,6 +126,22 @@ type KopfProps = {
  * Sektion gesetzt und deshalb einmal vergessen.
  */
 export function Kopf({ id, etikett, titel, lead, klasse }: KopfProps) {
+  /**
+   * Die Parallaxe der Überschrift.
+   *
+   * Karol: „die Überschriften mit dieser Parallax-Animation."
+   *
+   * Sie ist bewusst KLEIN — 4 % der Fensterhöhe über die ganze Durchfahrt.
+   * Eine Überschrift, die weit gegen den Scroll wandert, löst sich von ihrem
+   * Abschnitt und liest sich wie ein Fehler im Layout. Was sie leisten soll,
+   * ist etwas anderes: sie soll sich eine Spur LANGSAMER bewegen als der Text
+   * darunter. Daraus entsteht Tiefe, ohne dass sich etwas sichtbar verschiebt.
+   *
+   * Der Auftritt bleibt daneben bestehen und stört nicht: er verwandelt die
+   * WÖRTER, die Parallaxe die Überschrift. Zwei Knoten, zwei `transform`.
+   */
+  const schwebt = useVersatz<HTMLHeadingElement>(-0.04)
+
   return (
     <header className={`kopfblock${klasse ? ' ' + klasse : ''}`}>
       <Etikett>{etikett}</Etikett>
@@ -127,7 +149,7 @@ export function Kopf({ id, etikett, titel, lead, klasse }: KopfProps) {
           alle durch diesen Baustein gehen. Genau dafür gibt es ihn: eine
           Animation, die man pro Sektion von Hand setzen müsste, wird irgendwo
           vergessen, und dann ist sie keine Regel mehr, sondern ein Zufall. */}
-      <h2 id={id} className="lebt">
+      <h2 id={id} className="lebt" ref={schwebt}>
         <Auftritt>{titel}</Auftritt>
       </h2>
       {lead && <p className="lead kopfblock__lead">{lead}</p>}

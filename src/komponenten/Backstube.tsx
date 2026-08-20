@@ -1,5 +1,5 @@
 import { ARAM } from '../aram.config.ts'
-import { useKamerafahrt, useVersatz } from '../bewegung.ts'
+import { useAbgang, useKamerafahrt, useVersatz } from '../bewegung.ts'
 import Dampf from './ui/Dampf.tsx'
 import Oeffnung from './ui/Oeffnung.tsx'
 import Ladenschild from './Ladenschild.tsx'
@@ -42,6 +42,9 @@ import { Bild } from './ui/bausteine.tsx'
 export default function Backstube() {
   const bild = useVersatz<HTMLDivElement>(-0.06)
   const fahrt = useKamerafahrt<HTMLImageElement>('.backstube')
+  /* Beim Herunterscrollen hebt die Schlagzeile ab. Sie begrüsst und geht dann
+     aus dem Weg — sie fährt nicht die ganze Seite mit. */
+  const titel = useAbgang<HTMLHeadingElement>('.backstube')
 
   return (
     <section className="backstube" id="start" aria-labelledby="backstube-titel">
@@ -108,19 +111,65 @@ export default function Backstube() {
 
       <div className="schale backstube__gitter">
         <div className="backstube__satz">
+          {/* ═══ Warum hier vier Zeilen stehen und vorher sieben ═══
+
+              Am 20.08. hatte der Hero: Logo (672 px breit), eine orange
+              Unterzeile, einen Vorspann, die Öffnungszeit, ZWEI Knöpfe, einen
+              Bildnachweis und ein schwebendes Gebäck. Karol: „Die Startseite
+              ist eine Katastrophe."
+
+              Sie war es, und nicht wegen einer der acht Sachen. Acht Dinge, die
+              gleichzeitig sprechen, sagen nichts — der Blick findet keinen
+              Anfang und bleibt deshalb nirgends hängen. Ein Hero hat EINEN
+              Satz, und alles andere steht ihm bei.
+
+              Die Reihenfolge ist jetzt: wer (Marke), wo (Ort), was (Satz),
+              wie (Beleg). Vier Stufen, absteigend laut. */}
           <Ladenschild />
-          <p className="backstube__unter">Orientalisches Gebäck &amp; Pizza · Bonn-Hardtberg</p>
+
+          {/* KURZ, und das ist gemessen statt entschieden.
+
+              Hier stand „Bonn-Hardtberg · seit über 25 Jahren". In der
+              Ersatzschrift brach die Zeile auf ZWEI Zeilen um, mit Reem Kufi
+              auf eine — 42 px gegen 21 px, und die 21 px Differenz schoben
+              Schlagzeile, Vorspann, Knopf, Gebäck und die ganze nächste
+              Sektion nach oben, sobald die Schrift eintraf. Das war der Rest
+              des Sprungs, den `size-adjust` nicht auflösen konnte: eine Zeile,
+              die umbricht, ist kein Metrikproblem, sondern eine zu lange Zeile.
+
+              Kürzer ist hier ausserdem richtiger. Bonn-Hardtberg steht schon im
+              Bildnachweis unten, „Orientalisches Gebäck und Pizza" im Vorspann
+              darunter — die Zeile hat zwei Sachen gesagt, die beide woanders
+              stehen. Was bleibt, ist die einzige, die sonst nirgends steht. */}
+          <p className="backstube__ort">Seit über 25 Jahren</p>
+
+          {/* Die Schlagzeile ist gesetzte Schrift, nicht mehr ihr Logo.
+
+              Es ist IHR Satz — er stand vorher als Vorspann klein unter dem
+              Logo, und das war die Verschwendung: der beste Satz der Seite als
+              Kleingedrucktes unter einem Rasterbild. Ein Handzettel behauptet
+              „bester Geschmack"; dieser Satz sagt, was jemand um sechs Uhr
+              morgens tut. Genau das kann kein Wettbewerber abschreiben. */}
+          <h1 id="backstube-titel" className="backstube__titel" ref={titel}>
+            Jeder Teig wird morgens von Hand gerollt
+          </h1>
 
           <p className="lead backstube__lead">
-            Jeder Teig wird morgens von Hand gerollt und erst bei deiner Bestellung belegt.
+            Orientalisches Gebäck und Pizza, belegt erst bei deiner Bestellung.
           </p>
 
           <Oeffnung className="backstube__oeffnung" />
 
+          {/* EIN Knopf, nicht zwei. Karol: „auch mit dem orangenen Button in
+              der Ecke … auf jeden Fall einmal musst du ihn raus. Ich würd'
+              sagen, von der Startseite oben rechts kannst du den lassen."
+
+              Er hat damit die richtige der beiden Nummern gestrichen. Die
+              Telefonnummer steht fest in der Kopfzeile und ist auf JEDER
+              Bildschirmhöhe erreichbar; dieselbe Nummer zwei Zentimeter
+              darunter noch einmal als Farbklotz ist keine zweite Gelegenheit,
+              sondern ein zweiter Anspruch auf dieselbe Aufmerksamkeit. */}
           <div className="backstube__knoepfe">
-            <a className="knopf" href={ARAM.kontakt.telefonHref}>
-              <span aria-hidden="true">☎</span> {ARAM.kontakt.telefon}
-            </a>
             <a
               className="knopf knopf--leise"
               href={ARAM.kontakt.whatsapp}
@@ -139,13 +188,6 @@ export default function Backstube() {
           Der Inhaber und seine Brüder, vor ihrer Tür in Bonn-Hardtberg
         </p>
 
-        {/* Freigestellt, nicht rechteckig: „Das Essen liegt nicht auf dieser
-            Seite, es schwebt darüber" — der erste Satz der Direktion. Der
-            Freisteller entsteht durch Hintergrundentfernung an IHREM Foto.
-
-            Ohne Bildunterschrift: das Element liegt frei über der Sektion, und
-            eine Unterschrift landete dadurch mitten im Fliesstext. Was es ist,
-            sagt der Alternativtext — und die Karte zwei Sektionen weiter. */}
         <div className="backstube__bild" ref={bild}>
           {/* Der Dampf steigt HINTER dem Gebäck auf, nicht davor. Vorne wäre er
               ein Schleier über dem Produkt; hinten kommt er von der Oberseite,

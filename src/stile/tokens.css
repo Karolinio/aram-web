@@ -40,46 +40,71 @@
    * kleine Marken. Kein vollflächiges Band mehr. Ein Farbfeld über die ganze
    * Breite ist ein Schnitt, kein Übergang.
    */
-  --ton-hell: oklch(96.5% 0.020 76);   /* Grund 1. Warmes Off-White */
-  --ton-tief: oklch(90.5% 0.038 68);   /* Grund 2. Clay, eine Stufe tiefer */
+  /**
+   * ── CLAY, nicht Creme ──────────────────────────────────────────────────
+   *
+   * Karol am 20.08.: „mach den Style Guide auf Clay und normales Orange …
+   * und auch Schwarz ein bisschen."
+   *
+   * Damit ist entschieden, was zwei Tage lang als drei umschaltbare Fassungen
+   * im Code lag: Creme fliegt raus, beide Gründe rücken eine Stufe wärmer.
+   * Die Seite liest damit als Backstube statt als Papier — und ihr Orange hat
+   * endlich einen Grund, auf dem es sitzen kann, ohne zu leuchten.
+   *
+   * Die Probefassungen sind gelöscht, nicht auskommentiert. Drei Wahrheiten im
+   * Code sind schlimmer als eine falsche.
+   */
+  --ton-hell: oklch(93% 0.030 72);     /* Grund 1. Helles Clay */
+  --ton-tief: oklch(87% 0.045 66);     /* Grund 2. Clay, eine Stufe tiefer */
 
-  --tinte: oklch(30% 0.055 55);        /* Espresso — 12,3 auf hell, AAA */
-  --tinte-leise: oklch(48% 0.050 52);  /* Sekundär — 5,9 auf hell, AA */
-  --linie: oklch(84% 0.030 70);        /* Haarlinien, immer 1px */
+  --tinte: oklch(30% 0.055 55);        /* Espresso — 11,2 auf hell, AAA */
+  /* 44 statt 48 %: der wärmere Grund kostet Kontrast. Bei 48 % kam die
+     gedämpfte Schrift auf dem tiefen Clay auf 4,44 und damit UNTER die Grenze
+     von 4,5 für normalen Text. Jetzt 5,28. */
+  --tinte-leise: oklch(44% 0.050 52);
+  --linie: oklch(80% 0.038 68);        /* Haarlinien, immer 1px */
+
+  /* Ihr Schwarz von der alten Seite. Es trägt den Fuss und den Schleier über
+     dem Hero — „ein bisschen Schwarz", und mehr soll es auch nicht werden. */
+  --nacht: #1d140e;
 
   --akzent: oklch(40% 0.130 35);       /* DAS Signal. Knopf, Anker, Fokus */
   --glut: oklch(66% 0.180 45);         /* IHR Orange, wie im Logo */
   --tinte-glut: oklch(26% 0.045 52);   /* Schrift auf hellem Glut */
 
   /**
-   * ── Der GLUTGRUND: ihr Orange als ganze Fläche ──────────────────────────
+   * ── Der DUNKLE GRUND: ihr Schwarz als zweite Fläche ─────────────────────
    *
-   * ═══ Warum das die Kehrtwende ist ═══
+   * ═══ Warum das Orange als Fläche endgültig gestorben ist ═══
    *
-   * Zweimal ist Orange auf dieser Seite gescheitert — als Band im Hero und als
-   * Kachel im Bestellen. Beide Male hat Karol es zu Recht rausgeworfen. Der
-   * Schluss daraus war bisher: Orange darf keine Fläche sein.
+   * Dreimal stand hier ein oranges Feld, dreimal hat Karol es rausgeworfen —
+   * als Band im Hero, als Kachel im Bestellen, zuletzt als ganze Sektion.
+   * Am 20.08.: „Das Orange, das du da eingebunden hast, sieht nicht schlecht
+   * aus, ist aber kein typisches Orange."
    *
-   * Das war der falsche Schluss. Nicht die Farbe war das Problem, sondern die
-   * DOSIS. Ein kleines gesättigtes Feld auf ruhigem Grund liest immer als
-   * Imbissschild; eine ganze gesättigte Fläche liest als Entscheidung. Bei
-   * Eat Hungry Tiger (Mobbin) trägt gebranntes Orange die komplette
-   * Startseite, mit einer riesigen goldenen Schlagzeile darauf — und es sieht
-   * nach Marke aus, nicht nach Imbiss.
+   * Und genau das ist der Beweis, nicht der Einwand. Eine ganze Fläche in
+   * Orange MUSS dunkel sein, sonst trägt sie keine Schrift — und ein dunkles
+   * Orange ist ein Rostbraun. Es gibt kein „typisches Orange", das gleichzeitig
+   * Fläche sein kann: typisch orange heisst hell und gesättigt, und hell und
+   * gesättigt trägt weder Creme noch Tinte.
    *
-   * Also: EINE Sektion steht vollflächig darin, der Rest bleibt Hell und Clay.
-   * Ein zweiter Glutgrund macht daraus wieder eine Grundfarbe.
+   *   ihr Logo-Orange   #fe6201   auf Creme 2,27   auf ihrem Schwarz 6,01
    *
-   * Gebrannt, nicht leuchtend: ihr Logo-Orange (L 66 %) als Fläche ist zu hell
-   * für helle Schrift und zu bunt für dunkle. L 42 % trägt Creme mit Abstand.
+   * Die Zeile rechts ist die Antwort. Ihr Orange braucht keinen orangen Grund,
+   * es braucht einen DUNKLEN. Auf Schwarz ist es endlich das Orange vom Logo —
+   * unverändert, ungedämpft, und lesbar.
+   *
+   * Damit stehen ZWEI Gründe und EIN Akzent:
+   *
+   *   Clay      hell und tief, der Regelfall
+   *   Nacht     ihr Schwarz, für genau die Abschnitte, die tragen sollen
+   *   #fe6201   ihr Orange, NIE als Fläche — nur Schrift, Linie, Marke
    */
-  --glut-grund: oklch(42% 0.140 41);   /* Die Fläche */
-  --glut-schrift: oklch(96.5% 0.020 76); /* Creme darauf */
-  --glut-marke: oklch(84% 0.140 75);   /* Gold für Etikett und Marken */
-  /* 45 % und nicht 28 %: gemessen kam die gepunktete Linie bei 28 % auf 1,87
-     gegen den Grund und war praktisch weg. Sie ist das Bindemittel der ganzen
-     Seite — ausgerechnet auf der auffälligsten Fläche darf sie nicht fehlen. */
-  --glut-linie: oklch(96.5% 0.02 76 / 0.45);
+  --nacht-grund: #1d140e;                 /* ihr Schwarz von der alten Seite */
+  --nacht-schrift: oklch(96.5% 0.020 76); /* Creme darauf — 16,2 gemessen */
+  --nacht-leise: oklch(96.5% 0.02 76 / 0.76);
+  --nacht-marke: #fe6201;                 /* ihr Orange, 6,01 auf Nacht */
+  --nacht-linie: oklch(96.5% 0.02 76 / 0.28);
 
   /* Alte Namen zeigen auf die neuen, damit nichts stumm bricht. */
   --papier: var(--ton-hell);
@@ -140,7 +165,10 @@
    * Achsen der Schrift, keine Effekte — sie kosten nichts und lassen sich nicht
    * nachahmen.
    */
-  --font-display: 'Fraunces Variable', Georgia, serif;
+  /* „Fraunces Ersatz“ steht VOR Georgia — auf 99,5 % der Laufweite vermessen,
+     siehe den @font-face-Block in grundlage.css. Georgia bleibt als letzte
+     Stufe stehen, falls Times nirgends installiert ist. */
+  --font-display: 'Fraunces Variable', 'Fraunces Ersatz', Georgia, serif;
   /* „Reem Ersatz" ist die auf Reem Kufis Laufweite vermessene Systemschrift.
      Sie steht VOR system-ui, damit der Umbruch schon vor dem Nachladen stimmt —
      siehe den @font-face-Block oben in grundlage.css. */
@@ -319,73 +347,4 @@
      der Sprungmarken (scroll-margin-top) und der Platz oben im Hero. Zwei
      Zahlen, die auseinanderlaufen, sind ein abgeschnittenes Gericht. */
   --kopf-hoehe: 3.75rem;
-}
-
-/**
- * ══════════════════════════════════════════════════════════════════════════
- * DREI FARBFASSUNGEN ZUR WAHL — umschaltbar über `data-farbe` am <html>
- * ══════════════════════════════════════════════════════════════════════════
- *
- * Karol am 17.08.: „nimm dir den Style Guide, Farben nur … Orange und Schwarz
- * vor allem, du kennst die ältere Seite. Iteriere, welche Farbkombi am meisten
- * bringt. Ich sage: dieser helle Clay-Ton plus Orange."
- *
- * ═══ Was ihre echten Markenfarben sind, und was sie können ═══
- *
- * Aus dem Scan ihrer alten Seite, nicht geschätzt:
- *
- *   Orange   #fe6201   rgb(254, 98, 1)
- *   Schwarz  #1d140e   rgb(29, 20, 14) — warmes Fast-Schwarz
- *   Schrift  #ffffff
- *
- * Und hier ist die Messung, die alles entscheidet:
- *
- *   ihr Orange als SCHRIFT auf Clay        2,27   durchgefallen
- *   ihr Orange als SCHRIFT auf Creme       2,72   durchgefallen
- *   Tinte auf ihrem Orange als FLÄCHE      4,57   knapp bestanden
- *   Weiss auf ihrem Orange als FLÄCHE      3,02   durchgefallen
- *   ihr Orange auf IHREM Schwarz           6,01   sitzt
- *   Creme auf ihrem Schwarz               16,34   sitzt
- *
- * Daraus folgt eine Regel, die keine Geschmacksfrage ist: **ihr Orange wird
- * erst auf dunklem Grund zur Markenfarbe.** Auf hellem Grund ist es entweder
- * unsichtbar (als Schrift) oder eine kleine gesättigte Kachel — und genau die
- * hat Karol auf dieser Seite dreimal zu Recht rausgeworfen.
- *
- * Die alte Seite wusste das: Orange auf Fast-Schwarz. Ihr Fehler war nicht die
- * Kombination, sondern dass sie ÜBERALL stand — und dann liest sie als Imbiss.
- */
-
-/* ── B · „clay" — Karols Vorschlag ───────────────────────────────────────
-   Beide Gründe eine Stufe wärmer: Clay wird der Hauptgrund, ein helleres Clay
-   der zweite. Creme verschwindet. Die Glutsektion bleibt, wie sie ist. */
-:root[data-farbe='clay'] {
-  --ton-hell: oklch(93% 0.030 72);
-  --ton-tief: oklch(87% 0.045 66);
-  --linie: oklch(80% 0.038 68);
-  /* Eine Stufe dunkler, und der Grund ist gemessen: auf dem wärmeren tiefen
-     Grund kam die gedämpfte Schrift auf 4,44 und damit UNTER die Grenze von
-     4,5 für normalen Text. Bei L 44 % sind es 4,84. Ein wärmerer Grund kostet
-     Kontrast — wer ihn nimmt, muss die Tinte nachziehen. */
-  --tinte-leise: oklch(44% 0.050 52);
-}
-
-/* ── C · „ofen" — meine Empfehlung ───────────────────────────────────────
-   Gründe wie bei B, aber die eine Ausnahmesektion steht in IHREM Schwarz mit
-   IHREM Orange statt in meinem erfundenen gebrannten Ton.
-
-   Der Unterschied ist nicht Nuance: das gebrannte Orange (L 42 %) ist ein Ton,
-   den ich gewählt habe. Diese Fassung nimmt die zwei Werte, die auf ihrem
-   Ladenschild und ihrer alten Seite stehen — in dem einzigen Verhältnis, in
-   dem sie messbar funktionieren. */
-:root[data-farbe='ofen'] {
-  --ton-hell: oklch(93% 0.030 72);
-  --ton-tief: oklch(87% 0.045 66);
-  --linie: oklch(80% 0.038 68);
-  --tinte-leise: oklch(44% 0.050 52);
-
-  --glut-grund: #1d140e;
-  --glut-schrift: oklch(96.5% 0.020 76);
-  --glut-marke: #fe6201;
-  --glut-linie: oklch(96.5% 0.02 76 / 0.30);
 }

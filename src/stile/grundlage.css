@@ -18,6 +18,50 @@
  * 100 px in Reem Kufi 1052 px breit, in der Systemschrift 998 px.
  * 1052 / 998 = 1,054.
  */
+/**
+ * „Fraunces Ersatz“ — dazugekommen am 20.08., und der Anlass war ein Messwert.
+ *
+ * Mit der neuen Schlagzeile sprang CLS am Handy von 0,009 auf 0,062. Der Prüfer
+ * zeigte auf `section#start > div „Jeder Teig wird morgens von Hand“`: 0,054 von
+ * 0,062 kamen aus dieser einen Zeile.
+ *
+ * Der Grund ist der Wechsel der ROLLE, nicht ein Fehler in der Zeile. Vorher war
+ * die Schlagzeile ein Rasterbild mit `width`/`height` — ein Bild kann seine
+ * Grösse nicht ändern, wenn eine Schrift nachlädt. Jetzt ist sie gesetzt, und
+ * gesetzte Schrift bricht neu um, sobald Fraunces eintrifft.
+ *
+ * Gemessen, Gewicht 800, derselbe Satz bei 100 px:
+ *
+ *   Fraunces    1793 px
+ *   Georgia     2170 px   -> 1793 / 2170 = 82,6 %
+ *
+ * ═══ Und der erste Versuch war das falsche Mittel ═══
+ *
+ * Zuerst stand hier Times New Roman, weil es bei Gewicht 800 zufällig auf
+ * 99,5 % der Fraunces-Breite kommt und deshalb ohne Anpassung passt. Gemessen
+ * wurde es damit SCHLECHTER, nicht besser: CLS stieg von 0,062 auf 0,144.
+ *
+ * Der Grund ist `text-wrap: balance` an der Schlagzeile. Es verteilt die Wörter
+ * auf möglichst gleich lange Zeilen — und diese Verteilung hängt nicht an der
+ * Gesamtbreite des Satzes, sondern an den Breiten der EINZELNEN Wörter. Zwei
+ * Schriften können denselben Satz gleich breit setzen und trotzdem an anderer
+ * Stelle umbrechen.
+ *
+ * `size-adjust` an Georgia löst das, weil es die Schrift PROPORTIONAL staucht:
+ * jedes Wort wird um denselben Faktor schmaler, und damit fallen die Umbrüche
+ * an dieselben Stellen. Eine andere Familie zu wählen konnte das nie leisten.
+ *
+ * Die Ersatzschrift muss den gleichen PLATZ brauchen, nicht gleich aussehen —
+ * sie steht 200 ms im Bild und darf in dieser Zeit nur eines nicht: anders
+ * umbrechen.
+ */
+@font-face {
+  font-family: 'Fraunces Ersatz';
+  src: local('Georgia'), local('Times New Roman'), local('Liberation Serif');
+  size-adjust: 82.6%;
+  font-display: swap;
+}
+
 @font-face {
   font-family: 'Reem Ersatz';
   src: local('Helvetica Neue'), local('Helvetica'), local('Arial');
@@ -313,15 +357,36 @@ section {
  * Stattdessen eine ruhige Zeile in Terrakotta mit einer Haarlinie darunter:
  * lesbar als Hinweis an Karol, nicht als kaputtes Layout.
  */
+/**
+ * ═══ Leiser gestellt am 20.08. ═══
+ *
+ * Vorher: Fraunces, Gewicht 600, Terrakotta, durchgezogene Linie darunter.
+ * Karol beim Blick aufs Impressum: „Das Impressum sieht scheisse aus."
+ *
+ * Er hat auf die Lücken gezeigt, ohne es zu wissen. Auf der Startseite gibt es
+ * eine davon; im Impressum stehen SIEBEN untereinander, und mit dieser
+ * Auszeichnung war jede so laut wie die Überschrift darüber. Die Seite las sich
+ * damit als Fehlerliste — und dabei ist sie eine Pflichtseite, die ein Kunde
+ * anschaut.
+ *
+ * Was bleibt: sie sind zu erkennen, jederzeit, ohne Suchen. Was geht: dass sie
+ * lauter sind als der Inhalt, in dem sie fehlen. Kursiv in der Textschrift, in
+ * gedämpfter Tinte, mit einer GEPUNKTETEN Linie — die Punktlinie ist auf dieser
+ * Seite ohnehin das Bindemittel, und eine durchgezogene Linie unter einem Wort
+ * ist überall sonst im Netz ein Verweis.
+ *
+ * Ein durchgezogener Strich unter rotem Fettdruck sagt: hier ist etwas kaputt.
+ * Eine gepunktete Linie unter Kursivem sagt: hier fehlt noch eine Angabe. Das
+ * Zweite stimmt.
+ */
 .luecke {
   display: inline-block;
-  color: var(--terra);
-  font-family: var(--font-display);
-  font-variation-settings: var(--wonk-klein);
-  font-size: var(--text-meta);
-  font-weight: 600;
-  border-bottom: 1px solid var(--terra);
-  padding-bottom: 1px;
+  color: var(--tinte-leise);
+  font-family: var(--font-text);
+  font-size: 0.95em;
+  font-style: italic;
+  border-bottom: 1px dotted var(--terra);
+  padding-bottom: 2px;
 }
 
 /* ── Bewegung ─────────────────────────────────────────────────────────────── */

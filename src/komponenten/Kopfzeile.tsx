@@ -82,7 +82,9 @@ export default function Kopfzeile() {
 
   return (
     <header className="kopf" data-eng={eng ? 'ja' : 'nein'}>
-      <div className="kopf__zeile schale">
+      <div className="schale">
+        <div className="kopf__glas">
+          <div className="kopf__zeile">
         <a className="kopf__marke" href="#start">
           {/* Ihr Logo, klein und in fester Grösse. Es kollidiert mit der ruhigen
               Cremerichtung — comichaft, rot, mit Pizzastück. Es zu ersetzen wäre
@@ -139,6 +141,8 @@ export default function Kopfzeile() {
           </span>
           <span className="visuell-versteckt">{menue ? 'Menü schliessen' : 'Menü öffnen'}</span>
         </button>
+          </div>
+        </div>
       </div>
 
       <Handymenue anker={ANKER} offen={menue} schliessen={schliessen} />

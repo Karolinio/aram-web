@@ -145,87 +145,89 @@
    * FEST, nicht klebend — und das ist eine Fehlerbehebung, keine Vorliebe.
    *
    * Eine klebende Kopfzeile behält ihren Platz im Fluss. Sobald sie beim
-   * Scrollen zusammenfährt (3,75 rem auf 3,1 rem, Logo 38 px auf 30 px),
-   * schrumpft dieser Platz — und ALLES darunter rutscht um zehn Pixel nach
-   * oben. Bei jedem Durchgang, an derselben Stelle.
+   * Scrollen zusammenfährt, schrumpft dieser Platz — und ALLES darunter
+   * rutscht nach oben. Bei jedem Durchgang, an derselben Stelle. Gemessen hat
+   * es der Fabrikprüfer: als Quelle des Sprungs stand `header>div>button` im
+   * Befund.
    *
-   * Gemessen hat es der Fabrikprüfer, und er hat mit dem Finger genau darauf
-   * gezeigt: als Quelle des Sprungs stand `header>div>button` im Befund.
+   * ═══ Und ab dem 20.08. ist sie eine INSEL, kein Balken ═══
    *
-   * `fixed` nimmt die Kopfzeile aus dem Fluss. Dann kostet ihre Höhenänderung
-   * kein Layout mehr, und der Platz darunter kommt einmalig vom Innenabstand
-   * am `<body>` — ein Wert, der sich nie ändert.
+   * Karol: „Der Header soll, wie gesagt, gläsern sein, vielleicht nicht eckig,
+   * sondern abgerundet oben an den Ecken."
+   *
+   * Ein Balken über die volle Breite kann gar nicht gläsern wirken. Glas
+   * erkennt man an seiner KANTE — daran, dass etwas daneben vorbeizieht, was
+   * darunter anders aussieht. Ein Balken, der bis an beide Bildschirmränder
+   * reicht, hat nur eine Unterkante, und die liest als Schnitt, nicht als
+   * Scheibe. Deshalb hat hier auch eine gepunktete Linie gestanden und deshalb
+   * musste sie wieder raus: sie hat versucht, die fehlende Kante zu ersetzen.
+   *
+   * Jetzt schwebt die Zeile eingerückt, mit Luft nach oben und zu beiden
+   * Seiten. Das Foto zieht RINGSUM vorbei. Das ist der ganze Trick, und er
+   * kostet zwei Zeilen.
+   *
+   * Der Träger selbst ist unsichtbar und fängt keine Klicks — sonst läge ein
+   * durchsichtiger Streifen über der ganzen Bildschirmbreite und schluckte
+   * jeden Griff daneben.
    */
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 40;
-  /**
-   * ═══ GLÄSERN — und das hebt eine Regel der Direktion auf ═══
-   *
-   * Dort stand: „kein Weichzeichner, keine durchscheinende Karte". Die Regel
-   * kam aus Fassung 1, wo durchscheinende Karten mit Weichzeichner ÜBERALL
-   * lagen und die Seite deshalb wie ein Betriebssystem-Fenster aussah.
-   *
-   * Karol, mehrfach: „mach den Header einfach gläsern." Er hat recht, und die
-   * Regel war zu breit gefasst. Der Unterschied ist die Anzahl: EIN gläsernes
-   * Element auf einer sonst deckenden Seite ist eine Scheibe, durch die man
-   * den Inhalt vorbeiziehen sieht — das ist der Sinn einer klebenden
-   * Kopfzeile. ZWANZIG davon sind eine Optik.
-   *
-   * Die Zahlen sind gewählt, nicht abgeschrieben:
-   *   72 %       Deckung. Darunter wird der Text auf dem Foto unlesbar.
-   *   18 px      Unschärfe. Genug, dass Gesichter darunter zu Flächen werden.
-   *   140 %      Sättigung — Glas, das entsättigt, sieht nach Milchglas aus.
-   */
-  /**
-   * ═══ Zwei Gläser, weil es zwei Gründe gibt ═══
-   *
-   * Karol: „den Glasheader nochmal schärfer machen und anpassen."
-   *
-   * Schärfer heisst hier weniger Unschärfe, nicht mehr: 18 px verwischten das
-   * Foto darunter zu Brei, und ein Glas, hinter dem man nichts mehr erkennt,
-   * ist eine Milchscheibe. 12 px lassen die Ladenfront durchziehen und bleiben
-   * ruhig genug für die Navigation.
-   *
-   * Und es passt sich an, statt einen Kompromiss zu suchen: über dem dunklen
-   * Hero ist es DUNKLES Glas mit heller Schrift, ab der ersten hellen Sektion
-   * helles Glas mit Tinte. Ein einziges Glas für beide Gründe müsste in der
-   * Mitte liegen — und dort ist es auf keinem von beiden gut.
-   */
-  /* 0,62 statt 0,42: gemessen kam Creme auf dem helleren Glas auf 2,91 gegen
-     rgb(153,143,131) — ein grauer Brei, in dem weder Foto noch Navigation
-     etwas gewinnen. Dichteres Glas ist hier nicht weniger gläsern, sondern
-     lesbar. */
-  background: oklch(14% 0.02 55 / 0.62);
+  padding-top: clamp(0.5rem, 1.1vw, 0.9rem);
+  pointer-events: none;
+}
+
+.kopf > * { pointer-events: auto; }
+
+/**
+ * Die Scheibe.
+ *
+ * ═══ Die Zahlen sind gewählt, nicht abgeschrieben ═══
+ *
+ *   0,62      Deckung. Bei 0,42 kam Creme darauf auf 2,91 gegen den Brei
+ *             darunter — ein Glas, auf dem man nichts lesen kann, ist kein
+ *             Glas, sondern Nebel.
+ *   12 px     Unschärfe. 18 verwischten das Foto zu Brei; 12 lassen die
+ *             Ladenfront durchziehen und bleiben ruhig genug für Navigation.
+ *   135 %     Sättigung. Glas, das entsättigt, sieht nach Milchglas aus.
+ *
+ * ═══ Und die Lichtkante ═══
+ *
+ * Eine Scheibe hat eine Oberkante, an der sich Licht bricht. Ohne sie ist eine
+ * durchscheinende Fläche nur eine durchscheinende Fläche. Die eine `inset`-
+ * Zeile im Schatten unten ist der Unterschied zwischen „halbdurchsichtig" und
+ * „aus Glas" — das ist die teuerste Zeile dieser Datei, gemessen in Wirkung
+ * pro Zeichen.
+ */
+.kopf__glas {
+  /* Oben stärker gerundet als unten — Karols „abgerundet oben an den Ecken".
+     Eine Form, die oben weicher ist als unten, liest als Griff und nicht als
+     Kachel. */
+  border-radius: 22px 22px 14px 14px;
+  background: oklch(15% 0.035 48 / 0.70);
   color: oklch(97% 0.015 78);
   -webkit-backdrop-filter: blur(12px) saturate(135%);
   backdrop-filter: blur(12px) saturate(135%);
-  /**
-   * KEINE Linie an der Unterkante.
-   *
-   * Hier stand die gepunktete Linie, weil sie das Bindemittel der Seite ist.
-   * Über einer randlosen Fotografie ist sie aber kein Bindemittel, sondern ein
-   * Schnitt — Karol: „da oben beim Header ist noch eine Striche-Linie, die
-   * definiert, wo die Linie verläuft. Die muss raus, das sieht unprofessionell
-   * aus."
-   *
-   * Was den Kopf vom Inhalt trennt, ist jetzt das Glas selbst. Eine Scheibe
-   * braucht keinen Strich, um als Scheibe zu gelten.
-   */
+  box-shadow:
+    inset 0 1px 0 oklch(100% 0 0 / 0.16),
+    0 10px 30px -14px oklch(12% 0.02 55 / 0.7);
   transition:
     background-color var(--dauer-mikro) var(--ease-teig),
+    color var(--dauer-mikro) var(--ease-teig),
     box-shadow var(--dauer-mikro) var(--ease-teig);
 }
 
 /* Ab der ersten hellen Sektion dreht das Glas um: heller Grund, Tinte darauf,
    und eine Spur dichter — unter dem Hero zieht Inhalt vorbei, und ein zu
    klares Glas lässt Überschriften durch die Navigation laufen. */
-.kopf[data-eng='ja'] {
-  background-color: color-mix(in oklch, var(--ton-tief) 86%, transparent);
+.kopf[data-eng='ja'] .kopf__glas {
+  background-color: color-mix(in oklch, var(--ton-tief) 88%, transparent);
   color: var(--tinte);
-  box-shadow: var(--clay-ruhe);
+  box-shadow:
+    inset 0 1px 0 oklch(100% 0 0 / 0.5),
+    0 10px 26px -14px oklch(30% 0.055 55 / 0.35);
 }
 
 .kopf__zeile {
@@ -233,6 +235,10 @@
   align-items: center;
   gap: clamp(0.75rem, 2vw, 2rem);
   min-height: var(--kopf-hoehe);
+  /* Der Innenabstand sitzt an der Zeile, nicht an der Schale: die Schale
+     zentriert und begrenzt, die Scheibe polstert. Zwei Aufgaben, zwei
+     Zuständigkeiten. */
+  padding-inline: clamp(0.85rem, 1.6vw, 1.5rem);
   transition: min-height var(--dauer-mikro) var(--ease-teig);
 }
 
@@ -624,6 +630,19 @@
       oklch(12% 0.02 55 / 0.55) 0%,
       oklch(12% 0.02 55 / 0.12) 26%,
       transparent 52%
+    ),
+    /* Die KAPPE oben — dazugekommen mit der gläsernen Insel am 20.08.
+       Eine Scheibe zeigt, was hinter ihr liegt. Lag dort die hellste Stelle des
+       Fotos, wurde aus dunklem Glas ein graubrauner Riegel: das Glas mischt
+       sich mit dem Grund, und ein heller Grund macht jedes dunkle Glas grau.
+       Gemessen kam die Navigation darauf auf rgb(150,140,131).
+       Die Kappe gibt der Scheibe etwas Dunkles zum Draufliegen — und liest von
+       selbst als Lichtabfall nach oben, wie er über jeder Ladenfront steht. */
+    linear-gradient(
+      to bottom,
+      oklch(10% 0.02 50 / 0.62) 0%,
+      oklch(10% 0.02 50 / 0.30) 12%,
+      transparent 26%
     );
 }
 
@@ -686,6 +705,30 @@
  * Seite, weil das Licht vom Fenster links oben kommt.
  */
 .schild-buehne {
+  /**
+   * Trägt die Parallaxe. Die Perspektive liegt eine Ebene tiefer, damit die
+   * beiden Bewegungen auf getrennten Knoten sitzen.
+   *
+   * ═══ Und hier steht die BREITE, nicht am Schild ═══
+   *
+   * Zuerst stand hier `width: fit-content` und am Schild `width: min(60%, 11rem)`.
+   * Das ist ein Zirkelbezug: die Breite der Bühne richtet sich nach dem Kind,
+   * die Breite des Kindes nach der Bühne. Der Browser löst so etwas auf, aber
+   * erst, wenn er die Eigengrösse des Bildes kennt — und die kennt er erst nach
+   * dem Dekodieren.
+   *
+   * Gemessen mit gedrosselter Leitung: bei 1965 ms wuchs `.backstube__gitter`
+   * von 409 auf 503 px und schob Gebäck, Dampfleinwand und die nächste Sektion
+   * mit. 0,054 CLS aus einer einzigen Prozentangabe an der falschen Stelle.
+   *
+   * Eine feste Breite an der Bühne beendet den Zirkel: das Bild füllt sie zu
+   * 100 %, sein Seitenverhältnis steht in den Attributen, der Platz steht damit
+   * vor dem ersten Byte fest.
+   */
+  width: min(60%, 11rem);
+}
+
+.schild-neigung {
   perspective: 900px;
   /* Der Zeiger soll auch dann noch führen, wenn er neben dem Schild steht —
      sonst kippt es nur, solange man genau darauf zeigt. */
@@ -700,29 +743,50 @@
 }
 
 .schild {
-  /* Markant heisst gross. 34 → 38 → jetzt 42 rem: Karol hat dreimal nach mehr
-     gefragt, und seit der Grund eine Fotografie ist, trägt die Fläche es auch.
-     Weiter geht nicht — bei 46 rem stösst das Schild in den Vorspann. */
-  width: min(100%, 42rem);
+  /**
+   * ═══ 42 rem → 11 rem, und das ist die Umkehr vom 20.08. ═══
+   *
+   * Karol hat dreimal nach mehr gefragt, ich habe dreimal vergrössert, und beim
+   * vierten Blick kam: „Die Startseite ist eine Katastrophe."
+   *
+   * Beides stimmt. Grösser war jedes Mal besser als vorher — und der ganze Weg
+   * war trotzdem falsch. Ihr Logo ist eine Wortmarke mit Schlagschatten,
+   * Wulstkontur und Cartoon-Pizza: ein SCHILD. Ein Schild bei 672 px Breite ist
+   * nicht ein grösseres Schild, es ist ein Plakat — und dann ist die ganze
+   * Seite so hochwertig wie ihr Handzettel von 2008. Nichts daneben kann das
+   * noch aufwiegen; die lauteste Fläche bestimmt die Klasse.
+   *
+   * Bei 11 rem ist es wieder eine Marke: sofort erkennbar, deutlich vor allem
+   * anderen, und es behauptet nicht, die Schlagzeile zu sein. Die Schlagzeile
+   * ist jetzt gesetzt — in einer Schrift, die sich skalieren, umbrechen und
+   * ausrichten lässt. Genau das kann ein Rasterbild nicht.
+   *
+   * Die Kundenakte hat das von Anfang an so festgehalten: „einen festen kleinen
+   * Platz, und NICHT vergrössert." Sie hatte recht, und ich habe sie auf Zuruf
+   * überschrieben, statt zu sagen, warum sie dasteht.
+   */
+  width: 100%;
   transform-style: preserve-3d;
-  will-change: transform;
+  /* KEIN `will-change`. Es stand hier, solange das Schild 672 px breit war —
+     eine so grosse Fläche, die dem Zeiger folgt, gewinnt durch eine eigene
+     Ebene. Bei 176 px gewinnt sie nichts und hält die Ebene trotzdem: der
+     Fabrikprüfer zählte danach acht Elemente, die am Handy eine Compositor-
+     Ebene halten, ohne im Bild zu sein. Dieselbe Falle wie am 17.08., nur an
+     einer anderen Stelle. */
 }
 
 .schild img {
   width: 100%;
   height: auto;
+  /* Vier Durchgänge statt zehn. Die Flanke ist in Pixeln gemessen, nicht in
+     Prozent — bei 672 px Breite waren zehn Pixel eine Platte, bei 176 px wären
+     sie ein Klotz. Was skaliert, muss mitskaliert werden. */
   filter:
-    drop-shadow(1px 1px 0 oklch(38% 0.10 40))
-    drop-shadow(1px 1px 0 oklch(36% 0.10 40))
     drop-shadow(1px 1px 0 oklch(34% 0.09 40))
-    drop-shadow(1px 1px 0 oklch(32% 0.09 42))
     drop-shadow(1px 1px 0 oklch(30% 0.08 42))
-    drop-shadow(1px 1px 0 oklch(28% 0.08 44))
     drop-shadow(1px 1px 0 oklch(26% 0.07 44))
-    drop-shadow(1px 1px 0 oklch(24% 0.06 46))
     drop-shadow(1px 1px 0 oklch(22% 0.05 46))
-    drop-shadow(1px 1px 0 oklch(20% 0.04 48))
-    drop-shadow(0 16px 22px oklch(24% 0.03 50 / 0.3));
+    drop-shadow(0 10px 18px oklch(12% 0.02 50 / 0.45));
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -742,14 +806,59 @@
  */
 .backstube__satz { color: oklch(97% 0.015 78); }
 
-.backstube__unter {
-  margin-top: 0.9rem;
-  font-family: var(--font-display);
-  font-variation-settings: var(--wonk-klein);
-  font-size: clamp(1rem, 0.9rem + 0.5vw, 1.3rem);
-  font-weight: 600;
-  color: #fe6201;
+/**
+ * Die Ortszeile — Karols „richtig hässlich", und er hatte recht.
+ *
+ * Sie stand als 1,3-rem-Fraunces in #fe6201 direkt unter einer 672 px breiten
+ * roten Wortmarke. Zwei fette Schriften in derselben Farbfamilie, zehn Pixel
+ * auseinander: das ist keine Unterzeile, das ist eine zweite Wortmarke, die um
+ * dieselbe Stelle kämpft. Kein Wert hätte das gerettet — es war die ROLLE.
+ *
+ * Jetzt ist sie, was eine Ortszeile ist: leise, gesperrt, klein, in Creme statt
+ * in Orange. Sie sagt, wo man ist, und tritt zurück. Gesperrte Versalien in
+ * kleinem Grad sind das einzige typografische Mittel, das laut aussieht ohne
+ * laut zu sein — deshalb steht die Marke oben und nicht hier.
+ */
+.backstube__ort {
+  margin: 1.1rem 0 0;
+  font-family: var(--font-text);
+  font-size: var(--text-micro);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  /* Sie darf NIE umbrechen. Eine Ortszeile über zwei Zeilen ist keine
+     Ortszeile mehr, und ein Umbruch, der von der geladenen Schrift abhängt,
+     verschiebt alles darunter. Kurz genug ist sie jetzt: gemessen 207 px bei
+     393 px Bildschirmbreite. */
+  white-space: nowrap;
+  color: oklch(97% 0.015 78 / 0.72);
   max-width: none;
+}
+
+/**
+ * Die Schlagzeile.
+ *
+ * Sie ist jetzt gesetzte Schrift und trägt IHREN Satz — vorher stand er klein
+ * als Vorspann unter dem Logo. Fraunces mit `opsz 144` bekommt bei diesem Grad
+ * feinere Haarstriche als bei 24 pt; das ist der Unterschied zwischen einer
+ * skalierten und einer gesetzten Schrift, und er ist der Grund, dass sie hier
+ * überhaupt so gross stehen darf.
+ *
+ * `--text-hero` läuft bis 12 rem — hier gedeckelt auf 6,5. Ein Satz aus sieben
+ * Wörtern bei 12 rem füllt drei Zeilen und wird zum Plakat; die Grösse muss zur
+ * Länge passen, nicht zur Skala.
+ */
+.backstube__titel {
+  margin: 0.5rem 0 0;
+  max-width: 15ch;
+  font-family: var(--font-display);
+  font-variation-settings: var(--wonk-display);
+  font-size: clamp(2.6rem, 1rem + 6vw, 6.5rem);
+  font-weight: 800;
+  line-height: var(--leading-eng);
+  letter-spacing: var(--sperr-hero);
+  text-wrap: balance;
+  color: oklch(97% 0.015 78);
 }
 
 .backstube__lead { margin-top: clamp(1.5rem, 3vw, 2.5rem); }
@@ -763,26 +872,21 @@
 }
 
 /**
- * ═══ Die zwei Knöpfe im Hero, auf dunklem Grund ═══
+ * ═══ EIN Knopf im Hero, und das war eine Streichung ═══
  *
- * Karol: „die Startseite viel hochwertiger machen, indem man einzelne
- * UI-Komponenten, also die Telefonnummer, noch hinein hat."
+ * Hier standen zwei: ihr Orange gefüllt für die Nummer, Glas für WhatsApp.
+ * Karol am 20.08.: „auch mit dem orangenen Button in der Ecke … auf jeden Fall
+ * einmal musst du ihn raus."
  *
- * Der gefüllte trägt IHR Orange (#fe6201) mit ihrem Schwarz darauf — 4,57
- * gemessen, und das ist die einzige Paarung, in der ihr Orange als Fläche
- * bestanden hat. Auf dem dunklen Foto liest es wie ein beleuchtetes Schild.
+ * Der gefüllte ist weg, weil dieselbe Telefonnummer zehn Zentimeter weiter oben
+ * fest in der Kopfzeile steht — auf JEDER Bildschirmhöhe. Zweimal dieselbe
+ * Handlung im selben Blickfeld ist keine zweite Gelegenheit, sondern ein
+ * zweiter Anspruch auf dieselbe Aufmerksamkeit; beide werden dadurch leiser.
  *
- * Der zweite ist eine Scheibe: Glas mit heller Kante, kein zweiter Farbklotz.
- * Zwei gefüllte Knöpfe nebeneinander nehmen einander die Bedeutung — das war
- * schon der Befund, als es fünf Knopffarben gab.
+ * Was bleibt, ist eine Scheibe: dieselbe Glasfamilie wie die Kopfzeile, kein
+ * zweiter Farbklotz. Damit trägt im ganzen Hero genau EINE Fläche Farbe — die
+ * Fotografie.
  */
-.backstube__knoepfe .knopf {
-  background: #fe6201;
-  color: #1d140e;
-  border-color: transparent;
-  box-shadow: 0 10px 24px -10px oklch(12% 0.02 55 / 0.7);
-}
-
 .backstube__knoepfe .knopf--leise {
   background: oklch(97% 0.015 78 / 0.10);
   color: oklch(97% 0.015 78);
@@ -793,7 +897,6 @@
 }
 
 @media (hover: hover) {
-  .backstube__knoepfe .knopf:hover { background: oklch(74% 0.19 48); }
   .backstube__knoepfe .knopf--leise:hover {
     background: oklch(97% 0.015 78 / 0.2);
     border-color: oklch(97% 0.015 78 / 0.7);
@@ -1940,10 +2043,25 @@
 
 /* ── Der Fuss ─────────────────────────────────────────────────────────────── */
 
+/**
+ * ═══ Der Fuss ist das „bisschen Schwarz" ═══
+ *
+ * Karol: „und auch Schwarz ein bisschen."
+ *
+ * Der Fuss ist die richtige Stelle dafür, und zwar aus einem Grund, der über
+ * Geschmack hinausgeht: er ist das ENDE. Eine Seite, die auf Clay beginnt,
+ * eine orange Ausnahme in der Mitte hat und schwarz endet, hat einen Verlauf.
+ * Dasselbe Schwarz irgendwo dazwischen wäre ein zweiter Unterbruch — und dann
+ * unterbricht nichts mehr, weil alles unterbricht.
+ *
+ * Es ist IHR Schwarz von der alten Seite (#1d140e), nicht irgendeins. Damit
+ * schliesst die Seite mit demselben Wert, mit dem der Hero-Schleier arbeitet.
+ */
 .fuss {
   position: relative;
   z-index: 1;
-  background: var(--ton-tief);
+  background: var(--nacht);
+  color: oklch(96% 0.018 78);
   border-top: 0;
   padding-block: clamp(3rem, 5vw, 5rem);
   /* Platz, damit die Bestellleiste den Fuss nicht überdeckt. */
@@ -1960,6 +2078,17 @@
 
 .fuss__navi ul { list-style: none; padding: 0; margin: 0; }
 .fuss__navi li { padding-block: 0.3rem; }
+
+/* Auf dem Nachtgrund dreht sich alles um: Creme statt Tinte, ihr Orange statt
+   des Akzents, helle Haarlinien. Die Lücken bleiben sichtbar — sie sind der
+   Grund, warum die Seite nicht live darf, und ein dunkler Grund ist kein
+   Anlass, sie leiser zu machen. */
+.fuss .etikett { color: #fe6201; }
+.fuss a { color: oklch(96% 0.018 78); }
+.fuss a:hover { color: #fe6201; }
+.fuss .leise { color: oklch(96% 0.018 78 / 0.72); }
+.fuss .luecke { color: #fe6201; }
+.fuss .datenzeile { --linie: oklch(96% 0.018 78 / 0.24); }
 
 .nichtlive {
   margin-top: clamp(2.5rem, 5vw, 4rem);
@@ -2031,14 +2160,21 @@
        landete bei 46 % auf rgb(112,111,114) und kam auf 1,66. Ihr Orange
        braucht einen dunklen Grund, sonst ist es keine Marke, sondern ein
        Fleck. */
-    background: linear-gradient(
-      to top,
-      oklch(12% 0.02 55 / 0.93) 0%,
-      oklch(12% 0.02 55 / 0.89) 58%,
-      oklch(12% 0.02 55 / 0.74) 76%,
-      oklch(12% 0.02 55 / 0.28) 92%,
-      oklch(12% 0.02 55 / 0.10) 100%
-    );
+    background:
+      linear-gradient(
+        to bottom,
+        oklch(10% 0.02 50 / 0.62) 0%,
+        oklch(10% 0.02 50 / 0.28) 14%,
+        transparent 30%
+      ),
+      linear-gradient(
+        to top,
+        oklch(12% 0.02 55 / 0.93) 0%,
+        oklch(12% 0.02 55 / 0.89) 58%,
+        oklch(12% 0.02 55 / 0.80) 78%,
+        oklch(12% 0.02 55 / 0.52) 92%,
+        oklch(12% 0.02 55 / 0.34) 100%
+      );
   }
 
   /* Und deshalb sitzt der Satz unten statt mittig: er muss in den dichten
@@ -2052,7 +2188,7 @@
   .backstube__grund img { object-position: 50% 100%; }
 
   /* Die Unterzeile bricht sonst nach „Bonn-" um. Ausgeglichen statt gestückelt. */
-  .backstube__unter { text-wrap: balance; }
+  .backstube__ort { letter-spacing: 0.12em; }
 
   /* Kürzer umbrechen, damit das schwebende Gebäck rechts unten keine Zeile
      anschneidet. Gemessen: bei 34 ch lag es auf „vor ihrer Tür in". */

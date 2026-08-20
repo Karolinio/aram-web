@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 
-import { ARAM } from '../aram.config.ts'
-import { useAbgang } from '../bewegung.ts'
+import { useVersatz } from '../bewegung.ts'
+
 
 /**
  * Ihr Logo als Ladenschild — ein Gegenstand, keine Grafik.
@@ -44,11 +44,21 @@ const DAEMPFUNG = 0.08
 
 export default function Ladenschild() {
   const buehne = useRef<HTMLDivElement>(null)
+  /**
+   * Die Parallaxe — Karol am 20.08.: „das Logo soll eine Parallax-Animation
+   * haben. Hat es aktuell nicht."
+   *
+   * Sie sitzt auf der BÜHNE, nicht auf dem Schild. Das Schild trägt schon die
+   * Neigung, und zwei `transform` auf einem Knoten überschreiben einander
+   * still — der zweite gewinnt, der erste ist einfach weg. Ein Knoten pro
+   * Bewegung ist auf dieser Seite die Regel, seit derselbe Fehler den Hero
+   * einmal die Kamerafahrt gekostet hat.
+   *
+   * −0,10 heisst: es steigt beim Scrollen etwas langsamer als die Zeile
+   * darunter. Ein Schild hängt, es fährt nicht mit.
+   */
+  const schweben = useVersatz<HTMLDivElement>(-0.1)
   const schild = useRef<HTMLDivElement>(null)
-  /* Beim Herunterscrollen hebt das Schild ab und kippt weg. Ein Schild begrüsst
-     und geht dann aus dem Weg — es fährt nicht die ganze Seite mit. */
-  const abgang = useAbgang<HTMLHeadingElement>('.backstube')
-
   useEffect(() => {
     const b = buehne.current
     const s = schild.current
@@ -95,25 +105,25 @@ export default function Ladenschild() {
   }, [])
 
   return (
-    <div className="schild-buehne" ref={buehne}>
-      {/* Das Logo TRÄGT die Überschrift — es ist die Wortmarke „Aram", und ein
-          zweites gesetztes „Aram" daneben wären zwei Wortmarken, die um
-          dieselbe Stelle kämpfen. Für Vorleseprogramme und Suchmaschinen steht
-          der Name als Text da, nur unsichtbar. */}
-      <h1 id="backstube-titel" className="schild-titel" ref={abgang}>
-        <span className="visuell-versteckt">{ARAM.langname}</span>
-        <div className="schild" ref={schild} aria-hidden="true">
-          <img
-            src="/bilder/echt/logo.webp"
-            alt=""
-            width={1220}
-            height={540}
-            loading="eager"
-            fetchPriority="high"
-            decoding="sync"
-          />
+    <div className="schild-buehne" ref={schweben}>
+      <div className="schild-neigung" ref={buehne}>
+      {/* KEINE Überschrift mehr — und das ist die Umkehr vom 20.08.
+          Solange das Logo die Schlagzeile war, war die Schlagzeile ein
+          Rasterbild: nicht setzbar, nicht umbrechbar, nicht skalierbar, und in
+          der Bildsprache von 2008. Jetzt trägt gesetzte Schrift die Aussage
+          und das Logo ist wieder das, was ein Logo ist — eine Marke. */}
+      <div className="schild" ref={schild}>
+        <img
+          src="/bilder/echt/logo.webp"
+          alt="Aram — Pizzeria & Gastronomie"
+          width={1220}
+          height={540}
+          loading="eager"
+          fetchPriority="high"
+          decoding="sync"
+        />
         </div>
-      </h1>
+      </div>
     </div>
   )
 }
