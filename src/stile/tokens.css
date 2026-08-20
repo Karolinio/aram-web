@@ -64,16 +64,78 @@
   --tinte-leise: oklch(44% 0.050 52);
   --linie: oklch(80% 0.038 68);        /* Haarlinien, immer 1px */
 
-  /* Ihr Schwarz von der alten Seite. Es trägt den Fuss und den Schleier über
-     dem Hero — „ein bisschen Schwarz", und mehr soll es auch nicht werden. */
-  --nacht: #1d140e;
-
-  --akzent: oklch(40% 0.130 35);       /* DAS Signal. Knopf, Anker, Fokus */
-  --glut: oklch(66% 0.180 45);         /* IHR Orange, wie im Logo */
-  --tinte-glut: oklch(26% 0.045 52);   /* Schrift auf hellem Glut */
+  /**
+   * ── Der Akzent ist ihr Orange, nur dunkler ──────────────────────────────
+   *
+   * ═══ Der letzte Befund der Farbprüfung vom 20.08. ═══
+   *
+   * Er stand auf Ton 35, ihr Orange liegt auf Ton 43 — gemessen, indem 61
+   * Tonwerte gegen `#fe6201` gerechnet wurden. Acht Grad Abstand sind genau
+   * die Zone, in der es weder als dieselbe Farbe noch als eine andere liest:
+   * dieselbe Falle wie beim gelöschten `--glut`.
+   *
+   * Damit hatte die Seite ZWEI Markenfarben, je nach Grund eine. Jetzt hat sie
+   * eine in zwei Stufen — heller Grund nimmt die dunkle, dunkler Grund die
+   * helle. Das ist eine Skala, kein zweiter Ton.
+   *
+   * Und es lässt sich prüfen statt behaupten. Ein dunkles Orange verrät sich am
+   * Verhältnis von Grün zu Rot im fertigen Pixel:
+   *
+   *   vorher   rgb(127, 35, 11)   G/R 0,28   liest rot
+   *   jetzt    rgb(151, 63, 19)   G/R 0,42   liest orange
+   *   ihr Logo rgb(254, 98,  1)   G/R 0,39
+   *
+   * Heller ging nicht: bei L 50 fällt der Kontrast auf dem tiefen Clay unter
+   * 4,5. 48 % ist die hellste Stufe, die beide Gründe trägt — 5,61 auf hell,
+   * 4,63 auf tief.
+   */
+  --akzent: oklch(48% 0.130 43);       /* DAS Signal auf hellem Grund */
 
   /**
-   * ── Der DUNKLE GRUND: ihr Schwarz als zweite Fläche ─────────────────────
+   * ── IHR Orange, und es gibt es genau einmal ─────────────────────────────
+   *
+   * ═══ Was die Prüfung am 20.08. gefunden hat ═══
+   *
+   * Es gab zwei. `#fe6201` stand fünfmal als Literal im Stilblatt, und daneben
+   * lag ein Token `--glut: oklch(66% 0.180 45)` mit dem Kommentar „IHR Orange,
+   * wie im Logo". Gemessen sind das rgb(254, 98, 1) gegen rgb(232, 101, 24) —
+   * 32 Einheiten Abstand, deutlich zu sehen, wenn man sie nebeneinanderlegt.
+   *
+   * Ein Token, dessen Kommentar behauptet, es sei die Markenfarbe, und das es
+   * nicht ist, ist schlimmer als gar kein Token: es wird benutzt, WEIL da
+   * steht, es sei richtig. Dass es zuletzt nirgends mehr benutzt wurde, war
+   * Glück, keine Ordnung.
+   *
+   * Jetzt einer, als Hexwert, weil er aus IHRER Datei kommt und keine
+   * Herleitung hat, die man nachrechnen könnte.
+   */
+  --orange: #fe6201;
+
+  /**
+   * ── Creme, und es gibt sie genau einmal ─────────────────────────────────
+   *
+   * Vorher drei: `oklch(97% 0.015 78)`, `oklch(96% 0.018 78)` und
+   * `oklch(96.5% 0.020 76)`. Gemessen liegen sie 5 und 6 Einheiten
+   * auseinander — das ist unter der Schwelle, ab der ein Auge zwei Flächen
+   * überhaupt trennen kann.
+   *
+   * Drei Werte, die gleich AUSSEHEN, aber verschieden SIND, sind der teuerste
+   * Zustand von allen: niemand sieht den Unterschied, also merkt auch niemand,
+   * wenn ein vierter dazukommt. So entstehen fünfzehn.
+   */
+  --creme: oklch(97% 0.015 78);
+
+  /**
+   * ── Der Schleierton, und es gibt ihn genau einmal ───────────────────────
+   *
+   * Vorher drei: `oklch(12% 0.02 55)`, `oklch(10% 0.02 50)`, `oklch(12% 0.02 50)`.
+   * Abstände von 1 und 4 Einheiten — bei einem Ton, der ohnehin nur mit 6 bis
+   * 93 % Deckkraft über einer Fotografie liegt, ist das exakt nichts.
+   */
+  --tief: oklch(12% 0.02 55);
+
+  /**
+   * ── Der dunkle Grund: ihr Schwarz als zweite Fläche ─────────────────────
    *
    * ═══ Warum das Orange als Fläche endgültig gestorben ist ═══
    *
@@ -85,34 +147,53 @@
    * Und genau das ist der Beweis, nicht der Einwand. Eine ganze Fläche in
    * Orange MUSS dunkel sein, sonst trägt sie keine Schrift — und ein dunkles
    * Orange ist ein Rostbraun. Es gibt kein „typisches Orange", das gleichzeitig
-   * Fläche sein kann: typisch orange heisst hell und gesättigt, und hell und
-   * gesättigt trägt weder Creme noch Tinte.
+   * Fläche sein kann.
    *
-   *   ihr Logo-Orange   #fe6201   auf Creme 2,27   auf ihrem Schwarz 6,01
+   *   ihr Orange   auf Creme 2,27   auf ihrem Schwarz 6,01
    *
    * Die Zeile rechts ist die Antwort. Ihr Orange braucht keinen orangen Grund,
-   * es braucht einen DUNKLEN. Auf Schwarz ist es endlich das Orange vom Logo —
-   * unverändert, ungedämpft, und lesbar.
+   * es braucht einen DUNKLEN.
    *
    * Damit stehen ZWEI Gründe und EIN Akzent:
    *
    *   Clay      hell und tief, der Regelfall
    *   Nacht     ihr Schwarz, für genau die Abschnitte, die tragen sollen
-   *   #fe6201   ihr Orange, NIE als Fläche — nur Schrift, Linie, Marke
+   *   Orange    NIE als Fläche — nur Schrift, Linie, Marke
    */
-  --nacht-grund: #1d140e;                 /* ihr Schwarz von der alten Seite */
-  --nacht-schrift: oklch(96.5% 0.020 76); /* Creme darauf — 16,2 gemessen */
-  --nacht-leise: oklch(96.5% 0.02 76 / 0.76);
-  --nacht-marke: #fe6201;                 /* ihr Orange, 6,01 auf Nacht */
-  --nacht-linie: oklch(96.5% 0.02 76 / 0.28);
+  --nacht: #1d140e;                          /* ihr Schwarz von der alten Seite */
+  --nacht-schrift: var(--creme);             /* 16,2 gemessen */
+  --nacht-leise: color-mix(in oklch, var(--creme) 76%, transparent);
+  --nacht-marke: var(--orange);              /* 6,01 auf Nacht */
+  --nacht-linie: color-mix(in oklch, var(--creme) 28%, transparent);
 
-  /* Alte Namen zeigen auf die neuen, damit nichts stumm bricht. */
-  --papier: var(--ton-hell);
-  --creme: var(--ton-hell);
-  --creme-tief: var(--ton-tief);
-  --russ: var(--tinte);
-  --russ-mtl: var(--tinte-leise);
-  --terra: var(--akzent);
+  /**
+   * ── Die Cremestufen auf dunklem Grund ───────────────────────────────────
+   *
+   * Vier Stufen, und mehr gibt es nicht. Vorher lagen zehn verschiedene
+   * Deckkraftwerte derselben Creme im Stilblatt — 0,10 / 0,12 / 0,2 / 0,42 /
+   * 0,45 / 0,7 / 0,72 / 0,78. Zwischen 0,70 und 0,72 liegt nichts, was ein
+   * Mensch sehen kann; es liegt nur die Frage, welcher der beiden der richtige
+   * ist, und die kann niemand beantworten.
+   */
+  --creme-ruhig: color-mix(in oklch, var(--creme) 76%, transparent);  /* Nebentext, Kante im Griff */
+  --creme-kante: color-mix(in oklch, var(--creme) 45%, transparent);  /* Umrisse auf dunklem Grund */
+  --creme-glas:  color-mix(in oklch, var(--creme) 12%, transparent);  /* durchscheinende Füllung */
+  --creme-glas-hoch: color-mix(in oklch, var(--creme) 22%, transparent); /* dieselbe unter dem Zeiger */
+
+  /**
+   * ── Die Scheibe ─────────────────────────────────────────────────────────
+   *
+   * Der Ton der gläsernen Kopfzeile über der Fotografie. Er steht hier und
+   * nicht im Stilblatt, weil es genau EINE gläserne Fläche auf dieser Seite
+   * gibt und ein zweites Glas mit einem eigenen Ton die Regel wäre, nicht die
+   * Ausnahme.
+   *
+   * Wärmer als der Schleier (Ton 48 statt 55, mehr Buntheit): eine Scheibe
+   * mischt sich mit dem, was hinter ihr liegt, und hinter ihr liegt eine warme
+   * Ladenfront. Ein neutrales Glas darauf wird graubraun — gemessen kam die
+   * Navigation vorher auf rgb(150, 140, 131).
+   */
+  --glas: oklch(15% 0.035 48 / 0.70);
 
   /**
    * ── Clay: Tiefe aus Licht, nicht aus Linien ─────────────────────────────
@@ -144,12 +225,6 @@
   --schatten-speise:
     drop-shadow(0 18px 28px oklch(24% 0.03 50 / 0.22))
     drop-shadow(0 3px 8px oklch(24% 0.03 50 / 0.16));
-
-  /* Der Cremeschleier über der Fotografie. Eine DECKENDE Fläche mit Alpha —
-     kein Weichzeichner. Der Unterschied ist sichtbar: ein Schleier lässt die
-     Struktur des Fotos stehen und nimmt ihm nur den Kontrast. */
-  --schleier: oklch(95% 0.03 78 / 0.72);
-  --schleier-dicht: oklch(95% 0.03 78 / 0.88);
 
   /**
    * ── Typografie ─────────────────────────────────────────────────────────

@@ -44,7 +44,7 @@
   font-size: var(--text-meta);
   font-weight: 620;
   
-  color: var(--russ);
+  color: var(--tinte);
   max-width: none;
 }
 
@@ -53,7 +53,7 @@
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: var(--terra);
+  background: var(--akzent);
 }
 
 /* Grün heisst auf dieser Seite nichts — die Palette kennt kein Grün. Der
@@ -63,7 +63,7 @@
 }
 .oeffnung[data-art='zu'] .oeffnung__punkt {
   background: var(--linie);
-  border: 1px solid var(--russ-mtl);
+  border: 1px solid var(--tinte-leise);
 }
 
 @keyframes puls {
@@ -96,7 +96,7 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--terra);
+  background: var(--akzent);
 }
 
 .hinweisband__text {
@@ -106,7 +106,7 @@
   font-variation-settings: var(--wonk-klein);
   font-weight: 520;
   font-size: var(--text-meta);
-  color: var(--russ);
+  color: var(--tinte);
 }
 
 /* ── Kopfzeile ────────────────────────────────────────────────────────────── */
@@ -206,13 +206,13 @@
      Eine Form, die oben weicher ist als unten, liest als Griff und nicht als
      Kachel. */
   border-radius: 22px 22px 14px 14px;
-  background: oklch(15% 0.035 48 / 0.70);
-  color: oklch(97% 0.015 78);
+  background: var(--glas);
+  color: var(--creme);
   -webkit-backdrop-filter: blur(12px) saturate(135%);
   backdrop-filter: blur(12px) saturate(135%);
   box-shadow:
-    inset 0 1px 0 oklch(100% 0 0 / 0.16),
-    0 10px 30px -14px oklch(12% 0.02 55 / 0.7);
+    inset 0 1px 0 color-mix(in oklch, var(--creme) 22%, transparent),
+    0 10px 30px -14px color-mix(in oklch, var(--tief) 70%, transparent);
   transition:
     background-color var(--dauer-mikro) var(--ease-teig),
     color var(--dauer-mikro) var(--ease-teig),
@@ -226,8 +226,8 @@
   background-color: color-mix(in oklch, var(--ton-tief) 88%, transparent);
   color: var(--tinte);
   box-shadow:
-    inset 0 1px 0 oklch(100% 0 0 / 0.5),
-    0 10px 26px -14px oklch(30% 0.055 55 / 0.35);
+    inset 0 1px 0 color-mix(in oklch, var(--creme) 62%, transparent),
+    0 10px 26px -14px color-mix(in oklch, var(--tinte) 35%, transparent);
 }
 
 .kopf__zeile {
@@ -282,10 +282,10 @@
   padding-block: 0.4rem;
   border-bottom: 2px solid transparent;
 }
-.kopf__anker:hover { color: var(--terra); }
+.kopf__anker:hover { color: var(--akzent); }
 .kopf__anker[aria-current='true'] {
-  color: var(--terra);
-  border-bottom-color: var(--terra);
+  color: var(--akzent);
+  border-bottom-color: var(--akzent);
 }
 
 /**
@@ -315,47 +315,26 @@
  */
 /* Über dem dunklen Hero: Glasknopf mit heller Kante. Eine Clay-Fläche wäre
    dort ein heller Klotz auf einem Foto. */
-:root:not([data-probe='rot']) .kopf__anruf {
-  background: oklch(97% 0.015 78 / 0.12);
-  color: oklch(97% 0.015 78);
-  border: 1px solid oklch(97% 0.015 78 / 0.45);
+.kopf__anruf {
+  background: var(--creme-glas);
+  color: var(--creme);
+  border: 1px solid var(--creme-kante);
 }
 
 /* Ab der hellen Sektion wieder Clay mit Tinte — wie bisher. */
-:root:not([data-probe='rot']) .kopf[data-eng='ja'] .kopf__anruf {
+.kopf[data-eng='ja'] .kopf__anruf {
   background: var(--ton-hell);
   color: var(--tinte);
   border-color: var(--linie);
 }
 
-:root:not([data-probe='rot']) .kopf__anruf:hover {
+.kopf__anruf:hover {
   background: var(--ton-hell);
   border-color: var(--akzent);
   color: var(--akzent);
 }
 
 
-
-/**
- * FASSUNG ROT — ihr Logorot, aus der Datei gemessen.
- *
- * Nicht geschätzt: die häufigste kräftige Rotstufe in `logo.webp` liegt bei
- * rgb(184, 24, 24), 18,1 % aller Rotpunkte. Das ist der Ton der Wortmarke
- * selbst, nicht ein danebenliegender Markenton.
- *
- * Er ist deutlich wärmer und satter als `--akzent` (das bisherige Dunkelrot,
- * das Karol als unpassend empfindet) — dafür ist er die einzige gesättigte
- * Fläche der Seite und zieht den Blick nach oben rechts, weg vom Inhalt.
- */
-:root[data-probe='rot'] .kopf__anruf {
-  background: oklch(47% 0.19 29);
-  color: oklch(97% 0.02 60);
-  border: 1px solid transparent;
-}
-
-:root[data-probe='rot'] .kopf__anruf:hover {
-  background: oklch(41% 0.17 29);
-}
 
 .kopf__anruf-kurz { display: none; }
 
@@ -619,16 +598,16 @@
   background:
     linear-gradient(
       100deg,
-      oklch(12% 0.02 55 / 0.93) 0%,
-      oklch(12% 0.02 55 / 0.84) 34%,
-      oklch(12% 0.02 55 / 0.34) 62%,
-      oklch(12% 0.02 55 / 0.06) 88%,
+      color-mix(in oklch, var(--tief) 93%, transparent) 0%,
+      color-mix(in oklch, var(--tief) 84%, transparent) 34%,
+      color-mix(in oklch, var(--tief) 34%, transparent) 62%,
+      color-mix(in oklch, var(--tief) 6%, transparent) 88%,
       transparent 100%
     ),
     linear-gradient(
       to top,
-      oklch(12% 0.02 55 / 0.55) 0%,
-      oklch(12% 0.02 55 / 0.12) 26%,
+      color-mix(in oklch, var(--tief) 55%, transparent) 0%,
+      color-mix(in oklch, var(--tief) 12%, transparent) 26%,
       transparent 52%
     ),
     /* Die KAPPE oben — dazugekommen mit der gläsernen Insel am 20.08.
@@ -640,8 +619,8 @@
        selbst als Lichtabfall nach oben, wie er über jeder Ladenfront steht. */
     linear-gradient(
       to bottom,
-      oklch(10% 0.02 50 / 0.62) 0%,
-      oklch(10% 0.02 50 / 0.30) 12%,
+      color-mix(in oklch, var(--tief) 62%, transparent) 0%,
+      color-mix(in oklch, var(--tief) 30%, transparent) 12%,
       transparent 26%
     );
 }
@@ -686,7 +665,7 @@
    * solange der Hero hell war. Der Wert ist geblieben, die Begründung auch:
    * eine Bildunterschrift ist leise, aber sie muss lesbar bleiben.
    */
-  color: oklch(97% 0.015 78 / 0.78);
+  color: var(--creme-ruhig);
 }
 
 
@@ -786,7 +765,7 @@
     drop-shadow(1px 1px 0 oklch(30% 0.08 42))
     drop-shadow(1px 1px 0 oklch(26% 0.07 44))
     drop-shadow(1px 1px 0 oklch(22% 0.05 46))
-    drop-shadow(0 10px 18px oklch(12% 0.02 50 / 0.45));
+    drop-shadow(0 10px 18px color-mix(in oklch, var(--tief) 45%, transparent));
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -801,15 +780,15 @@
  * ZUSAMMENGESETZTE Pixel gemessen, nicht gegen einen Token — unter einem
  * Verlauf über einer Fotografie hilft keine Rechnung, nur der Screenshot.
  *
- * Und die Marke ist ihr echtes Orange (#fe6201). Auf hellem Grund konnte es
+ * Und die Marke ist ihr echtes Orange (var(--orange)). Auf hellem Grund konnte es
  * nie Schrift sein (2,27 gemessen); hier ist es endlich in seiner Rolle.
  */
-.backstube__satz { color: oklch(97% 0.015 78); }
+.backstube__satz { color: var(--creme); }
 
 /**
  * Die Ortszeile — Karols „richtig hässlich", und er hatte recht.
  *
- * Sie stand als 1,3-rem-Fraunces in #fe6201 direkt unter einer 672 px breiten
+ * Sie stand als 1,3-rem-Fraunces in var(--orange) direkt unter einer 672 px breiten
  * roten Wortmarke. Zwei fette Schriften in derselben Farbfamilie, zehn Pixel
  * auseinander: das ist keine Unterzeile, das ist eine zweite Wortmarke, die um
  * dieselbe Stelle kämpft. Kein Wert hätte das gerettet — es war die ROLLE.
@@ -831,7 +810,7 @@
      verschiebt alles darunter. Kurz genug ist sie jetzt: gemessen 207 px bei
      393 px Bildschirmbreite. */
   white-space: nowrap;
-  color: oklch(97% 0.015 78 / 0.72);
+  color: var(--creme-ruhig);
   max-width: none;
 }
 
@@ -858,7 +837,7 @@
   line-height: var(--leading-eng);
   letter-spacing: var(--sperr-hero);
   text-wrap: balance;
-  color: oklch(97% 0.015 78);
+  color: var(--creme);
 }
 
 .backstube__lead { margin-top: clamp(1.5rem, 3vw, 2.5rem); }
@@ -888,9 +867,9 @@
  * Fotografie.
  */
 .backstube__knoepfe .knopf--leise {
-  background: oklch(97% 0.015 78 / 0.10);
-  color: oklch(97% 0.015 78);
-  border-color: oklch(97% 0.015 78 / 0.42);
+  background: var(--creme-glas);
+  color: var(--creme);
+  border-color: var(--creme-kante);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   box-shadow: none;
@@ -898,9 +877,9 @@
 
 @media (hover: hover) {
   .backstube__knoepfe .knopf--leise:hover {
-    background: oklch(97% 0.015 78 / 0.2);
-    border-color: oklch(97% 0.015 78 / 0.7);
-    color: oklch(97% 0.015 78);
+    background: var(--creme-glas-hoch);
+    border-color: var(--creme-ruhig);
+    color: var(--creme);
   }
 }
 
@@ -1150,7 +1129,7 @@
   z-index: 0;
   /* Eine Spur dunkler als der Glutgrund, damit der Ausschnitt eine Vertiefung
      ist und kein Loch. Kein zweiter Farbton — dieselbe Glut, abgedunkelt. */
-  background: oklch(24% 0.09 40 / 0.35);
+  background: color-mix(in oklch, var(--tinte) 35%, transparent);
 }
 
 /**
@@ -1345,7 +1324,7 @@
 .flieger__text {
   display: block;
   font-size: var(--text-meta);
-  color: var(--russ-mtl);
+  color: var(--tinte-leise);
 }
 
 /**
@@ -1510,7 +1489,7 @@
   font-variation-settings: var(--wonk-klein);
   font-variant-numeric: tabular-nums;
   line-height: 1;
-  color: var(--terra);
+  color: var(--akzent);
   margin-bottom: 0.5rem;
 }
 
@@ -1521,7 +1500,7 @@
 
 .schritt__text {
   font-size: var(--text-meta);
-  color: var(--russ-mtl);
+  color: var(--tinte-leise);
   max-width: 22ch;
 }
 
@@ -1534,7 +1513,7 @@
 
 .filter__titel {
   font-size: var(--text-meta);
-  color: var(--russ-mtl);
+  color: var(--tinte-leise);
   margin-bottom: 0.9rem;
   max-width: var(--breite-satz);
 }
@@ -1551,7 +1530,7 @@
   border-radius: var(--radius-knopf);
   border: 1px solid var(--linie);
   background: transparent;
-  color: var(--russ);
+  color: var(--tinte);
   font-family: var(--font-display);
   font-variation-settings: var(--wonk-klein);
   font-size: var(--text-meta);
@@ -1561,15 +1540,15 @@
     border-color var(--dauer-mikro) var(--ease-teig),
     color var(--dauer-mikro) var(--ease-teig);
 }
-.filter__knopf:hover { border-color: var(--terra); color: var(--terra); }
+.filter__knopf:hover { border-color: var(--akzent); color: var(--akzent); }
 
 /* Gedrückt heisst hier „wird ausgeblendet". Deshalb wird der Knopf gefüllt und
    nicht nur farbig umrandet: der Zustand muss auch ohne Farbwahrnehmung lesbar
    sein — und die Beschriftung wechselt zusätzlich auf „ohne Gluten". */
 .filter__knopf[aria-pressed='true'] {
-  background: var(--terra);
-  border-color: var(--terra);
-  color: var(--papier);
+  background: var(--akzent);
+  border-color: var(--akzent);
+  color: var(--ton-hell);
 }
 
 .filter__zuruecksetzen {
@@ -1577,7 +1556,7 @@
   padding: 0.5em 0.4em;
   border: 0;
   background: transparent;
-  color: var(--terra);
+  color: var(--akzent);
   font-family: var(--font-display);
   font-size: var(--text-meta);
   font-weight: 620;
@@ -1589,7 +1568,7 @@
 .filter__stand {
   margin-top: 0.8rem;
   font-size: var(--text-micro);
-  color: var(--russ-mtl);
+  color: var(--tinte-leise);
   letter-spacing: 0.01em;
 }
 
@@ -1627,7 +1606,7 @@
   font-variation-settings: var(--wonk-kopf);
   letter-spacing: -0.01em;
   padding-bottom: 0.6rem;
-  border-bottom: 1px solid var(--russ);
+  border-bottom: 1px solid var(--tinte);
 }
 
 /* KEINE Kursive mehr. Reem Kufi hat keine — der Browser hätte sie geneigt,
@@ -1640,7 +1619,7 @@
   font-variation-settings: var(--wonk-klein);
   font-size: var(--text-meta);
   font-weight: 500;
-  color: var(--russ-mtl);
+  color: var(--tinte-leise);
 }
 
 .gruppe__liste { list-style: none; padding: 0; margin: 1rem 0 0; }
@@ -1728,7 +1707,7 @@
 .zeile__beschreibung {
   margin: 0.15rem 0 0;
   font-size: var(--text-meta);
-  color: var(--russ-mtl);
+  color: var(--tinte-leise);
   max-width: 46ch;
 }
 
@@ -1738,7 +1717,7 @@
   font-variation-settings: var(--wonk-klein);
   font-size: var(--text-micro);
   font-weight: 500;
-  color: var(--russ-mtl);
+  color: var(--tinte-leise);
   max-width: none;
 }
 
@@ -1746,7 +1725,7 @@
    er ist eine Leerstelle, keine Angabe. */
 .preis--folgt {
   font-weight: 500;
-  color: var(--russ-mtl);
+  color: var(--tinte-leise);
 }
 
 .zaehler { display: flex; align-items: center; gap: 0.3rem; }
@@ -1760,7 +1739,7 @@
   border-radius: 50%;
   border: 1px solid var(--linie);
   background: transparent;
-  color: var(--russ);
+  color: var(--tinte);
   font-family: var(--font-display);
   font-size: 1.25rem;
   font-weight: 600;
@@ -1770,9 +1749,9 @@
     border-color var(--dauer-mikro) var(--ease-teig),
     color var(--dauer-mikro) var(--ease-teig);
 }
-.zaehler__knopf:hover { border-color: var(--terra); color: var(--terra); }
-.zaehler__knopf--plus { border-color: var(--terra); color: var(--terra); }
-.zaehler__knopf--plus:hover { background: var(--terra); color: var(--papier); }
+.zaehler__knopf:hover { border-color: var(--akzent); color: var(--akzent); }
+.zaehler__knopf--plus { border-color: var(--akzent); color: var(--akzent); }
+.zaehler__knopf--plus:hover { background: var(--akzent); color: var(--ton-hell); }
 
 .zaehler__stand {
   min-width: 1.6ch;
@@ -1910,13 +1889,13 @@
   padding: clamp(1.2rem, 3vw, 1.75rem);
   border: 1px solid var(--linie);
   text-decoration: none;
-  color: var(--russ);
+  color: var(--tinte);
   transition:
     transform var(--dauer-mikro) var(--ease-teig),
     border-color var(--dauer-mikro) var(--ease-teig);
 }
 @media (hover: hover) {
-  .weg:hover { transform: translateY(-3px); border-color: var(--terra); }
+  .weg:hover { transform: translateY(-3px); border-color: var(--akzent); }
 }
 
 /**
@@ -1964,7 +1943,7 @@
   line-height: 1.15;
 }
 
-.weg__zusatz { font-size: var(--text-meta); color: var(--russ-mtl); }
+.weg__zusatz { font-size: var(--text-meta); color: var(--tinte-leise); }
 /* Auf dem Clay-Grund trägt der Kleintext dieselbe gedämpfte Tinte wie überall.
    Die Sonderregel für Glut ist mit der Glutfläche verschwunden. */
 
@@ -1989,7 +1968,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: var(--papier);
+  background: var(--ton-hell);
   border-top: 1px solid var(--linie);
   padding-bottom: env(safe-area-inset-bottom, 0);
 }
@@ -2013,7 +1992,7 @@
   font-weight: 600;
   
   letter-spacing: 0.005em;
-  color: var(--terra);
+  color: var(--akzent);
 }
 
 .leiste__liste {
@@ -2032,14 +2011,14 @@
   padding: 0 0.6rem;
   border: 0;
   background: transparent;
-  color: var(--russ-mtl);
+  color: var(--tinte-leise);
   font-family: var(--font-display);
   font-size: var(--text-meta);
   cursor: pointer;
   text-decoration: underline;
   text-underline-offset: 0.25em;
 }
-.leiste__leeren:hover { color: var(--terra); }
+.leiste__leeren:hover { color: var(--akzent); }
 
 /* ── Der Fuss ─────────────────────────────────────────────────────────────── */
 
@@ -2054,14 +2033,14 @@
  * Dasselbe Schwarz irgendwo dazwischen wäre ein zweiter Unterbruch — und dann
  * unterbricht nichts mehr, weil alles unterbricht.
  *
- * Es ist IHR Schwarz von der alten Seite (#1d140e), nicht irgendeins. Damit
+ * Es ist IHR Schwarz von der alten Seite (var(--nacht)), nicht irgendeins. Damit
  * schliesst die Seite mit demselben Wert, mit dem der Hero-Schleier arbeitet.
  */
 .fuss {
   position: relative;
   z-index: 1;
   background: var(--nacht);
-  color: oklch(96% 0.018 78);
+  color: var(--creme);
   border-top: 0;
   padding-block: clamp(3rem, 5vw, 5rem);
   /* Platz, damit die Bestellleiste den Fuss nicht überdeckt. */
@@ -2083,23 +2062,29 @@
    des Akzents, helle Haarlinien. Die Lücken bleiben sichtbar — sie sind der
    Grund, warum die Seite nicht live darf, und ein dunkler Grund ist kein
    Anlass, sie leiser zu machen. */
-.fuss .etikett { color: #fe6201; }
-.fuss a { color: oklch(96% 0.018 78); }
-.fuss a:hover { color: #fe6201; }
-.fuss .leise { color: oklch(96% 0.018 78 / 0.72); }
-.fuss .luecke { color: #fe6201; }
-.fuss .datenzeile { --linie: oklch(96% 0.018 78 / 0.24); }
+.fuss .etikett { color: var(--orange); }
+.fuss a { color: var(--creme); }
+.fuss a:hover { color: var(--orange); }
+.fuss .leise { color: var(--creme-ruhig); }
+/* Wie im Impressum: erkennbar, aber nicht lauter als der Inhalt, in dem sie
+   fehlt. In IHREM Orange war sie das Auffälligste im ganzen Fuss — lauter als
+   die Telefonnummer daneben, und die ist der Zweck der Zeile. */
+.fuss .luecke {
+  color: var(--creme-ruhig);
+  border-bottom-color: var(--orange);
+}
+.fuss .datenzeile { --linie: var(--nacht-linie); }
 
 .nichtlive {
   margin-top: clamp(2.5rem, 5vw, 4rem);
   padding: 1.25rem 1.5rem;
-  border: 1px solid var(--terra);
+  border: 1px solid var(--akzent);
 }
 
 .nichtlive__titel {
   font-family: var(--font-display);
   font-weight: 600;
-  color: var(--terra);
+  color: var(--akzent);
   margin-bottom: 0.6rem;
 }
 
@@ -2163,17 +2148,17 @@
     background:
       linear-gradient(
         to bottom,
-        oklch(10% 0.02 50 / 0.62) 0%,
-        oklch(10% 0.02 50 / 0.28) 14%,
+        color-mix(in oklch, var(--tief) 62%, transparent) 0%,
+        color-mix(in oklch, var(--tief) 28%, transparent) 14%,
         transparent 30%
       ),
       linear-gradient(
         to top,
-        oklch(12% 0.02 55 / 0.93) 0%,
-        oklch(12% 0.02 55 / 0.89) 58%,
-        oklch(12% 0.02 55 / 0.80) 78%,
-        oklch(12% 0.02 55 / 0.52) 92%,
-        oklch(12% 0.02 55 / 0.34) 100%
+        color-mix(in oklch, var(--tief) 93%, transparent) 0%,
+        color-mix(in oklch, var(--tief) 89%, transparent) 58%,
+        color-mix(in oklch, var(--tief) 80%, transparent) 78%,
+        color-mix(in oklch, var(--tief) 52%, transparent) 92%,
+        color-mix(in oklch, var(--tief) 34%, transparent) 100%
       );
   }
 

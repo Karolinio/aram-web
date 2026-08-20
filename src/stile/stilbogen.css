@@ -77,8 +77,8 @@
 
 .stil__gerichte img { width: 100%; height: auto; }
 .stil__name { margin: 0.6rem 0 0; font-family: var(--font-display); font-size: var(--text-meta); }
-.stil__echt { margin: 0; font-size: var(--text-micro); color: var(--terra); }
-.stil__erzeugt { margin: 0; font-size: var(--text-micro); color: var(--russ-mtl); }
+.stil__echt { margin: 0; font-size: var(--text-micro); color: var(--akzent); }
+.stil__erzeugt { margin: 0; font-size: var(--text-micro); color: var(--tinte-leise); }
 
 /* Der Bogen ist kein Hero. Seine Überschrift in `--text-hero` zu setzen war
    der erste Fehler, den er selbst sichtbar gemacht hat. */
@@ -91,6 +91,6 @@
 
 .stil__radien { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; gap: 0.75rem; }
 .stil__radien li { display: flex; align-items: center; gap: 1rem; }
-.stil__radius { width: 4rem; height: 2.5rem; background: var(--creme-tief); outline: 1px solid var(--linie); }
+.stil__radius { width: 4rem; height: 2.5rem; background: var(--ton-tief); outline: 1px solid var(--linie); }
 .stil__radius--klein { border-radius: var(--radius-klein); }
 .stil__radius--gross { border-radius: var(--radius-gross); }

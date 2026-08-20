@@ -96,8 +96,8 @@ body {
      ihre Höhe beim Scrollen, und solange sie im Fluss lag, rutschte dabei die
      ganze Seite. */
   padding-top: var(--kopf-hoehe);
-  background: var(--creme);
-  color: var(--russ);
+  background: var(--ton-hell);
+  color: var(--tinte);
   font-family: var(--font-text);
   font-size: var(--text-base);
   line-height: var(--leading-text);
@@ -145,7 +145,7 @@ body::before {
 /* Fokus ist sichtbar, immer, in der Signalfarbe. Ein unsichtbarer Fokus ist
    hier kein Stilfehler — er macht die Seite mit der Tastatur unbenutzbar. */
 :focus-visible {
-  outline: 2px solid var(--terra);
+  outline: 2px solid var(--akzent);
   outline-offset: 3px;
   border-radius: 2px;
 }
@@ -155,8 +155,8 @@ body::before {
   left: var(--rinne);
   top: -100vh;
   z-index: 60;
-  background: var(--terra);
-  color: var(--papier);
+  background: var(--akzent);
+  color: var(--ton-hell);
   padding: 0.7em 1.2em;
   border-radius: var(--radius-knopf);
   font-family: var(--font-display);
@@ -211,7 +211,7 @@ h3 { font-size: var(--text-gericht); font-variation-settings: var(--wonk-klein);
 @media (hover: hover) {
   .lebt:hover {
     font-variation-settings: 'opsz' 96, 'SOFT' 25, 'WONK' 1;
-    color: var(--terra);
+    color: var(--akzent);
   }
 }
 
@@ -221,7 +221,7 @@ h3 { font-size: var(--text-gericht); font-variation-settings: var(--wonk-klein);
 
 p { max-width: var(--breite-satz); }
 
-a { color: var(--terra); text-underline-offset: 0.2em; }
+a { color: var(--akzent); text-underline-offset: 0.2em; }
 
 /**
  * Das Etikett wohnt jetzt in bausteine.css.
@@ -238,7 +238,7 @@ a { color: var(--terra); text-underline-offset: 0.2em; }
   max-width: var(--breite-satz-eng);
 }
 
-.leise { color: var(--russ-mtl); }
+.leise { color: var(--tinte-leise); }
 
 /* Preise. Eine Zahlenkolonne, die wackelt, sieht selbstgemacht aus. Auf einer
    Speisekarte gehört der Preis derselben Schrift wie das Gericht. */
@@ -248,7 +248,7 @@ a { color: var(--terra); text-underline-offset: 0.2em; }
   font-variation-settings: var(--wonk-klein);
   font-size: var(--text-base);
   font-weight: 620;
-  color: var(--russ);
+  color: var(--tinte);
   white-space: nowrap;
 }
 
@@ -385,7 +385,7 @@ section {
   font-family: var(--font-text);
   font-size: 0.95em;
   font-style: italic;
-  border-bottom: 1px dotted var(--terra);
+  border-bottom: 1px dotted var(--akzent);
   padding-bottom: 2px;
 }
 
