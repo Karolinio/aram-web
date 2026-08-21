@@ -694,7 +694,18 @@
      eine Zeile, eine Anschrift und ein Pfeil. Vor drei Fassungen stand das
      Schild bei 42 rem NEBEN einer Schlagzeile in 6,5 rem — das war das
      Plakat, nicht die Grösse an sich. */
-  width: min(84%, 26rem);
+  /* 26 -> 34 rem. Karol zum dritten Mal: „das Logo auf der Startseite muss auf
+     jeden Fall grösser sein."
+
+     Die Regel „ein Schild ist eine Marke, kein Plakat" gilt weiter, und sie
+     wird hier NICHT gebrochen — sie bemisst sich am Verhältnis zum Rest, und
+     der Rest ist eine Zeile in 2,1 rem, eine Anschrift in 0,875 rem und ein
+     Pfeil. Vor vier Fassungen stand das Schild bei 42 rem NEBEN einer
+     Schlagzeile in 6,5 rem; das war das Plakat, nicht die Zahl.
+
+     34 rem ist die Grenze, an der es auf 1440 px noch Luft zum Rand hat und
+     am Handy (84 %) nicht an die Kante stösst. */
+  width: min(84%, 34rem);
   margin-inline: auto;
 }
 

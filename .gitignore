@@ -5,3 +5,6 @@ dist
 
 # Die Originale vom Chef. Ausserhalb von public/, damit der Bau sie nicht mitschleppt.
 rohbilder/
+
+# Werkzeug-Umgebung fürs Freistellen (Python 3.11, ~700 MB). Lokal, nicht ins Repo.
+.venv-bild/
