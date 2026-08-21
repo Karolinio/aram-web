@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 
-import { useVersatz } from '../bewegung.ts'
+import { useDrehung, useVersatz } from '../bewegung.ts'
 
 
 /**
@@ -58,6 +58,19 @@ export default function Ladenschild() {
    * darunter. Ein Schild hängt, es fährt nicht mit.
    */
   const schweben = useVersatz<HTMLDivElement>(-0.1)
+  /**
+   * Die Drehung — Karol: „ich will eine Animation, wie sich das dreht."
+   *
+   * 26 Grad über die volle Höhe des Heros, scrollgetrieben. Nicht mehr: ein
+   * Schild, das sich weiter dreht, zeigt irgendwann seine Kante, und eine
+   * Wortmarke von der Seite ist keine Wortmarke mehr. Bei 26 Grad bleibt sie
+   * durchgehend lesbar und fängt trotzdem sichtbar Licht.
+   *
+   * `scrub: 1` statt `true`: die Drehung läuft der Scrollbewegung eine knappe
+   * Sekunde nach. Starr gekoppelt wirkt jede Scrollbewegung mechanisch — die
+   * Nachlaufzeit ist das, was teuer aussieht.
+   */
+  const drehen = useDrehung<HTMLDivElement>(26)
   const schild = useRef<HTMLDivElement>(null)
   useEffect(() => {
     const b = buehne.current
@@ -107,6 +120,7 @@ export default function Ladenschild() {
   return (
     <div className="schild-buehne" ref={schweben}>
       <div className="schild-neigung" ref={buehne}>
+        <div className="schild-achse" ref={drehen}>
       {/* KEINE Überschrift mehr — und das ist die Umkehr vom 20.08.
           Solange das Logo die Schlagzeile war, war die Schlagzeile ein
           Rasterbild: nicht setzbar, nicht umbrechbar, nicht skalierbar, und in
@@ -122,6 +136,7 @@ export default function Ladenschild() {
           fetchPriority="high"
           decoding="sync"
         />
+          </div>
         </div>
       </div>
     </div>

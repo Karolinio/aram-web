@@ -142,92 +142,66 @@
  */
 .kopf {
   /**
-   * FEST, nicht klebend — und das ist eine Fehlerbehebung, keine Vorliebe.
+   * FEST, nicht klebend — eine Fehlerbehebung, keine Vorliebe. Eine klebende
+   * Kopfzeile behält ihren Platz im Fluss; sobald sie beim Scrollen
+   * zusammenfährt, rutscht alles darunter nach oben. Der Fabrikprüfer hat
+   * genau darauf gezeigt: `header>div>button` stand als Quelle des Sprungs
+   * im Befund.
    *
-   * Eine klebende Kopfzeile behält ihren Platz im Fluss. Sobald sie beim
-   * Scrollen zusammenfährt, schrumpft dieser Platz — und ALLES darunter
-   * rutscht nach oben. Bei jedem Durchgang, an derselben Stelle. Gemessen hat
-   * es der Fabrikprüfer: als Quelle des Sprungs stand `header>div>button` im
-   * Befund.
+   * ═══ Wieder EINE DURCHGEHENDE SCHEIBE, keine Insel ═══
    *
-   * ═══ Und ab dem 20.08. ist sie eine INSEL, kein Balken ═══
+   * Karol am 21.08.: „Das sieht irgendwie grad aus wie nix, halbes, nix
+   * Ganzes. Da ist ja so eine weisse Fläche hinter diesem abgerundeten
+   * Glasheader. Füll das aus."
    *
-   * Karol: „Der Header soll, wie gesagt, gläsern sein, vielleicht nicht eckig,
-   * sondern abgerundet oben an den Ecken."
+   * Er hat recht, und der Grund ist ein anderer als der, aus dem ich die Insel
+   * gebaut habe. Meine Begründung war: „Glas erkennt man an seiner KANTE — ein
+   * Balken über die volle Breite hat nur eine Unterkante." Das stimmt für eine
+   * Scheibe, die über EINEM Bild schwebt.
    *
-   * Ein Balken über die volle Breite kann gar nicht gläsern wirken. Glas
-   * erkennt man an seiner KANTE — daran, dass etwas daneben vorbeizieht, was
-   * darunter anders aussieht. Ein Balken, der bis an beide Bildschirmränder
-   * reicht, hat nur eine Unterkante, und die liest als Schnitt, nicht als
-   * Scheibe. Deshalb hat hier auch eine gepunktete Linie gestanden und deshalb
-   * musste sie wieder raus: sie hat versucht, die fehlende Kante zu ersetzen.
+   * Nur schwebt sie hier nicht über einem Bild, sondern über einer Seite, die
+   * unter ihr die Farbe wechselt. Dann liest der Streifen daneben nicht als
+   * Luft, sondern als REST — als hätte jemand vergessen, ihn zu füllen. Zwei
+   * Kanten links und rechts, die bei jedem Farbwechsel neu auftauchen, sind
+   * kein Detail, sie sind ein Loch.
    *
-   * Jetzt schwebt die Zeile eingerückt, mit Luft nach oben und zu beiden
-   * Seiten. Das Foto zieht RINGSUM vorbei. Das ist der ganze Trick, und er
-   * kostet zwei Zeilen.
-   *
-   * Der Träger selbst ist unsichtbar und fängt keine Klicks — sonst läge ein
-   * durchsichtiger Streifen über der ganzen Bildschirmbreite und schluckte
-   * jeden Griff daneben.
+   * Was von der Insel bleibt: die Rundung UNTEN und die Lichtkante. Eine
+   * Scheibe, die oben bündig sitzt und unten gerundet ausläuft, hat eine
+   * Kante, die man sieht, und keine, die man vermisst.
    */
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 40;
-  padding-top: clamp(0.5rem, 1.1vw, 0.9rem);
-  pointer-events: none;
-}
-
-.kopf > * { pointer-events: auto; }
-
-/**
- * Die Scheibe.
- *
- * ═══ Die Zahlen sind gewählt, nicht abgeschrieben ═══
- *
- *   0,62      Deckung. Bei 0,42 kam Creme darauf auf 2,91 gegen den Brei
- *             darunter — ein Glas, auf dem man nichts lesen kann, ist kein
- *             Glas, sondern Nebel.
- *   12 px     Unschärfe. 18 verwischten das Foto zu Brei; 12 lassen die
- *             Ladenfront durchziehen und bleiben ruhig genug für Navigation.
- *   135 %     Sättigung. Glas, das entsättigt, sieht nach Milchglas aus.
- *
- * ═══ Und die Lichtkante ═══
- *
- * Eine Scheibe hat eine Oberkante, an der sich Licht bricht. Ohne sie ist eine
- * durchscheinende Fläche nur eine durchscheinende Fläche. Die eine `inset`-
- * Zeile im Schatten unten ist der Unterschied zwischen „halbdurchsichtig" und
- * „aus Glas" — das ist die teuerste Zeile dieser Datei, gemessen in Wirkung
- * pro Zeichen.
- */
-.kopf__glas {
-  /* Oben stärker gerundet als unten — Karols „abgerundet oben an den Ecken".
-     Eine Form, die oben weicher ist als unten, liest als Griff und nicht als
-     Kachel. */
-  border-radius: 22px 22px 14px 14px;
+  border-radius: 0 0 clamp(14px, 1.6vw, 20px) clamp(14px, 1.6vw, 20px);
   background: var(--glas);
   color: var(--creme);
-  -webkit-backdrop-filter: blur(12px) saturate(135%);
-  backdrop-filter: blur(12px) saturate(135%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  backdrop-filter: blur(14px) saturate(140%);
   box-shadow:
-    inset 0 1px 0 color-mix(in oklch, var(--creme) 22%, transparent),
-    0 10px 30px -14px color-mix(in oklch, var(--tief) 70%, transparent);
+    inset 0 -1px 0 color-mix(in oklch, var(--creme) 14%, transparent),
+    0 12px 34px -18px color-mix(in oklch, var(--tief) 72%, transparent);
   transition:
     background-color var(--dauer-mikro) var(--ease-teig),
     color var(--dauer-mikro) var(--ease-teig),
     box-shadow var(--dauer-mikro) var(--ease-teig);
 }
 
-/* Ab der ersten hellen Sektion dreht das Glas um: heller Grund, Tinte darauf,
-   und eine Spur dichter — unter dem Hero zieht Inhalt vorbei, und ein zu
-   klares Glas lässt Überschriften durch die Navigation laufen. */
-.kopf[data-eng='ja'] .kopf__glas {
-  background-color: color-mix(in oklch, var(--ton-tief) 88%, transparent);
+/**
+ * Die Scheibe nimmt die Farbe des Grundes mit, unter dem sie gerade liegt —
+ * Karol: „soll der auch halt nur die Farben mitnehmen vom Untergrund."
+ *
+ * Zwei Zustände, nicht drei: über dem Video dunkles Glas mit Creme, ab der
+ * ersten hellen Sektion helles Glas mit Tinte. Ein einziges Glas für beide
+ * müsste in der Mitte liegen — und dort ist es auf keinem von beiden gut.
+ */
+.kopf[data-eng='ja'] {
+  background-color: color-mix(in oklch, var(--ton-tief) 90%, transparent);
   color: var(--tinte);
   box-shadow:
-    inset 0 1px 0 color-mix(in oklch, var(--creme) 62%, transparent),
-    0 10px 26px -14px color-mix(in oklch, var(--tinte) 35%, transparent);
+    inset 0 -1px 0 color-mix(in oklch, var(--tinte) 12%, transparent),
+    0 12px 30px -18px color-mix(in oklch, var(--tinte) 30%, transparent);
 }
 
 .kopf__zeile {
@@ -235,10 +209,10 @@
   align-items: center;
   gap: clamp(0.75rem, 2vw, 2rem);
   min-height: var(--kopf-hoehe);
-  /* Der Innenabstand sitzt an der Zeile, nicht an der Schale: die Schale
-     zentriert und begrenzt, die Scheibe polstert. Zwei Aufgaben, zwei
-     Zuständigkeiten. */
-  padding-inline: clamp(0.85rem, 1.6vw, 1.5rem);
+  /* KEIN eigener Innenabstand mehr. Er stammt aus der Inselfassung, wo die
+     Scheibe selbst polstern musste. Jetzt trägt `.schale` den Rand — und zwei
+     Innenabstände übereinander sind der doppelte Rand, den niemand bestellt
+     hat. */
   transition: min-height var(--dauer-mikro) var(--ease-teig);
 }
 
@@ -714,8 +688,21 @@
      enthält. Die Regel „ein Schild ist eine Marke, kein Plakat" gilt weiter —
      sie bemisst sich aber am Verhältnis zum Rest, und der Rest ist hier eine
      einzelne kleine Zeile. */
-  width: min(78%, 19rem);
+  /* Grösser — Karol: „das Logo auf der Startseite viel grösser". 19 -> 26 rem.
+     Die Regel von gestern („ein Schild ist eine Marke, kein Plakat") gilt
+     weiter; sie bemisst sich am Verhältnis zum Rest, und der Rest ist hier
+     eine Zeile, eine Anschrift und ein Pfeil. Vor drei Fassungen stand das
+     Schild bei 42 rem NEBEN einer Schlagzeile in 6,5 rem — das war das
+     Plakat, nicht die Grösse an sich. */
+  width: min(84%, 26rem);
   margin-inline: auto;
+}
+
+.schild-achse {
+  /* Trägt allein die scrollgetriebene Drehung. Sie braucht `preserve-3d`,
+     damit die Neigung des Kindes nicht flachgerechnet wird — ohne die Zeile
+     wird aus zwei gestapelten 3D-Drehungen eine 2D-Verzerrung. */
+  transform-style: preserve-3d;
 }
 
 .schild-neigung {

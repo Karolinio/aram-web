@@ -115,6 +115,77 @@ export function useVersatz<T extends HTMLElement>(tempo: number) {
 }
 
 /**
+ * Ein Element DREHT sich beim Scrollen.
+ *
+ * ═══ Warum das ein eigener Haken ist und nicht ein Zusatz zu `useVersatz` ═══
+ *
+ * Weil GSAP zwar `y` und `rotationY` auf demselben Knoten mischen kann, das
+ * Ladenschild aber schon eine dritte Bewegung trägt: die Neigung zum Zeiger,
+ * die in jedem Frame direkt `style.transform` setzt. Eine GSAP-Zeitleiste und
+ * eine Schleife, die dieselbe Eigenschaft schreibt, überschreiben einander
+ * still — sichtbar ist dann die letzte, und welche das ist, entscheidet die
+ * Bildwiederholrate.
+ *
+ * Drei Bewegungen, drei Knoten. Das ist auf dieser Seite die Regel, seit
+ * derselbe Fehler dem Hero einmal die Kamerafahrt gekostet hat.
+ *
+ * @param grad  Wie weit sich das Element über die volle Durchfahrt um die
+ *              Hochachse dreht. Positiv = die rechte Kante kommt nach vorn.
+ */
+export function useDrehung<T extends HTMLElement>(grad: number) {
+  const ref = useRef<T>(null)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    let tot = false
+    let abraeumen: (() => void) | undefined
+
+    void werkzeugHolen().then((werkzeug) => {
+      if (tot || !werkzeug) return
+      const { gsap } = werkzeug
+
+      const tween = gsap.fromTo(
+        el,
+        { rotationY: 0 },
+        {
+          rotationY: grad,
+          ease: 'none',
+          scrollTrigger: {
+            /* Ausgelöst von der Bühne, nicht vom Element: hinge der Bereich am
+               Schild, verschöbe er sich mit jeder Drehung selbst. */
+            trigger: '.backstube',
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 1,
+            invalidateOnRefresh: true,
+            onToggle: ({ isActive }) => {
+              el.style.willChange = isActive ? 'transform' : ''
+            },
+          },
+        },
+      )
+
+      abraeumen = () => {
+        tween.scrollTrigger?.kill()
+        tween.kill()
+        el.style.willChange = ''
+        el.style.transform = ''
+      }
+    })
+
+    return () => {
+      tot = true
+      abraeumen?.()
+    }
+  }, [grad])
+
+  return ref
+}
+
+/**
  * Ein Element verabschiedet sich beim Scrollen.
  *
  * Es hebt ab, kippt nach hinten weg und wird durchsichtig — fertig, bevor die
