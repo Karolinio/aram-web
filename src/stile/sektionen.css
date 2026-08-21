@@ -1889,12 +1889,39 @@
 
 
 .zeiten { list-style: none; padding: 0; margin: 0; }
+
+/**
+ * ═══ Warum hier `min-width: 0` steht ═══
+ *
+ * Diese Zeile ist am 21.08. übergelaufen, und zwar erst, als die echten
+ * Öffnungszeiten eingetragen wurden — vorher stand hier eine Lücke, und eine
+ * Lücke ist schmal. Gemessen bei 393 px: die Spanne endete bei 408, die ganze
+ * Seite liess sich seitlich schieben.
+ *
+ * Die Ursache: die Uhrzeit trägt `.preis` und damit `white-space: nowrap` und
+ * `flex: none`. Beides ist dort richtig — eine Zahlenkolonne, die umbricht,
+ * sieht selbstgemacht aus. Falsch war, dass DANEBEN nichts schrumpfen durfte.
+ *
+ * Ein Flex-Kind hat von Haus aus `min-width: auto` und kann deshalb nicht unter
+ * seine Inhaltsbreite schrumpfen. Der Wochentag hat also seine volle Breite
+ * behalten und die Uhrzeit hinausgeschoben. `min-width: 0` hebt genau das auf:
+ * jetzt gibt der Wochentag nach, und die Uhrzeit bleibt vollständig.
+ *
+ * Das ist die häufigste Ursache für seitlichen Überlauf in einem Flex-Layout,
+ * und man sieht sie am Rechner nie.
+ */
 .zeiten li {
   display: flex;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 0.75rem;
   max-width: 20rem;
   padding-block: 0.2rem;
+}
+
+.zeiten li > span:first-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* ── Bestellen ────────────────────────────────────────────────────────────── */
@@ -2212,8 +2239,32 @@
 }
 
 @media (max-width: 700px) {
+  /**
+   * ═══ Die Zeile darf am Handy nicht überlaufen ═══
+   *
+   * Gemessen bei 393 px: der Menüknopf sass bei 364–408, also 15 px über dem
+   * Bildschirmrand — und die ganze Seite war dadurch 408 px breit statt 393.
+   * Eine Seite, die sich seitlich schieben lässt, fühlt sich auf jedem Handy
+   * kaputt an, und man sieht es am Rechner nie.
+   *
+   * Die Ursache ist Arithmetik, kein Stilfehler: Marke, Status, Nummer und
+   * Menüknopf stehen alle auf `flex: none` und schrumpfen deshalb nicht. Ihre
+   * Eigenbreiten summieren sich über die verfügbare Breite, und der letzte
+   * wird hinausgeschoben.
+   *
+   * Zwei Zeilen lösen es: die Lücke wird am Handy kleiner, und der Status darf
+   * schrumpfen — er ist von den vieren das Einzige, das man auch verkürzt noch
+   * versteht. Marke, Nummer und Menü bleiben unantastbar.
+   */
+  .kopf__zeile { gap: 0.5rem; }
   .kopf__oeffnung { display: none; }
-  .kopf__oeffnung-kurz { display: inline-flex; margin-inline-start: auto; }
+  .kopf__oeffnung-kurz {
+    display: inline-flex;
+    margin-inline-start: auto;
+    min-width: 0;
+    flex: 0 1 auto;
+    overflow: hidden;
+  }
   .kopf__anruf { margin-inline-start: 0; }
   .kopf__anruf-text { display: none; }
   .kopf__anruf-kurz { display: inline; }
@@ -2288,3 +2339,103 @@
 
 .dienste__titel { margin-bottom: 0.4rem; }
 .dienste__stand { margin: 0 0 0.9rem; }
+
+/* ── Die Galerie ──────────────────────────────────────────────────────────
+ *
+ * Eine waagerechte Bahn, die beim Scrollen vorbeizieht. Die Sektion wird dafür
+ * angeheftet; der senkrechte Scroll wird zur waagerechten Fahrt.
+ *
+ * ═══ Warum die Bahn eine Liste ist ═══
+ *
+ * Weil es eine ist. Sieben Bilder in einer festgelegten Reihenfolge sind ein
+ * Verzeichnis, kein Haufen `div`. Für ein Vorleseprogramm ist der Unterschied,
+ * ob es „Liste mit sieben Einträgen" ansagt oder gar nichts.
+ */
+.galerie__buehne {
+  position: relative;
+  margin-top: var(--raum-block);
+  /* Waagerecht beschnitten, senkrecht offen: die Bahn ragt seitlich weit
+     hinaus und darf die Seite trotzdem nicht breiter machen. `hidden` wäre
+     falsch — sobald eine Achse `hidden` ist, wird die andere zu `auto` und
+     scrollt. Nur `clip` lässt die Gegenachse wirklich `visible`. */
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
+.galerie__bahn {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.25rem, 3vw, 3rem);
+  margin: 0;
+  padding: 0 0 0 0;
+  list-style: none;
+  /* `min-height` statt `height`: das höchste Bild bestimmt die Bahn, und das
+     ist ein Hochformat. Ein fester Wert wäre bei jedem Bildtausch falsch. */
+  min-height: 62vh;
+  will-change: transform;
+}
+
+.galerie__stueck { flex: none; margin: 0; }
+.galerie__stueck figure { margin: 0; }
+
+/* Hoch steht gross und vorn, quer kleiner und tiefer. Zwei Grössen, nicht
+   sieben — ein Rhythmus entsteht aus Wiederholung mit einer Ausnahme, nicht
+   aus lauter Ausnahmen. */
+.galerie__stueck[data-lage='hoch'] { width: clamp(15rem, 30vw, 26rem); }
+.galerie__stueck[data-lage='quer'] {
+  width: clamp(17rem, 34vw, 30rem);
+  transform: translateY(clamp(1.5rem, 4vw, 3.5rem));
+}
+
+.galerie__stueck img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: var(--radius-gross);
+  box-shadow: var(--clay-hoch);
+}
+
+.galerie__stueck figcaption {
+  margin-top: 0.75rem;
+  font-family: var(--font-display);
+  font-variation-settings: var(--wonk-klein);
+  font-size: var(--text-meta);
+  font-weight: 600;
+  color: var(--tinte-leise);
+}
+
+/**
+ * Gewischt statt gefahren — am Handy und für alle, die weniger Bewegung wollen.
+ *
+ * Ersatz, nicht Abschaltung: dieselben Bilder, dieselbe Reihenfolge, ein
+ * anderer Antrieb. Eine Bewegung, die etwas erklärt hat, hinterlässt ersatzlos
+ * ein Loch.
+ *
+ * `scroll-snap` ist kein Schmuck: eine frei laufende Rolle bleibt irgendwo
+ * zwischen zwei Bildern stehen, und dann sieht man zwei halbe.
+ */
+@media (max-width: 719px), (prefers-reduced-motion: reduce) {
+  .galerie__buehne {
+    overflow-x: auto;
+    overflow-y: visible;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    /* KEIN randloser Ausbruch mit negativem Aussenabstand. Gemessen: die
+       Sektion trägt selbst schon einen Innenabstand, der negative Rand
+       überschoss ihn, und die Seite war 413 statt 393 px breit. Randlos wäre
+       schöner; eine Seite, die sich seitlich schieben lässt, ist kaputt.
+       Die Bahn beginnt jetzt bündig mit der Überschrift — an derselben Kante,
+       an der auf dieser Seite ohnehin alles anfängt. */
+    scrollbar-width: none;
+  }
+  .galerie__buehne::-webkit-scrollbar { display: none; }
+  .galerie__bahn {
+    min-height: 0;
+    will-change: auto;
+    transform: none !important;
+    padding-bottom: 0.5rem;
+  }
+  .galerie__stueck { scroll-snap-align: center; }
+  .galerie__stueck[data-lage='hoch'] { width: 62vw; }
+  .galerie__stueck[data-lage='quer'] { width: 74vw; transform: none; }
+}

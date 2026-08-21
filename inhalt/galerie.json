@@ -1,0 +1,58 @@
+[
+ {
+  "nr": 19,
+  "titel": "Manakisch vom Blech",
+  "lage": "hoch",
+  "breite": 900,
+  "hoehe": 1199,
+  "kb": 206
+ },
+ {
+  "nr": 9,
+  "titel": "Fata’er, direkt aus der Glut",
+  "lage": "hoch",
+  "breite": 900,
+  "hoehe": 1200,
+  "kb": 98
+ },
+ {
+  "nr": 6,
+  "titel": "Der Teig kommt auf den Schieber",
+  "lage": "quer",
+  "breite": 900,
+  "hoehe": 675,
+  "kb": 58
+ },
+ {
+  "nr": 12,
+  "titel": "Manakisch, kurz vor dem Ofen",
+  "lage": "hoch",
+  "breite": 900,
+  "hoehe": 1200,
+  "kb": 99
+ },
+ {
+  "nr": 35,
+  "titel": "Ein Brett für den Tisch",
+  "lage": "quer",
+  "breite": 900,
+  "hoehe": 675,
+  "kb": 104
+ },
+ {
+  "nr": 21,
+  "titel": "Sesam und Schwarzkümmel",
+  "lage": "quer",
+  "breite": 900,
+  "hoehe": 675,
+  "kb": 66
+ },
+ {
+  "nr": 10,
+  "titel": "Der Inhaber und seine Brüder",
+  "lage": "quer",
+  "breite": 900,
+  "hoehe": 675,
+  "kb": 89
+ }
+]

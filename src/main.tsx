@@ -15,6 +15,7 @@ import './stile/sektionen.css'
 
 import Kopfzeile from './komponenten/Kopfzeile.tsx'
 import Backstube from './komponenten/Backstube.tsx'
+import Galerie from './komponenten/Galerie.tsx'
 import Handarbeit from './komponenten/Handarbeit.tsx'
 import Schaustueck from './komponenten/Schaustueck.tsx'
 import Karte from './komponenten/Karte.tsx'
@@ -120,6 +121,11 @@ function Seite() {
         {/* Das Schaustück steht ZWISCHEN Prozess und Karte: erst wie es
             entsteht, dann was dabei herauskommt, dann was es kostet. */}
         <Schaustueck />
+        {/* Die Galerie steht VOR der Karte, nicht dahinter. Wer wissen will,
+            was es gibt, liest die Karte; wer noch nicht weiss, ob er will,
+            sieht Bilder. Die Reihenfolge folgt der Entscheidung, nicht der
+            Datenmenge. */}
+        <Galerie />
         <Karte />
         <Laden />
         <Bestellen />
