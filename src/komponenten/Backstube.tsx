@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 
 import { ARAM } from '../aram.config.ts'
-import { useAbgang } from '../bewegung.ts'
+import { useAbgang, useMedienabfrage } from '../bewegung.ts'
 import Ladenschild from './Ladenschild.tsx'
 
 /**
@@ -36,6 +36,39 @@ import Ladenschild from './Ladenschild.tsx'
  * rechnet jedes Video auf 480p herunter; das Original ist 1080×1920.
  */
 export default function Backstube() {
+  /**
+   * ═══ Zwei Fassungen des Videos, und der Grund ist Arithmetik ═══
+   *
+   * Die Quelle ist 464x848 — WhatsApp rechnet jedes Video auf unter 480p
+   * herunter. Wie schlimm das aussieht, hängt allein davon ab, wie weit es
+   * hochskaliert werden muss:
+   *
+   *   Handy   393 CSS-px bei doppelter Pixeldichte = 786 Gerätepunkte.
+   *           464 -> 786 ist Faktor 1,7. Das sieht man kaum.
+   *   Rechner 1440 CSS-px. 464 -> 1440 ist Faktor 3,1. Das sieht man sofort.
+   *
+   * Am Rechner läuft deshalb eine mit Lanczos auf 696 px gerechnete und leicht
+   * nachgeschärfte Fassung: der Browser muss dann nur noch 2,07-fach
+   * vergrössern statt 3,10-fach. Gemessen an der Varianz des Laplace-Operators
+   * auf dem fertigen 1440-px-Bild — dem Standardmass für Bildschärfe:
+   *
+   *   464 px, wie bisher       3,9
+   *   696 px, nachgeschärft    5,3   +37 %
+   *   928 px, nachgeschärft    6,2   +61 %  — kostet aber 2,3 MB statt 1,1
+   *
+   * Die 696er ist zwei Drittel des Gewinns für die halben Bytes. Die 928er
+   * wäre die bessere Wahl, wenn die Datei nicht dreimal so gross wäre wie die
+   * ganze übrige Seite.
+   *
+   * Am Handy bleibt die kleine: dort ist der Unterschied kaum sichtbar, und
+   * 1,1 MB zusätzlich über Mobilfunk für einen Schmuckhintergrund sind es
+   * nicht wert.
+   *
+   * Hochrechnen fügt KEINE Details hinzu. Es macht Kanten sauberer, mehr
+   * nicht. Die eigentliche Lösung steht in ABLICHTUNG.md: die Originaldatei
+   * vom Handy des Inhabers, 1080x1920.
+   */
+  const schmal = useMedienabfrage('(max-width: 719px)')
   const titel = useAbgang<HTMLHeadingElement>('.backstube')
   const video = useRef<HTMLVideoElement>(null)
 
@@ -71,8 +104,19 @@ export default function Backstube() {
           loop
           preload="metadata"
         >
-          <source src="/video/kaeseschiffe.webm" type="video/webm" />
-          <source src="/video/kaeseschiffe.mp4" type="video/mp4" />
+          {/* Der Schlüssel erzwingt ein neues `video`-Element, wenn sich die
+              Breite ändert. Ohne ihn behält der Browser die einmal gewählte
+              Quelle bei — `<source>` wird nur beim ERSTEN Laden ausgewertet. */}
+          <source
+            key={schmal ? 'k-webm' : 'g-webm'}
+            src={schmal ? '/video/kaeseschiffe.webm' : '/video/kaeseschiffe-gross.webm'}
+            type="video/webm"
+          />
+          <source
+            key={schmal ? 'k-mp4' : 'g-mp4'}
+            src={schmal ? '/video/kaeseschiffe.mp4' : '/video/kaeseschiffe-gross.mp4'}
+            type="video/mp4"
+          />
         </video>
         <div className="backstube__schleier" />
       </div>
