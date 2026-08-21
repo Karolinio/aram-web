@@ -2,21 +2,48 @@
   "_": [
     "Öffnungszeiten. Die Seite RECHNET daraus live, ob gerade offen ist.",
     "",
-    "Solange `tage` leer ist, steht auf der Seite GAR NICHTS zum Thema Öffnung —",
-    "keine Zeiten, kein Punkt, keine Vermutung. Ein Gast, der wegen einer",
-    "erfundenen Öffnungszeit vor verschlossener Tür steht, kommt nicht wieder.",
+    "QUELLE: ihr eigener Flyer, fotografiert am 20.08.2026 — Bild 7 in",
+    "rohbilder/eingang, dort gross gedruckt: „MONTAG IST RUHETAG /",
+    "DI. BIS SO. 08:00 - 19:00 UHR\". Abgelesen, nicht angenommen.",
+    "",
+    "Montag fehlt deshalb ABSICHTLICH in der Liste: kein Eintrag heisst",
+    "geschlossen. Ein Eintrag mit von == bis wäre eine Spanne der Länge null und",
+    "würde als „offen\" gelesen.",
     "",
     "Format je Eintrag:",
     "  tag: 0 = Sonntag, 1 = Montag ... 6 = Samstag",
-    "  von / bis: \"HH:MM\" in Ortszeit Berlin.",
-    "",
-    "Mehrere Einträge pro Tag sind erlaubt — für eine Mittagspause einfach zwei",
-    "Zeilen mit demselben `tag`. Geht `bis` über Mitternacht, wird richtig",
-    "gerechnet (z. B. von 18:00 bis 01:00).",
-    "",
-    "Beispiel, wie es aussehen wird — NICHT übernehmen, sondern durch die echten",
-    "Zeiten ersetzen:",
-    "  { \"tag\": 1, \"von\": \"11:00\", \"bis\": \"22:00\" }"
+    "  von / bis: \"HH:MM\" in Ortszeit Berlin."
   ],
-  "tage": []
+  "tage": [
+    {
+      "tag": 2,
+      "von": "08:00",
+      "bis": "19:00"
+    },
+    {
+      "tag": 3,
+      "von": "08:00",
+      "bis": "19:00"
+    },
+    {
+      "tag": 4,
+      "von": "08:00",
+      "bis": "19:00"
+    },
+    {
+      "tag": 5,
+      "von": "08:00",
+      "bis": "19:00"
+    },
+    {
+      "tag": 6,
+      "von": "08:00",
+      "bis": "19:00"
+    },
+    {
+      "tag": 0,
+      "von": "08:00",
+      "bis": "19:00"
+    }
+  ]
 }

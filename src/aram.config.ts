@@ -31,12 +31,21 @@ export const ARAM = {
   },
 
   ort: {
-    strasse: null as string | Luecke,
-    plz: null as string | Luecke,
-    stadt: 'Bonn-Hardtberg',
-    /* Erst setzen, wenn die Adresse steht — eine Karte auf den falschen Punkt ist
-       schlimmer als keine Karte. */
-    maps: null as string | Luecke,
+    /* Abgelesen vom eigenen Flyer, Bild 7 vom 20.08.2026: „Rochusstraße 246,
+       53123 Bonn", zweimal darauf — einmal als Überschrift, einmal im Fussteil.
+       Zwei übereinstimmende Stellen auf demselben Druckstück sind ein Beleg,
+       eine wäre ein Tippfehlerrisiko. Siehe rohbilder/FUNDE.md. */
+    strasse: 'Rochusstraße 246' as string | Luecke,
+    plz: '53123' as string | Luecke,
+    stadt: 'Bonn',
+    /* Der Stadtteil steht getrennt, weil er in die Sprache der Seite gehört
+       („in Bonn-Hardtberg"), aber NICHT in eine Postanschrift. */
+    stadtteil: 'Bonn-Hardtberg',
+    /* Auf die Anschrift gesetzt, nicht auf eine Koordinate: eine Suchabfrage
+       trifft auch dann, wenn sich die Hausnummerierung ändert. */
+    maps: 'https://www.google.com/maps/search/?api=1&query=Rochusstra%C3%9Fe+246%2C+53123+Bonn' as string | Luecke,
+    /* Vom Flyer: „PARKPLATZ IN DER NÄHE? JA! AUF DER URDEL, 53123 BONN" */
+    parken: 'Auf der Urdel' as string | Luecke,
   },
 
   /* Die Öffnungszeiten stehen NICHT hier, sondern in `inhalt/zeiten.json`.

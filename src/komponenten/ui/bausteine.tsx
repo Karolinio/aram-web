@@ -58,7 +58,7 @@ import Auftritt from './Auftritt.tsx'
  * Wer einen ZWEITEN Nachtgrund einträgt, macht daraus wieder eine Grundfarbe
  * und nimmt der Ausnahme ihren Sinn.
  */
-export type Grund = 'hell' | 'tief' | 'nacht'
+export type Grund = 'hell' | 'tief' | 'glut'
 
 type SektionProps = {
   id?: string

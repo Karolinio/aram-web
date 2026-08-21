@@ -135,35 +135,52 @@
   --tief: oklch(12% 0.02 55);
 
   /**
-   * ── Der dunkle Grund: ihr Schwarz als zweite Fläche ─────────────────────
+   * ── IHR ORANGE IST EINE FLÄCHE. Ich lag falsch. ─────────────────────────
    *
-   * ═══ Warum das Orange als Fläche endgültig gestorben ist ═══
+   * ═══ Die Korrektur vom 21.08. ═══
    *
-   * Dreimal stand hier ein oranges Feld, dreimal hat Karol es rausgeworfen —
-   * als Band im Hero, als Kachel im Bestellen, zuletzt als ganze Sektion.
-   * Am 20.08.: „Das Orange, das du da eingebunden hast, sieht nicht schlecht
-   * aus, ist aber kein typisches Orange."
+   * Hier stand zwei Tage lang: „Eine ganze Fläche in Orange MUSS dunkel sein,
+   * sonst trägt sie keine Schrift — und ein dunkles Orange ist ein Rostbraun.
+   * Es gibt kein typisches Orange, das gleichzeitig Fläche sein kann."
    *
-   * Und genau das ist der Beweis, nicht der Einwand. Eine ganze Fläche in
-   * Orange MUSS dunkel sein, sonst trägt sie keine Schrift — und ein dunkles
-   * Orange ist ein Rostbraun. Es gibt kein „typisches Orange", das gleichzeitig
-   * Fläche sein kann.
+   * Der Satz ist falsch, und der Fehler steckt in einer Annahme, die nirgends
+   * ausgesprochen war: dass auf der Fläche CREME steht. Unter dieser Annahme
+   * stimmt die ganze Kette — Creme braucht einen dunklen Grund, ein dunkles
+   * Orange ist braun, also kann Orange keine Fläche sein.
    *
-   *   ihr Orange   auf Creme 2,27   auf ihrem Schwarz 6,01
+   * Karol, dreimal, zuletzt am 21.08.: „Das aktuelle Orange mag ich mit Clay
+   * in Verbindung, da ein bisschen schwarz … also mit schwarzer Schrift
+   * drauf." Mit SCHWARZER Schrift. Gemessen:
    *
-   * Die Zeile rechts ist die Antwort. Ihr Orange braucht keinen orangen Grund,
-   * es braucht einen DUNKLEN.
+   *   ihr Schwarz #1D140E   auf #FE6201   6,01   bestanden
+   *   Tinte       #432610   auf #FE6201   4,57   bestanden
+   *   Creme       #FBF4EA   auf #FE6201   2,76   durchgefallen
+   *   Weiss       #FFFFFF   auf #FE6201   3,02   durchgefallen
    *
-   * Damit stehen ZWEI Gründe und EIN Akzent:
+   * Die Fläche muss also gar nicht dunkel sein. Die SCHRIFT muss dunkel sein.
+   * Und dann bleibt das Orange, was es ist: ihr Logo-Orange, ungedämpft,
+   * unverschoben, genau der Ton von ihrer Markise.
    *
-   *   Clay      hell und tief, der Regelfall
-   *   Nacht     ihr Schwarz, für genau die Abschnitte, die tragen sollen
-   *   Orange    NIE als Fläche — nur Schrift, Linie, Marke
+   * Das ist die Lehre, nicht die Farbe: eine Messung beantwortet nur die
+   * Frage, die man stellt. Ich habe zweimal „welcher Orangeton trägt Creme"
+   * gemessen und daraus „Orange kann keine Fläche sein" geschlossen. Wer die
+   * Annahme nicht mitmisst, misst sich in die falsche Richtung.
    */
-  --nacht: #1d140e;                          /* ihr Schwarz von der alten Seite */
-  --nacht-schrift: var(--creme);             /* 16,2 gemessen */
+  --glut-grund: var(--orange);         /* IHR Orange, unverändert */
+  --glut-schrift: var(--nacht);        /* ihr Schwarz darauf — 6,01 */
+  --glut-leise: color-mix(in oklch, var(--nacht) 74%, transparent);
+  --glut-linie: color-mix(in oklch, var(--nacht) 26%, transparent);
+
+  /**
+   * Ihr Schwarz. Es trägt jetzt vor allem die SCHRIFT, nicht mehr eine ganze
+   * Sektion — Karol: „den inneren dunklen Ton mag ich nicht."
+   * Als Fläche bleibt genau der Fuss. Ein Schwarz am Ende einer Seite ist ein
+   * Schlusspunkt; ein Schwarz in der Mitte ist ein Loch.
+   */
+  --nacht: #1d140e;
+  --nacht-schrift: var(--creme);
   --nacht-leise: color-mix(in oklch, var(--creme) 76%, transparent);
-  --nacht-marke: var(--orange);              /* 6,01 auf Nacht */
+  --nacht-marke: var(--orange);
   --nacht-linie: color-mix(in oklch, var(--creme) 28%, transparent);
 
   /**

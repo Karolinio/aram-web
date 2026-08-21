@@ -476,9 +476,11 @@
   z-index: 2;
   display: flex;
   align-items: center;
-  /* Höher als vorher (84): der Grund ist jetzt ihr Laden, und eine
-     Ladenfront braucht Fläche, sonst ist sie ein Briefmarkenbild. */
-  min-height: 92svh;
+  justify-content: center;
+  /* Fast volle Bildschirmhöhe: ein Video als Grund braucht Fläche, sonst ist
+     es ein Briefmarkenkino. `svh` statt `vh`, weil sonst die Höhe springt,
+     sobald die Adressleiste am Handy ein- und ausfährt. */
+  min-height: 94svh;
   /**
    * Waagerecht beschnitten, senkrecht NICHT — und dieses Paar ist der Punkt.
    *
@@ -595,79 +597,83 @@
 .backstube__schleier {
   position: absolute;
   inset: 0;
+  /**
+   * Für ein VIDEO anders gebaut als für ein Foto.
+   *
+   * Beim Foto lag der dichte Teil links, wo die Schrift stand, und rechts
+   * blieb es klar. Jetzt steht alles in der Mitte, also läuft der Verlauf von
+   * innen nach aussen: ein weiches dunkles Zentrum trägt Logo und Zeile, die
+   * Ränder bleiben offen, damit man vom Video etwas sieht.
+   *
+   * Dazu eine Kappe oben für die gläserne Kopfzeile und ein Fuss unten für den
+   * Übergang in die nächste Sektion. Drei Verläufe, jeder mit einer Aufgabe.
+   */
   background:
+    radial-gradient(
+      108% 78% at 50% 46%,
+      color-mix(in oklch, var(--tief) 72%, transparent) 0%,
+      color-mix(in oklch, var(--tief) 62%, transparent) 42%,
+      color-mix(in oklch, var(--tief) 34%, transparent) 72%,
+      color-mix(in oklch, var(--tief) 20%, transparent) 100%
+    ),
     linear-gradient(
-      100deg,
-      color-mix(in oklch, var(--tief) 93%, transparent) 0%,
-      color-mix(in oklch, var(--tief) 84%, transparent) 34%,
-      color-mix(in oklch, var(--tief) 34%, transparent) 62%,
-      color-mix(in oklch, var(--tief) 6%, transparent) 88%,
-      transparent 100%
+      to bottom,
+      color-mix(in oklch, var(--tief) 58%, transparent) 0%,
+      color-mix(in oklch, var(--tief) 22%, transparent) 14%,
+      transparent 30%
     ),
     linear-gradient(
       to top,
-      color-mix(in oklch, var(--tief) 55%, transparent) 0%,
-      color-mix(in oklch, var(--tief) 12%, transparent) 26%,
-      transparent 52%
-    ),
-    /* Die KAPPE oben — dazugekommen mit der gläsernen Insel am 20.08.
-       Eine Scheibe zeigt, was hinter ihr liegt. Lag dort die hellste Stelle des
-       Fotos, wurde aus dunklem Glas ein graubrauner Riegel: das Glas mischt
-       sich mit dem Grund, und ein heller Grund macht jedes dunkle Glas grau.
-       Gemessen kam die Navigation darauf auf rgb(150,140,131).
-       Die Kappe gibt der Scheibe etwas Dunkles zum Draufliegen — und liest von
-       selbst als Lichtabfall nach oben, wie er über jeder Ladenfront steht. */
-    linear-gradient(
-      to bottom,
       color-mix(in oklch, var(--tief) 62%, transparent) 0%,
-      color-mix(in oklch, var(--tief) 30%, transparent) 12%,
-      transparent 26%
+      color-mix(in oklch, var(--tief) 18%, transparent) 22%,
+      transparent 42%
     );
 }
 
-.backstube__gitter {
+/**
+ * ═══ Der Hero ist jetzt EINE Mittelachse ═══
+ *
+ * Vorher ein Gitter mit einer Spalte, in der links ein Satzblock stand. Jetzt
+ * eine zentrierte Säule: Logo, Zeile, Ort, Hinweis nach unten.
+ *
+ * Zentriert ist auf dieser Seite sonst NICHTS — und genau deshalb funktioniert
+ * es hier. Ein zentrierter Block ist ein Bruch im Lesefluss; als Dauerzustand
+ * ist er die Voreinstellung jeder Vorlage, als einmaliges Ereignis am Anfang
+ * ist er ein Vorhang, der aufgeht.
+ */
+.backstube__mitte {
   position: relative;
   z-index: 1;
-  display: grid;
-  /* EINE Spalte. Das Ladenfoto war die zweite und ist in den Grund gewandert;
-     eine leere zweite Spalte stehen zu lassen hiesse, das Gitter zu behalten
-     und den Grund dafür zu vergessen. */
-  grid-template-columns: minmax(0, 1fr);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: clamp(1rem, 2.4vw, 1.8rem);
 }
 
 /**
- * Der Satz links.
+ * Das Video als Grund.
  *
- * Er begrenzt sich selbst auf 46 rem, und dieser Wert ist mit dem Schleier oben
- * verzahnt: was breiter liefe, käme in die aufklarende Zone und stünde auf dem
- * Foto statt auf Creme.
- */
-.backstube__satz { max-width: min(100%, 46rem); }
-
-/**
- * Der Bildnachweis zum Grund.
+ * `object-fit: cover` auf 100 % Breite und Höhe: das Hochformat füllt am Handy
+ * exakt, am Rechner wird es beschnitten und hochskaliert. Die Unschärfe, die
+ * dabei entsteht, trägt der Schleier darüber — das Auge braucht Kanten, um
+ * Schärfe zu beurteilen, und unter einer deckenden dunklen Fläche gibt es
+ * kaum noch welche.
  *
- * Er steht unten links auf dem dichten Teil des Schleiers. Ihn wegzulassen wäre
- * bequem — aber wer auf diesem Foto steht, IST die Aussage des Fotos, und ein
- * unbeschriftetes Bild von fünf Menschen ist Dekoration.
+ * `object-position` mittig-oben statt mittig: in diesem Video liegt das
+ * Geschehen im oberen Drittel, unten ist Tisch.
  */
-.backstube__nachweis {
-  margin: clamp(2rem, 4vw, 3.5rem) 0 0;
-  max-width: 34ch;
-  font-family: var(--font-display);
-  font-variation-settings: var(--wonk-klein);
-  font-size: var(--text-micro);
-  font-weight: 500;
-  /**
-   * Auf dem dunklen Fuss des Verlaufs: Creme mit gedämpfter Deckkraft.
-   *
-   * Frühere Fassung (dunkles Braun auf Creme) steht darunter — sie galt,
-   * solange der Hero hell war. Der Wert ist geblieben, die Begründung auch:
-   * eine Bildunterschrift ist leise, aber sie muss lesbar bleiben.
-   */
-  color: var(--creme-ruhig);
+.backstube__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 34%;
+  /* Ein Video ohne diese Zeile blitzt beim ersten Frame weiss auf, wenn das
+     Poster noch nicht dekodiert ist. */
+  background: var(--nacht);
 }
-
 
 /**
  * Das Ladenschild.
@@ -704,7 +710,12 @@
    * 100 %, sein Seitenverhältnis steht in den Attributen, der Platz steht damit
    * vor dem ersten Byte fest.
    */
-  width: min(60%, 11rem);
+  /* Grösser als in Fassung 3 (11 rem), weil der Hero jetzt sonst nichts
+     enthält. Die Regel „ein Schild ist eine Marke, kein Plakat" gilt weiter —
+     sie bemisst sich aber am Verhältnis zum Rest, und der Rest ist hier eine
+     einzelne kleine Zeile. */
+  width: min(78%, 19rem);
+  margin-inline: auto;
 }
 
 .schild-neigung {
@@ -783,7 +794,6 @@
  * Und die Marke ist ihr echtes Orange (var(--orange)). Auf hellem Grund konnte es
  * nie Schrift sein (2,27 gemessen); hier ist es endlich in seiner Rolle.
  */
-.backstube__satz { color: var(--creme); }
 
 /**
  * Die Ortszeile — Karols „richtig hässlich", und er hatte recht.
@@ -799,19 +809,71 @@
  * laut zu sein — deshalb steht die Marke oben und nicht hier.
  */
 .backstube__ort {
-  margin: 1.1rem 0 0;
+  margin: 0;
   font-family: var(--font-text);
   font-size: var(--text-micro);
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  /* Sie darf NIE umbrechen. Eine Ortszeile über zwei Zeilen ist keine
-     Ortszeile mehr, und ein Umbruch, der von der geladenen Schrift abhängt,
-     verschiebt alles darunter. Kurz genug ist sie jetzt: gemessen 207 px bei
-     393 px Bildschirmbreite. */
   white-space: nowrap;
   color: var(--creme-ruhig);
   max-width: none;
+}
+
+/* Gemessen: bei 393 px Bildschirm ist die Zeile 364 px breit — bei 320 px liefe
+   sie über. Umbrechen darf sie nicht (dann verschiebt der Schriftwechsel alles
+   darunter, siehe den Sprung vom 20.08.), also wird sie schmaler statt
+   zweizeilig. Die Sperrung geht zuerst: sie ist Schmuck, die Buchstaben sind
+   Inhalt. */
+@media (max-width: 430px) {
+  .backstube__ort { letter-spacing: 0.08em; font-size: 0.78rem; }
+}
+
+/**
+ * Der Hinweis nach unten.
+ *
+ * Ein Hero, der den ganzen Bildschirm füllt und keinen sichtbaren Anschluss
+ * hat, sieht für einen Moment aus wie die ganze Seite. Der Pfeil ist kein
+ * Schmuck, er ist die Antwort auf „und jetzt?" — und er ist ein echter Anker,
+ * kein Knopf mit Javascript: er funktioniert auch, bevor irgendetwas geladen
+ * ist, und er landet im Verlauf.
+ */
+.backstube__weiter {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: clamp(0.5rem, 2vw, 1.5rem);
+  padding: 0.6em 1.15em;
+  border: 1px solid var(--creme-kante);
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-variation-settings: var(--wonk-klein);
+  font-size: var(--text-meta);
+  font-weight: 600;
+  color: var(--creme);
+  text-decoration: none;
+  background: var(--creme-glas);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  transition: background var(--dauer-mikro) var(--ease-teig),
+              border-color var(--dauer-mikro) var(--ease-teig);
+}
+.backstube__weiter svg { width: 1.05em; height: 1.05em; }
+/* Der Pfeil atmet, der Knopf nicht. Bewegung an der Umrandung würde die Zeile
+   darunter mitschieben; ein `transform` am Symbol kostet kein Layout. */
+.backstube__weiter svg { animation: sinken 2.4s var(--ease-teig) infinite; }
+@keyframes sinken {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(3px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .backstube__weiter svg { animation: none; }
+}
+@media (hover: hover) {
+  .backstube__weiter:hover {
+    background: var(--creme-glas-hoch);
+    border-color: var(--creme-ruhig);
+  }
 }
 
 /**
@@ -828,98 +890,23 @@
  * Länge passen, nicht zur Skala.
  */
 .backstube__titel {
-  margin: 0.5rem 0 0;
-  max-width: 15ch;
+  /* KLEIN, und das ist der Punkt. In Fassung 3 war die Schlagzeile das
+     Ereignis des Heros; jetzt ist es das Video, und das Logo ist der Ruhepunkt
+     darin. Eine Schlagzeile in 6,5 rem daneben wäre ein dritter Anspruch auf
+     dieselbe Stelle.
+
+     Sie bleibt trotzdem eine echte h1 mit echtem Text: für Suchmaschinen und
+     Vorleseprogramme ist ein Video ein leeres Rechteck und ein Logo ein Bild. */
+  margin: 0;
+  max-width: 22ch;
   font-family: var(--font-display);
-  font-variation-settings: var(--wonk-display);
-  font-size: clamp(2.6rem, 1rem + 6vw, 6.5rem);
-  font-weight: 800;
-  line-height: var(--leading-eng);
-  letter-spacing: var(--sperr-hero);
+  font-variation-settings: var(--wonk-kopf);
+  font-size: clamp(1.35rem, 1.05rem + 1.4vw, 2.1rem);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: var(--sperr-kopf);
   text-wrap: balance;
   color: var(--creme);
-}
-
-.backstube__lead { margin-top: clamp(1.5rem, 3vw, 2.5rem); }
-.backstube__oeffnung { margin-top: 1.4rem; }
-
-.backstube__knoepfe {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-top: 1.6rem;
-}
-
-/**
- * ═══ EIN Knopf im Hero, und das war eine Streichung ═══
- *
- * Hier standen zwei: ihr Orange gefüllt für die Nummer, Glas für WhatsApp.
- * Karol am 20.08.: „auch mit dem orangenen Button in der Ecke … auf jeden Fall
- * einmal musst du ihn raus."
- *
- * Der gefüllte ist weg, weil dieselbe Telefonnummer zehn Zentimeter weiter oben
- * fest in der Kopfzeile steht — auf JEDER Bildschirmhöhe. Zweimal dieselbe
- * Handlung im selben Blickfeld ist keine zweite Gelegenheit, sondern ein
- * zweiter Anspruch auf dieselbe Aufmerksamkeit; beide werden dadurch leiser.
- *
- * Was bleibt, ist eine Scheibe: dieselbe Glasfamilie wie die Kopfzeile, kein
- * zweiter Farbklotz. Damit trägt im ganzen Hero genau EINE Fläche Farbe — die
- * Fotografie.
- */
-.backstube__knoepfe .knopf--leise {
-  background: var(--creme-glas);
-  color: var(--creme);
-  border-color: var(--creme-kante);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  box-shadow: none;
-}
-
-@media (hover: hover) {
-  .backstube__knoepfe .knopf--leise:hover {
-    background: var(--creme-glas-hoch);
-    border-color: var(--creme-ruhig);
-    color: var(--creme);
-  }
-}
-
-/* Das Foto ragt nach unten aus der Sektion heraus und überlappt die nächste.
-   Diese Überlappung IST die Tiefe — sie ersetzt den Schatten, den es nicht gibt. */
-/**
- * Das schwebende Gericht liegt jetzt FREI über der Sektion, nicht mehr als
- * dritte Gitterspalte. Mit Foto links und Text rechts war im Gitter kein Platz
- * mehr für eine dritte Spalte — und ein Gegenstand, der schwebt, gehört ohnehin
- * nicht in eine Tabellenzelle.
- */
-.backstube__bild {
-  position: absolute;
-  right: var(--rinne);
-  bottom: clamp(-9rem, -9vw, -4rem);
-  width: min(38%, 26rem);
-  z-index: 2;
-  justify-self: end;
-  /* Unten verankert, nicht mittig. Gemessen: mittig zentriert endete das Foto
-     167 px ÜBER dem Band — der negative Aussenabstand verschob es nur innerhalb
-     der Zeile, statt es über die Kante zu schieben. Erst `end` hängt es an die
-     Unterkante, und von dort ragt es hinaus. */
-  align-self: end;
-  width: min(100%, 30rem);
-  /* Das Foto ragt weiter herunter, als die Sektion reicht, und liegt dadurch
-     auf dem orangen Band. Diese Überlappung ersetzt den Schatten, den es auf
-     dieser Seite nicht gibt. */
-  margin-block-end: clamp(-13rem, -13vw, -6rem);
-}
-
-/* Der Eigenschatten des freigestellten Gerichts — der EINZIGE Schatten der
-   ganzen Seite. Er fällt nach unten rechts, weil das Licht vom Fenster links
-   oben kommt, und er macht aus einem Aufkleber einen Gegenstand.
-
-   Kein Radius: ein Freisteller hat keine Kante, an der einer sitzen könnte. */
-.backstube__bild img {
-  width: 100%;
-  height: auto;
-  border-radius: 0;
-  filter: var(--schatten-speise);
 }
 
 /**
@@ -942,29 +929,6 @@
  * `z-index: 0` gegen `1` an der Figur: dahinter, nicht davor. Davor wäre er
  * ein Schleier über dem Produkt.
  */
-/* Der Überstand war zuerst ±22 %. Der Prüfer hat es sofort gefunden: die
-   Leinwand ragte am Rechner 57 px über den Bildschirmrand und die Seite
-   wackelte seitlich. ±10 % bleiben innerhalb der Rinne. */
-.backstube__dampf {
-  position: absolute;
-  left: -10%;
-  right: -10%;
-  bottom: 42%;
-  height: 105%;
-  z-index: 0;
-}
-
-.backstube__bild figure { position: relative; z-index: 1; }
-
-.backstube__bild {
-  display: flex;
-  flex-direction: column-reverse;
-  /* Schmuck fängt keine Klicks. Ohne diese Zeile lag am Handy ein
-     freigestelltes Gebäck vor dem WhatsApp-Knopf und schluckte jede
-     Berührung — sichtbar war der Knopf, drückbar nicht. */
-  pointer-events: none;
-}
-
 
 
 /* ── Das Schaustück ───────────────────────────────────────────────────────
@@ -2101,24 +2065,7 @@
   .kopf__navi { display: none; }
   .kopf__anruf { margin-inline-start: auto; }
 
-  /**
-   * Das schwebende Gebäck am Handy.
-   *
-   * Gemessen und korrigiert: mit 56 % Breite lag es auf dem WhatsApp-Knopf —
-   * nicht nur optisch, es FING DESSEN KLICKS AB. Ein Schmuckbild vor einem
-   * Bestellknopf ist der teuerste Fehler, den diese Seite machen kann.
-   *
-   * Drei Zeilen lösen es zusammen: schmaler, weiter nach unten, und die
-   * Sektion bekommt unten Platz, damit die Knöpfe darüber frei bleiben.
-   * `pointer-events` steht bei der Grundregel — dort gilt es für alle Breiten.
-   */
-  .backstube__bild {
-    width: min(46%, 12rem);
-    right: -0.5rem;
-    bottom: -2.5rem;
-    margin-block-end: -2.5rem;
-  }
-  .backstube { padding-block: 2rem 7rem; }
+  .backstube { padding-block: 2rem 4rem; }
 
   /**
    * Unter 1000 px dreht der Schleier von schräg auf SENKRECHT.
@@ -2138,94 +2085,33 @@
    * praktisch unsichtbar. Wer eine Grundregel dreht, muss ihre Ausnahmen
    * mitdrehen.
    */
+  /**
+   * Am Handy braucht der Schleier weniger Mitte und mehr Fuss.
+   *
+   * Das Video ist hier im Hochformat und wird NICHT beschnitten — man sieht es
+   * ganz. Ein dichtes rundes Zentrum wie am Rechner läge dann mitten auf dem
+   * Geschehen. Stattdessen oben und unten dichter, in der Mitte offener: die
+   * Schrift steht ohnehin am oberen und unteren Drittel.
+   */
   .backstube__schleier {
-    /* Der dichte Teil reicht weiter hinauf als am Rechner, und der Grund ist
-       gemessen: am Handy steht der ganze Satzblock untereinander statt neben
-       dem Foto, und seine oberste Zeile — die Unterzeile in IHREM Orange —
-       landete bei 46 % auf rgb(112,111,114) und kam auf 1,66. Ihr Orange
-       braucht einen dunklen Grund, sonst ist es keine Marke, sondern ein
-       Fleck. */
     background:
+      radial-gradient(
+        130% 62% at 50% 50%,
+        color-mix(in oklch, var(--tief) 62%, transparent) 0%,
+        color-mix(in oklch, var(--tief) 48%, transparent) 55%,
+        color-mix(in oklch, var(--tief) 30%, transparent) 100%
+      ),
       linear-gradient(
         to bottom,
         color-mix(in oklch, var(--tief) 62%, transparent) 0%,
-        color-mix(in oklch, var(--tief) 28%, transparent) 14%,
-        transparent 30%
+        transparent 26%
       ),
       linear-gradient(
         to top,
-        color-mix(in oklch, var(--tief) 93%, transparent) 0%,
-        color-mix(in oklch, var(--tief) 89%, transparent) 58%,
-        color-mix(in oklch, var(--tief) 80%, transparent) 78%,
-        color-mix(in oklch, var(--tief) 52%, transparent) 92%,
-        color-mix(in oklch, var(--tief) 34%, transparent) 100%
+        color-mix(in oklch, var(--tief) 68%, transparent) 0%,
+        transparent 34%
       );
   }
-
-  /* Und deshalb sitzt der Satz unten statt mittig: er muss in den dichten
-     Teil, nicht der dichte Teil zu ihm. */
-  .backstube { align-items: end; }
-
-  /* Auf schmalen Flächen füllt `cover` nach HÖHE — der senkrechte Anteil von
-     `object-position` läuft dann ins Leere, weil nichts oben überhängt. Der
-     Ausschnitt wird deshalb nicht hier entschieden, sondern über das zweite
-     Bild im `<picture>`. Waagerecht bleibt die Mitte: dort stehen die Männer. */
-  .backstube__grund img { object-position: 50% 100%; }
-
-  /* Die Unterzeile bricht sonst nach „Bonn-" um. Ausgeglichen statt gestückelt. */
-  .backstube__ort { letter-spacing: 0.12em; }
-
-  /* Kürzer umbrechen, damit das schwebende Gebäck rechts unten keine Zeile
-     anschneidet. Gemessen: bei 34 ch lag es auf „vor ihrer Tür in". */
-  .backstube__nachweis { max-width: 21ch; }
-
-  /* Am Handy wird zusammengelegt, nicht gestrichen: die Schritte behalten ihren
-     Versatz, nur kleiner, und der Flieger reist weiter — er bekommt nur weniger
-     Weg und mehr Platz, damit er die Rechtecke nicht verdeckt. */
-    .schritt { flex-direction: column; align-items: stretch; gap: 0.9rem; }
-  .schritt--1 { width: 78%; margin-inline-start: 22%; }
-  .schritt--2 { width: 70%; margin-inline-start: 8%; margin-top: -2.5rem; }
-  .schritt__wort { flex: none; padding-bottom: 0; }
-  .schritt__text { max-width: none; }
-  /* Unter 1000 px reist das Gericht nicht, es steht als letzter Schritt da —
-     zusammengelegt, nicht gestrichen. Fliegend verdeckte es auf 393 px die
-     Beschriftung des zweiten Schritts, und beides war unlesbar. Damit fällt
-     auch die zweispaltige Bühne weg: eine Spur zum Kleben braucht Platz
-     neben dem Inhalt, und den gibt es hier nicht. */
-  .prozess { perspective: none; }
-  .prozess__gitter { grid-template-columns: minmax(0, 1fr); }
-  /* Die Mindesthöhe der Flugspur ist am Handy eine ganze leere Bildschirmhöhe:
-     dort fliegt nichts, also braucht auch nichts Bahn. Gemessen 10,3 statt der
-     erlaubten 10 — das hier war der Unterschied. */
-  .spur { display: block; min-height: 0; }
-  .klebt { position: static; top: auto; max-width: none; }
-
-  /**
-   * Am Handy fliegt DASSELBE, nur auf einer anderen Bahn.
-   *
-   * Bis zum 16.08. stand der Schwarm hier still — mit der Begründung, neben
-   * dem Inhalt sei keine freie Bahn. Das stimmt und war trotzdem der falsche
-   * Schluss: die Bahn liegt nicht NEBEN dem Inhalt, sondern AUF der rechten
-   * Kante. Die Gerichte fliegen halb aus dem Bild heraus, und genau das lässt
-   * sie gross wirken statt gedrängt.
-   *
-   * Sie liegen weiterhin unter dem Text (z-index 1 gegen 2), und die Spalte
-   * bekommt rechts Luft, damit sich Schrift und Gericht nicht überlagern.
-   */
-  .gebaeck {
-    left: var(--li-m);
-    width: var(--gr-m);
-  }
-
-  .prozess__buehne { padding-inline-end: 32%; }
-
-  /* Die weiteren Ansichten bleiben: es wird auch hier gedreht. */
-
-  .laden__bild,
-  .laden__wort { grid-column: 1 / -1; }
-  /* Der Tiefversatz ist am Handy nur leerer Raum — dort steht ohnehin alles
-     untereinander. Gemessen: er kostete 0,1 Bildschirmhöhen über der Grenze. */
-  .laden__bild { width: min(78%, 26rem); margin-top: 0; }
 }
 
 @media (max-width: 700px) {
@@ -2235,7 +2121,10 @@
   .kopf__anruf-text { display: none; }
   .kopf__anruf-kurz { display: inline; }
 
-  .backstube { min-height: 70svh; padding-block: 2rem 1.5rem; }
+    /* 92 statt 70 svh. 70 stammt aus der Zeit, als hier ein Foto lag und
+     darunter sofort Inhalt kam. Ein Video, das nur zwei Drittel des Schirms
+     füllt, liest als eingebettetes Kästchen, nicht als Bühne. */
+  .backstube { min-height: 92svh; padding-block: 2rem 1.5rem; }
 
   /* Der Punkt vor dem Satz ist am Handy kleiner — 2,5 rem sind dort ein Fleck.
      Diese Regel stand zuerst in bausteine.css und wurde von der Grundregel
@@ -2244,10 +2133,7 @@
   .band { padding-block: 1.75rem; }
   .band__satz::before { width: 1.6rem; height: 1.6rem; margin-bottom: 0.9rem; }
 
-  /* Der Nachweis entfällt am Handy nicht — er rückt nur näher heran. Wer die
-     fünf Männer sieht, soll lesen können, wer sie sind. */
-  .backstube__nachweis { margin-top: 1.5rem; }
-
+  
   /**
    * Am Handy KEINE eigene Zeile mehr für den Preis.
    *

@@ -46,26 +46,35 @@
  * nicht in der Sektion, damit ein zweiter Glutabschnitt — sollte es je einen
  * geben — nicht seine eigene Auffassung davon mitbringt.
  */
-.sektion--nacht {
-  background: var(--nacht);
-  color: var(--nacht-schrift);
-  /* Die gepunktete Linie ist das Bindemittel der Seite — auf dunklem Grund
-     braucht sie den umgekehrten Ton, sonst verschwindet sie. */
-  --linie: var(--nacht-linie);
+/**
+ * Die Ausnahmesektion: ihr Orange über die volle Breite, SCHWARZE Schrift
+ * darauf. Sie nimmt am Wechsel zwischen Hell und Clay nicht teil, sie
+ * unterbricht ihn — und deshalb gibt es genau eine davon.
+ *
+ * Diese Klasse hiess vier Tage lang `sektion--nacht` und trug ihr Schwarz.
+ * Davor hiess sie schon einmal `sektion--glut` und trug ein abgedunkeltes
+ * Orange mit Creme darauf; das ist gescheitert, weil ein Orange, das Creme
+ * tragen soll, braun werden muss. Jetzt trägt sie ihr echtes Orange mit ihrem
+ * echten Schwarz — die einzige Paarung, die beide Farben unangetastet lässt.
+ */
+.sektion--glut {
+  background: var(--glut-grund);
+  color: var(--glut-schrift);
+  --linie: var(--glut-linie);
 }
 
-/* Hier, und nur hier, ist ihr Orange ungedämpft. Auf Creme kam es auf 2,27
-   und war unbrauchbar; auf ihrem Schwarz sind es 6,01. Dieselbe Farbe, ein
-   anderer Grund — das ist der ganze Unterschied. */
-.sektion--nacht .etikett { color: var(--nacht-marke); }
-.sektion--nacht h1,
-.sektion--nacht h2,
-.sektion--nacht h3 { color: var(--nacht-schrift); }
-.sektion--nacht .leise,
-.sektion--nacht .lead { color: var(--nacht-leise); }
+/* Auf der orangen Fläche ist die Marke SCHWARZ, nicht gold. Ein zweiter
+   warmer Ton auf Orange wäre kaum zu unterscheiden — der Kontrast kommt hier
+   aus der Helligkeit, nicht aus der Buntheit. */
+.sektion--glut .etikett { color: var(--glut-schrift); }
+.sektion--glut h1,
+.sektion--glut h2,
+.sektion--glut h3 { color: var(--glut-schrift); }
+.sektion--glut .leise,
+.sektion--glut .lead { color: var(--glut-leise); }
 
 @media (hover: hover) {
-  .sektion--nacht .lebt:hover { color: var(--nacht-marke); }
+  .sektion--glut .lebt:hover { color: var(--creme); }
 }
 
 /* Alte Namen zeigen auf den Zweiklang. */
@@ -316,8 +325,12 @@
 .wasserzeichen {
   position: fixed;
   z-index: 4;
-  right: clamp(1.25rem, 3vw, 3rem);
-  bottom: clamp(1.25rem, 3vw, 3rem);
+  /* Enger an die Ecke — Karol: „ein bisschen weiter präzise an die rechte
+     Ecke". Vorher bis zu 3 rem Abstand; das liest sich als schwebendes
+     Element, nicht als Zeichen AUF dem Papier. Ein Wasserzeichen sitzt am
+     Rand, nicht daneben. */
+  right: clamp(0.9rem, 1.4vw, 1.6rem);
+  bottom: clamp(0.9rem, 1.4vw, 1.6rem);
   width: clamp(6.5rem, 11vw, 12rem);
   pointer-events: none;
   opacity: 0;
@@ -335,7 +348,11 @@
  * streitet. Es soll da sein und nicht rufen.
  */
 .wasserzeichen[data-da='ja'] {
-  opacity: 0.46;
+  /* 0,46 -> 0,58. „Durchgehend transparent, aber auch sichtbar" — bei 0,46
+     verschwand die Wortmarke auf dem hellen Clay fast, und ein Wasserzeichen,
+     das man suchen muss, ist keines. Über 0,65 wird daraus ein zweites Logo,
+     das mit der Kopfzeile streitet. */
+  opacity: 0.58;
   transform: none;
 }
 
