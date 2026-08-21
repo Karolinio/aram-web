@@ -70,7 +70,7 @@ export default function Ladenschild() {
    * Sekunde nach. Starr gekoppelt wirkt jede Scrollbewegung mechanisch — die
    * Nachlaufzeit ist das, was teuer aussieht.
    */
-  const drehen = useDrehung<HTMLDivElement>(26)
+  const drehen = useDrehung<HTMLDivElement>(52)
   const schild = useRef<HTMLDivElement>(null)
   useEffect(() => {
     const b = buehne.current
@@ -127,6 +127,17 @@ export default function Ladenschild() {
           der Bildsprache von 2008. Jetzt trägt gesetzte Schrift die Aussage
           und das Logo ist wieder das, was ein Logo ist — eine Marke. */}
       <div className="schild" ref={schild}>
+            {/* Der Glanz — DIE Bewegung, die ohne Zutun läuft.
+                Eine Fläche in der Form des Logos, gefüllt mit einem schrägen
+                Lichtstreifen, der alle paar Sekunden darüberwandert. Die Form
+                kommt aus dem Alphakanal des Logos selbst (`mask-image`), also
+                bleibt der Glanz exakt auf der Wortmarke und läuft nicht über
+                den durchsichtigen Rand.
+
+                Das ist das, was ein glänzendes Schild in der Wirklichkeit tut,
+                wenn jemand daran vorbeigeht — und es ist der Grund, dass ein
+                Ladenschild lebendig aussieht und ein Aufkleber nicht. */}
+            <span className="schild__glanz" aria-hidden="true" />
         <img
           src="/bilder/echt/logo.webp"
           alt="Aram — Pizzeria & Gastronomie"

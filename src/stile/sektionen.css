@@ -705,7 +705,8 @@
 
      34 rem ist die Grenze, an der es auf 1440 px noch Luft zum Rand hat und
      am Handy (84 %) nicht an die Kante stösst. */
-  width: min(84%, 34rem);
+  /* Vierte Vergrösserung auf Zuruf: 34 -> 40 rem. */
+  width: min(88%, 40rem);
   margin-inline: auto;
 }
 
@@ -763,7 +764,105 @@
      einer anderen Stelle. */
 }
 
+.schild { position: relative; }
+
+/**
+ * ═══ Der Glanz — und warum er überhaupt gebaut werden musste ═══
+ *
+ * Karol am 21.08.: „mir fehlt die aktive Logo-Animation!!"
+ *
+ * Sie hat nicht gefehlt. Sie lief — und war unsichtbar. Gemessen im Browser,
+ * über 700 px Scrollweg:
+ *
+ *   Parallaxe   -51 px  ->  -90 px      39 px auf 700 px Weg
+ *   Drehung     0°      ->  19,7°       das Schild wird 5 % schmaler
+ *
+ * Fünf Prozent Breitenänderung über einen halben Bildschirm ist keine
+ * Animation, das ist ein Rundungsfehler. Ich hatte jede der drei Bewegungen
+ * einzeln auf „dezent" eingestellt, und die Summe von drei dezenten Bewegungen
+ * ist keine.
+ *
+ * Vor allem aber: alle drei brauchen EINGABE. Die Parallaxe und die Drehung
+ * brauchen Scrollen, die Neigung braucht einen Zeiger auf dem Schild. Wer die
+ * Seite ansieht und nichts tut, sieht ein Standbild. „Aktiv" heisst: es
+ * passiert von selbst.
+ *
+ * Der Glanz ist diese eine Bewegung. Die Maske kommt aus dem Alphakanal des
+ * Logos (66 % der Datei sind durchsichtig), der Streifen bleibt deshalb exakt
+ * auf der Wortmarke. `background-position` statt `transform`, weil eine
+ * Position innerhalb einer Fläche kein Layout anfasst — und weil ein
+ * `transform` hier mit den drei anderen Bewegungen kollidieren würde.
+ */
+.schild__glanz {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  -webkit-mask-image: url('/bilder/echt/logo.webp');
+  mask-image: url('/bilder/echt/logo.webp');
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  /* Schmal und schräg. Ein breiter Streifen liest als Aufhellung, ein schmaler
+     als Reflex — der Unterschied ist die Kante. */
+  background: linear-gradient(
+    108deg,
+    transparent 38%,
+    oklch(100% 0 0 / 0.06) 45%,
+    oklch(100% 0 0 / 0.55) 50%,
+    oklch(100% 0 0 / 0.06) 55%,
+    transparent 62%
+  );
+  background-size: 260% 100%;
+  background-repeat: no-repeat;
+  animation: glanz 4.2s var(--ease-teig) infinite;
+}
+
+@keyframes glanz {
+  /* Lange Pause, kurzer Durchgang. Ein Reflex, der ununterbrochen wandert, ist
+     ein Effekt; einer, der alle paar Sekunden einmal kommt, ist ein Schild,
+     an dem jemand vorbeigeht. */
+  /* Gemessen: bei 5,5 s Umlauf und 22 % Durchgang lagen 4,3 Sekunden Stillstand
+     dazwischen — von zwölf Stichproben zeigten neun dasselbe Bild. Jetzt 4,2 s
+     bei 26 %: gut eine Sekunde Reflex, knapp drei Sekunden Ruhe. Das ist der
+     Takt, in dem jemand an einem Schaufenster vorbeigeht. */
+  0%   { background-position: 190% 0; }
+  26%  { background-position: -90% 0; }
+  100% { background-position: -90% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .schild__glanz { animation: none; opacity: 0; }
+  .schild img { animation: none; }
+}
+
+/**
+ * Der Auftritt. Die zweite Bewegung, die ohne Zutun läuft — und die einzige,
+ * die genau einmal passiert.
+ *
+ * Sie sitzt am `<img>` und nicht an einem der drei Knoten darüber, weil die
+ * schon belegt sind: Bühne trägt die Parallaxe, Achse die Scrolldrehung,
+ * Schild die Neigung zum Zeiger. Vier Bewegungen, vier Knoten. Zwei auf einem
+ * Knoten überschreiben einander still.
+ *
+ * `backwards` ist nicht Kosmetik: ohne diesen Wert steht das Schild vor dem
+ * Beginn der Verzögerung in seiner Endlage, springt dann auf den Anfangswert
+ * und läuft los. Ein sichtbares Zucken beim Laden.
+ */
+@keyframes schild-auftritt {
+  from {
+    opacity: 0;
+    transform: perspective(900px) rotateY(-46deg) translate3d(0, 1.2rem, -120px);
+  }
+  to {
+    opacity: 1;
+    transform: perspective(900px) rotateY(0) translate3d(0, 0, 0);
+  }
+}
+
 .schild img {
+  animation: schild-auftritt 1150ms var(--ease-teig) 120ms backwards;
   width: 100%;
   height: auto;
   /* Vier Durchgänge statt zehn. Die Flanke ist in Pixeln gemessen, nicht in
