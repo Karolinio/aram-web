@@ -11,45 +11,47 @@ type Mass = { breite: number; hoehe: number }
 const M = reiseRoh as Record<string, Mass>
 
 /**
- * Die Reise — vier Takte auf EINER Bühne.
+ * Die Reise — EIN Gegenstand, gross, der aufbricht.
  *
- * ═══ Warum eine Bühne und nicht vier Sektionen ═══
+ * ═══ Von vier Takten auf einen ═══
  *
- * Vier Abschnitte hintereinander erzählen keine Folge, sie zählen auf. Was eine
- * Folge daraus macht, ist, dass der Ort BLEIBT und sich nur ändert, was darauf
- * geschieht — wie auf einer Theaterbühne. Der Scroll wird zur Zeit.
+ * Vorher flogen hier drei Gegenstände nacheinander durch: eine Scheibe, ein
+ * Fatayer, dann das Schiffchen. Karol nach dem Ansehen: „ich glaube es ist
+ * nichts davon geeignet für diese Scroll-Reise, ich sag ehrlich hässlich. Das
+ * Käseschiff sollte XL grossflächig als EINZELNE Animation eingesetzt werden."
  *
- * Deshalb ist die Sektion angeheftet und alles darin bewegt sich gegen einen
- * stehenden Grund. Ein Raumtausch je Takt wäre billiger zu bauen und würde die
- * Folge zerreissen.
+ * Er hat die Freisteller gesehen, ich nicht. Aber der Grund, warum er recht
+ * hat, lässt sich auch ohne Augen nennen: drei mittelgrosse Gegenstände
+ * nacheinander sind eine Aufzählung. Jeder bekommt ein Fünftel der Fläche und
+ * ein Fünftel der Zeit, und keiner bekommt genug von beidem, um zu wirken.
+ * Ein Gegenstand, der den halben Bildschirm füllt und aufbricht, ist ein
+ * Ereignis.
  *
- * ═══ Warum sie das Schaustück ERSETZT ═══
+ * Das ist auch der billigere Bau: ein Gegenstand braucht ein gutes Foto,
+ * drei brauchen drei.
  *
- * Vorher stand hier eine zweite angeheftete Sequenz mit demselben Zweck: ein
- * Gericht, das sich beim Scrollen aufbaut. Zwei davon hintereinander sind keine
- * Steigerung, sondern eine Wiederholung — und sie kosten zusammen sechs
- * Bildschirmhöhen. Diese hier kann, was die andere konnte, und mehr.
+ * ═══ Die drei Takte ═══
  *
- * ═══ Die vier Takte ═══
+ *   Feuer    die leere Bühne, Funken. Wer hier arbeitet und seit wann.
+ *   Ankunft  das Schiffchen kommt von hinten heran, XL, mit einem Stoss Mehl
+ *            beim Aufsetzen.
+ *   Bruch    es GEHT AUF — zwei Hälften schwingen auseinander, Dampf quillt
+ *            aus der Bruchstelle.
  *
- *   Feuer     die leere Bühne, Funken. Wer hier arbeitet und seit wann.
- *   Scheibe   ein Fladen dreht sich aus der Kante in die Fläche. Beim
- *             Aufsetzen ein Stoss Mehl.
- *   Fatayer   das gefüllte Gebäck zieht durch, gross und nah.
- *   Bruch     das Schiffchen kommt nach vorn und GEHT AUF — zwei Hälften
- *             schwingen auseinander, Dampf quillt aus der Bruchstelle.
+ * ═══ PLATZHALTER — bitte lesen, bevor jemand das hier fertig nennt ═══
  *
- * Der Bruch ist der Höhepunkt und steht deshalb am Ende. Er ist auch der
- * einzige Takt, den man nicht fotografieren kann: die Bruchkante entsteht in
- * werkzeug/reise-assets.py aus dem Alphakanal, nicht im Browser. Eine gerade
- * Trennlinie sähe zerschnitten aus, und zerschnittenes Gebäck ist etwas
- * anderes als gebrochenes.
+ * Der Gegenstand in `public/bilder/reise/` ist aus einem WhatsApp-Foto
+ * freigestellt und laut Karol nicht gut genug. Er ist hier drin, damit die
+ * Choreografie steht und geprüft werden kann — nicht, weil er bleiben soll.
+ *
+ * Was ihn ersetzt, steht in ABLICHTUNG.md: ein Foto mit genau den
+ * Eigenschaften, die ein Gegenstand braucht, der aufbrechen soll. Sobald es
+ * da ist, sind es zwei Zeilen: freistellen, brechen lassen, fertig — die
+ * Zeitleiste bleibt unverändert.
  */
 export default function Reise() {
   const schmal = useMedienabfrage('(max-width: 719px)')
   const buehne = useRef<HTMLDivElement>(null)
-  const scheibe = useRef<HTMLImageElement>(null)
-  const fatayer = useRef<HTMLImageElement>(null)
   const schiff = useRef<HTMLDivElement>(null)
   const links = useRef<HTMLImageElement>(null)
   const rechts = useRef<HTMLImageElement>(null)
@@ -77,8 +79,7 @@ export default function Reise() {
         /* Ausgangslage. Sie steht HIER und nicht im Stilblatt: was eine
            Zeitleiste bewegt, soll sie auch setzen — sonst stehen Anfangswerte
            an zwei Orten und laufen beim nächsten Umbau auseinander. */
-        gsap.set([scheibe.current, fatayer.current], { autoAlpha: 0 })
-        gsap.set(schiff.current, { autoAlpha: 0, scale: 0.7 })
+        gsap.set(schiff.current, { autoAlpha: 0 })
         gsap.set([links.current, rechts.current], { xPercent: 0, rotationY: 0 })
         gsap.set(bruchdampf.current, { autoAlpha: 0 })
         gsap.set(zeilen, { autoAlpha: 0, y: 18 })
@@ -91,7 +92,9 @@ export default function Reise() {
             /* Drei Bildschirmhöhen für vier Takte. Mehr wäre bequemer zu
                choreografieren und würde die Seite auf über sechzehn
                Bildschirmhöhen treiben — auf einem Daumen ist das Arbeit. */
-            end: () => `+=${window.innerHeight * 3}`,
+            /* Zweieinhalb statt drei Bildschirmhöhen: ein Takt weniger, und
+               die Seite lag bei 15,7 Bildschirmhöhen — zu viel Daumen. */
+            end: () => `+=${window.innerHeight * 2.4}`,
             pin: true,
             /* `transform` statt `fixed`: eine angeheftete Sektion in `fixed`
                nimmt ihren Platz aus dem Fluss und verschiebt alles darunter.
@@ -109,64 +112,53 @@ export default function Reise() {
         }
 
         /* ── Takt 1: Feuer ─────────────────────────────────────────────── */
-        zeigen(0, 0.02, 0.2)
+        zeigen(0, 0.02, 0.28)
 
-        /* ── Takt 2: die Scheibe dreht sich aus der Kante in die Fläche ──
-           `rotationX` von 82 auf 0 ist der überzeugendste 3D-Moment, den es
-           für einen flachen Gegenstand gibt: die Silhouette geht von einem
-           Strich zu einem Kreis, und genau daran erkennt ein Auge Tiefe. Bei
-           einem unregelmässigen Körper täte dieselbe Drehung nichts. */
+        /* ── Takt 2: die Ankunft ───────────────────────────────────────────
+           Von hinten heran und gross werden — nicht von der Seite herein. Ein
+           Gegenstand, der von links kommt, zieht vorbei; einer, der aus der
+           Tiefe wächst, kommt AUF EINEN ZU. Das ist der Unterschied zwischen
+           einer Parade und einem Auftritt.
+
+           `z` von −900 auf 0 statt eines blossen Massstabs: mit Perspektive
+           wächst die Silhouette dabei nicht gleichmässig, sondern so, wie ein
+           Ding wächst, das näher kommt. */
         tl.fromTo(
-          scheibe.current,
-          { autoAlpha: 0, xPercent: -60, yPercent: 40, rotationX: 82, rotationY: -24, scale: 0.6 },
-          { autoAlpha: 1, xPercent: 0, yPercent: 0, rotationX: 0, rotationY: 0, scale: 1, duration: 0.2 },
-          0.2,
+          schiff.current,
+          { autoAlpha: 0, z: -900, yPercent: 14, rotationX: 26, rotationY: -12 },
+          { autoAlpha: 1, z: 0, yPercent: 0, rotationX: 0, rotationY: 0, duration: 0.3 },
+          0.22,
         )
-        zeigen(1, 0.24, 0.4)
-        /* Der Mehlstoss kommt beim AUFSETZEN, nicht beim Losfliegen — und er
-           wird als EREIGNIS ausgelöst, nicht eingeblendet. `onEnter` beim
-           Vorwärtsscrollen, `onEnterBack` beim Zurück: wer die Stelle zweimal
-           passiert, sieht den Stoss zweimal. Eine Wolke, die nur einmal im
-           Leben der Seite kommt, verpasst man. */
+        zeigen(1, 0.34, 0.6)
+
+        /**
+         * Der Mehlstoss beim AUFSETZEN — ein eigener Auslöser, keine Zeile in
+         * der Zeitleiste.
+         *
+         * Eine Zeitleiste mit `scrub` läuft rückwärts, wenn man zurückscrollt.
+         * Ein Stoss kann das nicht: er hat einen Anfang und ein Ende, und
+         * rückwärts abgespielt wäre er eine Wolke, die in ein Blech
+         * zurückspringt. Deshalb ein Ereignis, das in BEIDE Richtungen
+         * dasselbe tut.
+         */
         const stoss = ScrollTrigger.create({
           trigger: b,
-          start: () => `top+=${window.innerHeight * 3 * 0.36} top`,
-          end: () => `top+=${window.innerHeight * 3 * 0.46} top`,
+          start: () => `top+=${window.innerHeight * 2.4 * 0.42} top`,
+          end: () => `top+=${window.innerHeight * 2.4 * 0.54} top`,
           onEnter: () => setMehlstoss((n) => n + 1),
           onEnterBack: () => setMehlstoss((n) => n + 1),
           invalidateOnRefresh: true,
         })
-        tl.to(
-          scheibe.current,
-          { autoAlpha: 0, xPercent: 70, yPercent: -30, rotationY: 40, scale: 0.8, duration: 0.14 },
-          0.42,
-        )
 
-        /* ── Takt 3: der Fatayer zieht durch ──────────────────────────── */
-        tl.fromTo(
-          fatayer.current,
-          { autoAlpha: 0, xPercent: 70, yPercent: 26, rotationY: 34, scale: 0.7 },
-          { autoAlpha: 1, xPercent: 0, yPercent: 0, rotationY: -6, scale: 1.06, duration: 0.18 },
-          0.44,
-        )
-        zeigen(2, 0.48, 0.63)
-        tl.to(
-          fatayer.current,
-          { autoAlpha: 0, xPercent: -60, yPercent: -34, rotationY: -46, scale: 0.82, duration: 0.13 },
-          0.64,
-        )
-
-        /* ── Takt 4: der Bruch ────────────────────────────────────────── */
-        tl.to(schiff.current, { autoAlpha: 1, scale: 1, duration: 0.14 }, 0.66)
-        zeigen(3, 0.72, 0.97)
-        /* Die Hälften schwingen um die Hochachse auseinander und zugleich
-           seitlich weg. Nur drehen sähe aus wie zwei Türen, nur schieben wie
-           ein Schnitt. Beides zusammen ist ein Bruch. */
-        tl.to(links.current, { xPercent: -22, rotationY: -34, duration: 0.16 }, 0.8)
-        tl.to(rechts.current, { xPercent: 22, rotationY: 34, duration: 0.16 }, 0.8)
-        /* Der Dampf beginnt, wenn der Spalt da ist — nicht davor. Dampf aus
-           einem geschlossenen Gebäck ist die Aussage, bevor sie stimmt. */
-        tl.to(bruchdampf.current, { autoAlpha: 1, duration: 0.1 }, 0.84)
+        /* ── Takt 3: der Bruch ─────────────────────────────────────────────
+           Die Hälften drehen UND schieben. Nur drehen sähe aus wie zwei Türen,
+           nur schieben wie ein Schnitt. Beides zusammen ist ein Bruch. */
+        zeigen(2, 0.66, 0.97)
+        tl.to(links.current, { xPercent: -26, rotationY: -38, duration: 0.2 }, 0.62)
+        tl.to(rechts.current, { xPercent: 26, rotationY: 38, duration: 0.2 }, 0.62)
+        /* Der Dampf beginnt, wenn der Spalt DA ist. Dampf aus einem
+           geschlossenen Gebäck ist die Aussage, bevor sie stimmt. */
+        tl.to(bruchdampf.current, { autoAlpha: 1, duration: 0.12 }, 0.68)
 
         return () => {
           stoss.kill()
@@ -174,8 +166,7 @@ export default function Reise() {
           tl.kill()
           gsap.set(
             [
-              scheibe.current, fatayer.current, schiff.current,
-              links.current, rechts.current, bruchdampf.current,
+              schiff.current, links.current, rechts.current, bruchdampf.current,
               ...zeilen,
             ],
             { clearProps: 'all' },
@@ -208,33 +199,12 @@ export default function Reise() {
         <Funken klasse="reise__funken" menge={schmal ? 16 : 34} />
 
         <div className="reise__flug" aria-hidden="true">
-          <img
-            ref={scheibe}
-            className="reise__stueck reise__stueck--scheibe"
-            src="/bilder/reise/scheibe.webp"
-            width={M.scheibe!.breite}
-            height={M.scheibe!.hoehe}
-            alt=""
-            loading="lazy"
-            decoding="async"
-          />
-          {/* Der Stoss wird über `aktiv` ausgelöst, nicht über Deckkraft.
+          {/* Der Stoss wird über einen ZÄHLER ausgelöst, nicht über Deckkraft.
               Eine Wolke, die man einblendet, ist eine stehende Wolke, die
               sichtbar wird — sie hat keinen Zeitpunkt. Ein Stoss beginnt. */}
           <div className="reise__mehl">
             <Mehlwolke stoss={mehlstoss} menge={schmal ? 46 : 96} />
           </div>
-
-          <img
-            ref={fatayer}
-            className="reise__stueck reise__stueck--fatayer"
-            src="/bilder/reise/fatayer.webp"
-            width={M.fatayer!.breite}
-            height={M.fatayer!.hoehe}
-            alt=""
-            loading="lazy"
-            decoding="async"
-          />
 
           <div className="reise__schiff" ref={schiff}>
             {/* Der Dampf liegt HINTER den Hälften: er kommt aus dem Spalt,
@@ -274,12 +244,8 @@ export default function Reise() {
             <p>Fünf Brüder, ein Steinofen, jeden Morgen ab sechs.</p>
           </li>
           <li>
-            <span className="etikett">Der Teig</span>
-            <p>Von Hand gerollt, mit Weizenmehl. Kein Blech kommt zweimal am selben Tag.</p>
-          </li>
-          <li>
-            <span className="etikett">Belegt</span>
-            <p>Zweiundzwanzig Sorten Fata’er — Zaatar, Muhammara, Spinat, Sucuk. Belegt erst bei deiner Bestellung.</p>
+            <span className="etikett">Von Hand gerollt</span>
+            <p>Weizenmehl, Hirtenkäse, und zweiundzwanzig Sorten Fata’er — belegt erst bei deiner Bestellung.</p>
           </li>
           <li>
             <span className="etikett">Ofenfrisch</span>

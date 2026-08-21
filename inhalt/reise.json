@@ -1,22 +1,14 @@
 {
- "scheibe": {
-  "breite": 620,
-  "hoehe": 572
- },
- "fatayer": {
-  "breite": 700,
-  "hoehe": 402
- },
  "schiff": {
-  "breite": 860,
-  "hoehe": 335
+  "breite": 1100,
+  "hoehe": 428
  },
  "schiff-links": {
-  "breite": 520,
-  "hoehe": 332
+  "breite": 700,
+  "hoehe": 447
  },
  "schiff-rechts": {
-  "breite": 520,
-  "hoehe": 347
+  "breite": 700,
+  "hoehe": 467
  }
 }

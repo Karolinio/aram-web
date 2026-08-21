@@ -2689,14 +2689,20 @@
     drop-shadow(0 3px 8px oklch(20% 0.05 45 / 0.3));
 }
 
-.reise__stueck--scheibe { width: min(58vw, 26rem); height: auto; }
-.reise__stueck--fatayer { width: min(66vw, 30rem); height: auto; }
-
+/**
+ * XL — Karol: „das Käseschiff sollte XL grossflächig als einzelne Animation
+ * eingesetzt werden."
+ *
+ * 34 -> 56 rem, und am Handy 92 statt 76 Prozent der Breite. Es ist jetzt der
+ * einzige Gegenstand auf der Bühne; die Fläche, die sich drei geteilt haben,
+ * bekommt einer. Ein Gegenstand, der den halben Bildschirm füllt und aufbricht,
+ * ist ein Ereignis — drei mittelgrosse nacheinander sind eine Aufzählung.
+ */
 .reise__schiff {
   position: relative;
   display: grid;
   place-items: center;
-  width: min(76vw, 34rem);
+  width: min(92vw, 56rem);
 }
 
 .reise__haelfte {

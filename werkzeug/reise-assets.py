@@ -49,24 +49,23 @@ def brechen(im, streuung=0.05, glaette=0.82):
     re = a.copy(); re[:, :, 3] = np.where(~links_maske, re[:, :, 3], 0)
     return zuschneiden(Image.fromarray(li)), zuschneiden(Image.fromarray(re))
 
-liste = {}
-for name, quelle, breite in [
-    ('scheibe', 'stueck-27-01.png', 620),
-    ('fatayer', 'stueck-21-01.png', 700),
-]:
-    im = zuschneiden(Image.open('rohbilder/frei/' + quelle).convert('RGBA'))
-    p, groesse, kb = sichern(im, name, breite)
-    liste[name] = dict(breite=groesse[0], hoehe=groesse[1])
-    print(f'  {name:16} {groesse[0]:>4}x{groesse[1]:<4} {kb:>3} kB   aus {quelle}')
+# EIN Gegenstand, nicht drei. Karol nach dem Ansehen der Freisteller: „nichts
+# davon geeignet ... das Käseschiff sollte XL grossflächig als EINZELNE
+# Animation eingesetzt werden." Die Scheibe und der Fatayer sind deshalb raus.
+#
+# QUELLE HIER TAUSCHEN, sobald das Foto aus ABLICHTUNG.md da ist. Sonst ändert
+# sich nichts — die Zeitleiste in Reise.tsx bleibt, wie sie ist.
+QUELLE = 'stueck-20-01.png'
 
-schiff = zuschneiden(Image.open('rohbilder/frei/stueck-20-01.png').convert('RGBA'))
-p, g, kb = sichern(schiff, 'schiff', 860)
+liste = {}
+schiff = zuschneiden(Image.open('rohbilder/frei/' + QUELLE).convert('RGBA'))
+p, g, kb = sichern(schiff, 'schiff', 1100)
 liste['schiff'] = dict(breite=g[0], hoehe=g[1])
-print(f'  {"schiff":16} {g[0]:>4}x{g[1]:<4} {kb:>3} kB   aus stueck-20-01.png')
+print(f'  {"schiff":16} {g[0]:>4}x{g[1]:<4} {kb:>3} kB   aus {QUELLE}')
 
 li, re = brechen(schiff)
 for teil, bild in (('schiff-links', li), ('schiff-rechts', re)):
-    p, g, kb = sichern(bild, teil, 520)
+    p, g, kb = sichern(bild, teil, 700)
     liste[teil] = dict(breite=g[0], hoehe=g[1])
     print(f'  {teil:16} {g[0]:>4}x{g[1]:<4} {kb:>3} kB')
 
