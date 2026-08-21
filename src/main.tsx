@@ -17,7 +17,7 @@ import Kopfzeile from './komponenten/Kopfzeile.tsx'
 import Backstube from './komponenten/Backstube.tsx'
 import Galerie from './komponenten/Galerie.tsx'
 import Handarbeit from './komponenten/Handarbeit.tsx'
-import Schaustueck from './komponenten/Schaustueck.tsx'
+import Reise from './komponenten/Reise.tsx'
 import Karte from './komponenten/Karte.tsx'
 import Laden from './komponenten/Laden.tsx'
 import Bestellen from './komponenten/Bestellen.tsx'
@@ -117,10 +117,17 @@ function Seite() {
           beim Eintreffen der echten Bilder neu zu komponieren statt zu
           bestücken — und ein erzeugtes Fatayer kommt nicht in Frage.
         */}
+        {/* Die Reise steht VOR der Handarbeit: erst was es ist, dann wie es
+            gemacht wird. Wer noch nicht weiss, was Fata'er sind, liest keinen
+            Prozess. */}
+        <Reise />
         <Handarbeit />
-        {/* Das Schaustück steht ZWISCHEN Prozess und Karte: erst wie es
-            entsteht, dann was dabei herauskommt, dann was es kostet. */}
-        <Schaustueck />
+        {/* Das Schaustück ist RAUS, seit es die Reise gibt. Es war eine
+            zweite angeheftete Sequenz mit demselben Zweck — ein Gericht, das
+            sich beim Scrollen aufbaut. Zwei davon hintereinander sind keine
+            Steigerung, sondern eine Wiederholung, und sie kosteten zusammen
+            sechs Bildschirmhöhen. Die Datei bleibt liegen, falls die Reise
+            wieder fällt. */}
         {/* Die Galerie steht VOR der Karte, nicht dahinter. Wer wissen will,
             was es gibt, liest die Karte; wer noch nicht weiss, ob er will,
             sieht Bilder. Die Reihenfolge folgt der Entscheidung, nicht der

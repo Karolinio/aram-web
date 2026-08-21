@@ -2629,3 +2629,181 @@
   .galerie .kopfblock { padding-left: 0; }
   .galerie__bahn { padding-left: 0; }
 }
+
+/* ── Die Reise ────────────────────────────────────────────────────────────
+ *
+ * Eine angeheftete Bühne, vier Takte, ein stehender Grund. Alles darin ist
+ * absolut gesetzt und mittig verankert — die Zeitleiste in Reise.tsx rechnet
+ * in Prozent der Elementgrösse, und das geht nur bei einer festen Ausgangslage.
+ */
+.reise {
+  position: relative;
+  overflow: clip;
+}
+
+.reise__buehne {
+  position: relative;
+  display: grid;
+  place-items: center;
+  /* Fast volle Höhe. Ein angehefteter Abschnitt, der kleiner ist als der
+     Bildschirm, sieht aus wie ein eingebettetes Kästchen. */
+  min-height: 88svh;
+  /* Der gemeinsame Fluchtpunkt für alle Drehungen der Gegenstände. Er sitzt
+     auf der Bühne, nicht auf den Bildern: jedes Bild mit eigener Perspektive
+     dreht sich um sich selbst, und die Folge zerfällt. */
+  perspective: 1600px;
+  perspective-origin: 50% 44%;
+}
+
+/* Die Funken kommen aus dem unteren Rand der Bühne, wie aus einer Glut vor
+   einem Ofen. Sie liegen HINTER allem — Funken vor dem Gebäck wären Konfetti. */
+.reise__funken {
+  position: absolute;
+  inset: auto 0 0;
+  height: 62%;
+  z-index: 0;
+  opacity: 0.72;
+}
+
+.reise__flug {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  transform-style: preserve-3d;
+  /* Schmuck fängt keine Klicks. Ohne die Zeile läge am Handy ein
+     freigestelltes Gebäck über der Bestellleiste und schluckte jede Berührung. */
+  pointer-events: none;
+}
+
+.reise__stueck,
+.reise__schiff {
+  grid-area: 1 / 1;
+  transform-style: preserve-3d;
+  /* Der einzige Schatten dieser Sektion — der Eigenschatten der Gegenstände.
+     Er macht sie zu Dingen statt zu Aufklebern und fällt nach unten rechts,
+     weil das Licht von links oben kommt. */
+  filter:
+    drop-shadow(0 18px 26px oklch(20% 0.05 45 / 0.42))
+    drop-shadow(0 3px 8px oklch(20% 0.05 45 / 0.3));
+}
+
+.reise__stueck--scheibe { width: min(58vw, 26rem); height: auto; }
+.reise__stueck--fatayer { width: min(66vw, 30rem); height: auto; }
+
+.reise__schiff {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(76vw, 34rem);
+}
+
+.reise__haelfte {
+  grid-area: 1 / 1;
+  width: 50.4%;
+  height: auto;
+  /* Die Hälften sind an ihrer BRUCHKANTE verankert, nicht in ihrer Mitte:
+     sie sollen sich um die Bruchstelle öffnen wie ein Buch, nicht um ihren
+     eigenen Schwerpunkt kippen. */
+}
+.reise__haelfte--links  { justify-self: end;   transform-origin: right center; }
+.reise__haelfte--rechts { justify-self: start; transform-origin: left center; }
+
+/* Der Dampf sitzt in der Bruchstelle und ragt weit darüber hinaus — Dampf
+   breitet sich aus und bleibt nicht in der Breite seines Gegenstands. */
+.reise__bruchdampf {
+  position: absolute;
+  left: 20%;
+  right: 20%;
+  bottom: 20%;
+  height: 190%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.reise__mehl {
+  grid-area: 1 / 1;
+  align-self: end;
+  width: min(70vw, 32rem);
+  height: 40%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* ── Die Texte ────────────────────────────────────────────────────────────
+ *
+ * Sie stehen unten, nicht neben den Gegenständen. Nebeneinander müsste der
+ * Gegenstand kleiner werden, um Platz zu lassen — und dann fliegt er nicht
+ * mehr, er illustriert. Unten hat er die ganze Fläche und der Satz seine Zeile.
+ */
+.reise__texte {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: clamp(1.5rem, 5vh, 4rem);
+  z-index: 3;
+  display: grid;
+  margin: 0;
+  padding: 0 var(--rinne);
+  list-style: none;
+  text-align: center;
+  pointer-events: none;
+}
+
+/* Alle vier liegen ÜBEREINANDER in derselben Rasterzelle. Nur so bleibt die
+   Höhe der Bühne konstant, egal welcher Satz gerade sichtbar ist — untereinander
+   würde die Bühne bei jedem Takt eine andere Höhe haben. */
+.reise__texte li {
+  grid-area: 1 / 1;
+  display: grid;
+  gap: 0.5rem;
+  justify-items: center;
+}
+
+.reise__texte .etikett { color: var(--glut-marke); }
+
+.reise__texte p {
+  margin: 0;
+  max-width: 34ch;
+  font-family: var(--font-display);
+  font-variation-settings: var(--wonk-kopf);
+  font-size: clamp(1.15rem, 0.95rem + 1.1vw, 1.85rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: var(--sperr-kopf);
+  text-wrap: balance;
+  color: var(--glut-schrift);
+}
+
+/**
+ * Ohne Bewegungswunsch: keine Anheftung, keine Flugbahn. Die vier Takte werden
+ * zu vier Absätzen untereinander, jeder mit seinem Gegenstand daneben.
+ *
+ * Ersatz, nicht Abschaltung — dieselbe Reihenfolge, dieselben Sätze, dieselben
+ * Bilder. Eine Bewegung, die etwas erklärt hat, hinterlässt ersatzlos ein Loch.
+ */
+/* Am Handy EIN Schattenwurf statt zwei. Zwei gestapelte `drop-shadow` auf
+   einem Bild, das sich in jedem Frame dreht, werden in jedem Frame neu
+   gerastert — nach den Funken der teuerste Posten dieser Sektion. */
+@media (max-width: 719px) {
+  .reise__stueck,
+  .reise__schiff {
+    filter: drop-shadow(0 12px 18px oklch(20% 0.05 45 / 0.45));
+  }
+  .reise__buehne { min-height: 82svh; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reise__buehne { min-height: 0; display: block; padding-block: var(--raum-block); }
+  .reise__flug { position: static; display: none; }
+  .reise__funken { display: none; }
+  .reise__texte {
+    position: static;
+    display: grid;
+    gap: var(--raum-block);
+    padding: 0;
+    text-align: start;
+  }
+  .reise__texte li { grid-area: auto; justify-items: start; opacity: 1 !important; visibility: visible !important; }
+}
