@@ -304,6 +304,17 @@
 .dampf {
   pointer-events: none;
   display: block;
+  /* Die Leinwand füllt ihren Kasten. Ohne diese zwei Zeilen bleibt sie auf den
+     Standardmassen einer Leinwand — 300×150 — und zwar unabhängig davon, wie
+     gross der Kasten ist, in dem sie steht.
+
+     Gemessen am 21.08. in der Reise: der Kasten war 1197×768, die Leinwand
+     darin 300×150. Der Dampf quoll also aus einer Briefmarke. Aufgefallen ist
+     es nur, weil hier zum ersten Mal ein `Dampf` OHNE eigene Klasse benutzt
+     wird — die beiden anderen Stellen setzen ihre Masse selbst und haben den
+     fehlenden Grundwert damit jahrelang verdeckt. */
+  width: 100%;
+  height: 100%;
 }
 
 /* ── Das Wasserzeichen ────────────────────────────────────────────────────── */
@@ -405,6 +416,14 @@ body:has(.leiste) .wasserzeichen {
 /* Die Funkenleinwand. Wie der Dampf: nur Schmuck, fängt keine Klicks, und sie
    ragt seitlich über ihren Gegenstand hinaus — Glut breitet sich aus. */
 .funken {
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Die Mehlwolke. Wie Dampf und Funken: nur Schmuck, fängt keine Klicks. */
+.mehlwolke {
   display: block;
   width: 100%;
   height: 100%;

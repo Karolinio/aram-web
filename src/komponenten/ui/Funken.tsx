@@ -101,7 +101,12 @@ export default function Funken({ klasse, menge = 40 }: Props) {
          liegt in jeder Aufnahme die Glut. */
       f.x = b * (0.25 + Math.random() * 0.5)
       f.y = h * (0.94 + Math.random() * 0.1)
-      f.r = 1.4 + Math.random() * 3.2
+      /* Der Radius hängt an der LEINWANDBREITE, nicht an festen Pixeln.
+         Vorher standen hier 1,4 bis 4,6 px. Gemessen auf einer Bühne von
+         1440×491 ergab das 617 leuchtende Pixel — 0,09 Prozent der Fläche,
+         also nichts. Ein Funke, der auf dem Handy stimmt, ist auf einem
+         grossen Bildschirm ein Staubkorn. */
+      f.r = b * (0.0028 + Math.random() * 0.0075)
       f.dauer = 1.6 + Math.random() * 1.9
       /* Beim ersten Bild über die Lebensdauer verteilt, sonst springt das ganze
          Feld gleichzeitig los. */
@@ -151,7 +156,7 @@ export default function Funken({ klasse, menge = 40 }: Props) {
         if (a <= 0.01) continue
 
         /* Funken SCHRUMPFEN — sie kühlen ab und verglühen. Dampf wächst. */
-        const gr = f.r * (1.25 - 0.5 * t)
+        const gr = f.r * (1.35 - 0.55 * t)
         ctx.globalAlpha = a
         ctx.drawImage(korn, x - gr, y - gr, gr * 2, gr * 2)
       }

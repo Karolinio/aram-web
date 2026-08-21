@@ -1,10 +1,10 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import reiseRoh from '../../inhalt/reise.json'
 import { useMedienabfrage, werkzeugHolen } from '../bewegung.ts'
 import Dampf from './ui/Dampf.tsx'
 import Funken from './ui/Funken.tsx'
-import Mehlstaub from './ui/Mehlstaub.tsx'
+import Mehlwolke from './ui/Mehlwolke.tsx'
 import { Sektion } from './ui/bausteine.tsx'
 
 type Mass = { breite: number; hoehe: number }
@@ -54,7 +54,7 @@ export default function Reise() {
   const links = useRef<HTMLImageElement>(null)
   const rechts = useRef<HTMLImageElement>(null)
   const bruchdampf = useRef<HTMLDivElement>(null)
-  const mehl = useRef<HTMLDivElement>(null)
+  const [mehlstoss, setMehlstoss] = useState(0)
   const texte = useRef<HTMLOListElement>(null)
 
   useEffect(() => {
@@ -81,7 +81,6 @@ export default function Reise() {
         gsap.set(schiff.current, { autoAlpha: 0, scale: 0.7 })
         gsap.set([links.current, rechts.current], { xPercent: 0, rotationY: 0 })
         gsap.set(bruchdampf.current, { autoAlpha: 0 })
-        gsap.set(mehl.current, { autoAlpha: 0 })
         gsap.set(zeilen, { autoAlpha: 0, y: 18 })
 
         const tl = gsap.timeline({
@@ -124,9 +123,19 @@ export default function Reise() {
           0.2,
         )
         zeigen(1, 0.24, 0.4)
-        /* Der Mehlstoss kommt beim AUFSETZEN, nicht beim Losfliegen. */
-        tl.to(mehl.current, { autoAlpha: 1, duration: 0.03 }, 0.38)
-        tl.to(mehl.current, { autoAlpha: 0, duration: 0.08 }, 0.44)
+        /* Der Mehlstoss kommt beim AUFSETZEN, nicht beim Losfliegen — und er
+           wird als EREIGNIS ausgelöst, nicht eingeblendet. `onEnter` beim
+           Vorwärtsscrollen, `onEnterBack` beim Zurück: wer die Stelle zweimal
+           passiert, sieht den Stoss zweimal. Eine Wolke, die nur einmal im
+           Leben der Seite kommt, verpasst man. */
+        const stoss = ScrollTrigger.create({
+          trigger: b,
+          start: () => `top+=${window.innerHeight * 3 * 0.36} top`,
+          end: () => `top+=${window.innerHeight * 3 * 0.46} top`,
+          onEnter: () => setMehlstoss((n) => n + 1),
+          onEnterBack: () => setMehlstoss((n) => n + 1),
+          invalidateOnRefresh: true,
+        })
         tl.to(
           scheibe.current,
           { autoAlpha: 0, xPercent: 70, yPercent: -30, rotationY: 40, scale: 0.8, duration: 0.14 },
@@ -160,12 +169,13 @@ export default function Reise() {
         tl.to(bruchdampf.current, { autoAlpha: 1, duration: 0.1 }, 0.84)
 
         return () => {
+          stoss.kill()
           tl.scrollTrigger?.kill()
           tl.kill()
           gsap.set(
             [
               scheibe.current, fatayer.current, schiff.current,
-              links.current, rechts.current, bruchdampf.current, mehl.current,
+              links.current, rechts.current, bruchdampf.current,
               ...zeilen,
             ],
             { clearProps: 'all' },
@@ -208,8 +218,11 @@ export default function Reise() {
             loading="lazy"
             decoding="async"
           />
-          <div className="reise__mehl" ref={mehl}>
-            <Mehlstaub />
+          {/* Der Stoss wird über `aktiv` ausgelöst, nicht über Deckkraft.
+              Eine Wolke, die man einblendet, ist eine stehende Wolke, die
+              sichtbar wird — sie hat keinen Zeitpunkt. Ein Stoss beginnt. */}
+          <div className="reise__mehl">
+            <Mehlwolke stoss={mehlstoss} menge={schmal ? 46 : 96} />
           </div>
 
           <img

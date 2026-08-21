@@ -2660,9 +2660,9 @@
 .reise__funken {
   position: absolute;
   inset: auto 0 0;
-  height: 62%;
+  height: 78%;
   z-index: 0;
-  opacity: 0.72;
+  opacity: 0.85;
 }
 
 .reise__flug {
@@ -2712,21 +2712,30 @@
 
 /* Der Dampf sitzt in der Bruchstelle und ragt weit darüber hinaus — Dampf
    breitet sich aus und bleibt nicht in der Breite seines Gegenstands. */
+/* Der Dampf war auf 300×150 Pixel eingesperrt — gemessen. Aus einem
+   aufgebrochenen Gebäck quillt er weit über den Gegenstand hinaus; deshalb
+   bemisst er sich jetzt an der BÜHNE und nicht am Schiffchen. Der Ursprung
+   bleibt die Bruchstelle, die Ausdehnung ist frei. */
 .reise__bruchdampf {
   position: absolute;
-  left: 20%;
-  right: 20%;
-  bottom: 20%;
-  height: 190%;
+  left: -60%;
+  right: -60%;
+  bottom: 0;
+  height: 420%;
   z-index: 0;
   pointer-events: none;
 }
 
+/* Die Wolke bekommt die halbe Bühne, nicht ein Kästchen unter dem Gebäck.
+   Gemessen war die alte Fassung 122 leuchtende Pixel auf 1440×900 — 0,009 %.
+   Ein Mehlstoss, der aus einem Blech springt, füllt den Raum darüber; wer ihn
+   in die Grösse des Gegenstands sperrt, sieht ihn nicht. */
 .reise__mehl {
-  grid-area: 1 / 1;
-  align-self: end;
-  width: min(70vw, 32rem);
-  height: 40%;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 18%;
+  height: 72%;
   z-index: 2;
   pointer-events: none;
 }
