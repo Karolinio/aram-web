@@ -16,7 +16,6 @@ import './stile/sektionen.css'
 import Kopfzeile from './komponenten/Kopfzeile.tsx'
 import Backstube from './komponenten/Backstube.tsx'
 import Galerie from './komponenten/Galerie.tsx'
-import Handarbeit from './komponenten/Handarbeit.tsx'
 import Reise from './komponenten/Reise.tsx'
 import Karte from './komponenten/Karte.tsx'
 import Laden from './komponenten/Laden.tsx'
@@ -117,11 +116,26 @@ function Seite() {
           beim Eintreffen der echten Bilder neu zu komponieren statt zu
           bestücken — und ein erzeugtes Fatayer kommt nicht in Frage.
         */}
-        {/* Die Reise steht VOR der Handarbeit: erst was es ist, dann wie es
-            gemacht wird. Wer noch nicht weiss, was Fata'er sind, liest keinen
-            Prozess. */}
+        {/* ═══ Die Handarbeit ist RAUS, und zwar aus drei Gründen ═══
+
+            1. SIE ERZÄHLT DIE REISE NOCH EINMAL. Teig, belegen, Ofen, fertig —
+               dieselbe Folge, nur in ruhig. Zwei Erzählungen derselben Sache
+               hintereinander sind keine Vertiefung, sondern eine Wiederholung.
+
+            2. SIE TRÄGT DIE VIER ERZEUGTEN GERICHTE. Der Schwarm besteht aus
+               einem echten Foto und vier am 15.08. erzeugten. Das war Karols
+               ausdrückliche Entscheidung und für eine Verkaufsdemo richtig —
+               für eine Seite, die dem Inhaber gezeigt wird, ist es das
+               Gefährlichste, was drauf sein kann. Er sieht Essen, das nicht
+               seins ist, auf seiner eigenen Seite.
+
+            3. SIE KOSTET DEN SCHEITEL. Mit der vollen Speisekarte (22 Sorten
+               statt 9) kam das Handy auf 15,3 Bildschirmhöhen, und der Prüfer
+               hat angeschlagen. Ohne diese Sektion passt beides.
+
+            Die Datei bleibt liegen. Sobald echte Aufnahmen der Gerichte da
+            sind, ist der Schwarm das erste, was sie zurückbringt. */}
         <Reise />
-        <Handarbeit />
         {/* Das Schaustück ist RAUS, seit es die Reise gibt. Es war eine
             zweite angeheftete Sequenz mit demselben Zweck — ein Gericht, das
             sich beim Scrollen aufbaut. Zwei davon hintereinander sind keine

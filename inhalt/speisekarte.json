@@ -1,35 +1,30 @@
 [
   {
-    "gruppe": "Syrische Fata'er",
-    "hinweis": "Herzhaft gefüllte Teigtaschen. Teig morgens von Hand gerollt.",
+    "gruppe": "Orientalisches Gebäck — Fata'er",
+    "hinweis": "Wir backen mit Weizenmehl. Jede Sorte mit Hirtenkäse aus Kuhmilch.",
     "gerichte": [
-      { "name": "Fatayer mit Spinat", "beschreibung": "Spinat, Zwiebel, Zitrone, Sumach", "preis": null, "allergene": ["Gluten"] },
-      { "name": "Fatayer mit Käse", "beschreibung": "Akkawi-Käse, Schwarzkümmel", "preis": null, "allergene": ["Gluten", "Milch"] },
-      { "name": "Fatayer mit Hackfleisch", "beschreibung": "Rindhack, Granatapfelmelasse", "preis": null, "allergene": ["Gluten"] }
-    ]
-  },
-  {
-    "gruppe": "Manakisch & Käseschiffchen",
-    "hinweis": "Ofenfrisches Fladenbrot, offen belegt.",
-    "gerichte": [
-      { "name": "Manakisch Zaatar", "beschreibung": "Zaatar, Olivenöl", "preis": null, "allergene": ["Gluten", "Sesam"] },
-      { "name": "Käseschiffchen", "beschreibung": "Käse, Ei, Butter — in Schiffchenform", "preis": null, "allergene": ["Gluten", "Milch", "Ei"] }
-    ]
-  },
-  {
-    "gruppe": "Lahmacun",
-    "hinweis": "Dünn ausgerollt, im Steinofen gebacken.",
-    "gerichte": [
-      { "name": "Lahmacun", "beschreibung": "Hackfleisch, Paprika, Petersilie, Zitrone", "preis": null, "allergene": ["Gluten"] },
-      { "name": "Lahm bi Ajin", "beschreibung": "Die syrische Art — kleiner, würziger", "preis": null, "allergene": ["Gluten"] }
-    ]
-  },
-  {
-    "gruppe": "Pizza",
-    "hinweis": "Frisch belegt, vor Ort zubereitet.",
-    "gerichte": [
-      { "name": "Pizza Margherita", "beschreibung": "Tomate, Mozzarella, Basilikum", "preis": null, "allergene": ["Gluten", "Milch"] },
-      { "name": "Pizza Salami", "beschreibung": "Tomate, Mozzarella, Salami", "preis": null, "allergene": ["Gluten", "Milch"] }
+      { "nr": 1,  "name": "Zaatar", "beschreibung": "Sesam, Olivenöl, Würzmischung mit Thymian", "preis": 1.5, "allergene": ["Gluten", "Sesam"] },
+      { "nr": 2,  "name": "Muhammara", "beschreibung": "Scharfe Paprikapaste, Sesam, Olivenöl, Gewürze, Granatapfelreduktion", "preis": 1.5, "allergene": ["Gluten", "Sesam"] },
+      { "nr": 3,  "name": "Lange Käse", "beschreibung": "Käse, Sesam", "preis": 2, "allergene": ["Gluten", "Sesam", "Milch"] },
+      { "nr": 4,  "name": "Doppelt Käse", "beschreibung": "Käse, Minze, Paprika", "preis": 3, "allergene": ["Gluten", "Milch"] },
+      { "nr": 5,  "name": "Schamiyeh", "beschreibung": "Käse, Petersilie, Eier, Butter", "preis": 2, "allergene": ["Gluten", "Milch", "Ei"] },
+      { "nr": 6,  "name": "Beirut", "beschreibung": "Käse, Minze", "preis": 2, "allergene": ["Gluten", "Milch"] },
+      { "nr": 7,  "name": "Spinat", "beschreibung": "Spinat, Zwiebeln, Paprika, Zitrone, Sumach", "preis": 2, "allergene": ["Gluten"] },
+      { "nr": 8,  "name": "Oliven", "beschreibung": "Grüne Oliven, Muhammara, Granatapfelreduktion", "preis": 2, "allergene": ["Gluten"] },
+      { "nr": 9,  "name": "Frischkäse", "beschreibung": "Frischkäse, Würzmischung, Zwiebeln", "preis": 2, "allergene": ["Gluten", "Milch"] },
+      { "nr": 10, "name": "Hackfleisch & Gemüse", "beschreibung": "Hackfleisch, Tomaten, Zwiebeln, Paprika, Minze, Petersilie, Knoblauch", "preis": 2, "allergene": ["Gluten"] },
+      { "nr": 11, "name": "Hackfleisch", "beschreibung": "Zwiebeln, Granatapfelreduktion", "preis": 2, "allergene": ["Gluten"] },
+      { "nr": 13, "name": "Schaorma Roll", "beschreibung": "Teigrolle mit Dönerfleisch, Mayo, Petersilie, Knoblauch", "preis": 3, "allergene": ["Gluten", "Ei"] },
+      { "nr": 14, "name": "Fahita", "beschreibung": "Hühnchenbrust, Paprika, Zwiebeln, Champignons", "preis": 2, "allergene": ["Gluten", "Ei"] },
+      { "nr": 15, "name": "Mexicano Roll", "beschreibung": "Hühnchenbrust, Paprika, Zwiebeln, Champignons, Mais, Senf, Mayonnaise", "preis": 2.5, "allergene": ["Gluten", "Ei", "Senf"] },
+      { "nr": 16, "name": "Sucuk", "beschreibung": "Hackfleisch, Gewürze, Olivenöl, Chili", "preis": 2, "allergene": ["Gluten"] },
+      { "nr": 17, "name": "Sucuk mit Käse", "beschreibung": "Sucuk mit Käse", "preis": 3, "allergene": ["Gluten", "Milch"] },
+      { "nr": 18, "name": "Toschka", "beschreibung": "Hackfleisch, Käse, Gemüse, Gewürze", "preis": 3, "allergene": ["Gluten", "Milch"] },
+      { "nr": 19, "name": "Gemüse Käse", "beschreibung": "Gemüse, Käse", "preis": 3, "allergene": ["Gluten", "Milch"] },
+      { "nr": 20, "name": "Groß Käse — scharf", "beschreibung": "Hirtenkäse", "preis": 3, "allergene": ["Gluten", "Milch"] },
+      { "nr": 21, "name": "Groß Käse, Gemüse", "beschreibung": "Käse und Gemüse", "preis": 3, "allergene": ["Gluten", "Milch"] },
+      { "nr": 22, "name": "Lahmacun", "beschreibung": "Gemüse und Hackfleisch", "preis": 2, "allergene": ["Gluten"] },
+      { "nr": 22, "name": "Lahmacun mit Zwiebeln", "beschreibung": "Zwiebeln, Granatapfelreduktion", "preis": 2.5, "allergene": ["Gluten"] }
     ]
   }
 ]

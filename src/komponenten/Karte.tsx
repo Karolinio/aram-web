@@ -91,7 +91,12 @@ export default function Karte() {
                 <span className="luecke">Die Preise tragen wir nach</span> — sie liegen uns
                 noch nicht vor. Am Telefon nennen wir sie dir sofort.
               </>
-            ) : undefined
+            ) : (
+              <>
+                Zweiundzwanzig Sorten, jede von Hand gerollt. Die Nummer vor dem Namen ist
+                dieselbe wie auf unserer Karte im Laden.
+              </>
+            )
           }
         />
 
@@ -158,7 +163,15 @@ export default function Karte() {
                             rechts in der Zeile und die Punktlinie UNTER allem —
                             sie trennte, statt zu verbinden. */}
                         <div className="zeile__kopf">
-                          <p className="zeile__name">{g.name}</p>
+                          <p className="zeile__name">
+                            {/* Die Nummer von IHRER gedruckten Karte. Gäste
+                                nennen am Telefon die Nummer — „einmal die
+                                sieben" — und eine Seite, die sie nicht führt,
+                                spricht eine andere Sprache als das Blatt an
+                                der Wand. */}
+                            {g.nr != null && <span className="zeile__nr">{g.nr}</span>}
+                            {g.name}
+                          </p>
                           <span className="zeile__leiter" aria-hidden="true" />
                           <p className={g.preis === null ? 'preis preis--folgt' : 'preis'}>
                             {g.preis === null ? (

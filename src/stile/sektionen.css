@@ -2822,3 +2822,13 @@
   }
   .reise__texte li { grid-area: auto; justify-items: start; opacity: 1 !important; visibility: visible !important; }
 }
+
+/* Die Nummer vor dem Gerichtnamen. Sie ist eine Ordnungszahl, kein Teil des
+   Namens — deshalb leiser, mit Tabellenziffern, damit die Spalte steht. */
+.zeile__nr {
+  display: inline-block;
+  min-width: 1.7em;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: var(--tinte-leise);
+}

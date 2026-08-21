@@ -22,6 +22,16 @@ export type Gericht = {
   name: string
   beschreibung: string
   /** `null` heisst: Preis fehlt noch. Wird als Lücke GEZEIGT, nicht erfunden. */
+  /**
+   * Die Nummer auf IHRER gedruckten Karte. Steht hier, weil Gäste am Telefon
+   * die Nummer nennen — „einmal die sieben" — und die Karte auf der Seite
+   * sonst eine andere Sprache spräche als das Blatt an der Wand.
+   *
+   * Sie ist nicht der Index: auf ihrer Karte fehlt die 12, und die 22 kommt
+   * zweimal vor. Beides steht so bei IHNEN und wird hier nicht stillschweigend
+   * begradigt — siehe ABLICHTUNG.md, letzter Punkt.
+   */
+  nr?: number
   preis: number | null
   /** Pflicht, sobald Preise online stehen (LMIV). Leer ist ein Befund, kein Zustand. */
   allergene: string[]
