@@ -91,11 +91,29 @@ html {
 }
 
 body {
-  /* Der Platz für die feste Kopfzeile. Ein einziger, unveränderlicher Wert —
-     siehe die Begründung an `.kopf` in sektionen.css: die Kopfzeile ändert
-     ihre Höhe beim Scrollen, und solange sie im Fluss lag, rutschte dabei die
-     ganze Seite. */
-  padding-top: var(--kopf-hoehe);
+  /**
+   * ═══ KEIN Platz mehr für die Kopfzeile — und das war ein struktureller
+   *     Fehler, kein Stilfehler ═══
+   *
+   * Hier stand `padding-top: var(--kopf-hoehe)`, damit nichts unter der festen
+   * Kopfzeile verschwindet. Die Nebenwirkung hat drei Fassungen lang niemand
+   * bemerkt: die obersten 60 Pixel der Seite waren dadurch CLAY, nicht Hero.
+   * Das Video lief NIE hinter der Kopfzeile — es begann darunter.
+   *
+   * Gemessen am 21.08.: die Navigation stand in Creme auf rgb(242, 225, 208).
+   * Kontrast 1,17. Praktisch unsichtbar, und zwar seit dem Tag, an dem der
+   * Hero auf hell geschrieben hat.
+   *
+   * Es erklärt auch, warum die „gläserne Kopfzeile" nie nach Glas aussah: sie
+   * lag über einer hellen Fläche, nicht über einer Fotografie. Man kann eine
+   * Scheibe nicht durchsichtig machen, wenn dahinter nichts ist.
+   *
+   * Jetzt beginnt der Hero bei null und läuft wirklich unter der Kopfzeile
+   * durch. Den Platz reserviert stattdessen der Hero selbst in seinem
+   * Innenabstand — dort ändert er kein Layout, weil die Sektion ohnehin eine
+   * feste Mindesthöhe hat. Sprungmarken haben ihren Abstand über
+   * `scroll-margin-top` und sind davon unberührt.
+   */
   background: var(--ton-hell);
   color: var(--tinte);
   font-family: var(--font-text);

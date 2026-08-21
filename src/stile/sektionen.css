@@ -43,10 +43,17 @@
   font-variation-settings: var(--wonk-klein);
   font-size: var(--text-meta);
   font-weight: 620;
-  
-  color: var(--tinte);
+  /* ERBT die Farbe, statt sie zu setzen. Der Status steht an zwei Orten mit
+     entgegengesetztem Grund: in der Kopfzeile (über dem Video hell, danach
+     dunkel) und im Laden auf Clay. Ein fester Wert kann nur an einem von
+     beiden richtig sein — gemessen stand er über dem Hero auf 1,43. */
+  color: inherit;
   max-width: none;
 }
+
+/* Der Punkt folgt derselben Regel: über dem dunklen Hero das Markenorange,
+   das dort 6,01 erreicht; auf hellem Grund der dunkle Akzent. */
+.kopf:not([data-eng='ja']) .oeffnung__punkt { background: var(--orange); }
 
 .oeffnung__punkt {
   flex: none;
@@ -142,66 +149,82 @@
  */
 .kopf {
   /**
-   * FEST, nicht klebend — eine Fehlerbehebung, keine Vorliebe. Eine klebende
-   * Kopfzeile behält ihren Platz im Fluss; sobald sie beim Scrollen
-   * zusammenfährt, rutscht alles darunter nach oben. Der Fabrikprüfer hat
-   * genau darauf gezeigt: `header>div>button` stand als Quelle des Sprungs
-   * im Befund.
+   * FEST, nicht klebend. Eine klebende Kopfzeile behält ihren Platz im Fluss;
+   * sobald sie beim Scrollen zusammenfährt, rutscht alles darunter nach oben.
+   * Der Fabrikprüfer hat genau darauf gezeigt.
    *
-   * ═══ Wieder EINE DURCHGEHENDE SCHEIBE, keine Insel ═══
+   * ═══ ÜBER DEM HERO GIBT ES KEINE SCHEIBE MEHR ═══
    *
-   * Karol am 21.08.: „Das sieht irgendwie grad aus wie nix, halbes, nix
-   * Ganzes. Da ist ja so eine weisse Fläche hinter diesem abgerundeten
-   * Glasheader. Füll das aus."
+   * Karol, zum zweiten Mal: „Der Glasheader sieht furchtbar aus."
    *
-   * Er hat recht, und der Grund ist ein anderer als der, aus dem ich die Insel
-   * gebaut habe. Meine Begründung war: „Glas erkennt man an seiner KANTE — ein
-   * Balken über die volle Breite hat nur eine Unterkante." Das stimmt für eine
-   * Scheibe, die über EINEM Bild schwebt.
+   * Diesmal habe ich das fertige Bild ausgemessen statt an Werten zu drehen,
+   * und es gab zwei belegbare Fehler:
    *
-   * Nur schwebt sie hier nicht über einem Bild, sondern über einer Seite, die
-   * unter ihr die Farbe wechselt. Dann liest der Streifen daneben nicht als
-   * Luft, sondern als REST — als hätte jemand vergessen, ihn zu füllen. Zwei
-   * Kanten links und rechts, die bei jedem Farbwechsel neu auftauchen, sind
-   * kein Detail, sie sind ein Loch.
+   *   1. DIE ECKEN. Bei `border-radius: 0 0 20px 20px` auf einem Balken über
+   *      die volle Breite entstehen an beiden Bildschirmrändern zwei kleine
+   *      Aussparungen. Gemessen lag dort rgb(233, 217, 200) — der helle
+   *      Clay-Grund der Seite, der durch die Rundung durchblitzt, direkt neben
+   *      dem dunklen Video. Zwei helle Kerben am Rand lesen als Darstellungs-
+   *      fehler. Ein randloser Balken hat keine Ecken.
    *
-   * Was von der Insel bleibt: die Rundung UNTEN und die Lichtkante. Eine
-   * Scheibe, die oben bündig sitzt und unten gerundet ausläuft, hat eine
-   * Kante, die man sieht, und keine, die man vermisst.
+   *   2. DAS GLAS WAR HELLER ALS SEIN UMFELD. Im Glas rgb(91, 73, 62), direkt
+   *      darunter rgb(31, 14, 8) — die Scheibe war dreimal so hell wie das
+   *      Bild, auf dem sie lag. Ursache ist der Weichzeichner selbst: er tastet
+   *      in einem Umkreis von 14 px ab und zieht damit helle Stellen des Videos
+   *      von UNTERHALB der Kante herein. Ergebnis ist ein milchiger Streifen —
+   *      das Gegenteil von Glas. Glas unterscheidet sich vom Grund durch
+   *      Weichheit, nicht durch Helligkeit.
+   *
+   * Die Lösung ist nicht, an der Deckkraft zu drehen. Über dem Hero braucht es
+   * gar keine Scheibe: dort steht das Logo gross in der Mitte, die Zeile ist
+   * kurz, und der Schleier ist oben ohnehin dicht. Eine Fläche dort ist ein
+   * zweites Element für eine Aufgabe, die schon erledigt ist.
+   *
+   * Also: über dem Hero nur Schrift, mit einem Schattensaum. Ab der ersten
+   * hellen Sektion fährt die Scheibe herein — dort ist sie nötig, weil unter
+   * ihr Inhalt vorbeizieht.
    */
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 40;
-  border-radius: 0 0 clamp(14px, 1.6vw, 20px) clamp(14px, 1.6vw, 20px);
-  background: var(--glas);
   color: var(--creme);
-  -webkit-backdrop-filter: blur(14px) saturate(140%);
-  backdrop-filter: blur(14px) saturate(140%);
-  box-shadow:
-    inset 0 -1px 0 color-mix(in oklch, var(--creme) 14%, transparent),
-    0 12px 34px -18px color-mix(in oklch, var(--tief) 72%, transparent);
+  /* Der Saum ersetzt die Fläche. Zwei Schatten: ein enger dunkler direkt an
+     der Schrift für die Kante, ein weiter weicher als Hof. Ein einzelner
+     Schatten wird entweder hart oder unsichtbar. */
+  text-shadow:
+    0 1px 2px oklch(12% 0.02 55 / 0.85),
+    0 2px 14px oklch(12% 0.02 55 / 0.6);
+  background: transparent;
   transition:
-    background-color var(--dauer-mikro) var(--ease-teig),
-    color var(--dauer-mikro) var(--ease-teig),
-    box-shadow var(--dauer-mikro) var(--ease-teig);
+    background-color 260ms var(--ease-teig),
+    color 260ms var(--ease-teig),
+    box-shadow 260ms var(--ease-teig),
+    backdrop-filter 260ms var(--ease-teig);
 }
 
 /**
- * Die Scheibe nimmt die Farbe des Grundes mit, unter dem sie gerade liegt —
- * Karol: „soll der auch halt nur die Farben mitnehmen vom Untergrund."
+ * Ab der ersten hellen Sektion: die Scheibe.
  *
- * Zwei Zustände, nicht drei: über dem Video dunkles Glas mit Creme, ab der
- * ersten hellen Sektion helles Glas mit Tinte. Ein einziges Glas für beide
- * müsste in der Mitte liegen — und dort ist es auf keinem von beiden gut.
+ * Hier ist sie nötig — unter ihr zieht Inhalt vorbei, und ohne Fläche liefe
+ * eine Überschrift durch die Navigation. KEINE Rundung: ein randloser Balken
+ * hat keine Ecken, und jede Rundung erzeugt am Bildschirmrand eine Kerbe.
+ *
+ * Die Lichtkante sitzt OBEN, nicht unten. Eine Scheibe fängt das Licht an
+ * ihrer Oberkante; unten sitzt der Schatten, den sie wirft. Das war vorher
+ * vertauscht.
  */
 .kopf[data-eng='ja'] {
-  background-color: color-mix(in oklch, var(--ton-tief) 90%, transparent);
   color: var(--tinte);
+  text-shadow: none;
+  background-color: color-mix(in oklch, var(--ton-hell) 82%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  backdrop-filter: blur(18px) saturate(150%);
   box-shadow:
-    inset 0 -1px 0 color-mix(in oklch, var(--tinte) 12%, transparent),
-    0 12px 30px -18px color-mix(in oklch, var(--tinte) 30%, transparent);
+    inset 0 1px 0 color-mix(in oklch, var(--creme) 70%, transparent),
+    0 1px 0 color-mix(in oklch, var(--linie) 80%, transparent),
+    0 14px 34px -22px color-mix(in oklch, var(--tinte) 40%, transparent);
 }
 
 .kopf__zeile {
@@ -287,19 +310,35 @@
  * die Seite ohnehin spricht — und trotzdem als Bedienelement zu erkennen,
  * weil sie die einzige Fläche im Kopf ist.
  */
-/* Über dem dunklen Hero: Glasknopf mit heller Kante. Eine Clay-Fläche wäre
-   dort ein heller Klotz auf einem Foto. */
+/**
+ * Über dem dunklen Hero: Glasknopf mit heller Kante — und jetzt trägt ER die
+ * Scheibe, weil die Kopfzeile darüber keine mehr hat.
+ *
+ * Das ist die Umkehrung, die den Kopf rettet: statt eines Balkens über die
+ * volle Breite gibt es genau EIN gläsernes Element, und es ist das, das man
+ * anfassen soll. Glas an einer Stelle ist ein Bedienelement; Glas über die
+ * ganze Breite ist eine Optik.
+ */
 .kopf__anruf {
-  background: var(--creme-glas);
+  background: var(--creme-glas-hoch);
   color: var(--creme);
   border: 1px solid var(--creme-kante);
+  border-radius: 999px;
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  backdrop-filter: blur(12px) saturate(140%);
+  text-shadow: none;
+  box-shadow: inset 0 1px 0 color-mix(in oklch, var(--creme) 26%, transparent);
 }
 
-/* Ab der hellen Sektion wieder Clay mit Tinte — wie bisher. */
+/* Ab der hellen Sektion wieder Clay mit Tinte — dort trägt die Kopfzeile
+   selbst die Scheibe, der Knopf braucht keine zweite. */
 .kopf[data-eng='ja'] .kopf__anruf {
-  background: var(--ton-hell);
+  background: var(--ton-tief);
   color: var(--tinte);
   border-color: var(--linie);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: none;
 }
 
 .kopf__anruf:hover {
@@ -472,7 +511,12 @@
   /* Der untere Innenabstand ist klein, weil das Foto ihn sonst nur auffüllt
      statt über die Kante zu ragen. Gemessen: mit 9rem blieben 11 px Überlappung
      übrig — also gar keine. */
-  padding-block: clamp(3rem, 2rem + 4vw, 6rem) clamp(2rem, 1rem + 4vw, 4rem);
+  /* Oben die Höhe der Kopfzeile dazu: der Hero beginnt jetzt bei null und
+     läuft unter ihr durch, also darf sein INHALT nicht darunter geraten.
+     Hier kostet der Wert kein Layout — die Sektion hat eine feste
+     Mindesthöhe, der Innenabstand verschiebt nur, was darin steht. */
+  padding-block: calc(var(--kopf-hoehe) + clamp(2rem, 1rem + 3vw, 4rem))
+                 clamp(2rem, 1rem + 4vw, 4rem);
 }
 
 /* Geklippt wird nur der Grund, nicht die Sektion. Läge das `clip` auf der
@@ -2360,6 +2404,11 @@
      scrollt. Nur `clip` lässt die Gegenachse wirklich `visible`. */
   overflow-x: clip;
   overflow-y: visible;
+  /* Der gemeinsame Fluchtpunkt. Er sitzt auf der Bühne und nicht auf den
+     einzelnen Bildern: läge er dort, hätte jedes seinen eigenen, und die Reihe
+     zerfiele in sieben Gegenstände, die sich zufällig drehen. */
+  perspective: 1500px;
+  perspective-origin: 50% 45%;
 }
 
 .galerie__bahn {
@@ -2373,10 +2422,18 @@
      ist ein Hochformat. Ein fester Wert wäre bei jedem Bildtausch falsch. */
   min-height: 62vh;
   will-change: transform;
+  /* Ohne diese Zeile rechnet der Browser die Drehungen der Kinder flach,
+     sobald die Bahn selbst verschoben wird. */
+  transform-style: preserve-3d;
 }
 
-.galerie__stueck { flex: none; margin: 0; }
-.galerie__stueck figure { margin: 0; }
+.galerie__stueck { flex: none; margin: 0; transform-style: preserve-3d; }
+
+.galerie__blatt {
+  position: relative;
+  margin: 0;
+  transform-style: preserve-3d;
+}
 
 /* Hoch steht gross und vorn, quer kleiner und tiefer. Zwei Grössen, nicht
    sieben — ein Rhythmus entsteht aus Wiederholung mit einer Ausnahme, nicht
@@ -2387,16 +2444,59 @@
   transform: translateY(clamp(1.5rem, 4vw, 3.5rem));
 }
 
+/**
+ * ═══ Edler heisst hier: eine Kante und ein echter Schatten ═══
+ *
+ * Vorher lag das Bild nackt auf dem Grund, mit einem weichen Schatten. Das ist
+ * sauber und beliebig — es sieht auf jeder Seite gleich aus.
+ *
+ * Drei Zutaten machen daraus einen Abzug statt einer Datei:
+ *
+ *   die HAARLINIE nach innen, in Creme. Sie trennt das Bild vom Grund, ohne
+ *   einen Rahmen zu behaupten. Ein gedruckter Abzug hat eine Kante; eine Datei
+ *   hat keine, und genau daran erkennt man sie.
+ *
+ *   ZWEI Schatten statt einem. Ein enger dunkler direkt unter der Kante trägt
+ *   das Gewicht, ein weiter weicher setzt es in den Raum. Ein einzelner
+ *   Schatten wird entweder hart oder wolkig.
+ *
+ *   Die Drehung selbst — sie steht in Galerie.tsx und ist der Grund, dass die
+ *   Kante überhaupt zu sehen ist. Ein flaches Bild hat keine Flanke.
+ */
 .galerie__stueck img {
   width: 100%;
   height: auto;
   display: block;
   border-radius: var(--radius-gross);
-  box-shadow: var(--clay-hoch);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in oklch, var(--creme) 22%, transparent),
+    0 2px 6px oklch(30% 0.055 55 / 0.10),
+    0 22px 44px -18px oklch(30% 0.055 55 / 0.32);
+}
+
+/**
+ * Die Nummer. Sie liegt auf dem Bild, nicht daneben — eine Ziffer neben einem
+ * Bild ist eine Beschriftung, eine Ziffer AUF dem Bild ist eine Seitenzahl.
+ * Klein, gesperrt, in Creme mit Saum, damit sie auf jedem Motiv steht.
+ */
+.galerie__nr {
+  position: absolute;
+  top: clamp(0.6rem, 1.4vw, 1rem);
+  left: clamp(0.7rem, 1.6vw, 1.1rem);
+  z-index: 2;
+  font-family: var(--font-display);
+  font-variation-settings: var(--wonk-klein);
+  font-size: var(--text-micro);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  font-variant-numeric: tabular-nums;
+  color: var(--creme);
+  text-shadow: 0 1px 3px oklch(12% 0.02 55 / 0.8);
 }
 
 .galerie__stueck figcaption {
-  margin-top: 0.75rem;
+  margin-top: 0.85rem;
+  letter-spacing: 0.04em;
   font-family: var(--font-display);
   font-variation-settings: var(--wonk-klein);
   font-size: var(--text-meta);

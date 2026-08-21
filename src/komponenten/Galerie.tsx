@@ -84,6 +84,69 @@ export default function Galerie() {
            des Geräts neu rechnet statt einen Wert von vorhin zu benutzen. */
         const weg = () => Math.max(0, s.scrollWidth - window.innerWidth)
 
+        const blaetter = gsap.utils.toArray<HTMLElement>('.galerie__blatt', s)
+        const MAX = 24
+        /* Ein Setzer je Eigenschaft und Element, einmal angelegt. `gsap.set`
+           in einer Schleife pro Bild wäre bei sieben Bildern und sechzig
+           Bildern je Sekunde 420 Aufrufe, die jedes Mal den Zielwert neu
+           auflösen. Ein `quickSetter` löst ihn einmal auf. */
+        const setzer = blaetter.map((el) => gsap.quickSetter(el, 'css'))
+
+        const drehen = () => {
+          const mitte = window.innerWidth / 2
+          for (let i = 0; i < blaetter.length; i++) {
+            const r = blaetter[i]!.getBoundingClientRect()
+            /* −1 links vom Fenster, 0 in der Mitte, +1 rechts. */
+            const t = gsap.utils.clamp(-1, 1, (r.left + r.width / 2 - mitte) / mitte)
+            setzer[i]!({
+              rotationY: -t * MAX,
+              /* Was sich wegdreht, rückt eine Spur nach hinten und wird eine
+                 Spur kleiner. Ohne das liest die Drehung als Verzerrung statt
+                 als Tiefe. */
+              z: -Math.abs(t) * 90,
+              scale: 1 - Math.abs(t) * 0.05,
+            })
+          }
+        }
+
+        /**
+         * ═══ Der Takt kommt vom BILD, nicht vom Auslöser ═══
+         *
+         * Zuerst hing die Drehung an `onUpdate` der gescrubbten Fahrt. Gemessen
+         * lief sie damit auf 1100 px Scrollweg genau EINMAL — die Bahn fuhr,
+         * die Winkel standen. `onUpdate` einer gescrubbten Zeitleiste meldet
+         * den Fortschritt der Zeitleiste; die Bahn wird aber mit Nachlauf
+         * bewegt, und die Position der Bilder im Fenster ändert sich noch,
+         * wenn der Fortschritt längst steht.
+         *
+         * Der Winkel hängt hier nicht vom Fortschritt ab, sondern von der
+         * POSITION IM FENSTER. Also wird er dort gerechnet, wo Positionen
+         * entstehen: einmal je Bild. GSAP hat dafür einen eigenen Takt, und
+         * er teilt sich die Uhr mit Lenis — zwei Schleifen nebeneinander
+         * laufen auseinander.
+         *
+         * Der Beobachter hält ihn an, sobald die Galerie aus dem Bild ist. Ein
+         * Rechteck je Bild und Frame ist billig; sieben Rechtecke für etwas,
+         * das niemand sieht, sind es nicht.
+         */
+        let laeuft = false
+        const anwerfen = () => {
+          if (laeuft) return
+          laeuft = true
+          gsap.ticker.add(drehen)
+        }
+        const anhalten = () => {
+          if (!laeuft) return
+          laeuft = false
+          gsap.ticker.remove(drehen)
+        }
+        const beob = new IntersectionObserver(
+          ([e]) => (e?.isIntersecting ? anwerfen() : anhalten()),
+          { rootMargin: '20% 0px' },
+        )
+        beob.observe(b)
+        drehen()
+
         const zug = gsap.to(s, {
           x: () => -weg(),
           ease: 'none',
@@ -102,6 +165,11 @@ export default function Galerie() {
             scrub: 1,
             anticipatePin: 1,
             invalidateOnRefresh: true,
+            /* Die Drehung hängt an DIESEM Auslöser und nicht an einem eigenen.
+               Ein zweiter Auslöser auf derselben angehefteten Sektion bekommt
+               einen verschobenen Bereich — gemessen blieben die Winkel dann
+               stehen, während die Bahn schon fuhr. Ein Auslöser, eine Fahrt,
+               eine Rechnung. */
           },
         })
 
@@ -120,12 +188,16 @@ export default function Galerie() {
           },
         })
 
+
+
         return () => {
           zug.scrollTrigger?.kill()
           zug.kill()
           tiefe.scrollTrigger?.kill()
           tiefe.kill()
-          gsap.set([s, ...nah], { clearProps: 'transform' })
+          anhalten()
+          beob.disconnect()
+          gsap.set([s, ...nah, ...blaetter], { clearProps: 'transform' })
         }
       })
 
@@ -162,7 +234,15 @@ export default function Galerie() {
               data-lage={bild.lage}
               data-ebene={bild.lage === 'hoch' ? 'fern' : 'nah'}
             >
-              <figure>
+              <figure className="galerie__blatt">
+                {/* Die Nummer ist keine Verzierung. Diese sieben Bilder sind
+                    eine FOLGE — vom Blech über die Glut auf den Tisch — und
+                    eine Folge, die man nicht zählen kann, liest sich als
+                    Haufen. Numeriert wird, was eine Reihenfolge hat; alles
+                    andere bekommt keine Nummer. */}
+                <span className="galerie__nr" aria-hidden="true">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
                 <img
                   src={`/bilder/galerie/${String(bild.nr).padStart(2, '0')}.webp`}
                   srcSet={`/bilder/galerie/${String(bild.nr).padStart(2, '0')}-klein.webp 520w, /bilder/galerie/${String(bild.nr).padStart(2, '0')}.webp 900w`}
