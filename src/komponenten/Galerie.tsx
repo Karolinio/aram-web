@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react'
 import { useEffect, useRef } from 'react'
 
 import galerieRoh from '../../inhalt/galerie.json'
@@ -6,6 +7,24 @@ import { Kopf, Sektion } from './ui/bausteine.tsx'
 
 type Bild = { nr: number; titel: string; lage: 'hoch' | 'quer'; breite: number; hoehe: number }
 const BILDER = galerieRoh as Bild[]
+
+/**
+ * Die Höhenversätze, in rem. Sieben Werte, unregelmässig — und das ist der
+ * ganze Punkt.
+ *
+ * Karol: „nicht gleichmässig angeordnet aussehen."
+ *
+ * Vorher gab es ZWEI Höhen, die sich mit der Lage abwechselten: hoch oben,
+ * quer unten. Das ist ein Muster, und ein Muster erkennt das Auge nach zwei
+ * Wiederholungen — danach liest die Reihe als Tabelle.
+ *
+ * Diese Folge hat keine Periode: sie steigt, fällt, springt zurück. Sie ist
+ * auch nicht zufällig — Zufall erzeugt Klumpen, und zwei Bilder auf derselben
+ * Höhe nebeneinander sehen aus wie ein Fehler. Von Hand gesetzt, mit dem
+ * einzigen Kriterium, dass keine zwei Nachbarn dieselbe Höhe haben und der
+ * grösste Sprung in der Mitte liegt.
+ */
+const VERSATZ = [0, 5.2, -2.4, 7.6, 1.2, -3.6, 4.4]
 
 /**
  * Die Galerie — sieben Bilder, die waagerecht vorbeiziehen.
@@ -92,17 +111,58 @@ export default function Galerie() {
            auflösen. Ein `quickSetter` löst ihn einmal auf. */
         const setzer = blaetter.map((el) => gsap.quickSetter(el, 'css'))
 
+        /**
+         * ═══ Die Maße werden EINMAL gemessen, nicht in jedem Bild ═══
+         *
+         * Die erste Fassung las in jedem Bild `getBoundingClientRect()` für
+         * jedes der sieben Bilder — und schrieb unmittelbar davor ein
+         * `transform`. Jeder dieser Aufrufe erzwingt damit einen neuen
+         * Layoutdurchgang.
+         *
+         * Gemessen über einen Durchlauf der ganzen Seite, Handy 4x gebremst:
+         *
+         *   ohne Drehung   0 lange Aufgaben,  1,0 % der Frames über 32 ms
+         *   mit            2 lange Aufgaben,  9,3 % der Frames über 32 ms
+         *
+         * Neunmal so viele zähe Bilder für etwas, das man auch ohne Layout
+         * ausrechnen kann: die Bilder stehen in einer Reihe, und ihre Abstände
+         * zueinander ändern sich beim Fahren NICHT. Es genügt, die Ruhelage
+         * einmal zu messen und je Bild nur den Stand der Bahn dazuzurechnen —
+         * ein einziges Rechteck je Frame statt sieben.
+         */
+        /* Gemessen wird der Abstand jedes Bildes zur LINKEN KANTE DER BAHN.
+           Beide Rechtecke tragen dieselbe Verschiebung, also fällt sie in der
+           Differenz heraus — der Wert ist verschiebungsfrei und gilt, solange
+           sich die Breiten nicht ändern.
+
+           Ein erster Versuch hat die Verschiebung zusätzlich addiert und beim
+           Zeichnen wieder abgezogen. Das war doppelt gemoppelt und hat sich
+           exakt aufgehoben: die Winkel standen still, während die Bahn fuhr.
+           `getBoundingClientRect` enthält Transformationen bereits — wer sie
+           noch einmal verrechnet, rechnet sie weg. */
+        let ruhe: number[] = []
+        const vermessen = () => {
+          const bahn = s.getBoundingClientRect()
+          ruhe = blaetter.map((el) => {
+            const r = el.getBoundingClientRect()
+            return r.left + r.width / 2 - bahn.left
+          })
+        }
+
         const drehen = () => {
+          if (!ruhe.length) return
+          /* EIN Rechteck je Frame statt sieben: die Bahn bewegt sich, die
+             Bilder darin nicht relativ zu ihr. */
+          const bahnLinks = s.getBoundingClientRect().left
           const mitte = window.innerWidth / 2
           for (let i = 0; i < blaetter.length; i++) {
-            const r = blaetter[i]!.getBoundingClientRect()
+            const x = bahnLinks + ruhe[i]!
             /* −1 links vom Fenster, 0 in der Mitte, +1 rechts. */
-            const t = gsap.utils.clamp(-1, 1, (r.left + r.width / 2 - mitte) / mitte)
+            const t = gsap.utils.clamp(-1, 1, (x - mitte) / mitte)
             setzer[i]!({
               rotationY: -t * MAX,
-              /* Was sich wegdreht, rückt eine Spur nach hinten und wird eine
-                 Spur kleiner. Ohne das liest die Drehung als Verzerrung statt
-                 als Tiefe. */
+              /* Was sich wegdreht, rückt nach hinten und wird kleiner. Ohne das
+                 liest die Drehung als Verzerrung statt als Tiefe. */
               z: -Math.abs(t) * 90,
               scale: 1 - Math.abs(t) * 0.05,
             })
@@ -145,6 +205,8 @@ export default function Galerie() {
           { rootMargin: '20% 0px' },
         )
         beob.observe(b)
+        ScrollTrigger.addEventListener('refreshInit', vermessen)
+        vermessen()
         drehen()
 
         const zug = gsap.to(s, {
@@ -162,7 +224,11 @@ export default function Galerie() {
                Das hat auf dieser Seite schon einmal CLS 0,525 gekostet. */
             pinType: 'transform',
             pin: true,
-            scrub: 1,
+            /* KEIN zusätzlicher Nachlauf auf der Hauptfahrt. Sie ist das
+               Einzige, was in dieser Sektion auf den Finger antwortet — jede
+               Millisekunde Verzögerung darauf ist eine Millisekunde, in der
+               die Seite tot wirkt. Die Weichheit kommt von Lenis. */
+            scrub: true,
             anticipatePin: 1,
             invalidateOnRefresh: true,
             /* Die Drehung hängt an DIESEM Auslöser und nicht an einem eigenen.
@@ -183,7 +249,10 @@ export default function Galerie() {
             trigger: b,
             start: 'top top',
             end: () => `+=${weg() + window.innerHeight * 0.5}`,
-            scrub: 1,
+            /* Die Tiefenebene DARF nachlaufen — genau daraus entsteht der
+               Abstand zur Hauptbahn. Sie ist die einzige Stelle, an der der
+               Nachlauf die Aussage ist und nicht die Verzögerung. */
+            scrub: 0.6,
             invalidateOnRefresh: true,
           },
         })
@@ -197,6 +266,7 @@ export default function Galerie() {
           tiefe.kill()
           anhalten()
           beob.disconnect()
+          ScrollTrigger.removeEventListener('refreshInit', vermessen)
           gsap.set([s, ...nah, ...blaetter], { clearProps: 'transform' })
         }
       })
@@ -233,6 +303,7 @@ export default function Galerie() {
               className="galerie__stueck"
               data-lage={bild.lage}
               data-ebene={bild.lage === 'hoch' ? 'fern' : 'nah'}
+              style={{ '--versatz': `${VERSATZ[i % VERSATZ.length]}rem` } as CSSProperties}
             >
               <figure className="galerie__blatt">
                 {/* Die Nummer ist keine Verzierung. Diese sieben Bilder sind

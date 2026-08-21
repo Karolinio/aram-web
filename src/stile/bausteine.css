@@ -63,10 +63,9 @@
   --linie: var(--glut-linie);
 }
 
-/* Auf der orangen Fläche ist die Marke SCHWARZ, nicht gold. Ein zweiter
-   warmer Ton auf Orange wäre kaum zu unterscheiden — der Kontrast kommt hier
-   aus der Helligkeit, nicht aus der Buntheit. */
-.sektion--glut .etikett { color: var(--glut-schrift); }
+/* Gold für das Etikett — 5,05 auf dem gebrannten Grund. Ihr Logo-Orange wäre
+   hier unsichtbar (Orange auf Orange), Schwarz käme auf 2,68. */
+.sektion--glut .etikett { color: var(--glut-marke); }
 .sektion--glut h1,
 .sektion--glut h2,
 .sektion--glut h3 { color: var(--glut-schrift); }
@@ -74,7 +73,7 @@
 .sektion--glut .lead { color: var(--glut-leise); }
 
 @media (hover: hover) {
-  .sektion--glut .lebt:hover { color: var(--creme); }
+  .sektion--glut .lebt:hover { color: var(--glut-marke); }
 }
 
 /* Alte Namen zeigen auf den Zweiklang. */

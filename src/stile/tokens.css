@@ -135,41 +135,45 @@
   --tief: oklch(12% 0.02 55);
 
   /**
-   * ── IHR ORANGE IST EINE FLÄCHE. Ich lag falsch. ─────────────────────────
+   * ── DAS GEBRANNTE ORANGE. Zurückgenommen, was ich heute früh geändert habe.
    *
-   * ═══ Die Korrektur vom 21.08. ═══
+   * ═══ Zwei Umkehrungen an einem Tag, und die zweite ist die richtige ═══
    *
-   * Hier stand zwei Tage lang: „Eine ganze Fläche in Orange MUSS dunkel sein,
-   * sonst trägt sie keine Schrift — und ein dunkles Orange ist ein Rostbraun.
-   * Es gibt kein typisches Orange, das gleichzeitig Fläche sein kann."
+   * Heute früh stand hier ihr helles Logo-Orange #FE6201 mit SCHWARZER Schrift
+   * darauf. Ich hatte das gebaut auf den Satz: „Das aktuelle Orange mag ich mit
+   * Clay in Verbindung … also mit schwarzer Schrift drauf." Gemessen trägt das
+   * auch: Schwarz auf #FE6201 kommt auf 6,01.
    *
-   * Der Satz ist falsch, und der Fehler steckt in einer Annahme, die nirgends
-   * ausgesprochen war: dass auf der Fläche CREME steht. Unter dieser Annahme
-   * stimmt die ganze Kette — Creme braucht einen dunklen Grund, ein dunkles
-   * Orange ist braun, also kann Orange keine Fläche sein.
+   * Karol am selben Abend: „Orange auch nicht geupdated, immer noch das helle
+   * ÄUSSERE Orange statt dem inneren dunkleren clay aussehenden, welches bei
+   * der Fatayer-Rauch-Sequenz verwendet wurde."
    *
-   * Karol, dreimal, zuletzt am 21.08.: „Das aktuelle Orange mag ich mit Clay
-   * in Verbindung, da ein bisschen schwarz … also mit schwarzer Schrift
-   * drauf." Mit SCHWARZER Schrift. Gemessen:
+   * Das ist eindeutig, und es zeigt auf etwas, das er GESEHEN hat: den Grund
+   * der Schaustück-Sektion, wie er vor heute früh war. Genau dieser Ton:
    *
-   *   ihr Schwarz #1D140E   auf #FE6201   6,01   bestanden
-   *   Tinte       #432610   auf #FE6201   4,57   bestanden
-   *   Creme       #FBF4EA   auf #FE6201   2,76   durchgefallen
-   *   Weiss       #FFFFFF   auf #FE6201   3,02   durchgefallen
+   *   #964300   G/R 0,45   liest orange, nicht rot
+   *   Creme darauf   6,20   bestanden
+   *   Schwarz darauf 2,68   durchgefallen
    *
-   * Die Fläche muss also gar nicht dunkel sein. Die SCHRIFT muss dunkel sein.
-   * Und dann bleibt das Orange, was es ist: ihr Logo-Orange, ungedämpft,
-   * unverschoben, genau der Ton von ihrer Markise.
+   * Damit steht auch fest, welche Schrift darauf gehört: CREME. Die beiden
+   * Entscheidungen hängen zusammen, und ich hatte sie heute früh in die andere
+   * Richtung gekoppelt. Ein helles Orange braucht dunkle Schrift, ein dunkles
+   * braucht helle — man kann nicht die Fläche des einen mit der Schrift des
+   * anderen kombinieren.
    *
-   * Das ist die Lehre, nicht die Farbe: eine Messung beantwortet nur die
-   * Frage, die man stellt. Ich habe zweimal „welcher Orangeton trägt Creme"
-   * gemessen und daraus „Orange kann keine Fläche sein" geschlossen. Wer die
-   * Annahme nicht mitmisst, misst sich in die falsche Richtung.
+   * Was ich heute früh richtig gemessen und falsch geschlossen habe: dass ihr
+   * Logo-Orange als Fläche funktioniert. Das stimmt technisch. Es sieht nur
+   * nicht nach dieser Seite aus — neben zwei Clay-Tönen ist ein volles
+   * #FE6201 ein Signal, kein Grund. Der gebrannte Ton liegt in derselben
+   * Familie und im selben Helligkeitsbereich wie das Clay.
    */
-  --glut-grund: var(--orange);         /* IHR Orange, unverändert */
-  --glut-schrift: var(--nacht);        /* ihr Schwarz darauf — 6,01 */
-  --glut-leise: color-mix(in oklch, var(--nacht) 74%, transparent);
-  --glut-linie: color-mix(in oklch, var(--nacht) 26%, transparent);
+  --glut-grund: oklch(48% 0.145 60);     /* #964300 — die Fläche */
+  --glut-schrift: var(--creme);          /* 6,20 darauf */
+  --glut-leise: color-mix(in oklch, var(--creme) 82%, transparent);
+  /* Gold für Etikett und Marken — 5,05 auf dem Grund. Ihr Logo-Orange wäre
+     hier unsichtbar: Orange auf Orange. */
+  --glut-marke: oklch(92% 0.130 80);
+  --glut-linie: color-mix(in oklch, var(--creme) 45%, transparent);
 
   /**
    * Ihr Schwarz. Es trägt jetzt vor allem die SCHRIFT, nicht mehr eine ganze

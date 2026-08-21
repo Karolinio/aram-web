@@ -61,6 +61,27 @@ export const werkzeugHolen = (): Promise<Werkzeug | null> => {
  *               der Fensterhöhe über die ganze Durchfahrt. Negativ = zieht
  *               langsamer nach (bleibt zurück), positiv = eilt vor.
  */
+/**
+ * ═══ Warum hier kaum noch geglättet wird ═══
+ *
+ * Lenis glättet den Scroll bereits über 1,1 Sekunden. Ein `scrub: 1` legt
+ * darauf eine ZWEITE Glättung von rund einer Sekunde — und zwei gestapelte
+ * Dämpfungen fühlen sich nicht doppelt weich an, sondern zäh.
+ *
+ * Gemessen am 21.08., ein Radstoss von 600 px in der Galerie:
+ *
+ *   100 ms   79 von 490 px    16 %
+ *   300 ms   310 px           63 %
+ *   500 ms   422 px           86 %
+ *   1200 ms  489 px           voll
+ *
+ * Die ersten hundert Millisekunden sind das, was eine Hand spürt. Sechzehn
+ * Prozent davon heisst: man schiebt, und es passiert fast nichts. Karol:
+ * „aktuell Scrollgefühl sehr haperig."
+ *
+ * Der Nachlauf muss also von Lenis kommen, nicht vom Scrub. `0.35` lässt genug
+ * Trägheit für die Tiefenwirkung und nimmt die zweite Sekunde weg.
+ */
 export function useVersatz<T extends HTMLElement>(tempo: number) {
   const ref = useRef<T>(null)
 
@@ -159,7 +180,7 @@ export function useDrehung<T extends HTMLElement>(grad: number) {
             trigger: '.backstube',
             start: 'top top',
             end: 'bottom top',
-            scrub: 1,
+            scrub: 0.35,
             invalidateOnRefresh: true,
             onToggle: ({ isActive }) => {
               el.style.willChange = isActive ? 'transform' : ''
@@ -222,7 +243,7 @@ export function useAbgang<T extends HTMLElement>(buehneWahl: string) {
           /* Nach sechzig Prozent der Sektion ist es weg. Bis zum Ende
              mitzufahren hiesse, es bis in die nächste Sektion zu schleppen. */
           end: '60% top',
-          scrub: 1,
+          scrub: 0.35,
           invalidateOnRefresh: true,
           onToggle: ({ isActive }) => {
             el.style.willChange = isActive ? 'transform, opacity' : ''
@@ -431,7 +452,7 @@ export function useFlug<T extends HTMLElement>(f: Flug) {
             /* `1` statt `true`: eine Sekunde Nachlauf. Starr gescrubbt ist
                technisch richtig und fühlt sich mechanisch an — das ist der
                Unterschied, der eine Seite teuer wirken lässt. */
-            scrub: 1,
+            scrub: 0.35,
             invalidateOnRefresh: true,
             onToggle: ({ isActive }) => {
               el.style.willChange = isActive ? 'transform' : ''
@@ -516,7 +537,7 @@ export function useKamerafahrt<T extends HTMLElement>(
             trigger: buehne,
             start: 'top top',
             end: 'bottom top',
-            scrub: 1,
+            scrub: 0.35,
             invalidateOnRefresh: true,
             onToggle: ({ isActive }) => {
               el.style.willChange = isActive ? 'transform' : ''

@@ -66,7 +66,7 @@ export default function Ladenschild() {
    * Wortmarke von der Seite ist keine Wortmarke mehr. Bei 26 Grad bleibt sie
    * durchgehend lesbar und fängt trotzdem sichtbar Licht.
    *
-   * `scrub: 1` statt `true`: die Drehung läuft der Scrollbewegung eine knappe
+   * `scrub: 0.35` statt `true`: die Drehung läuft der Scrollbewegung eine knappe
    * Sekunde nach. Starr gekoppelt wirkt jede Scrollbewegung mechanisch — die
    * Nachlaufzeit ist das, was teuer aussieht.
    */

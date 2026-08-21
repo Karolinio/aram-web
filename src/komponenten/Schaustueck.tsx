@@ -135,7 +135,7 @@ export default function Schaustueck() {
           pinType: 'transform',
           /* `1` statt `true`: eine Sekunde Nachlauf. Starr gescrubbt ist
              technisch richtig und liest sich mechanisch. */
-          scrub: 1,
+          scrub: 0.35,
           /* Ohne das springt der Pin bei schnellem Scrollen um einen Frame. */
           anticipatePin: 1,
           invalidateOnRefresh: true,
