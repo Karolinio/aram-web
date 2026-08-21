@@ -190,18 +190,48 @@
   right: 0;
   z-index: 40;
   color: var(--creme);
-  /* Der Saum ersetzt die Fläche. Zwei Schatten: ein enger dunkler direkt an
-     der Schrift für die Kante, ein weiter weicher als Hof. Ein einzelner
-     Schatten wird entweder hart oder unsichtbar. */
-  text-shadow:
-    0 1px 2px oklch(12% 0.02 55 / 0.85),
-    0 2px 14px oklch(12% 0.02 55 / 0.6);
-  background: transparent;
+  /**
+   * ═══ Die Scheibe ist zurück — nachgemessen an acht fremden Kopfzeilen ═══
+   *
+   * Zuletzt hatte ich sie über dem Hero ganz entfernt, mit der Begründung:
+   * „Glas darf nicht heller sein als sein Grund." Acht Referenzen aus Mobbin
+   * ausgemessen (werkzeug/kopf-vermessen.py) sagen etwas anderes:
+   *
+   *   sechs von acht sind HELLER als ihr Grund, Median +17
+   *   Streuung im Balken gegen Streuung darunter: Median 0,67
+   *
+   * Die Helligkeit ist also gar nicht das Merkmal. Das Merkmal ist die
+   * KONTRASTDÄMPFUNG: eine Scheibe flacht ab, was hinter ihr liegt, auf etwa
+   * zwei Drittel. Daran erkennt ein Auge Glas — nicht daran, ob es dunkler ist.
+   *
+   * Für einen DUNKLEN fotografischen Hero ist die eine passende Referenz
+   * Midjourney: Balken 20 gegen Grund 27, also acht Punkte dunkler, Streuung
+   * 14 gegen 23 — Verhältnis 0,61. Genau dort liegt das Ziel.
+   *
+   * Unsere alte Scheibe kam auf +60. Das war der Fehler, nicht die Idee. Sie
+   * ganz wegzunehmen war die Überkorrektur.
+   *
+   * `brightness(0.62)` im Filter ist die Zeile, die es löst: der Weichzeichner
+   * allein zieht helle Stellen von unterhalb der Kante herein und macht den
+   * Balken heller als seinen Grund. Die Helligkeitsstufe dreht das um, ohne
+   * die Dämpfung zu verlieren — eine deckende Farbe darüber täte das nicht,
+   * sie würde einfach überdecken.
+   */
+  background: color-mix(in oklch, var(--tief) 26%, transparent);
+  -webkit-backdrop-filter: blur(16px) saturate(125%) brightness(0.62);
+  backdrop-filter: blur(16px) saturate(125%) brightness(0.62);
+  /* Die Lichtkante sitzt OBEN. Eine Scheibe fängt das Licht an ihrer
+     Oberkante; unten sitzt der Schatten, den sie wirft. */
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklch, var(--creme) 16%, transparent),
+    0 1px 0 color-mix(in oklch, var(--creme) 8%, transparent);
+  /* Der Saum bleibt: er trägt die Schrift auch dort, wo das Video hell wird,
+     und kostet nichts. */
+  text-shadow: 0 1px 3px oklch(12% 0.02 55 / 0.7);
   transition:
     background-color 260ms var(--ease-teig),
     color 260ms var(--ease-teig),
-    box-shadow 260ms var(--ease-teig),
-    backdrop-filter 260ms var(--ease-teig);
+    box-shadow 260ms var(--ease-teig);
 }
 
 /**
