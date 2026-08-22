@@ -16,7 +16,7 @@ import './stile/sektionen.css'
 import Kopfzeile from './komponenten/Kopfzeile.tsx'
 import Backstube from './komponenten/Backstube.tsx'
 import Galerie from './komponenten/Galerie.tsx'
-import Reise from './komponenten/Reise.tsx'
+import Handarbeit from './komponenten/Handarbeit.tsx'
 import Karte from './komponenten/Karte.tsx'
 import Laden from './komponenten/Laden.tsx'
 import Bestellen from './komponenten/Bestellen.tsx'
@@ -116,26 +116,27 @@ function Seite() {
           beim Eintreffen der echten Bilder neu zu komponieren statt zu
           bestücken — und ein erzeugtes Fatayer kommt nicht in Frage.
         */}
-        {/* ═══ Die Handarbeit ist RAUS, und zwar aus drei Gründen ═══
+        {/* ═══ Zurückgetauscht am 22.08. ═══
 
-            1. SIE ERZÄHLT DIE REISE NOCH EINMAL. Teig, belegen, Ofen, fertig —
-               dieselbe Folge, nur in ruhig. Zwei Erzählungen derselben Sache
-               hintereinander sind keine Vertiefung, sondern eine Wiederholung.
+            Die Reise ist raus, die Handarbeit ist zurück. Karol nach dem
+            Ansehen: „Die erste Sektion nach der Startseite finde ich kacke …
+            nimm die Sektion komplett raus und tu wieder die vorherige rein.
+            Die vorherige Sektion, wo Käseschiffchen und so weiter … der
+            Untergrund war weiss und hatte so Sesam-Krümel-Hintergrund,
+            transparent. Diese Folie wieder zurück."
 
-            2. SIE TRÄGT DIE VIER ERZEUGTEN GERICHTE. Der Schwarm besteht aus
-               einem echten Foto und vier am 15.08. erzeugten. Das war Karols
-               ausdrückliche Entscheidung und für eine Verkaufsdemo richtig —
-               für eine Seite, die dem Inhaber gezeigt wird, ist es das
-               Gefährlichste, was drauf sein kann. Er sieht Essen, das nicht
-               seins ist, auf seiner eigenen Seite.
+            Die Reise hatte zwei Nachteile, die er beide benannt hat, ohne sie
+            zu benennen: sie stand auf gebranntem Orange direkt unter einer
+            Startseite, die hell sein soll — ein dunkler Block als Erstes nach
+            dem Hero. Und ihr Hauptdarsteller war ein Freisteller, den er selbst
+            verworfen hat.
 
-            3. SIE KOSTET DEN SCHEITEL. Mit der vollen Speisekarte (22 Sorten
-               statt 9) kam das Handy auf 15,3 Bildschirmhöhen, und der Prüfer
-               hat angeschlagen. Ohne diese Sektion passt beides.
+            Die Handarbeit hat beides nicht: heller Grund, Sesamfolie, und die
+            Gerichte fliegen, statt einzeln aufzutreten.
 
-            Die Datei bleibt liegen. Sobald echte Aufnahmen der Gerichte da
-            sind, ist der Schwarm das erste, was sie zurückbringt. */}
-        <Reise />
+            Reise.tsx bleibt liegen. Wenn das Foto aus ABLICHTUNG.md kommt, ist
+            sie in einer Zeile wieder da — dann aber auf hellem Grund. */}
+        <Handarbeit />
         {/* Das Schaustück ist RAUS, seit es die Reise gibt. Es war eine
             zweite angeheftete Sequenz mit demselben Zweck — ein Gericht, das
             sich beim Scrollen aufbaut. Zwei davon hintereinander sind keine

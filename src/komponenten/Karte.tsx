@@ -70,8 +70,20 @@ export default function Karte() {
   const umschalten = (a: string) =>
     setVersteckt((v) => (v.includes(a) ? v.filter((x) => x !== a) : [...v, a]))
 
+  /**
+   * KEINE gepunktete Kante mehr an dieser Sektion.
+   *
+   * Karol am 22.08.: „hier auf jeden Fall den Übergang von der Galerie zur
+   * Speisekarte, diese Naht da oben wegmachen, sieht unprofessionell aus."
+   *
+   * Er hat recht, und der Grund ist die Nachbarschaft: die Galerie steht auf
+   * Clay tief, die Karte auf Clay hell. Zwischen zwei VERSCHIEDENEN Gründen ist
+   * der Farbwechsel schon die Kante — eine Linie darüber ist ein zweiter
+   * Schnitt an derselben Stelle. Die gepunktete Linie gehört zwischen zwei
+   * Abschnitte auf DEMSELBEN Grund; dort verbindet sie, hier zerteilt sie.
+   */
   return (
-    <Sektion id="karte" grund="hell" kante klasse="karte" beschriftetVon="karte-titel">
+      <Sektion id="karte" grund="hell" klasse="karte" beschriftetVon="karte-titel">
       {/* Ihre Gerichte blass im Grund — damit die Fläche hinter der Karte etwas
           trägt, ohne dass man beim Lesen darüber stolpert. */}
       <Collage />

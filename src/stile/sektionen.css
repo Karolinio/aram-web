@@ -53,7 +53,8 @@
 
 /* Der Punkt folgt derselben Regel: über dem dunklen Hero das Markenorange,
    das dort 6,01 erreicht; auf hellem Grund der dunkle Akzent. */
-.kopf:not([data-eng='ja']) .oeffnung__punkt { background: var(--orange); }
+/* Der Punkt bleibt jetzt überall der dunkle Akzent — die Kopfzeile ist auch
+   über dem Hero hell, es gibt keinen dunklen Zustand mehr. */
 
 .oeffnung__punkt {
   flex: none;
@@ -151,83 +152,40 @@
   /**
    * FEST, nicht klebend. Eine klebende Kopfzeile behält ihren Platz im Fluss;
    * sobald sie beim Scrollen zusammenfährt, rutscht alles darunter nach oben.
-   * Der Fabrikprüfer hat genau darauf gezeigt.
    *
-   * ═══ ÜBER DEM HERO GIBT ES KEINE SCHEIBE MEHR ═══
+   * ═══ SIE LIEST DUNKEL, SIE IST NICHT DUNKEL ═══
    *
-   * Karol, zum zweiten Mal: „Der Glasheader sieht furchtbar aus."
+   * Karol am 22.08.: „Der Glasheader muss schwarz gelesen werden und nicht
+   * schwarz sein … der Header soll auf jeden Fall die Logik behalten:
+   * transparent."
    *
-   * Diesmal habe ich das fertige Bild ausgemessen statt an Werten zu drehen,
-   * und es gab zwei belegbare Fehler:
+   * Das ist eine präzise Unterscheidung, und sie war vorher genau falsch
+   * herum. Bisher war die Scheibe eine dunkle Fläche mit heller Schrift — sie
+   * WAR dunkel. Jetzt ist sie fast durchsichtig und trägt dunkle Schrift: man
+   * liest Schwarz, aber man sieht das Video hindurch.
    *
-   *   1. DIE ECKEN. Bei `border-radius: 0 0 20px 20px` auf einem Balken über
-   *      die volle Breite entstehen an beiden Bildschirmrändern zwei kleine
-   *      Aussparungen. Gemessen lag dort rgb(233, 217, 200) — der helle
-   *      Clay-Grund der Seite, der durch die Rundung durchblitzt, direkt neben
-   *      dem dunklen Video. Zwei helle Kerben am Rand lesen als Darstellungs-
-   *      fehler. Ein randloser Balken hat keine Ecken.
+   * Möglich wird das erst dadurch, dass der Hero hell geworden ist. Auf einem
+   * dunklen Grund gäbe es diese Wahl nicht.
    *
-   *   2. DAS GLAS WAR HELLER ALS SEIN UMFELD. Im Glas rgb(91, 73, 62), direkt
-   *      darunter rgb(31, 14, 8) — die Scheibe war dreimal so hell wie das
-   *      Bild, auf dem sie lag. Ursache ist der Weichzeichner selbst: er tastet
-   *      in einem Umkreis von 14 px ab und zieht damit helle Stellen des Videos
-   *      von UNTERHALB der Kante herein. Ergebnis ist ein milchiger Streifen —
-   *      das Gegenteil von Glas. Glas unterscheidet sich vom Grund durch
-   *      Weichheit, nicht durch Helligkeit.
-   *
-   * Die Lösung ist nicht, an der Deckkraft zu drehen. Über dem Hero braucht es
-   * gar keine Scheibe: dort steht das Logo gross in der Mitte, die Zeile ist
-   * kurz, und der Schleier ist oben ohnehin dicht. Eine Fläche dort ist ein
-   * zweites Element für eine Aufgabe, die schon erledigt ist.
-   *
-   * Also: über dem Hero nur Schrift, mit einem Schattensaum. Ab der ersten
-   * hellen Sektion fährt die Scheibe herein — dort ist sie nötig, weil unter
-   * ihr Inhalt vorbeizieht.
+   * `brightness(1.12)` statt der früheren 0.62: die Scheibe hellt jetzt AUF,
+   * was hinter ihr liegt, statt es abzudunkeln. Damit trägt sie dunkle Schrift
+   * auch dort, wo im Video gerade eine dunkle Stelle vorbeizieht — und bleibt
+   * trotzdem durchsichtig. Eine deckende helle Fläche täte dasselbe und wäre
+   * keine Scheibe mehr.
    */
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 40;
-  color: var(--creme);
-  /**
-   * ═══ Die Scheibe ist zurück — nachgemessen an acht fremden Kopfzeilen ═══
-   *
-   * Zuletzt hatte ich sie über dem Hero ganz entfernt, mit der Begründung:
-   * „Glas darf nicht heller sein als sein Grund." Acht Referenzen aus Mobbin
-   * ausgemessen (werkzeug/kopf-vermessen.py) sagen etwas anderes:
-   *
-   *   sechs von acht sind HELLER als ihr Grund, Median +17
-   *   Streuung im Balken gegen Streuung darunter: Median 0,67
-   *
-   * Die Helligkeit ist also gar nicht das Merkmal. Das Merkmal ist die
-   * KONTRASTDÄMPFUNG: eine Scheibe flacht ab, was hinter ihr liegt, auf etwa
-   * zwei Drittel. Daran erkennt ein Auge Glas — nicht daran, ob es dunkler ist.
-   *
-   * Für einen DUNKLEN fotografischen Hero ist die eine passende Referenz
-   * Midjourney: Balken 20 gegen Grund 27, also acht Punkte dunkler, Streuung
-   * 14 gegen 23 — Verhältnis 0,61. Genau dort liegt das Ziel.
-   *
-   * Unsere alte Scheibe kam auf +60. Das war der Fehler, nicht die Idee. Sie
-   * ganz wegzunehmen war die Überkorrektur.
-   *
-   * `brightness(0.62)` im Filter ist die Zeile, die es löst: der Weichzeichner
-   * allein zieht helle Stellen von unterhalb der Kante herein und macht den
-   * Balken heller als seinen Grund. Die Helligkeitsstufe dreht das um, ohne
-   * die Dämpfung zu verlieren — eine deckende Farbe darüber täte das nicht,
-   * sie würde einfach überdecken.
-   */
-  background: color-mix(in oklch, var(--tief) 26%, transparent);
-  -webkit-backdrop-filter: blur(16px) saturate(125%) brightness(0.62);
-  backdrop-filter: blur(16px) saturate(125%) brightness(0.62);
-  /* Die Lichtkante sitzt OBEN. Eine Scheibe fängt das Licht an ihrer
-     Oberkante; unten sitzt der Schatten, den sie wirft. */
-  box-shadow:
-    inset 0 1px 0 color-mix(in oklch, var(--creme) 16%, transparent),
-    0 1px 0 color-mix(in oklch, var(--creme) 8%, transparent);
-  /* Der Saum bleibt: er trägt die Schrift auch dort, wo das Video hell wird,
-     und kostet nichts. */
-  text-shadow: 0 1px 3px oklch(12% 0.02 55 / 0.7);
+  color: var(--tinte);
+  background: color-mix(in oklch, var(--ton-hell) 34%, transparent);
+  -webkit-backdrop-filter: blur(16px) saturate(120%) brightness(1.12);
+  backdrop-filter: blur(16px) saturate(120%) brightness(1.12);
+  /* Ein heller Saum statt eines dunklen: er hebt die dunkle Schrift von einer
+     hellen Stelle im Video ab, ohne als Schatten zu lesen. */
+  text-shadow: 0 1px 2px color-mix(in oklch, var(--ton-hell) 70%, transparent);
+  box-shadow: inset 0 -1px 0 color-mix(in oklch, var(--linie) 60%, transparent);
   transition:
     background-color 260ms var(--ease-teig),
     color 260ms var(--ease-teig),
@@ -350,14 +308,14 @@
  * ganze Breite ist eine Optik.
  */
 .kopf__anruf {
-  background: var(--creme-glas-hoch);
-  color: var(--creme);
-  border: 1px solid var(--creme-kante);
+  background: color-mix(in oklch, var(--ton-tief) 82%, transparent);
+  color: var(--tinte);
+  border: 1px solid var(--linie);
   border-radius: 999px;
-  -webkit-backdrop-filter: blur(12px) saturate(140%);
-  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(130%);
+  backdrop-filter: blur(12px) saturate(130%);
   text-shadow: none;
-  box-shadow: inset 0 1px 0 color-mix(in oklch, var(--creme) 26%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in oklch, var(--creme) 60%, transparent);
 }
 
 /* Ab der hellen Sektion wieder Clay mit Tinte — dort trägt die Kopfzeile
@@ -646,35 +604,48 @@
   position: absolute;
   inset: 0;
   /**
-   * Für ein VIDEO anders gebaut als für ein Foto.
+   * ═══ HELL, nicht dunkel — die Umkehr vom 22.08. ═══
    *
-   * Beim Foto lag der dichte Teil links, wo die Schrift stand, und rechts
-   * blieb es klar. Jetzt steht alles in der Mitte, also läuft der Verlauf von
-   * innen nach aussen: ein weiches dunkles Zentrum trägt Logo und Zeile, die
-   * Ränder bleiben offen, damit man vom Video etwas sieht.
+   * Karol: „Die Startseite muss auf jeden Fall auch heller sein … das
+   * Käseschiff-Video ist eigentlich hell, ihr macht das ein bisschen dunkel."
    *
-   * Dazu eine Kappe oben für die gläserne Kopfzeile und ein Fuss unten für den
-   * Übergang in die nächste Sektion. Drei Verläufe, jeder mit einer Aufgabe.
+   * Er hat recht, und der Fehler war eine Gewohnheit: ein Video als Grund
+   * bekommt fast automatisch einen dunklen Schleier, weil helle Schrift darauf
+   * die einfachste Lösung ist. Nur ist das Video hier NICHT dunkel — es zeigt
+   * helles Gebäck auf hellem Holz. Ein dunkler Schleier darauf kämpft gegen
+   * das Material, statt es zu tragen, und macht aus einer Backstube am
+   * Vormittag einen Abend.
+   *
+   * Jetzt ein CREME-Schleier: dieselbe Bauweise, umgedrehte Richtung. Die
+   * Schrift dreht mit auf Tinte — wer eine Grundregel dreht, muss ihre
+   * Ausnahmen mitdrehen, sonst steht Creme auf Creme.
+   *
+   * Die Verteilung bleibt: dicht in der Mitte, wo Logo und Zeile stehen, offen
+   * an den Rändern, damit vom Video etwas zu sehen ist. Eine Kappe oben für die
+   * Kopfzeile, ein Fuss unten für den Übergang.
    */
   background:
     radial-gradient(
-      108% 78% at 50% 46%,
-      color-mix(in oklch, var(--tief) 72%, transparent) 0%,
-      color-mix(in oklch, var(--tief) 62%, transparent) 42%,
-      color-mix(in oklch, var(--tief) 34%, transparent) 72%,
-      color-mix(in oklch, var(--tief) 20%, transparent) 100%
+      110% 80% at 50% 46%,
+      color-mix(in oklch, var(--ton-hell) 88%, transparent) 0%,
+      color-mix(in oklch, var(--ton-hell) 78%, transparent) 44%,
+      color-mix(in oklch, var(--ton-hell) 46%, transparent) 74%,
+      color-mix(in oklch, var(--ton-hell) 26%, transparent) 100%
     ),
     linear-gradient(
       to bottom,
-      color-mix(in oklch, var(--tief) 58%, transparent) 0%,
-      color-mix(in oklch, var(--tief) 22%, transparent) 14%,
-      transparent 30%
+      color-mix(in oklch, var(--ton-hell) 82%, transparent) 0%,
+      color-mix(in oklch, var(--ton-hell) 40%, transparent) 16%,
+      transparent 34%
     ),
+    /* Der Fuss führt in den hellen Grund der nächsten Sektion. Vorher endete
+       der Hero dunkel und die nächste Sektion begann hell — eine Kante quer
+       über den Bildschirm. */
     linear-gradient(
       to top,
-      color-mix(in oklch, var(--tief) 62%, transparent) 0%,
-      color-mix(in oklch, var(--tief) 18%, transparent) 22%,
-      transparent 42%
+      var(--ton-hell) 0%,
+      color-mix(in oklch, var(--ton-hell) 72%, transparent) 14%,
+      transparent 40%
     );
 }
 
@@ -987,7 +958,7 @@
   letter-spacing: 0.16em;
   text-transform: uppercase;
   white-space: nowrap;
-  color: var(--creme-ruhig);
+  color: var(--tinte-leise);
   max-width: none;
 }
 
@@ -1015,15 +986,15 @@
   gap: 0.55rem;
   margin-top: clamp(0.5rem, 2vw, 1.5rem);
   padding: 0.6em 1.15em;
-  border: 1px solid var(--creme-kante);
+  border: 1px solid var(--linie);
   border-radius: 999px;
   font-family: var(--font-display);
   font-variation-settings: var(--wonk-klein);
   font-size: var(--text-meta);
   font-weight: 600;
-  color: var(--creme);
+  color: var(--tinte);
   text-decoration: none;
-  background: var(--creme-glas);
+  background: color-mix(in oklch, var(--ton-hell) 70%, transparent);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   transition: background var(--dauer-mikro) var(--ease-teig),
@@ -1042,8 +1013,8 @@
 }
 @media (hover: hover) {
   .backstube__weiter:hover {
-    background: var(--creme-glas-hoch);
-    border-color: var(--creme-ruhig);
+    background: var(--ton-tief);
+    border-color: var(--tinte-leise);
   }
 }
 
@@ -1077,7 +1048,7 @@
   line-height: 1.12;
   letter-spacing: var(--sperr-kopf);
   text-wrap: balance;
-  color: var(--creme);
+  color: var(--tinte);
 }
 
 /**
@@ -2291,23 +2262,34 @@
    * Geschehen. Stattdessen oben und unten dichter, in der Mitte offener: die
    * Schrift steht ohnehin am oberen und unteren Drittel.
    */
+  /**
+   * Am Handy senkrecht statt rund — und seit dem 22.08. ebenfalls HELL.
+   *
+   * Das hier stand zwei Stunden lang noch auf dunkel, während der Rechner
+   * schon hell war. Gemessen: mittlere Helligkeit 69 gegen 209, und alle vier
+   * Textkontraste durchgefallen — die Schlagzeile kam auf 1,33.
+   *
+   * Es ist derselbe Fehler wie am 17.08., nur andersherum: wer eine Grundregel
+   * dreht, muss ihre Ausnahmen mitdrehen. Eine Ausnahme, die man vergisst,
+   * fällt am Rechner nie auf.
+   *
+   * Auf einer einspaltigen Breite gibt es kein Rechts: der Satz läuft über die
+   * ganze Breite, deshalb deckt der Schleier flächiger als am Rechner.
+   */
   .backstube__schleier {
     background:
-      radial-gradient(
-        130% 62% at 50% 50%,
-        color-mix(in oklch, var(--tief) 62%, transparent) 0%,
-        color-mix(in oklch, var(--tief) 48%, transparent) 55%,
-        color-mix(in oklch, var(--tief) 30%, transparent) 100%
-      ),
       linear-gradient(
         to bottom,
-        color-mix(in oklch, var(--tief) 62%, transparent) 0%,
-        transparent 26%
+        color-mix(in oklch, var(--ton-hell) 88%, transparent) 0%,
+        color-mix(in oklch, var(--ton-hell) 52%, transparent) 18%,
+        color-mix(in oklch, var(--ton-hell) 30%, transparent) 34%
       ),
       linear-gradient(
         to top,
-        color-mix(in oklch, var(--tief) 68%, transparent) 0%,
-        transparent 34%
+        var(--ton-hell) 0%,
+        color-mix(in oklch, var(--ton-hell) 86%, transparent) 26%,
+        color-mix(in oklch, var(--ton-hell) 62%, transparent) 48%,
+        color-mix(in oklch, var(--ton-hell) 40%, transparent) 70%
       );
   }
 }
@@ -2416,142 +2398,90 @@
 
 /* ── Die Galerie ──────────────────────────────────────────────────────────
  *
- * Eine waagerechte Bahn, die beim Scrollen vorbeizieht. Die Sektion wird dafür
- * angeheftet; der senkrechte Scroll wird zur waagerechten Fahrt.
- *
- * ═══ Warum die Bahn eine Liste ist ═══
- *
- * Weil es eine ist. Sieben Bilder in einer festgelegten Reihenfolge sind ein
- * Verzeichnis, kein Haufen `div`. Für ein Vorleseprogramm ist der Unterschied,
- * ob es „Liste mit sieben Einträgen" ansagt oder gar nichts.
+ * Zwei Spuren, links und rechts, in denen Bilder von unten nach oben fliegen.
+ * Kein Anheften, keine waagerechte Fahrt — der Scroll bewegt, was ohnehin in
+ * seiner Richtung liegt.
  */
-.galerie__buehne {
+.galerie {
   position: relative;
-  margin-top: var(--raum-block);
-  /* Waagerecht beschnitten, senkrecht offen: die Bahn ragt seitlich weit
-     hinaus und darf die Seite trotzdem nicht breiter machen. `hidden` wäre
-     falsch — sobald eine Achse `hidden` ist, wird die andere zu `auto` und
-     scrollt. Nur `clip` lässt die Gegenachse wirklich `visible`. */
+  /* Die Bilder brauchen Weg zum Fliegen. Ohne Mindesthöhe ist die Sektion nur
+     so hoch wie ihr Inhalt, und die halbe Bahn fällt aus. */
+  min-height: 190vh;
+  /* Die Bahnen ragen über die Kante hinaus; ohne `clip` entstünde daraus eine
+     waagerechte Scrollleiste. Senkrecht bleibt offen, damit die Überlappung
+     zur nächsten Sektion sichtbar ist. */
   overflow-x: clip;
   overflow-y: visible;
-  /* Der gemeinsame Fluchtpunkt. Er sitzt auf der Bühne und nicht auf den
-     einzelnen Bildern: läge er dort, hätte jedes seinen eigenen, und die Reihe
-     zerfiele in sieben Gegenstände, die sich zufällig drehen. */
-  perspective: 1500px;
-  perspective-origin: 50% 45%;
+  /* Der gemeinsame Fluchtpunkt für alle Kippbewegungen. Er sitzt auf der
+     Sektion, nicht auf den Bildern: jedes Bild mit eigener Perspektive dreht
+     sich um sich selbst, und die Reihe zerfällt in Einzelteile. */
+  perspective: 1600px;
+  perspective-origin: 50% 42%;
 }
 
 .galerie__bahn {
-  display: flex;
-  align-items: center;
-  /* Das erste Bild beginnt weiter rechts, nicht an der Satzkante — Karol:
-     „vor allem Bild Nr. 1 weiter rechts positionieren."
-
-     Der Grund ist nicht Geschmack: eine Reihe, die genau an der linken
-     Textkante beginnt, liest als Fortsetzung des Textblocks. Ein Vorlauf macht
-     sie zu etwas Eigenem, das von rechts hereinkommt — und beim Fahren sieht
-     man dann auch, dass links etwas WAR. */
-  gap: clamp(1.25rem, 3vw, 3rem);
-  margin: 0;
-  /* Der Vorlauf stand zuerst ZWEI Zeilen weiter oben — und wurde von einem
-     `padding: 0 0 0 0` in derselben Regel überschrieben. Gleiche Spezifität,
-     spätere Deklaration gewinnt; gemessen kam 0 px an. Eine Kurzform, die
-     einen Einzelwert über sich zurücksetzt, ist keine Aufräumaktion, sondern
-     eine Falle. Jetzt steht beides in einer Deklaration. */
-  padding: 0 0 0 clamp(1.5rem, 14vw, 16rem);
+  position: relative;
+  display: grid;
+  /* Zwei Spalten, und die MITTE bleibt frei. Der Text steht dort, und ein
+     Bild, das durch eine Textspalte fliegt, ist kein Bild mehr, sondern eine
+     Störung. */
+  grid-template-columns: minmax(0, 1fr) clamp(2rem, 12vw, 12rem) minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(3rem, 9vh, 8rem) 0;
+  margin: clamp(2rem, 6vh, 5rem) 0 0;
+  padding: 0;
   list-style: none;
-  /* `min-height` statt `height`: das höchste Bild bestimmt die Bahn, und das
-     ist ein Hochformat. Ein fester Wert wäre bei jedem Bildtausch falsch. */
-  min-height: 62vh;
-  will-change: transform;
-  /* Ohne diese Zeile rechnet der Browser die Drehungen der Kinder flach,
-     sobald die Bahn selbst verschoben wird. */
   transform-style: preserve-3d;
 }
 
-.galerie__stueck { flex: none; margin: 0; transform-style: preserve-3d; }
+.galerie__stueck {
+  margin: 0;
+  transform-style: preserve-3d;
+  /* `will-change` steht NICHT hier. In der Fassung vom 17.08. hielt es dreissig
+     Ebenen ab dem Laden — der Haken setzt es beim Eintreten und räumt es
+     danach weg. */
+}
 
+/* Links und rechts wechseln sich ab; jede Spur füllt ihre Spalte ganz. */
+.galerie__stueck[data-spur='links']  { grid-column: 1; justify-self: end; }
+.galerie__stueck[data-spur='rechts'] { grid-column: 3; justify-self: start; }
+
+/* Hochformate schmaler als Querformate — sonst wird das eine winzig. */
+.galerie__stueck[data-lage='hoch'] { width: min(100%, 21rem); }
+.galerie__stueck[data-lage='quer'] { width: min(100%, 27rem); }
+
+/**
+ * Das Passepartout: eine schmale helle Fläche zwischen Bild und Welt, wie sie
+ * ein gerahmter Abzug hat. Ein gezeichneter Rahmen sähe aus wie eine
+ * Bilderrahmen-Grafik; das Passepartout sieht nach Abzug aus.
+ *
+ * Das Schweben kommt vom WEITEN, blassen Schatten. Ein enger dunkler klebt
+ * einen Gegenstand an den Grund.
+ */
 .galerie__blatt {
   position: relative;
   margin: 0;
-  transform-style: preserve-3d;
-}
-
-/* Zwei Grössen, sieben Höhen. Die Grösse folgt der Lage — ein Hochformat neben
-   einem Querformat gleich breit zu setzen macht das eine winzig. Die HÖHE
-   folgt der Folge in Galerie.tsx und hat keine Periode. */
-.galerie__stueck[data-lage='hoch'] { width: clamp(15rem, 30vw, 26rem); }
-.galerie__stueck[data-lage='quer'] { width: clamp(17rem, 34vw, 30rem); }
-
-/* Der Versatz sitzt am `li`, die Drehung am `figure` darin. Zwei
-   `transform` auf einem Knoten überschreiben einander still — auf dieser
-   Seite die am häufigsten wiederholte Falle. */
-.galerie__stueck { transform: translateY(var(--versatz, 0)); }
-
-/**
- * ═══ Der Rahmen: ein Passepartout, kein Rahmen ═══
- *
- * Karol: „hochwertiger gerahmt" und „schwebender Effekt".
- *
- * Ein gezeichneter Rahmen um ein Foto sieht aus wie eine Bilderrahmen-Grafik.
- * Was teuer aussieht, ist das PASSEPARTOUT: eine schmale helle Fläche zwischen
- * Bild und Welt, wie sie ein gerahmter Abzug hat. Sie kostet keine Linie und
- * gibt dem Bild einen Rand, den es selbst nicht hat.
- *
- * Das Schweben kommt vom Schatten, und zwar von einem, der WEIT unter dem Bild
- * liegt und kaum sichtbar ist. Ein enger dunkler Schatten klebt einen
- * Gegenstand an den Grund; ein weiter weicher hebt ihn ab. Deshalb hier drei:
- * eine Haarlinie für die Kante, ein mittlerer fürs Gewicht, ein sehr weiter
- * und sehr blasser als Luft darunter.
- */
-.galerie__blatt {
-  padding: clamp(0.5rem, 1.1vw, 0.9rem);
+  padding: clamp(0.45rem, 1vw, 0.85rem);
   background: var(--creme);
   border-radius: calc(var(--radius-gross) + 0.4rem);
   box-shadow:
-    0 1px 2px oklch(30% 0.055 55 / 0.14),
-    0 10px 20px -8px oklch(30% 0.055 55 / 0.22),
-    0 40px 60px -28px oklch(30% 0.055 55 / 0.40);
+    0 1px 2px oklch(30% 0.055 55 / 0.12),
+    0 10px 20px -8px oklch(30% 0.055 55 / 0.2),
+    0 40px 60px -28px oklch(30% 0.055 55 / 0.36);
 }
 
-/**
- * ═══ Edler heisst hier: eine Kante und ein echter Schatten ═══
- *
- * Vorher lag das Bild nackt auf dem Grund, mit einem weichen Schatten. Das ist
- * sauber und beliebig — es sieht auf jeder Seite gleich aus.
- *
- * Drei Zutaten machen daraus einen Abzug statt einer Datei:
- *
- *   die HAARLINIE nach innen, in Creme. Sie trennt das Bild vom Grund, ohne
- *   einen Rahmen zu behaupten. Ein gedruckter Abzug hat eine Kante; eine Datei
- *   hat keine, und genau daran erkennt man sie.
- *
- *   ZWEI Schatten statt einem. Ein enger dunkler direkt unter der Kante trägt
- *   das Gewicht, ein weiter weicher setzt es in den Raum. Ein einzelner
- *   Schatten wird entweder hart oder wolkig.
- *
- *   Die Drehung selbst — sie steht in Galerie.tsx und ist der Grund, dass die
- *   Kante überhaupt zu sehen ist. Ein flaches Bild hat keine Flanke.
- */
-.galerie__stueck img {
+.galerie__blatt img {
   width: 100%;
   height: auto;
   display: block;
   border-radius: var(--radius-gross);
-  /* Nur noch die Haarlinie nach innen — das Gewicht trägt jetzt der Karton
-     darunter. Zwei Schattenwürfe übereinander ergeben einen Fleck. */
   box-shadow: inset 0 0 0 1px oklch(30% 0.055 55 / 0.12);
 }
 
-/**
- * Die Nummer. Sie liegt auf dem Bild, nicht daneben — eine Ziffer neben einem
- * Bild ist eine Beschriftung, eine Ziffer AUF dem Bild ist eine Seitenzahl.
- * Klein, gesperrt, in Creme mit Saum, damit sie auf jedem Motiv steht.
- */
 .galerie__nr {
   position: absolute;
-  top: clamp(0.6rem, 1.4vw, 1rem);
-  left: clamp(0.7rem, 1.6vw, 1.1rem);
+  top: clamp(0.7rem, 1.5vw, 1.1rem);
+  left: clamp(0.8rem, 1.7vw, 1.2rem);
   z-index: 2;
   font-family: var(--font-display);
   font-variation-settings: var(--wonk-klein);
@@ -2563,68 +2493,69 @@
   text-shadow: 0 1px 3px oklch(12% 0.02 55 / 0.8);
 }
 
-.galerie__stueck figcaption {
-  margin-top: 0.85rem;
-  letter-spacing: 0.04em;
+.galerie__blatt figcaption {
+  margin-top: 0.7rem;
   font-family: var(--font-display);
   font-variation-settings: var(--wonk-klein);
   font-size: var(--text-meta);
   font-weight: 600;
+  letter-spacing: 0.04em;
   color: var(--tinte-leise);
 }
 
 /**
- * Gewischt statt gefahren — am Handy und für alle, die weniger Bewegung wollen.
- *
- * Ersatz, nicht Abschaltung: dieselben Bilder, dieselbe Reihenfolge, ein
- * anderer Antrieb. Eine Bewegung, die etwas erklärt hat, hinterlässt ersatzlos
- * ein Loch.
- *
- * `scroll-snap` ist kein Schmuck: eine frei laufende Rolle bleibt irgendwo
- * zwischen zwei Bildern stehen, und dann sieht man zwei halbe.
+ * Am Handy wird ZUSAMMENGELEGT, nicht weggelassen: aus zwei Spuren wird eine
+ * Spalte, aus dem Flug ein Versatz. Der Haken fliegt unter 720 px ohnehin
+ * nicht — zwei Spuren auf 393 px wären zwei Briefmarken nebeneinander.
  */
-@media (max-width: 719px), (prefers-reduced-motion: reduce) {
-  .galerie__buehne {
+/**
+ * Am Handy wird GEWISCHT, nicht gestapelt.
+ *
+ * Zwei Spuren auf 393 px wären zwei Briefmarken nebeneinander — also lag es
+ * nahe, sie zu einer Spalte zu stapeln. Gemessen kostete das fünf
+ * Bildschirmhöhen: die Seite sprang von 13,5 auf 15,5, und der Prüfer schlug
+ * an. Sieben Bilder untereinander sind am Daumen Arbeit.
+ *
+ * Eine waagerechte Rolle mit Schnappen kostet EINE Bildschirmhöhe und ist die
+ * Geste, die dort ohnehin jeder für eine Galerie erwartet. Das ist kein
+ * Weglassen — dieselben Bilder, dieselbe Reihenfolge, ein anderer Antrieb.
+ *
+ * `scroll-snap` ist kein Schmuck: eine frei laufende Rolle bleibt zwischen
+ * zwei Bildern stehen, und dann sieht man zwei halbe.
+ */
+@media (max-width: 719px) {
+  .galerie { min-height: 0; perspective: none; overflow-x: clip; }
+  .galerie__bahn {
+    display: flex;
+    grid-template-columns: none;
+    gap: 1rem;
     overflow-x: auto;
     overflow-y: visible;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
-    /* KEIN randloser Ausbruch mit negativem Aussenabstand. Gemessen: die
-       Sektion trägt selbst schon einen Innenabstand, der negative Rand
-       überschoss ihn, und die Seite war 413 statt 393 px breit. Randlos wäre
-       schöner; eine Seite, die sich seitlich schieben lässt, ist kaputt.
-       Die Bahn beginnt jetzt bündig mit der Überschrift — an derselben Kante,
-       an der auf dieser Seite ohnehin alles anfängt. */
     scrollbar-width: none;
-  }
-  .galerie__buehne::-webkit-scrollbar { display: none; }
-  .galerie__bahn {
-    min-height: 0;
-    will-change: auto;
-    transform: none !important;
     padding-bottom: 0.5rem;
   }
-  .galerie__stueck { scroll-snap-align: center; }
-
-  /* Der weite weiche Schatten fällt am Handy weg. Gemessen mit vierfach
-     gebremster Rechenleistung: sieben Karten mit 60 px Streuung, die beim
-     Wischen neu gezeichnet werden, kosteten 12,2 % zähe Bilder. Der Schweb-
-     Eindruck kommt dort ohnehin nicht vom Schatten, sondern davon, dass die
-     Karten einzeln einrasten. */
+  .galerie__bahn::-webkit-scrollbar { display: none; }
+  .galerie__stueck[data-spur='links'],
+  .galerie__stueck[data-spur='rechts'] {
+    grid-column: auto;
+    justify-self: auto;
+    flex: none;
+    scroll-snap-align: center;
+    /* Die Flugbahn ist unter 720 px ohnehin abgeschaltet — der Haken prüft
+       `abBreite`. Diese Zeile räumt auf, falls das Fenster grösser war. */
+    transform: none !important;
+  }
+  .galerie__stueck[data-lage='hoch'] { width: 62vw; }
+  .galerie__stueck[data-lage='quer'] { width: 76vw; }
   .galerie__blatt {
     box-shadow:
       0 1px 2px oklch(30% 0.055 55 / 0.14),
       0 8px 16px -8px oklch(30% 0.055 55 / 0.24);
   }
-  .galerie__stueck[data-lage='hoch'] { width: 62vw; }
-  .galerie__stueck[data-lage='quer'] { width: 74vw; transform: none; }
 }
 
-
-/* Die Überschrift der Galerie rückt mit — sie gehört zur Reihe, nicht zum
-   Textblock darüber. Weniger als die Bahn, damit ein Versatz entsteht statt
-   einer zweiten Kante. */
-.galerie .kopfblock { padding-left: clamp(0.5rem, 7vw, 8rem); }
 @media (max-width: 719px) {
   .galerie .kopfblock { padding-left: 0; }
   .galerie__bahn { padding-left: 0; }
@@ -2831,4 +2762,34 @@
   font-variant-numeric: tabular-nums;
   font-weight: 600;
   color: var(--tinte-leise);
+}
+
+/**
+ * ═══ Was nicht im Bild ist, wird nicht gerechnet ═══
+ *
+ * Die Handarbeit trägt 23 Bilder, die Karte 10. Gemessen mit einem Scroll, der
+ * die ganze Seite in zehn Sekunden durchzieht — also jemandem, der wischt statt
+ * liest: 16 lange Aufgaben, zusammen 2900 ms, die längste 788 ms. Bei ruhigem
+ * Scrollen dagegen NULL. Es ist kein Dauerproblem, sondern eine Spitze, wenn
+ * viele Bilder gleichzeitig dekodieren.
+ *
+ * `content-visibility: auto` lässt den Browser Layout, Zeichnen und Dekodieren
+ * für alles überspringen, was ausserhalb des Bildes liegt.
+ *
+ * `contain-intrinsic-size` ist dabei PFLICHT und nicht Feinschliff: ohne den
+ * Wert nimmt der Browser für übersprungene Abschnitte die Höhe null an, die
+ * Seite wird kürzer, und beim Hineinscrollen springt sie auf. Das wäre genau
+ * der Sprung, den diese Seite seit dem 17.08. bei 0,01 hält.
+ *
+ * Die Werte sind gemessen, nicht geschätzt — die tatsächlichen Höhen der
+ * beiden Abschnitte bei 1440 px.
+ */
+.prozess {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 1510px;
+}
+
+.karte {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 2400px;
 }
