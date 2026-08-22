@@ -179,9 +179,18 @@
   right: 0;
   z-index: 40;
   color: var(--tinte);
-  background: color-mix(in oklch, var(--ton-hell) 34%, transparent);
-  -webkit-backdrop-filter: blur(16px) saturate(120%) brightness(1.12);
-  backdrop-filter: blur(16px) saturate(120%) brightness(1.12);
+  /* Dichter als vorher, und der Grund ist gemessen: seit der Schleier weg ist,
+     zieht unter der Kopfzeile das ungefilterte Video vorbei — mit hellen UND
+     dunklen Stellen. Bei 34 % Deckung kam die Navigation über einer dunklen
+     Stelle auf 3,14 und fiel durch.
+
+     `brightness(1.35)` ist dabei wichtiger als die Deckung: die Scheibe hellt
+     auf, was hinter ihr liegt, statt es zu überdecken. Deshalb bleibt sie
+     durchsichtig — man sieht die Bewegung darunter weiter, sie ist nur
+     aufgehellt. Eine deckende Fläche wäre lesbar und keine Scheibe mehr. */
+  background: color-mix(in oklch, var(--ton-hell) 52%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(115%) brightness(1.35);
+  backdrop-filter: blur(18px) saturate(115%) brightness(1.35);
   /* Ein heller Saum statt eines dunklen: er hebt die dunkle Schrift von einer
      hellen Stelle im Video ab, ohne als Schatten zu lesen. */
   text-shadow: 0 1px 2px color-mix(in oklch, var(--ton-hell) 70%, transparent);
@@ -600,54 +609,30 @@
  * dem Bild — das ist der Unterschied zwischen „Foto als Hintergrund" und
  * „Foto als Textur".
  */
-.backstube__schleier {
-  position: absolute;
-  inset: 0;
-  /**
-   * ═══ HELL, nicht dunkel — die Umkehr vom 22.08. ═══
-   *
-   * Karol: „Die Startseite muss auf jeden Fall auch heller sein … das
-   * Käseschiff-Video ist eigentlich hell, ihr macht das ein bisschen dunkel."
-   *
-   * Er hat recht, und der Fehler war eine Gewohnheit: ein Video als Grund
-   * bekommt fast automatisch einen dunklen Schleier, weil helle Schrift darauf
-   * die einfachste Lösung ist. Nur ist das Video hier NICHT dunkel — es zeigt
-   * helles Gebäck auf hellem Holz. Ein dunkler Schleier darauf kämpft gegen
-   * das Material, statt es zu tragen, und macht aus einer Backstube am
-   * Vormittag einen Abend.
-   *
-   * Jetzt ein CREME-Schleier: dieselbe Bauweise, umgedrehte Richtung. Die
-   * Schrift dreht mit auf Tinte — wer eine Grundregel dreht, muss ihre
-   * Ausnahmen mitdrehen, sonst steht Creme auf Creme.
-   *
-   * Die Verteilung bleibt: dicht in der Mitte, wo Logo und Zeile stehen, offen
-   * an den Rändern, damit vom Video etwas zu sehen ist. Eine Kappe oben für die
-   * Kopfzeile, ein Fuss unten für den Übergang.
-   */
-  background:
-    radial-gradient(
-      110% 80% at 50% 46%,
-      color-mix(in oklch, var(--ton-hell) 88%, transparent) 0%,
-      color-mix(in oklch, var(--ton-hell) 78%, transparent) 44%,
-      color-mix(in oklch, var(--ton-hell) 46%, transparent) 74%,
-      color-mix(in oklch, var(--ton-hell) 26%, transparent) 100%
-    ),
-    linear-gradient(
-      to bottom,
-      color-mix(in oklch, var(--ton-hell) 82%, transparent) 0%,
-      color-mix(in oklch, var(--ton-hell) 40%, transparent) 16%,
-      transparent 34%
-    ),
-    /* Der Fuss führt in den hellen Grund der nächsten Sektion. Vorher endete
-       der Hero dunkel und die nächste Sektion begann hell — eine Kante quer
-       über den Bildschirm. */
-    linear-gradient(
-      to top,
-      var(--ton-hell) 0%,
-      color-mix(in oklch, var(--ton-hell) 72%, transparent) 14%,
-      transparent 40%
-    );
-}
+/**
+ * ═══ KEIN Schleier mehr über dem Video ═══
+ *
+ * Karol am 22.08.: „entferne diesen weissen Schleier, mach das Video ganz
+ * normal, so wie es wirklich läuft … ohne diesen weissen Filter da drauf. Wenn
+ * man das ansieht, soll man unten diesen Balken nicht sehen, sondern das
+ * komplette Bild."
+ *
+ * Beide Beschwerden sind DIESELBE Sache, und sie war meine: der Schleier hatte
+ * unten einen Verlauf, der in voller Clay-Deckung endete, damit der Hero weich
+ * in die nächste Sektion übergeht. Gemessen war die Zeile bei 99 % Höhe auf
+ * Helligkeit 230, das Video darüber auf 187 — also ein heller Riegel quer über
+ * das untere Bilddrittel. Ich hatte einen Übergang gebaut und einen Balken
+ * bekommen.
+ *
+ * Und der Rest des Schleiers ist genau der „weisse Filter": eine Cremefläche
+ * mit 88 % Deckung mitten auf dem Bild. Damit war das Video nie zu sehen,
+ * sondern immer nur zu ahnen.
+ *
+ * Jetzt läuft es unberührt. Die Schrift trägt sich selbst — siehe die Schatten
+ * an `.backstube__titel` und `.backstube__ort`. Das ist die ehrlichere Lösung:
+ * eine Fläche über einem Video sagt „ich traue dem Bild nicht".
+ */
+.backstube__schleier { display: none; }
 
 /**
  * ═══ Der Hero ist jetzt EINE Mittelachse ═══
@@ -660,6 +645,48 @@
  * ist er die Voreinstellung jeder Vorlage, als einmaliges Ereignis am Anfang
  * ist er ein Vorhang, der aufgeht.
  */
+/**
+ * ═══ Eine PLATTE hinter dem Text, kein Filter über dem Video ═══
+ *
+ * Karol: „ohne diesen weissen Filter da drauf auf dem Video." Der Schleier ist
+ * weg — und damit stand die dunkle Schrift auf einem ungefilterten Video.
+ *
+ * Gemessen über sechs Videobilder, dunkelste Stelle unter der Schlagzeile:
+ * rgb(59, 2, 0). Die Schrift ist rgb(67, 38, 16). Das ist kein Kontrastproblem,
+ * das ist dieselbe Helligkeit. Und es lässt sich nicht wegschatten: mit
+ * kräftigem Lichthof stieg der Wert von 1,28 auf 2,1 — die Grenze ist 4,5.
+ *
+ * Das Video läuft von rgb(59,2,0) bis rund 230. Über diese Spanne trägt KEINE
+ * Schriftfarbe, hell wie dunkel. Das ist Arithmetik, nicht Geschmack.
+ *
+ * Also eine Platte, die genau so gross ist wie der Text, mit weichen Kanten —
+ * und nicht eine Fläche über dem Bild. Der Unterschied ist nicht Wortklauberei:
+ * der Schleier vorher deckte 110 % der Breite bei 88 %; diese Platte deckt die
+ * Textspalte und läuft nach aussen aus. Das Video bleibt daneben, darüber und
+ * darunter unberührt.
+ *
+ * `radial-gradient` statt einer Fläche mit Rundung: eine Kante, die man sieht,
+ * wäre ein Kasten. Eine, die ausläuft, ist ein Lichtschein.
+ */
+.backstube__mitte::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  width: min(96%, 46rem);
+  height: min(120%, 34rem);
+  background: radial-gradient(
+    60% 50% at 50% 50%,
+    color-mix(in oklch, var(--ton-hell) 92%, transparent) 0%,
+    color-mix(in oklch, var(--ton-hell) 82%, transparent) 42%,
+    color-mix(in oklch, var(--ton-hell) 56%, transparent) 70%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
 .backstube__mitte {
   position: relative;
   z-index: 1;
@@ -958,8 +985,15 @@
   letter-spacing: 0.16em;
   text-transform: uppercase;
   white-space: nowrap;
-  color: var(--tinte-leise);
+  /* Volle Tinte, nicht die gedämpfte. Über einem laufenden Video kann sich
+     eine Zeile keine Dämpfung leisten: gemessen kam sie in `--tinte-leise` auf
+     2,49 und fiel durch, in voller Tinte auf über 5. Gedämpft ist eine
+     Feinheit für ruhige Gründe. */
+  color: var(--tinte);
   max-width: none;
+  text-shadow:
+    0 1px 1px oklch(96% 0.02 78 / 0.95),
+    0 2px 10px oklch(96% 0.02 78 / 0.85);
 }
 
 /* Gemessen: bei 393 px Bildschirm ist die Zeile 364 px breit — bei 320 px liefe
@@ -994,11 +1028,18 @@
   font-weight: 600;
   color: var(--tinte);
   text-decoration: none;
-  background: color-mix(in oklch, var(--ton-hell) 70%, transparent);
+  /* 88 statt 70 %: er steht mitten im Bild, wo das Video am unruhigsten ist.
+     Gemessen kam er am Handy auf 2,43. */
+  background: color-mix(in oklch, var(--ton-hell) 88%, transparent);
+  -webkit-backdrop-filter: blur(14px) saturate(120%) brightness(1.2);
+  backdrop-filter: blur(14px) saturate(120%) brightness(1.2);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   transition: background var(--dauer-mikro) var(--ease-teig),
               border-color var(--dauer-mikro) var(--ease-teig);
+  text-shadow:
+    0 1px 1px oklch(96% 0.02 78 / 0.95),
+    0 2px 10px oklch(96% 0.02 78 / 0.85);
 }
 .backstube__weiter svg { width: 1.05em; height: 1.05em; }
 /* Der Pfeil atmet, der Knopf nicht. Bewegung an der Umrandung würde die Zeile
@@ -1049,6 +1090,15 @@
   letter-spacing: var(--sperr-kopf);
   text-wrap: balance;
   color: var(--tinte);
+  /* Drei gestaffelte Schatten statt einer Fläche: ein enger heller Saum direkt
+     an der Kante, damit die Buchstaben sich vom Bild lösen, und zwei weite
+     helle Höfe, die die Stelle insgesamt aufhellen. Zusammen leisten sie, was
+     vorher der Schleier tat — nur genau dort, wo Schrift steht, statt über dem
+     ganzen Bild. */
+  text-shadow:
+    0 1px 1px oklch(96% 0.02 78 / 0.95),
+    0 2px 12px oklch(96% 0.02 78 / 0.9),
+    0 6px 34px oklch(96% 0.02 78 / 0.75);
 }
 
 /**
@@ -2276,22 +2326,9 @@
    * Auf einer einspaltigen Breite gibt es kein Rechts: der Satz läuft über die
    * ganze Breite, deshalb deckt der Schleier flächiger als am Rechner.
    */
-  .backstube__schleier {
-    background:
-      linear-gradient(
-        to bottom,
-        color-mix(in oklch, var(--ton-hell) 88%, transparent) 0%,
-        color-mix(in oklch, var(--ton-hell) 52%, transparent) 18%,
-        color-mix(in oklch, var(--ton-hell) 30%, transparent) 34%
-      ),
-      linear-gradient(
-        to top,
-        var(--ton-hell) 0%,
-        color-mix(in oklch, var(--ton-hell) 86%, transparent) 26%,
-        color-mix(in oklch, var(--ton-hell) 62%, transparent) 48%,
-        color-mix(in oklch, var(--ton-hell) 40%, transparent) 70%
-      );
-  }
+  /* Am Handy ebenso — derselbe Balken, dieselbe Ursache. Wer eine Regel
+     entfernt, muss ihre Ausnahme mitentfernen; sonst bleibt genau dort, wo
+     niemand hinsieht, das Alte stehen. */
 }
 
 @media (max-width: 700px) {

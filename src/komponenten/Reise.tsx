@@ -107,12 +107,35 @@ export default function Reise() {
         })
 
         const zeigen = (i: number, ab: number, bis: number) => {
-          tl.to(zeilen[i]!, { autoAlpha: 1, y: 0, duration: 0.06 }, ab)
-          tl.to(zeilen[i]!, { autoAlpha: 0, y: -14, duration: 0.05 }, bis)
+          tl.to(zeilen[i]!, { autoAlpha: 1, y: 0, duration: 0.09 }, ab)
+          tl.to(zeilen[i]!, { autoAlpha: 0, y: -14, duration: 0.08 }, bis)
         }
 
+        /**
+         * ═══ Der Rhythmus — Karol: „mach einen angenehmen Flow draus, das ist
+         *     noch viel zu unkonsistent in der Abfolge" ═══
+         *
+         * Die erste Fassung hatte Löcher. Die Ankunft endete bei 0,52, der
+         * Bruch begann bei 0,62 — dazwischen zehn Prozent des Scrollwegs, in
+         * denen nichts passierte, und das ist genau die Stelle, an der eine
+         * Bewegung „unrund" wird. Ein Betrachter merkt nicht, dass etwas fehlt;
+         * er merkt, dass es stockt.
+         *
+         * Jetzt greift jeder Takt in den nächsten, und zwar mit fester
+         * Überlappung: was aufhört, ist noch da, während das Nächste beginnt.
+         *
+         *   0,00 ─────── 0,22   Feuer, Satz 1
+         *          0,14 ─────── 0,48   Ankunft aus der Tiefe
+         *                 0,30 ─────── 0,58   Satz 2
+         *                        0,50 ─────── 0,84   der Bruch
+         *                             0,58 ─────── 0,98   Satz 3, Dampf
+         *
+         * Kein Abschnitt beginnt, wo der vorige endet. Das ist der ganze
+         * Unterschied zwischen einer Folge und einer Liste.
+         */
+
         /* ── Takt 1: Feuer ─────────────────────────────────────────────── */
-        zeigen(0, 0.02, 0.28)
+        zeigen(0, 0.01, 0.22)
 
         /* ── Takt 2: die Ankunft ───────────────────────────────────────────
            Von hinten heran und gross werden — nicht von der Seite herein. Ein
@@ -121,15 +144,18 @@ export default function Reise() {
            einer Parade und einem Auftritt.
 
            `z` von −900 auf 0 statt eines blossen Massstabs: mit Perspektive
-           wächst die Silhouette dabei nicht gleichmässig, sondern so, wie ein
-           Ding wächst, das näher kommt. */
+           wächst die Silhouette so, wie ein Ding wächst, das näher kommt. */
         tl.fromTo(
           schiff.current,
-          { autoAlpha: 0, z: -900, yPercent: 14, rotationX: 26, rotationY: -12 },
-          { autoAlpha: 1, z: 0, yPercent: 0, rotationX: 0, rotationY: 0, duration: 0.3 },
-          0.22,
+          { autoAlpha: 0, z: -900, yPercent: 12, rotationX: 22, rotationY: -10 },
+          { autoAlpha: 1, z: 0, yPercent: 0, rotationX: 0, rotationY: 0, duration: 0.34 },
+          0.14,
         )
-        zeigen(1, 0.34, 0.6)
+        /* 0,26 statt 0,30: Satz 1 blendet bei 0,22 aus und braucht dafür 0,08.
+           Beginnt der zweite erst bei 0,30, steht zwischen 0,28 und 0,30 gar
+           nichts — gemessen war das die Lücke, die die Abfolge stocken liess.
+           Jetzt greift der zweite, während der erste noch geht. */
+        zeigen(1, 0.26, 0.56)
 
         /**
          * Der Mehlstoss beim AUFSETZEN — ein eigener Auslöser, keine Zeile in
@@ -137,28 +163,44 @@ export default function Reise() {
          *
          * Eine Zeitleiste mit `scrub` läuft rückwärts, wenn man zurückscrollt.
          * Ein Stoss kann das nicht: er hat einen Anfang und ein Ende, und
-         * rückwärts abgespielt wäre er eine Wolke, die in ein Blech
-         * zurückspringt. Deshalb ein Ereignis, das in BEIDE Richtungen
-         * dasselbe tut.
+         * rückwärts abgespielt wäre er eine Wolke, die ins Blech zurückspringt.
+         * Deshalb ein Ereignis, das in BEIDE Richtungen dasselbe tut.
          */
         const stoss = ScrollTrigger.create({
           trigger: b,
-          start: () => `top+=${window.innerHeight * 2.4 * 0.42} top`,
-          end: () => `top+=${window.innerHeight * 2.4 * 0.54} top`,
+          start: () => `top+=${window.innerHeight * 2.4 * 0.4} top`,
+          end: () => `top+=${window.innerHeight * 2.4 * 0.5} top`,
           onEnter: () => setMehlstoss((n) => n + 1),
           onEnterBack: () => setMehlstoss((n) => n + 1),
           invalidateOnRefresh: true,
         })
 
-        /* ── Takt 3: der Bruch ─────────────────────────────────────────────
-           Die Hälften drehen UND schieben. Nur drehen sähe aus wie zwei Türen,
-           nur schieben wie ein Schnitt. Beides zusammen ist ein Bruch. */
-        zeigen(2, 0.66, 0.97)
-        tl.to(links.current, { xPercent: -26, rotationY: -38, duration: 0.2 }, 0.62)
-        tl.to(rechts.current, { xPercent: 26, rotationY: 38, duration: 0.2 }, 0.62)
-        /* Der Dampf beginnt, wenn der Spalt DA ist. Dampf aus einem
-           geschlossenen Gebäck ist die Aussage, bevor sie stimmt. */
-        tl.to(bruchdampf.current, { autoAlpha: 1, duration: 0.12 }, 0.68)
+        /**
+         * ═══ Takt 3: der Bruch — und zwar ANDERSHERUM ═══
+         *
+         * Karol: „das Käseschiff soll genau andersrum aufgehen, nicht so."
+         *
+         * Vorher drehten die Hälften mit dem Rücken zum Betrachter auf: die
+         * linke nach links WEG, die rechte nach rechts weg. Man sah dabei
+         * genau das, was ein aufbrechendes Gebäck NICHT zeigen soll — die
+         * Aussenseiten, also Kruste. Die Bruchflächen zeigten voneinander weg.
+         *
+         * Jetzt kippen sie zum Betrachter hin: die Bruchflächen drehen nach
+         * VORN, und der Blick fällt in das Gebäck hinein statt daran vorbei.
+         * Es ist dieselbe Bewegung mit umgekehrtem Vorzeichen, und sie
+         * entscheidet, ob man Käse sieht oder Rinde.
+         *
+         * Die Hälften drehen UND schieben: nur drehen sähe aus wie zwei Türen,
+         * nur schieben wie ein Schnitt. Beides zusammen ist ein Bruch.
+         */
+        tl.to(links.current, { xPercent: -24, rotationY: 34, duration: 0.34 }, 0.5)
+        tl.to(rechts.current, { xPercent: 24, rotationY: -34, duration: 0.34 }, 0.5)
+        zeigen(2, 0.58, 0.98)
+        /* Der Dampf beginnt, wenn der Spalt DA ist — nicht davor. Dampf aus
+           einem geschlossenen Gebäck ist die Aussage, bevor sie stimmt.
+           Er läuft länger als der Bruch: was aufsteigt, hört nicht auf, wenn
+           die Bewegung darunter endet. */
+        tl.to(bruchdampf.current, { autoAlpha: 1, duration: 0.22 }, 0.58)
 
         return () => {
           stoss.kill()
