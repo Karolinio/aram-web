@@ -1,170 +1,162 @@
 # Stand · Aram
 
-Wiedereinstieg nach einer Pause. Alles, was eine neue Sitzung braucht, um ohne
-Rückfragen weiterzubauen.
+Wiedereinstieg. Alles, was eine neue Sitzung braucht, um ohne Rückfragen
+weiterzubauen.
 
-**Letzter Stand:** `0c5454a` — die Startseite ohne Cremeschleier
-**Zweig:** `main`
-**Stichtag dieser Notiz:** 19.08.2026
+**Letzter Stand:** `ceee8f2` · **Zweig:** `main` · **Notiz vom:** 22.08.2026
 
 ---
 
 ## ⚠ Dieses Repo hat KEINE Gegenstelle
 
 `git remote -v` ist leer. Die gesamte Arbeit liegt **nur auf diesem Rechner**.
-Es gibt keine Sicherung bei GitHub, in keiner Cloud, nirgends.
+Keine Sicherung bei GitHub, in keiner Cloud, nirgends. Ein Festplattenschaden
+kostet alles. Wenn eine Gegenstelle gewünscht ist: privates Repo anlegen, einmal
+pushen — der Rest ist Routine.
 
-Solange das so ist, kostet ein Festplattenschaden alles. Wenn eine Gegenstelle
-gewünscht ist: privates Repo anlegen und einmal pushen — der Rest ist dann
-Routine.
-
-Die **Direktion** liegt woanders und ist dort gesichert:
-`~/dev/website-factory/clients/aram/DIRECTION.md`, Zweig
-`feat/vorlage-zahnarzt-praxis`, Gegenstelle `Karolinio/website-factory`.
-Sie enthält sechs Amendements und ist die Begründung für jeden Token.
-
----
-
-## Starten
+## Loslegen
 
 ```bash
-cd ~/dev/aram-web
-pnpm dev                       # Entwicklung, http://localhost:4185
-pnpm build && pnpm preview --port 4190   # der gebaute Stand
-```
+cd ~/dev/aram-web && pnpm dev            # http://localhost:4185
+pnpm build && pnpm exec vite preview --port 4190
 
-Weitere Seiten: `/stil.html` (Stilbogen, `noindex`), `/impressum.html`,
-`/datenschutz.html`.
-
-## Prüfen
-
-```bash
+# Der Fabrikprüfer — Playwright liegt in der Factory, nicht hier
 cd ~/dev/website-factory
 PLAYWRIGHT_KANAL=chrome node engine/pruefen.mjs http://localhost:4190/
-node engine/inhalt-pruefen.mjs aram
 ```
 
-**Falle:** Der Prüfer braucht Playwright über zwei Symlinks in
-`~/dev/website-factory/node_modules/`. Die sind während der letzten Sitzung
-einmal verschwunden und mussten neu gelegt werden:
+**Falle:** `node engine/pruefen.mjs` läuft nur aus `~/dev/website-factory`, und
+Playwright braucht `channel: 'chrome'` — auf diesem Mac gibt es kein eigenes
+Chromium.
+
+---
+
+## ⚠ ZUERST LESEN: die Bildübertragung war zwei Sitzungen lang blockiert
+
+Am 20. und 21.08. konnte ich **kein einziges Bild ansehen** — weder Karols
+Screenshots, noch Mobbin-Referenzen, noch die eigene Seite. Auch heruntergeladene
+und auf 520 px verkleinerte Dateien wurden abgelehnt; es lag am aufgebrauchten
+Bildkontingent der Sitzung, nicht an der Dateigrösse.
+
+**Folge: die ganze Seite ist gemessen, aber nicht gesehen.** Jede Zahl in den
+Commit-Nachrichten stimmt. Ob es SCHÖN ist, weiss niemand ausser Karol.
+
+**Erste Handlung einer neuen Sitzung: die Seite ansehen.** Screenshots bei
+1440 und 393 px, Hero, Reise, Galerie, Karte. Danach erst weiterbauen.
+
+Was in diesen zwei Sitzungen nur über Messung ging und dringend ein Augenpaar
+braucht: die Reise (Flugbahn, Grösse des Schiffchens, Zeitpunkt des Bruchs),
+die Galerie (Versätze, Rahmen), die Kopfzeile über dem Video.
+
+---
+
+## Was zuletzt gebaut wurde
+
+| Commit | |
+|---|---|
+| `bc57e84` | Reise auf EIN Objekt, XL — plus `ABLICHTUNG.md` |
+| `7d819ca` | echte Speisekarte, 22 Sorten mit Preisen; Handarbeit raus |
+| `ceee8f2` | Hero-Video am Rechner schärfer; ein Fehlalarm zurückgenommen |
+
+**Die Seite besteht aus:** Hero mit Video → Reise (gepinnt, ein XL-Objekt, das
+aufbricht) → Galerie (waagerecht, 3D-Drehung) → Karte (22 Gerichte) → Laden →
+Bestellen → Fuss.
+
+**Nicht mehr in der Seite, Dateien liegen aber:** `Schaustueck.tsx` (von der
+Reise ersetzt), `Handarbeit.tsx` (erzählte die Reise ein zweites Mal UND trug
+die vier erzeugten Gerichte).
+
+---
+
+## Der Farbstand — er hat sich dreimal gedreht
+
+Endstand nach Karols Entscheidung vom 21.08. abends:
+
+```
+Clay hell   oklch(93% 0.030 72)   #F5E5D3   Regelfall
+Clay tief   oklch(87% 0.045 66)   #E9CFB6   zweiter Grund
+Nacht       #1D140E                          Fuss und Schrift
+Glut        oklch(48% 0.145 60)   #964300   EINE Sektion (die Reise), CREME darauf
+Orange      #FE6201                          ihr Logo-Orange, nie als Fläche
+Akzent      oklch(48% 0.130 43)              die dunkle Stufe ihres Orange
+```
+
+**Die Regel, die drei Umwege gekostet hat:** ein helles Orange braucht dunkle
+Schrift, ein dunkles braucht helle. Man kann nicht die Fläche des einen mit der
+Schrift des anderen kombinieren. `#FE6201` trägt Schwarz (6,01) und kein Creme
+(2,76); `#964300` trägt Creme (6,20) und kein Schwarz (2,68). Karol wollte den
+GEBRANNTEN — den aus der Fatayer-Rauch-Sequenz.
+
+---
+
+## Was fehlt, und alles hängt am Inhaber
+
+`ABLICHTUNG.md` ist die Seite zum Weitergeben. Kurzfassung:
+
+1. **Ein Foto vom Käseschiff** nach fünf Bedingungen (ein Stück allein, Luft an
+   allen vier Seiten, ruhiger andersfarbiger Untergrund, von schräg vorn,
+   Licht von einer Seite) — plus dasselbe Gericht einmal aufgebrochen.
+   Ohne das bleibt der Höhepunkt der Seite ein Platzhalter, den Karol selbst
+   „hässlich" genannt hat.
+2. **Das Käseschiff-Video im Original.** WhatsApp liefert 464×848; das Original
+   ist 1080×1920. Nicht über WhatsApp schicken — AirDrop oder Drive-Link.
+3. **Impressum:** Firma mit Rechtsform, ladungsfähige Anschrift, E-Mail,
+   Hoster, Streitbeilegung. Ohne diese fünf darf die Seite nicht live.
+4. **Der Allergen-Schlüssel** von seinem Flyer. Die Karte führt Buchstaben
+   (G, C, F, E, A), deren Legende nicht mitfotografiert wurde. In
+   `inhalt/speisekarte.json` steht deshalb nur, was WÖRTLICH in seiner
+   Zutatenliste vorkommt — nichts geraten.
+5. **Drei Widersprüche**, siehe `rohbilder/FUNDE.md`: zwei Logos (das grüne mit
+   Olivenkranz!), drei Telefonnummern, zwei Firmennamen.
+
+---
+
+## Werkzeug, das in diesen Sitzungen entstanden ist
+
+```
+werkzeug/freistellen.py     freistellen + bewerten (Randkontakt, Deckung, Teile)
+werkzeug/kanten.py          WELCHE Kante berührt — unten offen ist verzeihlich
+werkzeug/ernten.py          einzelne Gegenstände aus Gruppenfotos lösen
+werkzeug/schaufenster.py    alle Freisteller als Seite (Umgehung der Blindheit)
+werkzeug/besetzung.py       Kandidaten in Flug-Grösse auf dem echten Grund
+werkzeug/kopf-vermessen.py  fremde Kopfzeilen aus Mobbin AUSMESSEN
+werkzeug/reise-assets.py    Flugobjekte + den Bruch in den Alphakanal schneiden
+werkzeug/galeriebilder.py   Galeriebilder zuschneiden und ableiten
+```
+
+Läuft in `.venv-bild` — **Python 3.11**, weil es für 3.14 kein `onnxruntime`
+gibt und rembg ohne das nicht startet.
 
 ```bash
-cd ~/dev/website-factory && mkdir -p node_modules
-ln -sfn ~/Desktop/03_OS_Projects/LifeOS/browser-service/node_modules/playwright node_modules/playwright
-ln -sfn ~/Desktop/03_OS_Projects/LifeOS/browser-service/node_modules/playwright-core node_modules/playwright-core
+python3.11 -m venv .venv-bild
+.venv-bild/bin/pip install "rembg[cpu]" pillow numpy scipy
 ```
 
-Auf diesem Mac gibt es kein eigenes Chromium — immer `channel: 'chrome'`.
-
 ---
 
-## Drei Entscheidungen liegen bei Karol
+## Die teuersten Fallen dieser Woche
 
-Alle drei liegen als **umschaltbare Fassungen** im Code. Sobald entschieden
-ist, fliegt die Verliererin raus — damit nicht zwei Wahrheiten stehen bleiben.
+**Zwei `transform` auf einem Knoten überschreiben einander still.** Vier
+Bewegungen am Ladenschild = vier Knoten. Dieselbe Falle hat auch die
+Galerie-Drehung gekostet.
 
-### 1. Die Farbfassung
+**`getBoundingClientRect` enthält Transformationen bereits.** Wer sie noch
+einmal verrechnet, rechnet sie weg — die Winkel standen still, während die Bahn
+fuhr.
 
-```js
-document.documentElement.setAttribute('data-farbe','clay')  // Karols Vorschlag
-document.documentElement.setAttribute('data-farbe','ofen')  // Empfehlung
-document.documentElement.removeAttribute('data-farbe')      // Ist-Zustand
-```
+**Ein Flex-Kind hat `min-width: auto`** und kann nicht unter seine
+Inhaltsbreite. Häufigste Ursache für seitlichen Überlauf, am Rechner nie
+sichtbar.
 
-Gemessen aus dem Scan ihrer alten Seite: Orange `#fe6201`, Schwarz `#1d140e`.
-Und die Messung, die alles entscheidet — **ihr Orange wird erst auf dunklem
-Grund zur Markenfarbe**:
+**Doppelte Glättung.** Lenis glättet 1,1 s; ein `scrub: 1` legt eine zweite
+Sekunde darauf. Gemessen: 16 % des Weges in den ersten 100 ms. Jetzt `true`
+für die Hauptfahrt, 0,35 sonst — 52 %.
 
-| | |
-|---|---|
-| ihr Orange als Schrift auf Clay | 2,27 durchgefallen |
-| Tinte auf ihrem Orange als Fläche | 4,57 knapp |
-| ihr Orange auf ihrem Schwarz | **6,01 sitzt** |
-| Creme auf ihrem Schwarz | **16,34 sitzt** |
+**Eine Leinwand ohne CSS-Grösse bleibt 300×150.** Der Dampf quoll zwei Tage
+lang aus einer Briefmarke, weil `.dampf` keine Masse setzte.
 
-Empfehlung `ofen`: Clay als Grund über die ganze Seite, und die eine
-Ausnahmesektion in ihrem Schwarz mit ihrem Orange. Seit die Startseite dunkel
-ist, spricht die Seite damit durchgehend dieselbe Sprache.
+**`naturalWidth` ist bei `srcset` dichtekorrigiert.** Nicht die Dateigrösse.
+Hat mich einen falschen Befund gekostet.
 
-### 2. Der Telefonknopf in der Kopfzeile
-
-```js
-document.documentElement.setAttribute('data-probe','rot')   // ihr Logorot
-document.documentElement.removeAttribute('data-probe')      // Clay/Glas
-```
-
-### 3. Der Deckel von 10 Bildschirmhöhen
-
-Der Auftrag deckelt bei 10 am Handy, 11 am Rechner. Aktuell: **Handy 10,9**,
-Rechner 9,3. Der Überhang ist der Preis des gepinnten Schaustücks — ein
-gepinnter Abschnitt kostet seinen Scrollweg zusätzlich zu seiner Höhe.
-
-Drei Wege: Deckel auf 11,5 anheben (die Fabrik warnt erst bei 15) · die Karte
-hinter „alle neun anzeigen" kürzen (~1,5 Höhen, versteckt aber das, wofür Gäste
-kommen) · das Schaustück streichen.
-
----
-
-## Was vom Chef fehlt — und was es freischaltet
-
-| fehlt | schaltet frei |
-|---|---|
-| **11 Gerichtefotos**, 3–4 Ansichten je Gericht | „Die Reise" (das eigentliche Showpiece) und ein Schaustück mit echtem Essen |
-| **Ein Frontfoto bei Abendlicht** | die Startseite — sie erwartet jetzt ein Bild bei voller Stärke |
-| **Ofenfoto** | Schritt 03 im Prozess, plus die zweite Dampfquelle (gebaut, wartet) |
-| **9 Preise** | neunmal „—" wird eine Karte |
-| **Öffnungszeiten** | die sichtbare Lücke im Hero, der Live-Status, `openingHours` bei Google |
-| **Anschrift, Rechtsform, E-Mail, Hoster, VSBG-Aussage** | Impressum, Datenschutz, Kartensuche — und den Livegang überhaupt |
-| **Lieferando/Uber/Wolt: ja oder nein** | drei Namen ohne Link im Bestellen |
-
-Alles davon sind Zeilen in `src/aram.config.ts` und `inhalt/zeiten.json`.
-`lueckenVorLive()` blockiert den Livegang, solange etwas davon fehlt, und die
-Konsole meldet es bei jedem Start.
-
----
-
-## Was noch niemand gebaut hat
-
-- **Ein Zuhause.** Keine Domain, kein Server, kein Vorschaulink. Deshalb hat
-  der Chef die Seite bisher nur über Karols Bildschirm gesehen.
-- **Die Reise** — das Herzstück aus der Direktion, 0 %.
-- **Messung**, ob überhaupt jemand anruft.
-- **Ein Test auf einem echten Gerät.** Alles Gemessene lief in einem
-  gesteuerten Browser auf einem Mac.
-
----
-
-## Fallen, die diese Sitzung gekostet haben
-
-Damit sie nicht zweimal Zeit kosten:
-
-- **`[hidden]` schlägt kein eigenes `display`.** Das Handymenü lag deshalb
-  bildschirmfüllend über der Seite, auch am Rechner. Wer `display` an einem
-  Element setzt, das `hidden` tragen kann, muss `[hidden] { display: none }`
-  mitschreiben.
-- **`backdrop-filter` macht ein Element zum enthaltenden Block** für alle
-  `position: fixed`-Nachfahren — wie `filter` und `transform`. Deshalb hängt
-  das Menü per Portal am `<body>`.
-- **Eine klebende Kopfzeile, die ihre Höhe ändert, schiebt die ganze Seite.**
-  Sie ist jetzt `fixed`, der Platz kommt vom Innenabstand am `<body>`.
-- **Text auf einer Fotografie rechnet man nicht, man misst ihn** — am
-  zusammengesetzten Pixel, nicht am Token. Drei Werte sind so durchgefallen,
-  die auf dem Papier gestimmt hätten.
-- **Wer eine Grundregel dreht, muss ihre Ausnahmen mitdrehen.** Der Hero war
-  auf hell gedreht, die Handy-Ausnahme trug noch den Cremeschleier: 1,06.
-- **`will-change` kostete hier zweimal mehr, als es brachte** — einmal 30
-  Ebenen ab dem Laden, einmal einen Neuumbruch bei `text-wrap: balance`.
-- **Der gläserne Kopf kostet Bildrate.** Gemessen: schlimmster Frame 54 ms mit
-  Glas gegen 28 ms ohne. Erste Stellschraube, falls die Seite je zäh wirkt.
-
----
-
-## Zuletzt gemessen (`0c5454a`, Produktionsbau)
-
-Prüfer **ohne Befund** · CLS 0,004 · 0 Konsolenfehler · 0 lange Aufgaben ·
-Handy 10,9 / Tablet 9,3 / Laptop 9,3 Bildschirmhöhen.
-
-Kontraste im neuen Hero, am Pixel gemessen: Rechner 5,44–18,43 ·
-Handy 4,71–18,01 · Kopfzeile 5,64.
-
-**Higgsfield: 49 von 60 Credits verbraucht.**
+**Der Prüfer kann selbst falsch liegen.** Sein „8 von 10 durchgefallen" beim
+Freistellen war zu streng: er zählte den ganzen Umfang statt je Kante.
