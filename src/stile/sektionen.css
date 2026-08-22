@@ -2793,3 +2793,10 @@
   content-visibility: auto;
   contain-intrinsic-size: auto 2400px;
 }
+
+/* Die Reise ebenso: drei grosse Freisteller plus drei Leinwände. Der Wert ist
+   die gemessene Höhe der angehefteten Bühne bei 1440 px. */
+.reise {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 792px;
+}

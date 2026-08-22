@@ -17,6 +17,7 @@ import Kopfzeile from './komponenten/Kopfzeile.tsx'
 import Backstube from './komponenten/Backstube.tsx'
 import Galerie from './komponenten/Galerie.tsx'
 import Handarbeit from './komponenten/Handarbeit.tsx'
+import Reise from './komponenten/Reise.tsx'
 import Karte from './komponenten/Karte.tsx'
 import Laden from './komponenten/Laden.tsx'
 import Bestellen from './komponenten/Bestellen.tsx'
@@ -137,6 +138,26 @@ function Seite() {
             Reise.tsx bleibt liegen. Wenn das Foto aus ABLICHTUNG.md kommt, ist
             sie in einer Zeile wieder da — dann aber auf hellem Grund. */}
         <Handarbeit />
+
+        {/* ═══ Die Reise ist zurück — an einer anderen Stelle ═══
+
+            Karol am 22.08.: „nutze higgsfield mcp um das riesen käseschiff
+            teilbare animation 3d scroll driven landingpage vibe."
+
+            Sie steht jetzt NACH der Handarbeit, nicht davor. Der Grund ist
+            sein eigener Einwand von heute früh: sie stand auf gebranntem
+            Orange direkt unter einer Startseite, die hell sein soll — ein
+            dunkler Block als Erstes nach dem Hero.
+
+            An dieser Stelle stimmt sie: hell (Hero), hell (Handarbeit), dann
+            EIN dunkler Einschnitt, dann Clay tief (Galerie), dann hell
+            (Karte). Der Bruch ist damit der Höhepunkt in der Mitte, nicht die
+            Begrüssung.
+
+            Der Gegenstand ist erzeugt und gegen dieselben fünf Bedingungen
+            geprüft, die ABLICHTUNG.md vom Inhaber verlangt. Er wird getauscht,
+            sobald das echte Foto da ist. */}
+        <Reise />
         {/* Das Schaustück ist RAUS, seit es die Reise gibt. Es war eine
             zweite angeheftete Sequenz mit demselben Zweck — ein Gericht, das
             sich beim Scrollen aufbaut. Zwei davon hintereinander sind keine

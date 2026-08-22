@@ -55,7 +55,18 @@ def brechen(im, streuung=0.05, glaette=0.82):
 #
 # QUELLE HIER TAUSCHEN, sobald das Foto aus ABLICHTUNG.md da ist. Sonst ändert
 # sich nichts — die Zeitleiste in Reise.tsx bleibt, wie sie ist.
-QUELLE = 'stueck-20-01.png'
+# Am 22.08. getauscht: nicht mehr der Freisteller aus einem WhatsApp-Foto,
+# sondern ein erzeugtes Bild — auf Karols ausdrückliche Anweisung („nutze
+# higgsfield mcp um das riesen käseschiff teilbare animation").
+#
+# Es ist gegen DIESELBEN fünf Bedingungen geprüft worden, die ABLICHTUNG.md vom
+# Inhaber verlangt (werkzeug/kandidat-pruefen.py). Ergebnis für diesen
+# Kandidaten: Randkontakt 0,00 %, ein zusammenhängendes Teil, Trennung 64,
+# Grundruhe 30,0, Schärfe 1709 — der schärfste von drei.
+#
+# Es bleibt erzeugtes Essen. Sobald das echte Foto aus ABLICHTUNG.md da ist,
+# wird hier eine Zeile getauscht und sonst nichts.
+QUELLE = '../erzeugt/schiff-b-frei.png'
 
 liste = {}
 schiff = zuschneiden(Image.open('rohbilder/frei/' + QUELLE).convert('RGBA'))

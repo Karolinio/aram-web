@@ -1,14 +1,14 @@
 {
  "schiff": {
   "breite": 1100,
-  "hoehe": 428
+  "hoehe": 454
  },
  "schiff-links": {
-  "breite": 700,
-  "hoehe": 447
+  "breite": 696,
+  "hoehe": 485
  },
  "schiff-rechts": {
-  "breite": 700,
-  "hoehe": 467
+  "breite": 692,
+  "hoehe": 487
  }
 }
