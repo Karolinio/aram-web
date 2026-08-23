@@ -18,6 +18,31 @@
 import hinweisRoh from '../inhalt/hinweis.json'
 import speisekarteRoh from '../inhalt/speisekarte.json'
 
+/**
+ * Das Foto eines Gerichts.
+ *
+ * ═══ Warum das Feld schon da ist, obwohl es die Bilder noch nicht gibt ═══
+ *
+ * Karol am 22.08.: „Am besten dann auch demnächst vormerken, dass da überall
+ * Bilder hinkommen … Mach mal die Logik rein. Bereite nur das vor, noch nicht
+ * die Bilder."
+ *
+ * Die Logik steht. Solange `bild` fehlt, zeigt die Karte kein Vorschaubild und
+ * reserviert dafür auch keinen Platz — 22 graue Kästen unter einer Karte, die
+ * sonst fertig aussieht, lesen sich als Fehler, nicht als Vorbereitung.
+ *
+ * Sobald die Aufnahmen kommen: je Gericht diese vier Angaben in
+ * inhalt/speisekarte.json eintragen, sonst nichts. Was gebraucht wird, steht in
+ * ABLICHTUNG.md.
+ */
+export type Gerichtbild = {
+  quelle: string
+  /** Was zu sehen ist — für Vorleseprogramme. Nicht der Gerichtname; der steht daneben. */
+  alt: string
+  breite: number
+  hoehe: number
+}
+
 export type Gericht = {
   name: string
   beschreibung: string
@@ -35,6 +60,8 @@ export type Gericht = {
   preis: number | null
   /** Pflicht, sobald Preise online stehen (LMIV). Leer ist ein Befund, kein Zustand. */
   allergene: string[]
+  /** Fehlt noch bei allen 22 Gerichten — siehe `Gerichtbild` und ABLICHTUNG.md. */
+  bild?: Gerichtbild
 }
 
 export type Gruppe = {

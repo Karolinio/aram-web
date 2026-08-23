@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react'
 import { inhalt, type Gericht } from '../inhalt.ts'
 import { anzahlVon, minus, plus } from '../bestellung.ts'
 import { useBestellung } from '../useBestellung.ts'
+import Bildschau from './ui/Bildschau.tsx'
 import { Kopf, Sektion } from './ui/bausteine.tsx'
 import Collage from './ui/Collage.tsx'
 
@@ -41,6 +42,8 @@ export const kennung = (name: string): string =>
 
 export default function Karte() {
   const [versteckt, setVersteckt] = useState<string[]>([])
+  /* Welches Gericht gerade gross zu sehen ist. `null` heisst: keins. */
+  const [gross, setGross] = useState<Gericht | null>(null)
   useBestellung() /* neu rendern, sobald sich die Auswahl ändert */
 
   /* Nur Allergene anbieten, die auf dieser Karte wirklich vorkommen. Ein Knopf
@@ -157,7 +160,15 @@ export default function Karte() {
         ) : (
           <div className="karte__gruppen">
             {gruppen.map((gr) => (
-            <div className="gruppe" key={gr.gruppe}>
+            <div
+              className="gruppe"
+              key={gr.gruppe}
+              /* Sobald EIN Gericht der Gruppe ein Foto hat, bekommen alle
+                 Zeilen der Gruppe die Bildspalte — auch die ohne. Sonst stünde
+                 in der Übergangszeit, in der die Fotos nach und nach kommen,
+                 jede zweite Zeile um 5 rem versetzt. */
+              data-mit-bild={gr.gerichte.some((x) => x.bild) ? 'ja' : 'nein'}
+            >
               <h3 className="gruppe__titel">{gr.gruppe}</h3>
               {gr.hinweis && <p className="gruppe__hinweis">{gr.hinweis}</p>}
 
@@ -167,6 +178,38 @@ export default function Karte() {
                   const anzahl = anzahlVon(g.name)
                   return (
                     <li className="zeile" id={id} key={id}>
+                      {/* ═══ Der Bildplatz ═══
+
+                          Karol: „Entweder man sieht es von Anfang an, wie so
+                          ein Produktbild, oder wenn man draufklickt, öffnet
+                          sich ein grösseres. Beides."
+
+                          Beides, und deshalb ist das Vorschaubild ein KNOPF und
+                          kein Bild: es zeigt sofort, was es ist, und öffnet auf
+                          Klick die grosse Ansicht. Ein Bild mit einem
+                          Klickhorcher darauf wäre dasselbe zu sehen und für
+                          Tastatur und Vorleseprogramm nichts.
+
+                          Ohne Foto steht hier nichts — auch kein Platzhalter.
+                          Siehe `Gerichtbild` in inhalt.ts. */}
+                      {g.bild && (
+                        <button
+                          type="button"
+                          className="zeile__bild"
+                          onClick={() => setGross(g)}
+                        >
+                          <img
+                            src={g.bild.quelle}
+                            alt=""
+                            width={g.bild.breite}
+                            height={g.bild.hoehe}
+                            loading="lazy"
+                            decoding="async"
+                          />
+                          <span className="visuell-versteckt">{g.name} gross ansehen</span>
+                        </button>
+                      )}
+
                       <div className="zeile__wort">
                         {/* Name, Punktlinie, Preis — auf EINER Grundlinie.
                             Bei Monte und Corgi nachgesehen: in einer gesetzten
@@ -248,6 +291,11 @@ export default function Karte() {
           </div>
         )}
       </div>
+
+      {/* Sie liegt AUSSERHALB der Liste: ein `dialog` in einem `li` wäre im
+          Baum an einer Stelle, an der Vorleseprogramme ein Listenelement
+          erwarten — und es gibt nur eines davon, nicht zweiundzwanzig. */}
+      <Bildschau gericht={gross} schliessen={() => setGross(null)} />
     </Sektion>
   )
 }

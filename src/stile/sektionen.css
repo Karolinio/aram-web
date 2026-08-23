@@ -1728,13 +1728,25 @@
  * einem Blick zusammenbleiben — und sie halbiert nebenbei die Höhe.
  */
 .karte__gruppen {
+  /* Eine Zahl, drei Regeln: Spaltenbreite, Bildbreite, Bildhöhe. */
+  --bildplatz: clamp(3.4rem, 7vw, 4.6rem);
   display: grid;
   gap: 0 clamp(2.5rem, 5vw, 5rem);
 }
 
-@media (min-width: 1000px) {
-  .karte__gruppen { grid-template-columns: 1fr 1fr; align-items: start; }
-}
+/**
+ * ═══ KEIN zweites Zweispalten-Raster mehr ═══
+ *
+ * Hier stand `grid-template-columns: 1fr 1fr`. Es sollte die Gruppen
+ * nebeneinander setzen — und tat das auch, solange es mehrere Gruppen gab. Es
+ * gibt aber genau eine, und seit die Gerichteliste selbst zwei Spalten hat,
+ * lagen zwei Zweispalter ineinander: gemessen 290 px je Gerichtspalte, in denen
+ * Name, Punktlinie, Preis und Zähler nebeneinander stehen sollten.
+ *
+ * Eine gesetzte Karte macht es andersherum: jede Gruppe bekommt die volle
+ * Breite, und die GERICHTE darin laufen in zwei Spalten. Das gilt auch, wenn
+ * eines Tages mehr als eine Gruppe da ist.
+ */
 
 .gruppe { margin-bottom: clamp(2.5rem, 4vw, 3.5rem); }
 
@@ -1763,7 +1775,43 @@
   color: var(--tinte-leise);
 }
 
-.gruppe__liste { list-style: none; padding: 0; margin: 1rem 0 0; }
+/**
+ * ═══ Die 22 Gerichte laufen in ZWEI Spalten ═══
+ *
+ * Karol am 22.08.: „die geht schon sehr lang nach unten. Vielleicht sortiere es
+ * ein bisschen, sodass auf links und rechts … halb so viel Platz nach unten
+ * verbraucht wird."
+ *
+ * Zweispaltig war die Karte schon — aber auf GRUPPEN-Ebene, und es gibt nur
+ * eine Gruppe. Das Raster hatte also eine Zelle zu füllen und eine leer, und
+ * die 22 Gerichte standen weiter alle untereinander. Ein Fehler, der nur
+ * auffällt, wenn man die Seite mit echten Daten ansieht statt mit zwei
+ * Beispielgruppen.
+ *
+ * `columns` und nicht Raster: eine gesetzte Speisekarte liest sich SPALTENWEISE
+ * — 1 bis 11 links, 12 bis 22 rechts. Ein Raster füllt zeilenweise, und dann
+ * steht die 2 rechts neben der 1. Bei durchnummerierten Gerichten ist das
+ * falsch herum.
+ *
+ * `break-inside: avoid` an der Zeile, sonst reisst der Umbruch ein Gericht
+ * zwischen Name und Preis auseinander.
+ */
+.gruppe__liste {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0;
+}
+
+@media (min-width: 900px) {
+  .gruppe__liste {
+    columns: 2;
+    column-gap: clamp(2rem, 4vw, 4rem);
+    /* Eine Haarlinie zwischen den Spalten — dasselbe Mittel wie auf einer
+       gedruckten Karte, und es erspart die Frage, wo die eine aufhört. */
+    column-rule: 1px solid var(--linie);
+  }
+  .gruppe__liste > .zeile { break-inside: avoid; }
+}
 
 /**
  * Eine Zeile der Speisekarte.
@@ -1788,6 +1836,157 @@
   align-items: center;
   column-gap: clamp(0.75rem, 2vw, 1.5rem);
   padding-block: 1rem;
+}
+
+/**
+ * ═══ Der Bildplatz — vorbereitet, noch leer ═══
+ *
+ * Sobald ein Gericht ein Foto trägt, bekommt die ganze GRUPPE die Bildspalte:
+ * eine feste erste Spalte, in der auch die Zeilen ohne Foto ihren Platz
+ * freilassen. Ohne das stünde in der Übergangszeit jede zweite Zeile versetzt.
+ *
+ * Solange kein einziges Foto da ist, existiert die Spalte nicht — 22 leere
+ * Kästen unter einer sonst fertigen Karte lesen sich als Fehler.
+ */
+.gruppe[data-mit-bild='ja'] .zeile {
+  grid-template-columns: var(--bildplatz) minmax(0, 1fr) auto;
+}
+.gruppe[data-mit-bild='ja'] .zeile__wort { grid-column: 2; }
+.gruppe[data-mit-bild='ja'] .zaehler { grid-column: 3; }
+
+.zeile__bild {
+  grid-column: 1;
+  grid-row: 1;
+  width: var(--bildplatz);
+  aspect-ratio: 1;
+  padding: 0;
+  border: 0;
+  border-radius: var(--rund-klein, 0.5rem);
+  overflow: hidden;
+  background: var(--ton-tief);
+  cursor: pointer;
+  /* Der Rahmen gehört zum Ruhezustand, nicht erst zum Schweben — sonst
+     springt beim Zeigen die Grösse des Kastens. */
+  outline: 1px solid var(--linie);
+  outline-offset: -1px;
+  transition:
+    transform var(--dauer-schnell, 150ms) var(--kurve, ease),
+    outline-color var(--dauer-schnell, 150ms) var(--kurve, ease);
+}
+
+.zeile__bild img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (hover: hover) {
+  .zeile__bild:hover { transform: scale(1.04); outline-color: var(--akzent); }
+}
+.zeile__bild:focus-visible { outline: 2px solid var(--akzent); outline-offset: 2px; }
+
+/* ── Die grosse Ansicht ────────────────────────────────────────────────────
+ *
+ * `dialog` liegt in der obersten Ebene des Browsers. Kein `z-index` nötig —
+ * und das ist hier keine Feinheit, sondern der Grund für die Wahl: das
+ * Käseschiff liegt fest im Fenster bei z-index 40, die Kopfzeile bei 100.
+ */
+.bildschau {
+  /* `margin: auto` AUSDRÜCKLICH. Der Browser setzt es im Voreinstellungsblatt
+     für `dialog`, aber jede eigene `margin`-Regel im Projekt — und `*` mit
+     `margin: 0` ist die häufigste — nimmt es wieder weg. Sichtbar war das als
+     Fenster, das links oben klebte. */
+  margin: auto;
+  width: min(92vw, 46rem);
+  max-height: 88vh;
+  padding: 0;
+  border: 0;
+  border-radius: var(--rund, 0.9rem);
+  background: var(--ton-hell);
+  color: var(--tinte);
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.bildschau::backdrop {
+  background: oklch(18% 0.03 50 / 0.72);
+  backdrop-filter: blur(3px);
+}
+
+.bildschau__innen { position: relative; }
+
+.bildschau__bild {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* Ein Produktfoto darf nicht die ganze Höhe des Fensters nehmen — sonst
+     steht der Name unter der Falte, und der ist der Grund fürs Öffnen. */
+  max-height: 56vh;
+  object-fit: cover;
+}
+
+.bildschau__luecke {
+  margin: 0;
+  padding: clamp(2rem, 6vw, 4rem) var(--raum-schale);
+  text-align: center;
+  color: var(--tinte-leise);
+}
+
+.bildschau__zu {
+  position: absolute;
+  top: 0.7rem;
+  right: 0.7rem;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border: 0;
+  border-radius: 50%;
+  background: var(--creme-glas-hoch, oklch(97% 0.015 78 / 0.92));
+  color: var(--tinte);
+  font-size: 1rem;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+}
+.bildschau__zu:focus-visible { outline: 2px solid var(--akzent); outline-offset: 2px; }
+
+.bildschau__wort { padding: clamp(1.1rem, 3vw, 1.8rem); }
+
+.bildschau__titel {
+  display: flex;
+  align-items: baseline;
+  margin: 0;
+  font-family: var(--font-display);
+  font-variation-settings: var(--wonk-kopf);
+  font-size: clamp(1.35rem, 1.1rem + 1vw, 1.9rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.bildschau__preis {
+  margin: 0.35rem 0 0;
+  font-family: var(--font-display);
+  font-variation-settings: var(--wonk-klein);
+  font-size: 1.15rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.bildschau__text { margin: 0.7rem 0 0; max-width: 44ch; }
+
+.bildschau__allergene {
+  margin: 0.7rem 0 0;
+  font-size: var(--text-micro);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--tinte-leise);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zeile__bild { transition: none; }
+  .zeile__bild:hover { transform: none; }
 }
 
 /* Name — Punktlinie — Preis, auf einer Grundlinie. */

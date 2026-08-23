@@ -92,3 +92,40 @@ oben. Das ist die Grundlage der Speisekarte.
 - **Lieferdienste:** bei Lieferando, Uber Eats oder Wolt gelistet?
 - Auf der Karte fehlt die **Nummer 12**, und die **22** gibt es zweimal
   (Lahmacun für 2,00 und für 2,50). Was stimmt?
+
+---
+
+## Nachtrag 23.08.2026 — die Gerichtefotos
+
+Die Speisekarte ist jetzt darauf **vorbereitet**: jedes Gericht kann ein Foto
+tragen, es erscheint als Vorschaubild neben dem Namen, und ein Klick öffnet es
+gross mit Preis, Beschreibung und Allergenen. Solange kein Foto da ist, steht
+dort auch kein Platzhalter — die Karte sieht fertig aus, weil sie es ist.
+
+**Es sind 22 Gerichte.** Das ist der Punkt, über den vorher gesprochen werden
+muss: 22 Aufnahmen an einem Tag sind ein halber Arbeitstag, und ungleich
+aufgenommen sind sie schlimmer als gar keine.
+
+### Was eine Aufnahme brauchbar macht
+
+1. **Immer dieselbe Kameraposition.** Handy auf einen Stapel Bücher, senkrecht
+   von oben, und dann nicht mehr anfassen. Nur das Gericht wechselt.
+2. **Immer dasselbe Licht.** Tageslicht vom Fenster, kein Blitz, keine
+   Deckenlampe dazu. Am besten vormittags, immer zur selben Zeit.
+3. **Immer derselbe Untergrund.** Ein Blech, ein Brett, ein Tuch — eins davon,
+   und dann für alle 22.
+4. **Ein Gericht pro Bild.** Kein Teller mit drei Sorten.
+5. **Quadratisch denken.** Das Vorschaubild ist quadratisch; was am Rand liegt,
+   wird abgeschnitten. Das Gericht mittig, ringsum etwas Luft.
+
+### Wie sie zu uns kommen
+
+**Nicht über WhatsApp.** Der Dienst rechnet jedes Bild klein — aus 4000 px
+werden 1200, und das sieht man auf einem grossen Bildschirm sofort. Bitte über
+einen Link (Drive, Dropbox, WeTransfer) oder AirDrop, als Originaldatei.
+
+### Reihenfolge, falls es zu viel auf einmal ist
+
+Die zehn meistbestellten zuerst. Zehn gute Fotos sind besser als 22 mittelmässige
+— die Karte kommt mit gemischtem Bestand zurecht: Zeilen ohne Foto bekommen
+trotzdem denselben Einzug, damit nichts versetzt steht.
