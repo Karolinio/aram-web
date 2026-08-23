@@ -3,8 +3,6 @@ import type { CSSProperties } from 'react'
 import { useBildfolge, useFlug, useMedienabfrageBreit, useVersatz } from '../bewegung.ts'
 import { GEBAECKE, type Gebaeck } from '../gebaecke.ts'
 import { Bild, Etikett, Kopf, Sektion } from './ui/bausteine.tsx'
-import Auftritt from './ui/Auftritt.tsx'
-import Collage from './ui/Collage.tsx'
 
 /**
  * Der Weg zum Fata’er — die Savor-Sequenz.
@@ -157,13 +155,21 @@ function Gebaeckstueck({ g }: { g: Gebaeck }) {
 export default function Handarbeit() {
   return (
     <>
-      <div className="band">
-        <Collage />
-        <p className="band__satz schale">
-          <Auftritt versatz={0.075}>Du siehst zu, wie dein Fata’er entsteht.</Auftritt>
-        </p>
-      </div>
+      {/* ═══ Das Band ist RAUS ═══
 
+          Karol am 23.08.: „Naja, das gehört halt dazu zu diesem Sektion
+          Fiasko, ganz direkt unter der Startseite. Das fuckt mich so arsch …
+          ‚Du siehst zu, wie dein Fata’er entsteht' — auch rausnehmen." Und zu
+          der Collage dahinter: „Ich weiss auch nicht, ob das dir diese Blasen
+          darstellen sollen … keine Ahnung, was das sein soll."
+
+          Wenn der Betrachter fragen muss, was etwas darstellen soll, stellt es
+          nichts dar. Die Collage waren freigestellte Gebäcke bei 8 % Deckkraft
+          — als Textur gedacht, gelesen als Flecken. Beides ersatzlos weg: der
+          Hero geht jetzt ohne Zwischenstück in die erste Sektion.
+
+          Auftritt.tsx und Collage.tsx bleiben liegen; sie werden woanders
+          gebraucht. */}
       <Sektion grund="hell" klasse="prozess" beschriftetVon="prozess-titel">
         <div className="schale prozess__buehne">
           <Kopf

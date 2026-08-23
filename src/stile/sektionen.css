@@ -947,15 +947,11 @@
   letter-spacing: 0.16em;
   text-transform: uppercase;
   white-space: nowrap;
-  /* Volle Tinte, nicht die gedämpfte. Über einem laufenden Video kann sich
-     eine Zeile keine Dämpfung leisten: gemessen kam sie in `--tinte-leise` auf
-     2,49 und fiel durch, in voller Tinte auf über 5. Gedämpft ist eine
-     Feinheit für ruhige Gründe. */
-  color: var(--tinte);
   max-width: none;
+  color: oklch(97% 0.015 78 / 0.82);
   text-shadow:
-    0 1px 1px oklch(96% 0.02 78 / 0.95),
-    0 2px 10px oklch(96% 0.02 78 / 0.85);
+    0 1px 2px oklch(12% 0.02 55 / 0.9),
+    0 0 12px oklch(12% 0.02 55 / 0.66);
 }
 
 /* Gemessen: bei 393 px Bildschirm ist die Zeile 364 px breit — bei 320 px liefe
@@ -1035,32 +1031,31 @@
  * Länge passen, nicht zur Skala.
  */
 .backstube__titel {
-  /* KLEIN, und das ist der Punkt. In Fassung 3 war die Schlagzeile das
-     Ereignis des Heros; jetzt ist es das Video, und das Logo ist der Ruhepunkt
-     darin. Eine Schlagzeile in 6,5 rem daneben wäre ein dritter Anspruch auf
-     dieselbe Stelle.
+  /* KLEIN, und das ist der Punkt. Das Ereignis dieses Heros ist das Video, der
+     Ruhepunkt darin ist ihr Logo. Eine Schlagzeile in 6,5 rem daneben wäre ein
+     dritter Anspruch auf dieselbe Stelle.
 
      Sie bleibt trotzdem eine echte h1 mit echtem Text: für Suchmaschinen und
      Vorleseprogramme ist ein Video ein leeres Rechteck und ein Logo ein Bild. */
   margin: 0;
-  max-width: 22ch;
+  max-width: 24ch;
   font-family: var(--font-display);
   font-variation-settings: var(--wonk-kopf);
-  font-size: clamp(1.35rem, 1.05rem + 1.4vw, 2.1rem);
-  font-weight: 700;
-  line-height: 1.12;
-  letter-spacing: var(--sperr-kopf);
+  font-size: clamp(1.05rem, 0.92rem + 0.62vw, 1.45rem);
+  font-weight: 620;
+  line-height: 1.22;
+  letter-spacing: 0.005em;
   text-wrap: balance;
-  color: var(--tinte);
-  /* Drei gestaffelte Schatten statt einer Fläche: ein enger heller Saum direkt
-     an der Kante, damit die Buchstaben sich vom Bild lösen, und zwei weite
-     helle Höfe, die die Stelle insgesamt aufhellen. Zusammen leisten sie, was
-     vorher der Schleier tat — nur genau dort, wo Schrift steht, statt über dem
-     ganzen Bild. */
+  /* Creme statt Weiss: auf dieser Seite kommt kein einziger kühler Ton vor,
+     und reines Weiss über gebackenem Teig liest sich als Fremdkörper. */
+  color: var(--creme);
+  /* Ein enger harter Saum für die Kanten, ein weiter weicher für die Stelle.
+     Zusammen leisten sie, was vorher der Schleier tat — aber nur dort, wo
+     Schrift steht, statt über dem ganzen Bild. */
   text-shadow:
-    0 1px 1px oklch(96% 0.02 78 / 0.95),
-    0 2px 12px oklch(96% 0.02 78 / 0.9),
-    0 6px 34px oklch(96% 0.02 78 / 0.75);
+    0 1px 2px oklch(12% 0.02 55 / 0.92),
+    0 0 10px oklch(12% 0.02 55 / 0.7),
+    0 0 26px oklch(12% 0.02 55 / 0.55);
 }
 
 /**
@@ -1822,6 +1817,30 @@
   max-width: none;
 }
 
+/**
+ * Die Nummer von ihrer gedruckten Karte.
+ *
+ * ═══ Sie hatte keine einzige Regel ═══
+ *
+ * Das Markup setzt sie seit dem ersten Tag als eigenes `span` vor den Namen —
+ * ohne Stilblatt stand sie damit ohne Abstand daran: „1Zaatar", „2Muhammara",
+ * zweiundzwanzigmal. Am Rechner fiel es kaum auf, am Handy sofort.
+ *
+ * Sie bekommt jetzt, was eine Nummer braucht: eigene Farbe (sie ist nicht Teil
+ * des Namens), Ziffern in fester Breite (sonst tanzen die Namen untereinander)
+ * und eine feste Spaltenbreite, damit alle Namen auf einer Kante beginnen.
+ * `inline-block` statt `float` oder Raster: die Zeile bleibt damit eine Zeile
+ * und bricht mit dem Namen um, wenn es eng wird.
+ */
+.zeile__nr {
+  display: inline-block;
+  min-width: 1.6em;
+  margin-right: 0.15em;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--tinte-leise);
+}
+
 .zeile__beschreibung {
   margin: 0.15rem 0 0;
   font-size: var(--text-meta);
@@ -2560,160 +2579,190 @@
   .galerie__bahn { padding-left: 0; }
 }
 
-/* ── Die Reise ────────────────────────────────────────────────────────────
+/* ── Die Riss-Sektion ─────────────────────────────────────────────────────
  *
- * Keine Anheftung mehr. Das Schiff hängt am Scroll und läuft ihm nach — die
- * Seite zieht hoch, es bleibt zurück und wandert dadurch langsam nach unten.
- * Ein Gegenstand, der einen begleitet, kann nicht anhalten.
+ * Sie enthält das Schiff NICHT mehr — das liegt fest im Fenster und wird von
+ * Kaeseschiff.tsx geführt. Was hier bleibt, ist der Raum, in dem gerissen
+ * wird: Höhe, damit der Riss Weg hat, und alles, was heiss ist.
  */
 .reise {
   position: relative;
-  /* Weg zum Fliegen. Ohne Mindesthöhe ist die Sektion nur so hoch wie ihr Text,
-     und die halbe Bahn fällt aus. */
-  min-height: 190vh;
+  /* Weg für den letzten Takt. Zwei Bildschirmhöhen: die erste bringt das
+     Schiff in die Mitte, die zweite reisst es auf. */
+  min-height: 185vh;
   overflow-x: clip;
   overflow-y: visible;
-  /* Gemeinsamer Fluchtpunkt für alle Kippbewegungen des Schiffs. */
-  perspective: 1500px;
-  perspective-origin: 50% 45%;
 }
 
-/* Die Bühne muss so hoch sein wie die Sektion, sonst hat das klebende Element
-   keinen Klebebereich: `sticky` klebt innerhalb seines Elternblocks, nicht
-   innerhalb der Sektion. Ohne diese Zeile war der Bereich nur so lang wie
-   Text plus eine Bildschirmhöhe — und das Schiff lief oben heraus. */
 .reise__buehne { position: relative; min-height: 175vh; }
 
-/* Der Text steht oben und bleibt stehen — er ist der Grund, warum die Sektion
-   überhaupt Höhe hat. Das Schiff zieht daran vorbei. */
+/* Der Text steht OBEN, nicht in der Mitte — in der Mitte reisst es. Er ist
+   zugleich der Grund, warum die Sektion überhaupt Höhe hat. */
 .reise__wort { position: relative; z-index: 2; padding-top: var(--raum-block); }
 
 .reise__funken {
   position: absolute;
   inset: auto 0 0;
-  height: 55%;
+  height: 62%;
   z-index: 0;
-  opacity: 0.6;
+  opacity: 0.62;
 }
 
-/**
- * Die Flugebene. Sie klebt oben in der Sektion und wird vom Haken verschoben —
- * `sticky` statt `absolute`, damit das Schiff über die ganze Länge im Bild
- * bleiben KANN und nicht nach der ersten Bildschirmhöhe verschwindet.
- */
-.reise__flug {
-  /**
-   * ═══ Eine volle Bildschirmhöhe, klebend ═══
-   *
-   * Zuerst stand hier `height: 0`. Ein klebendes Element ohne Höhe hat keinen
-   * Klebebereich — es verhielt sich wie ein normales und lief nach oben aus
-   * dem Bild. Gemessen stieg das Schiff von y 1475 auf 589, statt zu sinken.
-   *
-   * Der zweite Anlauf wollte das über die Flugbahn ausgleichen. Das geht,
-   * verlangt aber, dass der Gegenstand WEITER wandert als die Sektion lang ist
-   * — bei drei Bildschirmhöhen Sektion also über drei Bildschirmhöhen
-   * Versatz. Er hinge dann weit ausserhalb seiner Sektion.
-   *
-   * Richtig ist die Arbeitsteilung: das Kleben hält ihn im Bild, die Flugbahn
-   * gibt ihm die Drift. Eine volle Bildschirmhöhe als Klebefläche, der
-   * Gegenstand mittig darin, und der Haken verschiebt ihn darin um ein
-   * knappes Drittel nach unten.
-   */
-  position: sticky;
-  top: 0;
+.reise__mehl {
+  position: absolute;
+  inset: 26% 0 auto;
+  height: 62%;
   z-index: 1;
-  display: grid;
-  place-items: center;
-  height: 100vh;
-  transform-style: preserve-3d;
   pointer-events: none;
+}
+
+@media (max-width: 719px) {
+  .reise { min-height: 150vh; }
+  .reise__buehne { min-height: 140vh; }
+}
+
+/* ── Das Käseschiff ───────────────────────────────────────────────────────
+ *
+ * ═══ Warum es fest im Fenster liegt und nicht in einer Sektion ═══
+ *
+ * Karol: „Ich will, dass das Käseschiff von oben nach unten … runtergeht. Also
+ * so von links in der Kurve nach rechts und dann wieder nach links … Sektion
+ * 2, 3, 4 Scroll Driven."
+ *
+ * Ein Gegenstand, der über drei Sektionen reist, kann in keiner davon wohnen —
+ * er wäre an ihrer Unterkante zu Ende. `position: fixed` dreht das Verhältnis
+ * um: die Seite fährt darunter durch, das Schiff bleibt. Genau das ist der
+ * „magische Cursor als Pide", den er zwei Runden früher beschrieben hat.
+ *
+ * Die Bahn steht NICHT hier, sondern als Wegpunkttabelle in Kaeseschiff.tsx.
+ * Hier steht nur, was sich nicht bewegt: Grösse, Tiefe, Stapelordnung.
+ */
+.schiffbahn {
+  position: fixed;
+  inset: 0;
+  /* Unter der Kopfzeile (100) und unter der Bestellleiste, über allem
+     Sektionsinhalt. Ein Gegenstand, der VOR dem Kopf fliegt, verdeckt die
+     Telefonnummer — die wichtigste Zeile dieser Seite. */
+  z-index: 40;
+  pointer-events: none;
+  /* Der gemeinsame Fluchtpunkt für alle Kippbewegungen. Ohne ihn ist `rotateY`
+     eine Stauchung und keine Drehung. */
+  perspective: 1600px;
+  perspective-origin: 50% 45%;
+  /* Sonst schiebt das Schiff am äusseren Punkt der Bahn eine waagerechte
+     Bildlaufleiste über die ganze Seite. */
+  overflow: clip;
 }
 
 /**
  * ═══ Die Grösse — Karols „drei bis vier oder fünf Mal so gross" ═══
  *
  * Die fliegenden Gebäcke im Schwarm liegen bei 7 bis 11 % der Fensterbreite.
- * Das Fünffache davon wären 35 bis 55 %. Die vorige Fassung stand bei 62 % und
- * war ihm zu gross, der Schwarm bei 9 % zu klein.
+ * Das Fünffache wären 35 bis 55 %. Eine Fassung stand bei 62 % und war ihm zu
+ * gross, der Schwarm bei 9 % zu klein.
  *
- * 34 vw ist das Vierfache des Schwarms und knapp die Hälfte der alten Fassung.
- * Gross genug, dass man den Riss sieht; klein genug, dass es fliegt statt zu
- * stehen.
+ * 38 rem ist der Wert bei voller Skala — am Ende, beim Riss. Unterwegs steht
+ * das Schiff bei 26 bis 80 % davon: es kommt aus der Tiefe nach vorn, und der
+ * Riss ist der Moment, in dem es am nächsten ist.
  */
-.reise__schiff {
-  position: relative;
+.schiff {
+  /* `inset: 0` + `margin: auto` + feste Masse = exakt mittig, ohne eine
+     einzige Transformation. Das ist hier keine Feinheit, sondern Pflicht: die
+     Transformation gehört dem Flug, und zwei Schreiber auf derselben
+     Eigenschaft überschreiben einander still. */
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: min(84vw, 38rem);
+  aspect-ratio: 1100 / 454;
   display: grid;
-  place-items: center;
-  width: min(86vw, 34rem);
+  place-items: stretch;
   transform-style: preserve-3d;
   filter:
-    drop-shadow(0 20px 30px oklch(30% 0.055 55 / 0.34))
-    drop-shadow(0 4px 9px oklch(30% 0.055 55 / 0.26));
+    drop-shadow(0 22px 34px oklch(30% 0.055 55 / 0.3))
+    drop-shadow(0 5px 10px oklch(30% 0.055 55 / 0.24));
+  will-change: transform, opacity;
 }
 
-.reise__haelfte {
+/**
+ * ═══ Beide Hälften tragen die VOLLE Leinwand ═══
+ *
+ * Vorher war jede auf ihren Inhalt zugeschnitten und wurde mit `width: 50.4 %`
+ * und `justify-self` an ihren Platz gerückt. Das konnte nicht aufgehen: die
+ * linke Hälfte war 696 px breit, die rechte 692, das Ganze 1100 — drei Bilder
+ * mit drei Bezugsrahmen. Sichtbar war das als Spalt und als Versatz nach oben.
+ *
+ * Jetzt sind beide 1100 × 454, also deckungsgleich mit dem Ganzen. Sie liegen
+ * einfach übereinander, und die Drehachse liegt bei beiden in der Mitte — was
+ * genau die Bruchkante ist. Damit fällt `justify-self` ersatzlos weg, und mit
+ * ihm der Fehler, den Karol dreimal gemeldet hat.
+ */
+.schiff__haelfte {
   grid-area: 1 / 1;
-  width: 50.4%;
+  width: 100%;
   height: auto;
+  transform-origin: 50% 50%;
+  backface-visibility: hidden;
 }
-/* An der BRUCHKANTE verankert, nicht in der Mitte: die Hälften öffnen sich wie
-   ein Buch, statt um ihren eigenen Schwerpunkt zu kippen. */
-.reise__haelfte--links  { justify-self: end;   transform-origin: right center; }
-.reise__haelfte--rechts { justify-self: start; transform-origin: left center; }
 
-/* Die Fäden spannen über die ganze Breite des Schiffs und etwas darüber
-   hinaus — Käse, der reisst, hängt nach unten aus dem Bild heraus. */
-.reise__faeden {
-  /* KEIN `grid-area` neben `position: absolute` — absolut gesetzte Kinder
-     nehmen nicht am Raster teil, und die Angabe verwirrt nur den nächsten,
-     der es liest. */
+.schiff__faeden {
   position: absolute;
   left: 0;
   right: 0;
   top: 0;
-  height: 150%;
+  /* Doppelte Gebäckhöhe. Die Fäden setzen im oberen Viertel der Leinwand an
+     (siehe Kaesefaeden.tsx) und brauchen den Rest zum Durchhängen — Käse, der
+     reisst, bleibt nicht im Rechteck. */
+  height: 200%;
   z-index: 3;
 }
 
-.reise__bruchdampf {
+/* Getropft wird aus der Unterkante nach unten. Der Bereich beginnt bei 62 %
+   der Bildhöhe: dort endet die Käsefläche, darunter ist nur noch Kruste. */
+.schiff__tropfen {
   position: absolute;
-  left: -50%;
-  right: -50%;
-  bottom: 10%;
-  height: 320%;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.reise__mehl {
-  grid-area: 1 / 1;
-  position: absolute;
-  left: -40%;
-  right: -40%;
-  bottom: -20%;
-  height: 220%;
+  left: 6%;
+  right: 6%;
+  top: 62%;
+  height: 145%;
   z-index: 2;
   pointer-events: none;
 }
 
+/* Dampf steigt HINTER dem Gebäck auf, nicht davor — sonst liegt Nebel auf dem
+   Käse statt darüber. */
+.schiff__dampf {
+  position: absolute;
+  left: -20%;
+  right: -20%;
+  bottom: 30%;
+  /* Nicht höher. Bei 300 % wuchsen die Schwaden auf dem letzten Drittel so
+     weit auf, dass ihr dunkler Saum als RING gelesen wurde — sichtbar als
+     graue Kringel über dem Gebäck. Dampf, der Ringe macht, ist Rauch aus einem
+     Comic. */
+  height: 175%;
+  z-index: 0;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
 @media (max-width: 719px) {
-  .reise { min-height: 150vh; }
-  .reise__flug { top: 22vh; }
-  .reise__schiff {
-    width: 78vw;
-    filter: drop-shadow(0 14px 20px oklch(30% 0.055 55 / 0.36));
+  .schiff {
+    width: 88vw;
+    filter: drop-shadow(0 14px 22px oklch(30% 0.055 55 / 0.34));
   }
 }
 
 /**
- * Ohne Bewegungswunsch: kein Flug, kein Riss. Das Schiff steht ganz und ruhig
- * in der Sektion. Ersatz, nicht Abschaltung — dieselbe Aussage, ohne Bewegung.
+ * Ohne Bewegungswunsch fliegt gar nichts — Kaeseschiff.tsx rendert dann nichts.
+ * Die Riss-Sektion schrumpft entsprechend auf ihren Text zusammen.
  */
 @media (prefers-reduced-motion: reduce) {
   .reise { min-height: 0; padding-block: var(--raum-block); }
-  .reise__flug { position: static; height: auto; margin-top: var(--raum-block); }
-  .reise__funken, .reise__faeden, .reise__mehl { display: none; }
+  .reise__buehne { min-height: 0; }
+  .reise__funken, .reise__mehl { display: none; }
 }
+
 
 /**
  * ═══ Was nicht im Bild ist, wird nicht gerechnet ═══
@@ -2756,33 +2805,28 @@
 
 
 /**
- * Der Satz unter dem Video.
+ * Der Satz auf dem Video — klein, mit dunklem Saum.
  *
- * Er stand drei Fassungen lang ÜBER dem Bild und hat drei verschiedene
- * Hilfskonstruktionen gebraucht, damit er lesbar war: einen Schleier, einen
- * Lichthof, eine Platte. Jede davon hat Karol gesehen und weggewollt.
+ * ═══ Warum die drei Vorfassungen gescheitert sind ═══
  *
- * Auf Clay braucht er nichts davon — 11,18:1, gemessen, ohne einen einzigen
- * Zusatz. Das ist die Lehre: wenn Text auf einem Bild drei Krücken braucht,
- * gehört er nicht auf das Bild.
+ * Schleier, Lichthof, Platte: alle drei wollten die FLÄCHE ändern, damit eine
+ * grosse Schlagzeile darauf tragen kann. Karol hat jede einzeln gesehen und
+ * jede weggewollt, immer mit demselben Wort: „diesen weissen Schimmer weg."
+ *
+ * Der Fehler lag nicht in der Ausführung, sondern in der Grösse. Eine
+ * 3-rem-Zeile über einem Video, das von rgb(59,2,0) bis 230 läuft, braucht
+ * eine Fläche — es gibt keine Farbe, die über diese ganze Spanne trägt.
+ *
+ * Eine KLEINE Zeile braucht keine. Sie deckt wenige Prozent des Bildes, und
+ * ein dunkler Saum um helle Schrift ist das Mittel, mit dem jeder Untertitel
+ * dieser Welt arbeitet. Dunkel, nicht hell: der Schimmer, den er zweimal
+ * genannt hat, war ein LEUCHTEN. Ein Schatten leuchtet nicht.
  */
 .backstube__wort {
-  background: var(--ton-hell);
-  padding-block: clamp(2rem, 1rem + 4vw, 4rem) clamp(1.5rem, 1rem + 2.5vw, 2.75rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(0.55rem, 1.4vw, 0.9rem);
   text-align: center;
 }
 
-.backstube__wort .backstube__titel {
-  margin-inline: auto;
-  /* Grösser als über dem Video: hier steht sie allein auf einer ruhigen Fläche
-     und darf die Schlagzeile sein, die sie ist. */
-  font-size: clamp(1.9rem, 1.2rem + 2.6vw, 3.4rem);
-  max-width: 20ch;
-  text-shadow: none;
-}
-
-.backstube__wort .backstube__ort {
-  margin: clamp(0.9rem, 2vw, 1.4rem) auto 0;
-  color: var(--tinte-leise);
-  text-shadow: none;
-}

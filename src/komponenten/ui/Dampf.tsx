@@ -63,7 +63,7 @@ type Schwade = {
 type Props = {
   klasse?: string
   /** `hell` über Fotografie, `warm` über Creme. Siehe Kopf. */
-  ton?: 'hell' | 'warm'
+  ton?: 'hell' | 'warm' | 'ofen'
 }
 
 /** Kantenlänge des vorgemalten Wölkchens. Genug für weiche Ränder, wenig genug
@@ -86,7 +86,29 @@ export default function Dampf({ klasse, ton = 'hell' }: Props) {
     const wctx = wolke.getContext('2d')
     if (!wctx) return
     const v = wctx.createRadialGradient(SPRITE / 2, SPRITE / 2, 0, SPRITE / 2, SPRITE / 2, SPRITE / 2)
-    if (ton === 'hell') {
+    if (ton === 'ofen') {
+      /**
+       * ═══ Warum es einen dritten Ton braucht ═══
+       *
+       * Der Ton `warm` hat einen hellen Kern UND einen dunkleren Saum — genau
+       * dafür gebaut, dass er auf hellen wie dunklen Gründen steht.
+       *
+       * Über dem Clay der Sektionen kippt das: der helle Kern verschwindet im
+       * fast gleich hellen Grund, und übrig bleibt der dunkle Saum. Sichtbar
+       * ist dann nicht eine Schwade, sondern ein RING — gemessen als graue
+       * Kringel über dem Käseschiff, und genau so hat Karol es auch genannt
+       * („diese Blasen im Hintergrund, keine Ahnung, was das sein soll").
+       *
+       * Ein Farbverlauf, dessen Deckkraft von innen nach aussen STRENG fällt,
+       * kann keinen Ring machen. Das ist die ganze Regel. Warm und heller als
+       * jeder Grund dieser Seite — so sieht Dampf aus, durch den Ofenlicht
+       * fällt.
+       */
+      v.addColorStop(0, 'oklch(99% 0.032 88 / 0.74)')
+      v.addColorStop(0.4, 'oklch(97% 0.038 84 / 0.34)')
+      v.addColorStop(0.72, 'oklch(96% 0.042 82 / 0.12)')
+      v.addColorStop(1, 'oklch(96% 0.042 82 / 0)')
+    } else if (ton === 'hell') {
       /* Für dunkle Gründe: nur Kern, kein Saum. Nicht reinweiss — ein Hauch
          Wärme, sonst liegt ein kühler Fleck auf einer Seite, die keinen
          einzigen kühlen Ton kennt. */

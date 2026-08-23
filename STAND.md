@@ -3,7 +3,42 @@
 Wiedereinstieg. Alles, was eine neue Sitzung braucht, um ohne Rückfragen
 weiterzubauen.
 
-**Letzter Stand:** `ceee8f2` · **Zweig:** `main` · **Notiz vom:** 22.08.2026
+**Letzter Stand:** `HEAD` · **Zweig:** `main` · **Notiz vom:** 23.08.2026
+
+---
+
+## Was am 23.08. umgebaut wurde
+
+**Das Käseschiff wohnt nicht mehr in einer Sektion.** Es liegt fest im Fenster
+(`src/komponenten/Kaeseschiff.tsx`, `position: fixed`) und wird allein vom
+Scrollfortschritt geführt — von der Oberkante der Handarbeit bis zur Unterkante
+der Riss-Sektion, also über drei Sektionen. Die Bahn ist eine
+**Wegpunkttabelle** (`BAHN`), keine Formel: jede Zeile ist eine Stelle auf der
+Seite, jede Spalte eine Bewegung. Wer die Bahn ändern will, ändert Zahlen in
+dieser Tabelle und sonst nichts.
+
+**Die Wegpunkte sind nach den ÜBERSCHRIFTEN gewählt, nicht nach der Kurve.** Es
+gibt drei Fenster, in denen das Schiff tief oder rechts stehen MUSS, weil sonst
+eine Überschrift darunter liegt — sie stehen im Kopf der Datei. Wer neue
+Sektionen einzieht oder Höhen ändert, muss diese Fenster nachrechnen.
+
+**Der Riss kommt aus DEMSELBEN Fortschritt wie der Flug** (`RISS_AB`,
+`RISS_BIS`). Ein zweiter ScrollTrigger dafür war der Fehler der Vorfassung: das
+Gebäck war mitten in der Galerie schon halb offen.
+
+**Raus sind:** der Öffnungsstatus aus der Kopfzeile, das Band unter der
+Startseite samt Collage, der Satzblock unter dem Video. Oeffnung.tsx,
+Collage.tsx und Auftritt.tsx bleiben im Bau — sie werden gebraucht.
+
+**Drei Fehler, die nur eine Messung findet:**
+
+- `justify-self` war bei den Hälften vertauscht — die Bruchkante zeigte nach
+  aussen. Das war der Grund, warum das Schiff dreimal „falsch rum" aufging.
+- Die Hälften waren einzeln auf ihren Inhalt zugeschnitten (696 / 692 / 1100 px)
+  und passten deshalb nie zusammen. Sie tragen jetzt alle die volle Leinwand.
+- Die Leinwände massen sich mit `getBoundingClientRect` — also in der
+  TRANSFORMIERTEN Grösse. Im skalierten Schiff hiess das 158 px Speicher für
+  eine Fläche, die bis 608 px wächst. Jetzt `offsetWidth`.
 
 ---
 

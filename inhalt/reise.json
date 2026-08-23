@@ -4,11 +4,11 @@
   "hoehe": 454
  },
  "schiff-links": {
-  "breite": 696,
-  "hoehe": 485
+  "breite": 1100,
+  "hoehe": 454
  },
  "schiff-rechts": {
-  "breite": 692,
-  "hoehe": 487
+  "breite": 1100,
+  "hoehe": 454
  }
 }

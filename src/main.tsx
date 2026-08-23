@@ -24,6 +24,7 @@ import Bestellen from './komponenten/Bestellen.tsx'
 import Fusszeile from './komponenten/Fusszeile.tsx'
 import Bestellleiste from './komponenten/Bestellleiste.tsx'
 import Wasserzeichen from './komponenten/Wasserzeichen.tsx'
+import Kaeseschiff from './komponenten/Kaeseschiff.tsx'
 import Mehlstaub from './komponenten/ui/Mehlstaub.tsx'
 
 import { scrollenStarten } from './scrollen.ts'
@@ -105,70 +106,44 @@ function Seite() {
       <Mehlstaub />
       <main>
         <Backstube />
-        {/*
-          Hier gehört die REISE hin — das Showpiece: ein Käseschiffchen wandert
-          scrollgetrieben über drei Sektionen, dreimal fallen Partikel und
-          schalten das Bild eine Stufe weiter, am Ende teilt es sich.
 
-          Sie ist nicht gebaut, und das ist Absicht. Sie besteht aus vier
-          Aufnahmen desselben Gerichts aus derselben Kameraposition (Teig →
-          bemehlt → belegt → gebacken) plus zwei Aufnahmen ganz und geteilt.
-          Diese Bilder gibt es noch nicht. Um Platzhalter herum gebaut wäre sie
-          beim Eintreffen der echten Bilder neu zu komponieren statt zu
-          bestücken — und ein erzeugtes Fatayer kommt nicht in Frage.
-        */}
-        {/* ═══ Zurückgetauscht am 22.08. ═══
+        {/* ═══ Die Reise des Käseschiffs beginnt HIER und endet bei .reise ═══
 
-            Die Reise ist raus, die Handarbeit ist zurück. Karol nach dem
-            Ansehen: „Die erste Sektion nach der Startseite finde ich kacke …
-            nimm die Sektion komplett raus und tu wieder die vorherige rein.
-            Die vorherige Sektion, wo Käseschiffchen und so weiter … der
-            Untergrund war weiss und hatte so Sesam-Krümel-Hintergrund,
-            transparent. Diese Folie wieder zurück."
+            Karol am 23.08.: „Ich will, dass das Käseschiff von oben nach unten
+            … runtergeht. Also so von links in der Kurve nach rechts und dann
+            wieder nach links … Sektion 2, 3, 4 Scroll Driven, und ich glaube,
+            bei 5, dann ist es vorbei."
 
-            Die Reise hatte zwei Nachteile, die er beide benannt hat, ohne sie
-            zu benennen: sie stand auf gebranntem Orange direkt unter einer
-            Startseite, die hell sein soll — ein dunkler Block als Erstes nach
-            dem Hero. Und ihr Hauptdarsteller war ein Freisteller, den er selbst
-            verworfen hat.
+            Das Schiff ist deshalb KEIN Kind einer Sektion mehr. Es liegt fest
+            im Fenster (Kaeseschiff.tsx) und wird allein vom Scrollfortschritt
+            geführt: die Seite fährt darunter durch, es bleibt. Seine Bahn
+            spannt von der Oberkante der Handarbeit bis zur Unterkante der
+            Riss-Sektion — drei Sektionen, eine Bewegung.
 
-            Die Handarbeit hat beides nicht: heller Grund, Sesamfolie, und die
-            Gerichte fliegen, statt einzeln aufzutreten.
+            Es steht hier oben im Baum und nicht unten, weil es über allem
+            liegt: die Reihenfolge im Quelltext ist die Reihenfolge, in der ein
+            Vorleseprogramm liest, und ein rein dekoratives Element gehört dort
+            nicht zwischen zwei Sektionen. */}
+        <Kaeseschiff />
 
-            Reise.tsx bleibt liegen. Wenn das Foto aus ABLICHTUNG.md kommt, ist
-            sie in einer Zeile wieder da — dann aber auf hellem Grund. */}
         <Handarbeit />
 
-        {/* ═══ Die Reise ist zurück — an einer anderen Stelle ═══
-
-            Karol am 22.08.: „nutze higgsfield mcp um das riesen käseschiff
-            teilbare animation 3d scroll driven landingpage vibe."
-
-            Sie steht jetzt NACH der Handarbeit, nicht davor. Der Grund ist
-            sein eigener Einwand von heute früh: sie stand auf gebranntem
-            Orange direkt unter einer Startseite, die hell sein soll — ein
-            dunkler Block als Erstes nach dem Hero.
-
-            An dieser Stelle stimmt sie: hell (Hero), hell (Handarbeit), dann
-            EIN dunkler Einschnitt, dann Clay tief (Galerie), dann hell
-            (Karte). Der Bruch ist damit der Höhepunkt in der Mitte, nicht die
-            Begrüssung.
-
-            Der Gegenstand ist erzeugt und gegen dieselben fünf Bedingungen
-            geprüft, die ABLICHTUNG.md vom Inhaber verlangt. Er wird getauscht,
-            sobald das echte Foto da ist. */}
-        <Reise />
-        {/* Das Schaustück ist RAUS, seit es die Reise gibt. Es war eine
-            zweite angeheftete Sequenz mit demselben Zweck — ein Gericht, das
-            sich beim Scrollen aufbaut. Zwei davon hintereinander sind keine
-            Steigerung, sondern eine Wiederholung, und sie kosteten zusammen
-            sechs Bildschirmhöhen. Die Datei bleibt liegen, falls die Reise
-            wieder fällt. */}
         {/* Die Galerie steht VOR der Karte, nicht dahinter. Wer wissen will,
             was es gibt, liest die Karte; wer noch nicht weiss, ob er will,
             sieht Bilder. Die Reihenfolge folgt der Entscheidung, nicht der
-            Datenmenge. */}
+            Datenmenge.
+
+            Und sie steht jetzt VOR der Riss-Sektion: das Schiff braucht Weg,
+            bevor es aufreisst. Vorher lag der Riss unmittelbar nach der ersten
+            Sektion — ein Höhepunkt nach zwei Bildschirmhöhen ist kein
+            Höhepunkt. */}
         <Galerie />
+
+        {/* Der letzte Takt: hier reisst das Schiff auseinander. Die Sektion
+            selbst enthält es nicht — sie hält nur den Raum dafür frei, und
+            alles, was heiss ist. */}
+        <Reise />
+
         <Karte />
         <Laden />
         <Bestellen />

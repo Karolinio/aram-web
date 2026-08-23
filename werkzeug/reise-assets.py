@@ -34,7 +34,24 @@ def zuschneiden(im):
     return im.crop((xs.min(), ys.min(), xs.max() + 1, ys.max() + 1))
 
 def brechen(im, streuung=0.05, glaette=0.82):
-    """Zwei Haelften mit gemeinsamer, unregelmaessiger Bruchkante."""
+    """Zwei Haelften mit gemeinsamer, unregelmaessiger Bruchkante.
+
+    ═══ Warum beide Haelften die VOLLE Leinwand behalten ═══
+
+    Erst wurde jede Haelfte auf ihren Inhalt zugeschnitten. Das ist sparsam und
+    war der Grund, warum das Schiff im Browser nie zusammenpasste: die linke
+    Haelfte kam auf 696 px, die rechte auf 692, das Ganze auf 1100 — drei
+    Bilder, drei Bezugsrahmen. Im Browser lagen sie damit weder waagerecht noch
+    senkrecht deckungsgleich, und zwischen ihnen stand ein Spalt, den niemand
+    bestellt hatte.
+
+    Ungeschnitten haben beide dieselben Masse wie das Ganze. Sie lassen sich
+    dann uebereinanderlegen und passen ohne eine einzige Rechnung — und die
+    Drehachse liegt bei beiden auf 50 %, also genau auf der Bruchkante.
+
+    Der Preis dafuer ist keiner: eine durchsichtige Flaeche kostet in WebP fast
+    nichts.
+    """
     w, h = im.size
     rng = np.random.default_rng(4711)          # fest, damit der Bruch reproduzierbar ist
     schritt = rng.normal(0, w * streuung * 0.35, h)
@@ -47,7 +64,7 @@ def brechen(im, streuung=0.05, glaette=0.82):
     a = np.array(im)
     li = a.copy(); li[:, :, 3] = np.where(links_maske, li[:, :, 3], 0)
     re = a.copy(); re[:, :, 3] = np.where(~links_maske, re[:, :, 3], 0)
-    return zuschneiden(Image.fromarray(li)), zuschneiden(Image.fromarray(re))
+    return Image.fromarray(li), Image.fromarray(re)
 
 # EIN Gegenstand, nicht drei. Karol nach dem Ansehen der Freisteller: „nichts
 # davon geeignet ... das Käseschiff sollte XL grossflächig als EINZELNE
@@ -76,7 +93,7 @@ print(f'  {"schiff":16} {g[0]:>4}x{g[1]:<4} {kb:>3} kB   aus {QUELLE}')
 
 li, re = brechen(schiff)
 for teil, bild in (('schiff-links', li), ('schiff-rechts', re)):
-    p, g, kb = sichern(bild, teil, 700)
+    p, g, kb = sichern(bild, teil, 1100)
     liste[teil] = dict(breite=g[0], hoehe=g[1])
     print(f'  {teil:16} {g[0]:>4}x{g[1]:<4} {kb:>3} kB')
 

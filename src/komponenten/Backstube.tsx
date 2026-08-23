@@ -69,7 +69,7 @@ export default function Backstube() {
    * vom Handy des Inhabers, 1080x1920.
    */
   const schmal = useMedienabfrage('(max-width: 719px)')
-  const titel = useAbgang<HTMLHeadingElement>('.backstube')
+  const wort = useAbgang<HTMLDivElement>('.backstube')
   const video = useRef<HTMLVideoElement>(null)
 
   useEffect(() => {
@@ -86,7 +86,6 @@ export default function Backstube() {
   }, [])
 
   return (
-    <>
     <section className="backstube" id="start" aria-labelledby="backstube-titel">
       <div className="backstube__grund" aria-hidden="true">
         <video
@@ -119,32 +118,40 @@ export default function Backstube() {
             type="video/mp4"
           />
         </video>
-        <div className="backstube__schleier" />
       </div>
 
-      {/* ═══ Über dem Video steht NUR das Logo ═══
+      {/* ═══ Der Satz steht wieder auf dem Video — klein ═══
 
-          Karol, zum dritten Mal an derselben Stelle: „mach diesen hässlichen
-          weissen Rauch weg auf der Startseite, diesen weissen Schimmer weg."
+          Karol am 23.08.: „Das Aram-Startseiten-Video soll direkt grossflächig
+          flächendeckend sein und nicht unterbrochen von dieser gebrickten
+          Sektion darunter … Schreib das in Schwarz oder in Weiss einfach auch
+          auf die Startseite, unauffällig, und dann die Sektion rausnehmen."
 
-          Erst war es ein Schleier über dem ganzen Bild. Dann eine Platte hinter
-          dem Text. Beides hat er gesehen und beides wollte er nicht — und er
-          hat jedes Mal dasselbe gemeint: über dem Video soll nichts liegen.
+          Die Runde davor stand der Satz UNTER dem Video auf Clay. Das war
+          rechnerisch richtig — 11:1 ohne jeden Trick — und gestalterisch
+          falsch: es zerschnitt den Hero in zwei Blöcke, und der zweite sah aus
+          wie eine angefangene Sektion.
 
-          Es lässt sich nicht beides haben, und das ist gemessen: das Video
-          läuft von rgb(59,2,0) bis rund 230. Über diese Spanne trägt KEINE
-          Schriftfarbe — dunkle Schrift fällt auf den dunklen Stellen durch,
-          helle auf den hellen. Ohne Fläche darunter ist Schrift auf diesem
-          Video nicht lesbar, egal welche Farbe.
+          Warum es JETZT trägt und bei den drei Fehlversuchen davor nicht: die
+          Fehlversuche wollten eine 4-rem-Schlagzeile über das ganze Bild legen.
+          Über eine Fläche, die von rgb(59,2,0) bis 230 läuft, geht das nicht —
+          jede Farbe fällt auf der einen Hälfte durch. Eine KLEINE Zeile ist ein
+          anderer Fall: sie deckt wenige Prozent des Bildes ab, und ein dunkler
+          Saum um weisse Schrift ist die Lösung, die jeder Untertitel benutzt.
 
-          Also geht die Schrift vom Video herunter. Der Hero zeigt das Video und
-          ihr Logo, sonst nichts; die Worte stehen direkt darunter auf Clay, wo
-          sie ohne jeden Trick 11:1 haben.
-
-          Das Logo bleibt oben: es ist ein Rasterbild mit eigener Kontur und
-          eigenem Schatten und braucht keinen Grund. */}
+          Ein DUNKLER Saum, kein heller. „Diesen weissen Schimmer weg" galt dem
+          Leuchten, nicht dem Schatten. */}
       <div className="schale backstube__mitte">
         <Ladenschild />
+
+        <div className="backstube__wort" ref={wort}>
+          <h1 id="backstube-titel" className="backstube__titel">
+            Jeder Teig wird morgens von Hand gerollt
+          </h1>
+          <p className="backstube__ort">
+            {ARAM.ort.strasse} · {ARAM.ort.stadtteil}
+          </p>
+        </div>
 
         <a className="backstube__weiter" href="#karte">
           <span>Zur Karte</span>
@@ -155,19 +162,5 @@ export default function Backstube() {
         </a>
       </div>
     </section>
-
-      {/* Der Satz steht auf Clay, nicht auf dem Video. Gemessen 11,18:1 — ohne
-          Schleier, ohne Platte, ohne Lichthof. */}
-      <div className="backstube__wort">
-        <div className="schale">
-          <h1 id="backstube-titel" className="backstube__titel" ref={titel}>
-            Jeder Teig wird morgens von Hand gerollt
-          </h1>
-          <p className="backstube__ort">
-            {ARAM.ort.strasse} · {ARAM.ort.stadtteil}
-          </p>
-        </div>
-      </div>
-    </>
   )
 }

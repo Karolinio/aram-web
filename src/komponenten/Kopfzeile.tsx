@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from 'react'
 
 import { ARAM } from '../aram.config.ts'
 import Handymenue from './Handymenue.tsx'
-import Oeffnung from './ui/Oeffnung.tsx'
 
 const ANKER = [
   { id: 'karte', text: 'Karte' },
@@ -111,12 +110,22 @@ export default function Kopfzeile() {
           ))}
         </nav>
 
-        {/* Zweimal derselbe Status, weil er am Handy anders lauten muss:
-            „Geschlossen · öffnet morgen um 11:00 Uhr" ist auf 393 px neben Logo
-            und Anrufknopf keine Zeile, sondern ein Umbruch. Gekürzt statt
-            gestrichen — die Auskunft, ob gerade offen ist, gehört auch dorthin. */}
-        <Oeffnung className="kopf__oeffnung" />
-        <Oeffnung form="kurz" className="kopf__oeffnung-kurz" />
+        {/* ═══ Kein Öffnungsstatus mehr im Kopf ═══
+
+            Karol, viermal an derselben Stelle, zuletzt am 23.08.: „Ja, ich
+            weiss auch nicht, wie oft ich das sage, aber Startseite, bitte.
+            Dieses ‚Geschlossen · öffnet heute um 08:00 Uhr' aus dem
+            Glass-Header raus."
+
+            Er hatte recht, und der Grund lässt sich benennen: im Kopf steht
+            nur, was zu einer HANDLUNG führt — Karte, Laden, Bestellen,
+            Anrufen. „Geschlossen" führt zu keiner; es nimmt sie weg. Als
+            Erstes, was ein Besucher über diesen Betrieb liest, ist es die
+            denkbar schlechteste Zeile.
+
+            Die Auskunft ist nicht verloren: die vollen Zeiten stehen in „Der
+            Laden", und die Bestellleiste am Fuss kennt den Status weiterhin.
+            Oeffnung.tsx bleibt deshalb im Bau. */}
 
         <a className="knopf kopf__anruf" href={ARAM.kontakt.telefonHref}>
           <span aria-hidden="true">☎</span>

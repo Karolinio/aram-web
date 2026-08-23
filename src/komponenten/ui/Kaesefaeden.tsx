@@ -63,14 +63,20 @@ export default function Kaesefaeden({ klasse, menge = 9 }: Props) {
     const faeden: Faden[] = Array.from({ length: menge }, (_, i) => {
       const t = (i + 0.5) / menge
       return {
-        oben: 0.2 + t * 0.6 + (Math.random() - 0.5) * 0.06,
-        obenRechts: 0.2 + t * 0.6 + (Math.random() - 0.5) * 0.1,
+        /* 0,10 bis 0,40 der Leinwand — und die Leinwand ist doppelt so hoch
+           wie das Gebäck. Die Fäden setzen damit zwischen 20 und 80 % der
+           GEBÄCKHÖHE an, also auf der Bruchkante, und haben die untere Hälfte
+           der Leinwand zum Durchhängen.
+           Vorher spannte sich 0,2…0,8 über eine anderthalbfache Leinwand: die
+           Fäden hingen dann unter dem Gebäck in der Luft. */
+        oben: 0.1 + t * 0.3 + (Math.random() - 0.5) * 0.03,
+        obenRechts: 0.1 + t * 0.3 + (Math.random() - 0.5) * 0.05,
         /* Gestaffelt von 0,35 bis 0,95: der erste reisst früh, der letzte hält
            fast bis zum Schluss. Ein wenig Zufall darüber, damit die Reihenfolge
            nicht von oben nach unten durchläuft. */
         reisst: 0.35 + t * 0.55 + (Math.random() - 0.5) * 0.12,
         dicke: 0.004 + Math.random() * 0.007,
-        hang: 0.1 + Math.random() * 0.16,
+        hang: 0.05 + Math.random() * 0.1,
         phase: Math.random() * Math.PI * 2,
       }
     })
@@ -79,10 +85,26 @@ export default function Kaesefaeden({ klasse, menge = 9 }: Props) {
     let h = 0
 
     const messen = () => {
-      const r = c.getBoundingClientRect()
+      /**
+       * ═══ `offsetWidth`, NICHT `getBoundingClientRect` ═══
+       *
+       * Die Leinwand liegt im Käseschiff, und das Schiff wird über die ganze
+       * Reise von 0,26 auf 1,0 skaliert. `getBoundingClientRect` liefert die
+       * TRANSFORMIERTE Grösse — beim Einhängen also 158 px statt 608. Die
+       * Leinwand bekam damit ihren Speicher für die kleinste Stufe und wurde
+       * bis zum Riss auf das Vierfache gestreckt.
+       *
+       * `offsetWidth` gibt die Layoutgrösse, auf die sich die Transformation
+       * erst anwendet. Die Leinwand ist damit immer für die VOLLE Grösse
+       * gerechnet; auf den kleinen Stufen ist sie überabgetastet, und das
+       * kostet nichts, weil der Compositor sie ohnehin skaliert.
+       *
+       * Ein ResizeObserver hätte das nicht gerettet: er meldet Layoutgrössen,
+       * und eine Transformation ändert die nicht.
+       */
       const dpr = Math.min(window.devicePixelRatio || 1, 2)
-      b = Math.max(1, Math.round(r.width))
-      h = Math.max(1, Math.round(r.height))
+      b = Math.max(1, c.offsetWidth)
+      h = Math.max(1, c.offsetHeight)
       c.width = Math.round(b * dpr)
       c.height = Math.round(h * dpr)
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
