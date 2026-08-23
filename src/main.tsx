@@ -19,6 +19,7 @@ import Galerie from './komponenten/Galerie.tsx'
 import Handarbeit from './komponenten/Handarbeit.tsx'
 import Reise from './komponenten/Reise.tsx'
 import Karte from './komponenten/Karte.tsx'
+import Ofen from './komponenten/Ofen.tsx'
 import Laden from './komponenten/Laden.tsx'
 import Bestellen from './komponenten/Bestellen.tsx'
 import Fusszeile from './komponenten/Fusszeile.tsx'
@@ -138,6 +139,11 @@ function Seite() {
             Sektion — ein Höhepunkt nach zwei Bildschirmhöhen ist kein
             Höhepunkt. */}
         <Galerie />
+
+        {/* Der Ofen — die einzige dunkle Sektion. Hier fällt das Schiff ins
+            Maul, und hier ist die Reise am Umkehrpunkt: alles davor ist roh,
+            alles danach gebacken. */}
+        <Ofen />
 
         {/* Der letzte Takt: hier reisst das Schiff auseinander. Die Sektion
             selbst enthält es nicht — sie hält nur den Raum dafür frei, und

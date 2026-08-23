@@ -76,6 +76,25 @@
   .sektion--glut .lebt:hover { color: var(--glut-marke); }
 }
 
+/**
+ * Der Ofen. Ihr Schwarz, und darauf ihr Ofenfoto.
+ *
+ * Kein Orange: das gebrannte Orange (`--glut-grund`) hat Karol zweimal
+ * verworfen, und ein Ofeninneres ist ohnehin nicht orange, sondern schwarz mit
+ * Feuer darin. Die Wärme kommt hier aus dem Foto, nicht aus der Fläche.
+ */
+.sektion--nacht {
+  background: var(--nacht);
+  color: var(--creme);
+  --linie: oklch(42% 0.03 55);
+}
+.sektion--nacht .etikett { color: var(--glut-marke); }
+.sektion--nacht h1,
+.sektion--nacht h2,
+.sektion--nacht h3 { color: var(--creme); }
+.sektion--nacht .leise,
+.sektion--nacht .lead { color: oklch(86% 0.02 72); }
+
 /* Alte Namen zeigen auf den Zweiklang. */
 .sektion--creme,
 .sektion--papier { background: var(--ton-hell); }

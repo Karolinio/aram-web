@@ -58,7 +58,19 @@ import Auftritt from './Auftritt.tsx'
  * Wer einen ZWEITEN Nachtgrund einträgt, macht daraus wieder eine Grundfarbe
  * und nimmt der Ausnahme ihren Sinn.
  */
-export type Grund = 'hell' | 'tief' | 'glut'
+/**
+ * ═══ Warum es jetzt DOCH einen zweiten dunklen Grund gibt ═══
+ *
+ * Der Kommentar darüber warnt davor, und die Warnung war richtig — für einen
+ * zweiten Grund derselben Art. `nacht` ist keiner: `glut` trägt ihr Orange mit
+ * ihrem Schwarz, `nacht` ist die Ofensektion und trägt gar keine Fläche, nur
+ * ein Foto ihres Ofens auf schwarzem Grund.
+ *
+ * Und `glut` steht auf dieser Seite derzeit an keiner Stelle — Schaustueck.tsx
+ * ist nicht eingehängt. Es gibt also faktisch einen dunklen Grund, nicht zwei.
+ * Wer das ändert, prüft beide zusammen.
+ */
+export type Grund = 'hell' | 'tief' | 'glut' | 'nacht'
 
 type SektionProps = {
   id?: string

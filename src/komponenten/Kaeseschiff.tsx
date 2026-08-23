@@ -10,41 +10,35 @@ type Mass = { breite: number; hoehe: number }
 const M = reiseRoh as Record<string, Mass>
 
 /**
- * Das Käseschiff — es begleitet die ganze Seite, nicht eine Sektion.
+ * Das Käseschiff — eine Reise vom Teig durch den Ofen bis zum Riss.
  *
- * ═══ Warum das die vierte Fassung ist, und was die drei davor falsch hatten ═══
+ * ═══ Was hier erzählt wird ═══
  *
- * Alle drei Vorfassungen hatten dasselbe Missverständnis: das Schiff war ein
- * KIND einer Sektion. Es trat dort auf, flog ein Stück und war wieder weg. Und
- * genau daran hat Karol jedes Mal gesehen, dass es nicht das ist, was er meint:
+ * Karol am 23.08.: „Wie aus dem Mehl irgendwie durch dieses Walzen so ein
+ * Käseschiff wird, dann fliegt das und landet dann unten im Ofen."
  *
- *   „Also, da ist ja nichts an Scroll-Driven … Ich will, dass das Käseschiff
- *   von oben nach unten … runtergeht. Also so von links in der Kurve nach
- *   rechts und dann wieder nach links … nachher wird das Käseschiff in zwei
- *   zerlegt, nach der vierten Sektion."
+ * Genau das, und in dieser Reihenfolge:
  *
- * Ein Gegenstand, der über VIER Sektionen reist, kann in keiner davon wohnen.
- * Er liegt jetzt fest im Fenster (`position: fixed`) und wird allein vom
- * Scrollfortschritt bewegt — die Seite fährt darunter durch, er bleibt. Das ist
- * das, was Karol schon zwei Runden früher „wie so ein magischer Cursor als
- * Pide" genannt hat.
+ *   Teigkugel  →  gewalzt  →  belegt  →  IN DEN OFEN  →  gebacken  →  reisst
  *
- * ═══ Warum eine Wegpunkttabelle und keine Formel ═══
+ * Ein Gegenstand, der so weit reist, kann in keiner Sektion wohnen — er wäre
+ * an deren Unterkante zu Ende. Er liegt fest im Fenster (`position: fixed`)
+ * und wird allein vom Scrollfortschritt bewegt: die Seite fährt darunter
+ * durch, er bleibt.
  *
- * Eine Sinuskurve wäre kürzer. Aber sie ist nicht verhandelbar: „etwas weiter
- * rechts bei Sektion zwei" lässt sich an einer Formel nicht sagen, an einer
- * Zeile in einer Tabelle schon. Die Bahn unten ist deshalb eine Liste von
- * Haltepunkten, zwischen denen weich (smoothstep) überblendet wird — jede
- * Zeile ist eine Stelle auf der Seite, und jede Spalte ist eine Bewegung.
+ * ═══ Drei Fahrpläne, EIN Fortschritt ═══
  *
- * ═══ Warum es zwei Stufen gibt ═══
+ * Die Bahn (`BAHN`), die Stufen (`STUFEN`) und der Riss (`RISS_AB`) lesen alle
+ * dieselbe Zahl. Das ist keine Sparsamkeit, sondern die Lehre aus dem
+ * Vorgängerbau: dort fuhr der Riss über einen EIGENEN ScrollTrigger, und das
+ * Gebäck war gemessen mitten in der Galerie schon halb offen. Zwei Bereiche,
+ * zwei Rechnungen, keine Garantie, dass sie dasselbe meinen.
  *
- *   bereit   Das Schiff wird in den Baum gehängt und dekodiert, sobald die
- *            Startseite durch ist. Vorher gehört es nicht dorthin: ein festes
- *            Element gilt dem Browser immer als „im Bild", und lazy-loading
- *            würde es mitten in den ersten Ladevorgang ziehen.
- *   aktiv    Die Leinwände (Dampf, Tropfen, Fäden) laufen NUR während der
- *            Reise. Ausserhalb steht keine einzige Schleife.
+ * ═══ Warum Tabellen und keine Formeln ═══
+ *
+ * „Etwas weiter rechts bei Sektion zwei" lässt sich an einer Sinuskurve nicht
+ * sagen, an einer Zeile in einer Tabelle schon. Wer die Reise ändern will,
+ * ändert Zahlen — hier, und sonst nirgends.
  */
 
 /** Ein Haltepunkt der Bahn. Alles ausser `p` wird zwischen zwei Punkten weich überblendet. */
@@ -63,54 +57,86 @@ type Punkt = {
   drehX: number
   /** Grösse. 1 = die volle Breite aus dem Stilblatt. */
   skala: number
-  /** Deckkraft. Fern und klein darf es blasser sein. */
+  /** Deckkraft. Im Ofen ist sie null — dort ist es dunkel. */
   deck: number
 }
 
 /**
- * Die Bahn: von links, in der Kurve nach rechts, wieder nach links, und in der
- * Mitte reisst es.
+ * Die Bahn.
  *
  * ═══ Wonach die Zahlen gewählt sind ═══
  *
  * Nicht nach der Kurve, sondern nach den ÜBERSCHRIFTEN. Ein Gegenstand, der
  * auf einer Überschrift parkt, ist kein Effekt, sondern ein Fehler — und genau
- * das war der erste Bau: gemessen stand das Schiff bei 38 % Fortschritt
- * mitten auf „Was am Morgen entsteht".
+ * das war der erste Bau: gemessen stand das Schiff bei 38 % Fortschritt mitten
+ * auf „Was am Morgen entsteht".
  *
  * Jede Sektion trägt ihre Überschrift im oberen Drittel und links. Daraus
- * folgen drei Fenster, in denen das Schiff entweder TIEF oder RECHTS stehen
- * muss — und dazwischen darf es hin, wo es will:
- *
- *   0,15…0,19   Überschrift der Handarbeit    → das Schiff sinkt nach unten
- *   0,41…0,50   Überschrift der Galerie       → das Schiff steht rechts
- *   0,85…0,92   Überschrift der Riss-Sektion  → das Schiff bleibt tief
+ * folgen die Fenster, in denen das Schiff TIEF oder RECHTS stehen muss — sie
+ * sind gemessen, nicht geschätzt, und wer Sektionshöhen ändert, muss sie neu
+ * messen.
  *
  * Die Kurve links → rechts → links, die Karol beschrieben hat, entsteht dabei
  * von selbst: die Ausweichbewegungen SIND die Kurve.
  */
 const BAHN: readonly Punkt[] = [
   //  p     x %vw    y %vh   dreh  drehY  drehX  skala  deck
-  { p: 0.00, x: -34, y: -0.94, dreh: -24, drehY: 44, drehX: 16, skala: 0.26, deck: 0 },
-  { p: 0.09, x: -33, y: -0.26, dreh: -18, drehY: 36, drehX: 11, skala: 0.33, deck: 1 },
-  { p: 0.20, x: -28, y: 0.26, dreh: -11, drehY: 25, drehX: 4, skala: 0.38, deck: 1 },
-  { p: 0.33, x: -33, y: -0.04, dreh: -4, drehY: 13, drehX: -1, skala: 0.43, deck: 1 },
-  { p: 0.47, x: 30, y: 0.22, dreh: 10, drehY: -19, drehX: -6, skala: 0.5, deck: 1 },
-  { p: 0.61, x: 34, y: -0.14, dreh: 18, drehY: -37, drehX: -11, skala: 0.58, deck: 1 },
-  { p: 0.72, x: -21, y: 0.16, dreh: 7, drehY: -12, drehX: -4, skala: 0.67, deck: 1 },
-  { p: 0.82, x: -17, y: 0.26, dreh: 4, drehY: -6, drehX: -2, skala: 0.76, deck: 1 },
-  { p: 0.89, x: -6, y: 0.24, dreh: 1, drehY: 3, drehX: 1, skala: 0.87, deck: 1 },
-  { p: 0.94, x: 0, y: 0.04, dreh: -2, drehY: 6, drehX: 2, skala: 0.96, deck: 1 },
-  { p: 0.97, x: 0, y: 0.0, dreh: 0, drehY: 0, drehX: 0, skala: 1.0, deck: 1 },
+  { p: 0.0, x: -32, y: -0.94, dreh: -24, drehY: 44, drehX: 16, skala: 0.24, deck: 0 },
+  { p: 0.07, x: -33, y: -0.26, dreh: -18, drehY: 34, drehX: 11, skala: 0.32, deck: 1 },
+  { p: 0.19, x: -28, y: 0.26, dreh: -11, drehY: 24, drehX: 4, skala: 0.38, deck: 1 },
+  { p: 0.31, x: -33, y: -0.06, dreh: -3, drehY: 12, drehX: -2, skala: 0.44, deck: 1 },
+  { p: 0.44, x: 29, y: 0.22, dreh: 10, drehY: -19, drehX: -6, skala: 0.5, deck: 1 },
+  { p: 0.56, x: 33, y: -0.14, dreh: 17, drehY: -34, drehX: -10, skala: 0.56, deck: 1 },
+  /* ── Der Anflug auf den Ofen ─────────────────────────────────────────────
+     Ab hier zieht es zur Mitte und sinkt. Es wird KLEINER, nicht grösser: was
+     in eine Öffnung fällt, entfernt sich vom Betrachter. */
+  { p: 0.66, x: 16, y: -0.3, dreh: 9, drehY: -14, drehX: -3, skala: 0.5, deck: 1 },
+  { p: 0.72, x: 2, y: -0.08, dreh: 2, drehY: -3, drehX: 12, skala: 0.36, deck: 1 },
+  /* Im Maul. Der Deckkraftabfall macht das Verschwinden; das Maul selbst ist
+     schwarz, und ein Gegenstand, der darin blasser wird, ist verschluckt. */
+  /* Die Maulmitte liegt gemessen bei y +0,10 Fensterhöhen — das Ofenbild ist
+     unten verankert, 597 px hoch, und sein dunkelster Punkt sitzt bei 37 %
+     seiner Höhe. Wer das Bild oder seine Grösse ändert, misst neu
+     (werkzeug/ofenbild.py meldet den Wert). */
+  { p: 0.76, x: 0, y: 0.1, dreh: 0, drehY: 0, drehX: 24, skala: 0.2, deck: 0 },
+  { p: 0.79, x: 0, y: 0.12, dreh: 0, drehY: 0, drehX: 24, skala: 0.2, deck: 0 },
+  /* ── Und wieder heraus, gebacken ────────────────────────────────────────── */
+  { p: 0.83, x: -4, y: 0.1, dreh: -3, drehY: 8, drehX: 8, skala: 0.46, deck: 1 },
+  { p: 0.9, x: -6, y: 0.24, dreh: 1, drehY: 4, drehX: 1, skala: 0.78, deck: 1 },
+  { p: 0.95, x: 0, y: 0.04, dreh: -2, drehY: 5, drehX: 2, skala: 0.94, deck: 1 },
+  { p: 0.98, x: 0, y: 0.0, dreh: 0, drehY: 0, drehX: 0, skala: 1.0, deck: 1 },
   /* Und dann ist es weg. Ohne diese Zeile bliebe ein aufgerissenes Gebäck in
      voller Grösse über der Speisekarte stehen — gemessen über 6000 px Scroll,
      weil ein festes Element nicht von selbst geht. */
-  { p: 1.00, x: 0, y: 0.08, dreh: 0, drehY: 0, drehX: 0, skala: 1.05, deck: 0 },
+  { p: 1.0, x: 0, y: 0.08, dreh: 0, drehY: 0, drehX: 0, skala: 1.05, deck: 0 },
 ]
 
-/** Von wo bis wo gerissen wird. Danach bleibt eine Reise-Länge zum Verschwinden. */
-const RISS_AB = 0.79
-const RISS_BIS = 0.97
+/**
+ * Wann welche Stufe zu sehen ist.
+ *
+ * Die Bilder liegen ÜBEREINANDER und werden nur ein- und ausgeblendet. Der
+ * naheliegende Weg wäre, `src` umzusetzen — dann muss der Browser beim ersten
+ * Wechsel jedes Bild erst dekodieren, mitten in der Bewegung, und genau dort
+ * kostet es den Frame, den man sieht.
+ *
+ * Alle tragen dieselbe Leinwand (1200 × 540, siehe werkzeug/ofenreise.py) und
+ * dieselbe Bildmitte. Ohne das springt der Gegenstand bei jedem Wechsel.
+ *
+ * Die letzte Stufe ist KEIN eigenes Bild: das gebackene Schiff sind die beiden
+ * Hälften bei Spanne null. Ein fünftes Bild wäre eine zweite Wahrheit über
+ * denselben Gegenstand.
+ */
+const STUFEN: readonly { klasse: string; quelle: string; von: number; bis: number }[] = [
+  { klasse: 'kugel', quelle: '/bilder/reise/stufe-1-kugel.webp', von: 0.0, bis: 0.17 },
+  { klasse: 'gewalzt', quelle: '/bilder/reise/stufe-2-gewalzt.webp', von: 0.13, bis: 0.35 },
+  { klasse: 'belegt', quelle: '/bilder/reise/stufe-3-belegt.webp', von: 0.31, bis: 0.78 },
+]
+/** Ab hier ist es gebacken — die Hälften übernehmen. */
+const GEBACKEN_AB = 0.79
+
+/** Von wo bis wo gerissen wird. Danach bleibt Weg zum Verschwinden. */
+const RISS_AB = 0.86
+const RISS_BIS = 0.98
 
 /** Weiche Überblendung statt Knick. Ohne sie hat die Bahn an jedem Wegpunkt eine Ecke. */
 const glatt = (t: number) => t * t * (3 - 2 * t)
@@ -135,6 +161,14 @@ function aufDerBahn(p: number): Punkt {
   }
 }
 
+/** Ein Fenster mit weichen Rändern: 0 draussen, 1 drinnen, dazwischen glatt. */
+function fenster(p: number, von: number, bis: number, rand = 0.045): number {
+  if (p <= von - rand || p >= bis + rand) return 0
+  if (p < von) return glatt((p - (von - rand)) / rand)
+  if (p > bis) return glatt((bis + rand - p) / rand)
+  return 1
+}
+
 export default function Kaeseschiff() {
   const schmal = useMedienabfrage('(max-width: 719px)')
   const ruhig = useMedienabfrage('(prefers-reduced-motion: reduce)')
@@ -143,7 +177,9 @@ export default function Kaeseschiff() {
   const schiff = useRef<HTMLDivElement>(null)
 
   /* Das Vorspiel: sobald die Startseite durch ist, wird das Schiff gebaut.
-     Ein eigener, sehr billiger Auslöser — er tut nichts als einmal umlegen. */
+     Vorher gehört es nicht in den Baum — ein festes Element gilt dem Browser
+     immer als „im Bild", und lazy-loading zöge alle Stufen in den ersten
+     Ladevorgang. */
   useEffect(() => {
     if (ruhig) return
     let tot = false
@@ -171,6 +207,11 @@ export default function Kaeseschiff() {
     const el = schiff.current
     if (!el || !bereit || ruhig) return
 
+    const links = el.querySelector<HTMLElement>('.schiff__haelfte--links')
+    const rechts = el.querySelector<HTMLElement>('.schiff__haelfte--rechts')
+    const stufen = STUFEN.map((s) => el.querySelector<HTMLElement>(`.schiff__stufe--${s.klasse}`))
+    const wurzel = document.documentElement
+
     let tot = false
     let abraeumen: (() => void) | undefined
 
@@ -179,49 +220,60 @@ export default function Kaeseschiff() {
       const { gsap, ScrollTrigger } = werkzeug
 
       /**
-       * Der Fortschritt wird über ein Hilfsobjekt geführt und nicht direkt aus
+       * Der Fortschritt wird über ein Hilfsobjekt geführt und nicht aus
        * `self.progress` gelesen. Der Grund ist der Scrub: er glättet die
        * VERKNÜPFTE Animation, nicht die Rohmeldung. Wer `onUpdate` fragt,
        * bekommt den ungeglätteten Wert und damit das harte Scrollgefühl
        * zurück, das hier zweimal beanstandet wurde.
        */
       const zustand = { p: 0 }
-      const links = el.querySelector<HTMLElement>('.schiff__haelfte--links')
-      const rechts = el.querySelector<HTMLElement>('.schiff__haelfte--rechts')
 
       const zeichnen = () => {
         const p = zustand.p
         const w = aufDerBahn(p)
         const vw = window.innerWidth
         const vh = window.innerHeight
+
         el.style.transform =
           `translate3d(${(w.x / 100) * vw}px, ${w.y * vh}px, 0)` +
           ` rotateY(${w.drehY}deg) rotateX(${w.drehX}deg)` +
           ` rotate(${w.dreh}deg) scale(${w.skala})`
         el.style.opacity = String(w.deck)
-        /* Eine Zahl, drei Verbraucher: die beiden Hälften über ihre eigenen
-           Tweens, die Käsefäden über den berechneten Stil. */
-        /**
-         * ═══ Eine Zahl, drei Verbraucher — und deshalb kein zweiter Auslöser ═══
-         *
-         * Die erste Fassung fuhr den Riss über einen EIGENEN ScrollTrigger mit
-         * eigenem Bereich. Gemessen war das Gebäck dadurch mitten in der
-         * Galerie schon halb offen: zwei Bereiche, zwei Rechnungen, und keine
-         * Garantie, dass sie dasselbe meinen.
-         *
-         * Jetzt kommt die Spanne aus DEMSELBEN Fortschritt wie der Flug. Die
-         * Hälften werden hier direkt geschrieben, die Fäden lesen sie aus dem
-         * berechneten Stil. Es gibt keine zweite Quelle, die abweichen könnte.
-         */
+
+        /* Die Stufen. Jede hat ihr Fenster; die Ränder überlappen, damit
+           überblendet und nicht geschaltet wird. */
+        for (let i = 0; i < stufen.length; i++) {
+          const s = STUFEN[i]!
+          const k = stufen[i]
+          if (k) k.style.opacity = String(fenster(p, s.von, s.bis))
+        }
+
+        /* Der Riss. Eine Zahl, drei Verbraucher: die beiden Hälften hier
+           direkt, die Käsefäden über den berechneten Stil. */
         const spanne = klemmen((p - RISS_AB) / (RISS_BIS - RISS_AB))
         el.style.setProperty('--spanne', String(spanne))
+
         if (links && rechts) {
+          const gebacken = String(fenster(p, GEBACKEN_AB, 1.2))
+          links.style.opacity = gebacken
+          rechts.style.opacity = gebacken
           /* Genau 30 % — dieselbe Zahl, mit der Kaesefaeden.tsx die Ansatz-
              punkte auseinanderzieht. Weichen sie ab, hängen die Fäden neben
              der Bruchkante statt daran. */
           links.style.transform = `translateX(${-30 * spanne}%) rotateY(${32 * spanne}deg)`
           rechts.style.transform = `translateX(${30 * spanne}%) rotateY(${-32 * spanne}deg)`
         }
+
+        /**
+         * Die Glut im Ofen. Sie geht dort auf, wo das Schiff eintaucht, und
+         * wieder zurück, wenn es heraus ist.
+         *
+         * Sie steht auf dem Wurzelelement und nicht auf der Ofensektion: das
+         * Schiff kennt die Sektion nicht, und es soll sie auch nicht kennen
+         * müssen. Wer die Glut sonst noch brauchen will, liest dieselbe
+         * Variable.
+         */
+        wurzel.style.setProperty('--ofen-glut', String(fenster(p, 0.71, 0.84, 0.07)))
       }
 
       const tween = gsap.to(zustand, {
@@ -229,10 +281,9 @@ export default function Kaeseschiff() {
         ease: 'none',
         onUpdate: zeichnen,
         scrollTrigger: {
-          /* Die Reise beginnt mit der ersten Sektion nach der Startseite und
-             endet mit der Sektion, in der gerissen wird. Beide werden über
-             Klassen gesucht statt über IDs: die Überschriften kommen noch vom
-             Inhaber, die Klassen bleiben. */
+          /* Von der ersten Sektion nach der Startseite bis zu der, in der
+             gerissen wird. Beide werden über Klassen gesucht statt über IDs:
+             die Überschriften kommen noch vom Inhaber, die Klassen bleiben. */
           trigger: '.prozess',
           start: 'top 88%',
           endTrigger: '.reise',
@@ -242,6 +293,7 @@ export default function Kaeseschiff() {
           onToggle: ({ isActive }) => {
             setAktiv(isActive)
             el.style.willChange = isActive ? 'transform, opacity' : ''
+            if (!isActive) wurzel.style.setProperty('--ofen-glut', '0')
           },
         },
       })
@@ -253,6 +305,7 @@ export default function Kaeseschiff() {
         tween.scrollTrigger?.kill()
         tween.kill()
         el.style.willChange = ''
+        wurzel.style.removeProperty('--ofen-glut')
       }
     })
 
@@ -262,8 +315,8 @@ export default function Kaeseschiff() {
     }
   }, [bereit, ruhig])
 
-  /* Ohne Bewegungswunsch fliegt hier gar nichts. Das Schiff steht dann als
-     Standbild in der Riss-Sektion — siehe Reise.tsx. */
+  /* Ohne Bewegungswunsch fliegt hier gar nichts — die Sektionen tragen dann
+     ihren Text und ihre Bilder, und das genügt. */
   if (ruhig || !bereit) return null
 
   return (
@@ -275,6 +328,18 @@ export default function Kaeseschiff() {
             <Dampf ton="ofen" />
           </div>
         )}
+
+        {STUFEN.map((s) => (
+          <img
+            key={s.klasse}
+            className={`schiff__stufe schiff__stufe--${s.klasse}`}
+            src={s.quelle}
+            width={M['stufe-1-kugel']!.breite}
+            height={M['stufe-1-kugel']!.hoehe}
+            alt=""
+            decoding="async"
+          />
+        ))}
 
         <img
           className="schiff__haelfte schiff__haelfte--links"
@@ -294,12 +359,12 @@ export default function Kaeseschiff() {
         />
 
         {/* Die Fäden liegen ÜBER den Hälften — eine Bruchfläche liegt vorn. */}
-        {aktiv && <Kaesefaeden klasse="schiff__faeden" menge={schmal ? 6 : 11} />}
+        {aktiv && <Kaesefaeden klasse="schiff__faeden" menge={schmal ? 4 : 6} />}
 
         {/* Getropft wird nur am Rechner. Am Handy ist unter dem Schiff kein
             Weg, auf dem ein Tropfen etwas erzählen könnte — und die drei
             Leinwände dort kosten ohnehin schon zu viel. */}
-        {aktiv && !schmal && <Kaesetropfen klasse="schiff__tropfen" menge={9} />}
+        {aktiv && !schmal && <Kaesetropfen klasse="schiff__tropfen" menge={6} />}
       </div>
     </div>
   )

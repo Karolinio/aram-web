@@ -22,6 +22,18 @@ import { useEffect, useRef } from 'react'
  * Ohne Schritt zwei fehlt alles. Mit ihm braucht es keine zwanzig Tropfen —
  * sechs reichen, weil jeder einzelne etwas erzählt.
  *
+ * ═══ Warum sie beim Riss VERSCHWINDEN ═══
+ *
+ * Sie hingen zuerst durchgehend, auch während das Gebäck auseinanderging.
+ * Sichtbar war das als fünf gelbe Mandeln, die mitten im leeren Raum zwischen
+ * den Hälften schwebten — Karol: „das der Käse schmelzen sieht auf jeden Fall
+ * so anders, wie keine Ahnung was."
+ *
+ * Er hatte recht, und der Grund ist einfach: ein Tropfen braucht etwas, von
+ * dem er tropft. Sobald die Hälften auseinander sind, ist unter der Mitte
+ * nichts mehr. Die Tropfen laufen deshalb mit der Spanne aus — erst tropft es,
+ * dann reisst es. Zwei Vorgänge nacheinander, nie beide zugleich.
+ *
  * ═══ Was er kostet ═══
  *
  * Keine Sprites, keine Weichzeichner: je Tropfen zwei gefüllte Pfade. Am
@@ -62,7 +74,7 @@ function neu(vorlauf: boolean): Tropfen {
     /* Gemessen: mit 0,012…0,028 kamen höchstens 178 von 39 000 Pixeln zusammen
        — 0,45 % der Fläche, also praktisch unsichtbar. Karol wollte sehen, dass
        der Käse tropft, nicht ahnen. */
-    gross: 0.018 + Math.random() * 0.022,
+    gross: 0.013 + Math.random() * 0.015,
     tempo: 0.22 + Math.random() * 0.2,
     /* Beim ersten Aufbau streuen, sonst lösen sich alle sechs im Gleichtakt. */
     pause: vorlauf ? Math.random() * 2.6 : Math.random() * 1.3,
@@ -117,9 +129,19 @@ export default function Kaesetropfen({ klasse, menge = 9 }: Props) {
       vorher = jetzt
       ctx.clearRect(0, 0, b, h)
 
+      /* Dieselbe Spanne, die auch die Hälften und die Fäden führen — gesetzt
+         vom Käseschiff, gelesen aus dem berechneten Stil. Bei voller Trennung
+         tropft nichts mehr. */
+      const roh = getComputedStyle(c).getPropertyValue('--spanne').trim()
+      const uebrig = 1 - Math.max(0, Math.min(1, Number(roh) || 0))
+      if (uebrig <= 0.02) {
+        id = requestAnimationFrame(bild)
+        return
+      }
+
       /* Warmes Cremegelb — derselbe Ton wie die Käsefäden. Geschmolzener
          Hirtenkäse ist nie reinweiss; ein weisser Tropfen liest als Milch. */
-      ctx.fillStyle = 'oklch(92% 0.07 90 / 0.95)'
+      ctx.fillStyle = `oklch(92% 0.07 90 / ${(0.95 * uebrig).toFixed(3)})`
 
       for (let i = 0; i < tropfen.length; i++) {
         const t = tropfen[i]!
@@ -176,11 +198,22 @@ export default function Kaesetropfen({ klasse, menge = 9 }: Props) {
           ctx.closePath()
           ctx.fill()
         }
-        /* Ein fallender Tropfen ist keine Kugel, sondern hinten spitz. */
+        /**
+         * Ein fallender Tropfen ist unten RUND und oben spitz.
+         *
+         * Die erste Fassung zog zwei gleiche Kurven um eine Mitte — das ergibt
+         * eine Form, die an beiden Enden spitz ist, und die liest sich als
+         * Blatt oder Kern, nicht als Tropfen. Fünf davon im leeren Raum sahen
+         * aus wie herabfallende Mandeln.
+         *
+         * Unten ein halber Kreis, oben eine Spitze: das ist die Form, an der
+         * das Auge einen Tropfen erkennt, und sie kostet einen Bogen mehr.
+         */
         ctx.beginPath()
-        ctx.moveTo(x, y - kugel * 1.5)
-        ctx.quadraticCurveTo(x + kugel, y, x, y + kugel)
-        ctx.quadraticCurveTo(x - kugel, y, x, y - kugel * 1.5)
+        ctx.arc(x, y, kugel, 0, Math.PI)
+        ctx.quadraticCurveTo(x - kugel * 0.8, y - kugel * 1.05, x, y - kugel * 2.1)
+        ctx.quadraticCurveTo(x + kugel * 0.8, y - kugel * 1.05, x + kugel, y)
+        ctx.closePath()
         ctx.fill()
         ctx.globalAlpha = 1
       }

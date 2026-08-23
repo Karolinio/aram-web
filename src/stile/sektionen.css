@@ -487,10 +487,38 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Fast volle Bildschirmhöhe: ein Video als Grund braucht Fläche, sonst ist
-     es ein Briefmarkenkino. `svh` statt `vh`, weil sonst die Höhe springt,
-     sobald die Adressleiste am Handy ein- und ausfährt. */
-  min-height: 94svh;
+  /**
+   * ═══ VOLLE Bildschirmhöhe, nicht 94 % ═══
+   *
+   * Die 94 waren Absicht: ein Streifen der nächsten Sektion sollte unten
+   * hervorschauen und sagen „hier geht es weiter". Gemessen sind das auf 900 px
+   * Fensterhöhe 54 px Clay unter dem Video — und genau die hat Karol dreimal
+   * als „diesen Balken unten" gemeldet, zuletzt am 23.08.: „Auf der Startseite
+   * brauchen wir definitiv diesen Balken nicht. Der muss weg."
+   *
+   * Er hat recht: die Aufgabe „es geht weiter" erledigt der Pfeil „Zur Karte",
+   * und der steht schon da. Ein angeschnittener Farbstreifen erledigt sie
+   * nicht, er sieht nur aus wie ein Fehler im Layout.
+   *
+   * ═══ `lvh`, nicht `svh` — und `vh` schon gar nicht ═══
+   *
+   *   vh    ignoriert die Adressleiste ganz. Am Handy ist der Hero damit
+   *         höher als der Bildschirm, und der Pfeil „Zur Karte" liegt hinter
+   *         der Leiste.
+   *   svh   die KLEINSTE Höhe, also mit sichtbarer Leiste. Gemessen auf einem
+   *         iPhone 13: Fenster 664 px, Hero 611 px — dieselben 53 px Clay
+   *         unten, die am Rechner beanstandet wurden, nur am Handy.
+   *   dvh   folgt der Leiste live. Der Hero ändert dann während des Scrollens
+   *         seine Höhe, und ScrollTrigger rechnet bei jeder Änderung alle
+   *         Bereiche der Seite neu.
+   *   lvh   die GRÖSSTE Höhe, und sie ist fest. Der Hero füllt den Bildschirm,
+   *         springt nicht, und wenn die Leiste sichtbar ist, scrollt man ein
+   *         paar Pixel weiter — das merkt niemand.
+   *
+   * `svh` bleibt als Rückfall für Browser ohne `lvh` in der Zeile darüber.
+   */
+  min-height: 100svh;
+  min-height: 100lvh;
   /**
    * Waagerecht beschnitten, senkrecht NICHT — und dieses Paar ist der Punkt.
    *
@@ -2346,7 +2374,11 @@
     /* 92 statt 70 svh. 70 stammt aus der Zeit, als hier ein Foto lag und
      darunter sofort Inhalt kam. Ein Video, das nur zwei Drittel des Schirms
      füllt, liest als eingebettetes Kästchen, nicht als Bühne. */
-  .backstube { min-height: 92svh; padding-block: 2rem 1.5rem; }
+  /* Auch hier VOLL. Die 92 waren dieselbe Absicht wie die 94 am Rechner und
+     derselbe Fehler: gemessen 611 px Hero in einem 664-px-Fenster, also 53 px
+     Clay unter dem Video. Zwei Regeln, ein Balken — die zweite hätte ich beim
+     ersten Anlauf fast übersehen. */
+  .backstube { min-height: 100svh; min-height: 100lvh; padding-block: 2rem 1.5rem; }
 
   /* Der Punkt vor dem Satz ist am Handy kleiner — 2,5 rem sind dort ein Fleck.
      Diese Regel stand zuerst in bausteine.css und wurde von der Grundregel
@@ -2621,6 +2653,118 @@
   .reise__buehne { min-height: 140vh; }
 }
 
+/* ── Der Ofen ─────────────────────────────────────────────────────────────
+ *
+ * Die einzige dunkle Sektion. Sie hält den Ofen an seinem Platz, damit das
+ * Schiff — das fest im Fenster liegt — ein festes Ziel hat: ohne `sticky`
+ * wäre das Maul bei jedem Scrollschritt woanders, und die Bahn träfe es nie.
+ */
+.ofen {
+  position: relative;
+  /**
+   * ═══ Warum sie so hoch sein muss ═══
+   *
+   * Der Klebebereich ist NICHT die Sektionshöhe, sondern was übrig bleibt:
+   * Sektion minus Textblock minus Bühnenhöhe. Bei 190 vh waren das gemessen
+   * 315 px — eine Drittel-Bildschirmhöhe, in der der ganze Ofensturz stattfinden
+   * sollte. Sichtbar war das als Ofen, der schon wieder nach oben wegrutschte,
+   * während das Schiff noch anflog.
+   *
+   *   Sektion 260 vh − Text 55 vh − Bühne 100 vh  =  105 vh Klebeweg
+   */
+  min-height: 260vh;
+  overflow: clip;
+}
+
+/* Sie klebt, damit das Maul ein FESTES Ziel im Fenster ist. Ohne das läge es
+   bei jedem Scrollschritt woanders, und die Bahn des Schiffs träfe es nie. */
+.ofen__buehne {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: clip;
+}
+
+/* Der Text steht VOR der klebenden Bühne im Fluss und scrollt normal davon —
+   siehe den Kommentar in Ofen.tsx, dort steht der gemessene Grund. */
+.ofen__wort {
+  position: relative;
+  z-index: 2;
+  padding-block: var(--raum-block) 0;
+}
+
+/**
+ * Das Maul liegt im Foto NICHT mittig, sondern bei 32,3 % seiner Breite —
+ * gemessen in werkzeug/ofenbild.py, nicht geschätzt. Der Versatz schiebt genau
+ * diesen Punkt in die Fenstermitte, damit das Schiff hineinfällt statt
+ * danebenzutreffen. Wer das Foto tauscht, misst neu.
+ */
+.ofen__maul {
+  position: absolute;
+  left: 50%;
+  bottom: -2vh;
+  /* Gross genug, dass der Bogen als Bogen zu lesen ist, klein genug, dass er
+     ganz ins Bild passt. Bei 74 rem lag die rechte Ziegelkante ausserhalb des
+     Fensters, und übrig blieb eine dunkle Fläche mit Feuer — kein Ofen. */
+  width: min(88vw, 56rem);
+  margin-left: calc(min(88vw, 56rem) * -0.323);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.ofen__maul img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/**
+ * Die Glut. Sie hängt an `--ofen-glut` — gesetzt vom Käseschiff, in demselben
+ * Frame, in dem es eintaucht. Eine zweite Zeitleiste für dasselbe Ereignis war
+ * schon einmal der Fehler.
+ *
+ * Ein Radialverlauf über dem Maul, in `screen` gemischt: er hellt auf, ohne
+ * die Ziegel zu überdecken. Eine deckende Fläche wäre ein Fleck.
+ */
+.ofen__glut {
+  position: absolute;
+  /* Auf dem MAUL, nicht irgendwo im Bild: 32,3 % / 37 % sind die gemessenen
+     Koordinaten des dunkelsten Punktes (werkzeug/ofenbild.py). Der erste
+     Anlauf stand bei 20/16 und war ein oranger Kreis neben dem Feuer. */
+  left: 32.3%;
+  top: 37%;
+  width: 17%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%) scale(calc(1 + var(--ofen-glut, 0) * 1.6));
+  background: radial-gradient(
+    circle,
+    oklch(95% 0.14 78 / 0.72) 0%,
+    oklch(78% 0.19 56 / 0.34) 34%,
+    oklch(62% 0.2 42 / 0) 68%
+  );
+  mix-blend-mode: screen;
+  opacity: var(--ofen-glut, 0);
+  will-change: opacity, transform;
+}
+
+@media (max-width: 719px) {
+  .ofen { min-height: 215vh; }
+  .ofen__maul { width: 150vw; margin-left: calc(150vw * -0.323); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ofen { min-height: 0; padding-block: var(--raum-block); }
+  .ofen__buehne { position: static; height: auto; }
+  .ofen__maul {
+    position: relative;
+    left: auto;
+    bottom: auto;
+    width: 100%;
+    margin: var(--raum-block) 0 0;
+  }
+  .ofen__glut { display: none; }
+}
+
 /* ── Das Käseschiff ───────────────────────────────────────────────────────
  *
  * ═══ Warum es fest im Fenster liegt und nicht in einer Sektion ═══
@@ -2674,7 +2818,7 @@
   inset: 0;
   margin: auto;
   width: min(84vw, 38rem);
-  aspect-ratio: 1100 / 454;
+  aspect-ratio: 1200 / 540;
   display: grid;
   place-items: stretch;
   transform-style: preserve-3d;
@@ -2697,6 +2841,19 @@
  * genau die Bruchkante ist. Damit fällt `justify-self` ersatzlos weg, und mit
  * ihm der Fehler, den Karol dreimal gemeldet hat.
  */
+/**
+ * Die Teigstufen. Sie liegen in derselben Rasterzelle wie die Hälften und in
+ * derselben Grösse — alle Quellen tragen dieselbe Leinwand (1200 × 540), damit
+ * beim Überblenden nichts springt.
+ */
+.schiff__stufe {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: auto;
+  opacity: 0;
+  backface-visibility: hidden;
+}
+
 .schiff__haelfte {
   grid-area: 1 / 1;
   width: 100%;

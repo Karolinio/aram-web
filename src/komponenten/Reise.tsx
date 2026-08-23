@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { useMedienabfrage, werkzeugHolen } from '../bewegung.ts'
-import Funken from './ui/Funken.tsx'
 import Mehlwolke from './ui/Mehlwolke.tsx'
 import { Kopf, Sektion } from './ui/bausteine.tsx'
 
@@ -67,7 +66,21 @@ export default function Reise() {
   return (
     <Sektion id="reise" grund="tief" klasse="reise" beschriftetVon="reise-titel">
       <div className="reise__buehne" ref={buehne}>
-        <Funken klasse="reise__funken" menge={schmal ? 14 : 30} />
+        {/* ═══ Die Funken sind RAUS ═══
+
+            Karol am 23.08.: „Diese Blasen am Ende, was soll das denn? Ach, das
+            ist aus."
+
+            Es waren Ofenfunken — und über einer dunklen Fläche wären sie das
+            auch gewesen. Über Clay nicht: ein oranger Punkt auf einem hellen
+            warmen Grund hat weder die Helligkeit noch die Bewegung, die einen
+            Funken ausmacht. Übrig blieben verstreute Kreise, und niemand, der
+            sie sieht, liest daraus Glut.
+
+            Dieselbe Lehre wie bei der Collage und beim Dampf-Ring: was auf
+            einem Grund funktioniert, funktioniert auf dem anderen nicht, und
+            der Ton entscheidet das, nicht die Bewegung. Funken.tsx bleibt
+            liegen — über einem Ofenfoto ist er richtig. */}
 
         <div className="schale reise__wort">
           <Kopf

@@ -1,14 +1,32 @@
 {
+ "stufe-1-kugel": {
+  "breite": 1200,
+  "hoehe": 540
+ },
+ "stufe-2-gewalzt": {
+  "breite": 1200,
+  "hoehe": 540
+ },
+ "stufe-3-belegt": {
+  "breite": 1200,
+  "hoehe": 540
+ },
  "schiff": {
-  "breite": 1100,
-  "hoehe": 454
+  "breite": 1200,
+  "hoehe": 540
  },
  "schiff-links": {
-  "breite": 1100,
-  "hoehe": 454
+  "breite": 1200,
+  "hoehe": 540
  },
  "schiff-rechts": {
-  "breite": 1100,
-  "hoehe": 454
+  "breite": 1200,
+  "hoehe": 540
+ },
+ "ofen-maul": {
+  "breite": 900,
+  "hoehe": 600,
+  "maulX": 0.323,
+  "maulY": 0.37
  }
 }

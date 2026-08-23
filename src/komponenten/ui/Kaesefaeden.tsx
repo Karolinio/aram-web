@@ -27,6 +27,26 @@ import { useEffect, useRef } from 'react'
  * SIE REISSEN NACHEINANDER. Alle gleichzeitig wäre ein Schnitt. Jeder Faden
  * bekommt deshalb eine eigene Reisslänge — der kürzeste zuerst, der zäheste
  * zuletzt. Danach hängt er an beiden Seiten herunter und zieht sich zusammen.
+ *
+ * ═══ Warum die zweite Fassung mit Strichen scheitern MUSSTE ═══
+ *
+ * Karol nach dem Ansehen: „das der Käse schmelzen sieht auf jeden Fall so
+ * anders, wie keine Ahnung was … das muss man dann besser sehen oder raus."
+ *
+ * Die Fäden waren gestrichene Kurven mit `lineWidth`. Ein Strich hat über
+ * seine ganze Länge EINE Stärke — die Einschnürung, die den ganzen Punkt
+ * ausmacht, lässt sich damit nicht zeichnen. Was blieb, waren elf gleich dicke
+ * Linien nebeneinander: ein Kamm, kein Käse.
+ *
+ * Jeder Faden ist jetzt eine GEFÜLLTE Fläche. Die Kurve wird abgetastet, an
+ * jeder Stelle wird eine eigene Halbbreite gerechnet, und daraus entsteht ein
+ * Umriss: dick an den beiden Wurzeln, dünn in der Mitte. Das kostet zwanzig
+ * Punkte statt zwei — und ist der Unterschied zwischen einem Strich und einem
+ * Strang.
+ *
+ * Und es sind FÜNF statt elf. Elf gleichmässig verteilte Fäden lesen sich als
+ * Raster; fünf verschieden dicke, dicht beieinander, als eine Käsemasse, die
+ * auseinandergezogen wird.
  */
 
 type Faden = {
@@ -50,7 +70,7 @@ type Props = {
   menge?: number
 }
 
-export default function Kaesefaeden({ klasse, menge = 9 }: Props) {
+export default function Kaesefaeden({ klasse, menge = 5 }: Props) {
   const ref = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
@@ -69,20 +89,70 @@ export default function Kaesefaeden({ klasse, menge = 9 }: Props) {
            der Leinwand zum Durchhängen.
            Vorher spannte sich 0,2…0,8 über eine anderthalbfache Leinwand: die
            Fäden hingen dann unter dem Gebäck in der Luft. */
-        oben: 0.1 + t * 0.3 + (Math.random() - 0.5) * 0.03,
-        obenRechts: 0.1 + t * 0.3 + (Math.random() - 0.5) * 0.05,
+        /* Ein enges Band statt einer gleichmässigen Verteilung: 0,15…0,33 der
+           Leinwand, und die Leinwand ist doppelt so hoch wie das Gebäck. Die
+           Fäden sitzen damit zwischen 30 und 66 % der Gebäckhöhe — dort, wo im
+           Bild der Käse liegt, und nicht über die ganze Kante verteilt. */
+        oben: 0.15 + t * 0.18 + (Math.random() - 0.5) * 0.03,
+        obenRechts: 0.15 + t * 0.18 + (Math.random() - 0.5) * 0.05,
         /* Gestaffelt von 0,35 bis 0,95: der erste reisst früh, der letzte hält
            fast bis zum Schluss. Ein wenig Zufall darüber, damit die Reihenfolge
            nicht von oben nach unten durchläuft. */
         reisst: 0.35 + t * 0.55 + (Math.random() - 0.5) * 0.12,
-        dicke: 0.004 + Math.random() * 0.007,
-        hang: 0.05 + Math.random() * 0.1,
+        /* Deutlich dicker als vorher (0,004…0,011) und viel weiter gestreut:
+           auf 608 px Gebäckbreite sind das Wurzeln von 7 bis 20 px. Gleich
+           dicke Fäden lesen sich als Kamm; verschieden dicke als Käse. */
+        dicke: 0.012 + Math.random() * 0.022,
+        hang: 0.055 + Math.random() * 0.075,
         phase: Math.random() * Math.PI * 2,
       }
     })
 
     let b = 0
     let h = 0
+
+    /** Ein Punkt auf einer quadratischen Bézierkurve. */
+    const punkt = (
+      x1: number, ay: number, mx: number, my: number, x2: number, by: number, t: number,
+    ): [number, number] => {
+      const u = 1 - t
+      return [
+        u * u * x1 + 2 * u * t * mx + t * t * x2,
+        u * u * ay + 2 * u * t * my + t * t * by,
+      ]
+    }
+
+    /**
+     * Ein Band zeichnen: die Kurve wird abgetastet, und an jeder Stelle sagt
+     * `breite(t)`, wie dick der Faden dort ist. Der Umriss läuft auf der
+     * Oberkante hin und auf der Unterkante zurück.
+     *
+     * Senkrecht versetzt und nicht entlang der Normalen — die Fäden liegen
+     * annähernd waagerecht, und der Unterschied wäre bei dieser Neigung
+     * kleiner als ein Pixel. Die Normale zu rechnen kostet je Punkt eine
+     * Wurzel; das ist der Preis für nichts.
+     */
+    const ABTASTUNG = 20
+    const band = (
+      bahn: (t: number) => [number, number],
+      breite: (t: number) => number,
+    ) => {
+      ctx.beginPath()
+      for (let i = 0; i <= ABTASTUNG; i++) {
+        const t = i / ABTASTUNG
+        const [x, y] = bahn(t)
+        const w = Math.max(0.35, breite(t))
+        if (i === 0) ctx.moveTo(x, y - w)
+        else ctx.lineTo(x, y - w)
+      }
+      for (let i = ABTASTUNG; i >= 0; i--) {
+        const t = i / ABTASTUNG
+        const [x, y] = bahn(t)
+        ctx.lineTo(x, y + Math.max(0.35, breite(t)))
+      }
+      ctx.closePath()
+      ctx.fill()
+    }
 
     const messen = () => {
       /**
@@ -122,10 +192,16 @@ export default function Kaesefaeden({ klasse, menge = 9 }: Props) {
       const roh = getComputedStyle(c).getPropertyValue('--spanne').trim()
       const spanne = Math.max(0, Math.min(1, Number(roh) || 0))
 
+      /* Warmes Cremeweiss mit einem Stich Gelb — geschmolzener Hirtenkäse
+         ist nie reinweiss. Ein weisser Strang liest als Faden, ein gelblicher
+         als Käse. */
+      ctx.fillStyle = 'oklch(94% 0.055 92 / 0.94)'
       ctx.clearRect(0, 0, b, h)
       if (spanne > 0.001) {
         /* Die Ansatzpunkte wandern mit den Hälften auseinander: bei Spanne 1
-           sitzen sie am äusseren Drittel, bei 0 in der Mitte. */
+           sitzen sie am äusseren Drittel, bei 0 in der Mitte. Die 0,3 ist
+           dieselbe Zahl, mit der Kaeseschiff.tsx die Hälften verschiebt —
+           weichen sie ab, hängen die Fäden neben der Bruchkante. */
         const links = b * (0.5 - spanne * 0.3)
         const rechts = b * (0.5 + spanne * 0.3)
 
@@ -135,39 +211,40 @@ export default function Kaesefaeden({ klasse, menge = 9 }: Props) {
           const y2 = h * f.obenRechts
           /* Straffung: je weiter gezogen, desto weniger Durchhang. */
           const straff = Math.min(1, spanne / Math.max(f.reisst, 0.001))
-          const hang = h * f.hang * (1 - straff * 0.8)
-          /* Einschnürung: in der Mitte am dünnsten, und sie nimmt zu, je näher
-             der Riss kommt. */
-          const dick = b * f.dicke * (1 - straff * 0.65)
+          const hang = h * f.hang * (1 - straff * 0.72)
+          const wurzel = b * f.dicke * (1 - straff * 0.28)
 
-          ctx.beginPath()
           if (!gerissen) {
             const mx = (links + rechts) / 2
-            const my = (y1 + y2) / 2 + hang + Math.sin(zeit * 1.4 + f.phase) * h * 0.004
-            ctx.moveTo(links, y1)
-            ctx.quadraticCurveTo(mx, my, rechts, y2)
-            ctx.lineWidth = Math.max(0.6, dick)
+            const my = (y1 + y2) / 2 + hang + Math.sin(zeit * 1.3 + f.phase) * h * 0.004
+            band(
+              (t) => punkt(links, y1, mx, my, rechts, y2, t),
+              /* Die Einschnürung. `sin(pi t)` ist in der Mitte 1 und an beiden
+                 Enden 0; die Wurzel 0,55 zieht sie zu den Enden hin schneller
+                 hoch, sodass der Faden nicht spindelförmig, sondern wie ein
+                 zäher Strang aussieht: kurze dicke Ansätze, langer dünner
+                 Mittelteil. Und sie NIMMT ZU, je näher der Riss kommt. */
+              (t) => wurzel * (1 - Math.sin(Math.PI * t) ** 0.55 * (0.5 + straff * 0.42)),
+            )
           } else {
-            /* Nach dem Riss: zwei kurze Enden, die zurückschnellen. Sie werden
-               kürzer und blasser, je weiter man zieht — was gerissen ist,
-               zieht sich zusammen. */
-            const rest = Math.max(0, 1 - (spanne - f.reisst) * 5)
+            /* Nach dem Riss: zwei Enden, die zurückschnellen und nach unten
+               hängen. Sie werden kürzer und blasser, je weiter man zieht —
+               was gerissen ist, zieht sich zusammen. */
+            const rest = Math.max(0, 1 - (spanne - f.reisst) * 4)
             if (rest <= 0.02) continue
-            const laenge = b * 0.07 * rest
-            ctx.moveTo(links, y1)
-            ctx.quadraticCurveTo(links + laenge * 0.6, y1 + hang * 0.5, links + laenge, y1 + hang * 0.9)
-            ctx.moveTo(rechts, y2)
-            ctx.quadraticCurveTo(rechts - laenge * 0.6, y2 + hang * 0.5, rechts - laenge, y2 + hang * 0.9)
-            ctx.lineWidth = Math.max(0.6, dick * rest)
+            const lang = b * 0.1 * rest
+            const tief = hang * 1.6 + h * 0.03
             ctx.globalAlpha = rest
+            band(
+              (t) => punkt(links, y1, links + lang * 0.55, y1 + tief * 0.5, links + lang * 0.7, y1 + tief, t),
+              (t) => wurzel * rest * (1 - t * 0.86),
+            )
+            band(
+              (t) => punkt(rechts, y2, rechts - lang * 0.55, y2 + tief * 0.5, rechts - lang * 0.7, y2 + tief, t),
+              (t) => wurzel * rest * (1 - t * 0.86),
+            )
+            ctx.globalAlpha = 1
           }
-          /* Warmes Cremeweiss mit einem Stich Gelb — geschmolzener Hirtenkäse
-             ist nie reinweiss. Ein weisser Faden liest als Faden, ein
-             gelblicher als Käse. */
-          ctx.strokeStyle = 'oklch(93% 0.055 92 / 0.92)'
-          ctx.lineCap = 'round'
-          ctx.stroke()
-          ctx.globalAlpha = 1
         }
       }
       id = requestAnimationFrame(bild)

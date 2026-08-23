@@ -7,38 +7,57 @@ weiterzubauen.
 
 ---
 
-## Was am 23.08. umgebaut wurde
+## Die Ofenreise — der Stand vom 23.08.
 
-**Das Käseschiff wohnt nicht mehr in einer Sektion.** Es liegt fest im Fenster
+Das Käseschiff wohnt in KEINER Sektion. Es liegt fest im Fenster
 (`src/komponenten/Kaeseschiff.tsx`, `position: fixed`) und wird allein vom
 Scrollfortschritt geführt — von der Oberkante der Handarbeit bis zur Unterkante
-der Riss-Sektion, also über drei Sektionen. Die Bahn ist eine
-**Wegpunkttabelle** (`BAHN`), keine Formel: jede Zeile ist eine Stelle auf der
-Seite, jede Spalte eine Bewegung. Wer die Bahn ändern will, ändert Zahlen in
-dieser Tabelle und sonst nichts.
+der Riss-Sektion. Es erzählt dabei den ganzen Vorgang:
+
+```
+Teigkugel → gewalzt → belegt → IN DEN OFEN → gebacken → reisst auf
+```
+
+**Drei Fahrpläne, ein Fortschritt.** `BAHN` (wohin), `STUFEN` (welches Bild),
+`RISS_AB`/`RISS_BIS` (wie weit offen) lesen alle dieselbe Zahl. Ein zweiter
+ScrollTrigger für den Riss war der Fehler der Vorfassung — das Gebäck war
+gemessen mitten in der Galerie schon halb offen.
 
 **Die Wegpunkte sind nach den ÜBERSCHRIFTEN gewählt, nicht nach der Kurve.** Es
-gibt drei Fenster, in denen das Schiff tief oder rechts stehen MUSS, weil sonst
-eine Überschrift darunter liegt — sie stehen im Kopf der Datei. Wer neue
-Sektionen einzieht oder Höhen ändert, muss diese Fenster nachrechnen.
+gibt Fenster, in denen das Schiff tief oder rechts stehen MUSS, sonst parkt es
+auf einer Zeile. Sie stehen im Kopf der Datei. Wer Sektionshöhen ändert, misst
+sie neu.
 
-**Der Riss kommt aus DEMSELBEN Fortschritt wie der Flug** (`RISS_AB`,
-`RISS_BIS`). Ein zweiter ScrollTrigger dafür war der Fehler der Vorfassung: das
-Gebäck war mitten in der Galerie schon halb offen.
+**Der Ofen ist IHR Ofen** — Galeriefoto 09, beschnitten (`werkzeug/ofenbild.py`).
+Erzeugt sind nur die Teigstufen; Mehl und Teig sind Material ohne erkennbaren
+Ort. Das Maul liegt bei 32,3 % / 37 % des Bildes, gemessen — der Versatz im
+Stilblatt schiebt genau diesen Punkt in die Fenstermitte. Wer das Foto tauscht,
+misst neu.
 
-**Raus sind:** der Öffnungsstatus aus der Kopfzeile, das Band unter der
-Startseite samt Collage, der Satzblock unter dem Video. Oeffnung.tsx,
-Collage.tsx und Auftritt.tsx bleiben im Bau — sie werden gebraucht.
+**Die Teigstufen** (`werkzeug/ofenreise.py`) sind mit nano_banana_pro erzeugt,
+MIT dem gebackenen Schiff als Referenz — nur deshalb stimmen Umriss,
+Blickwinkel und Licht überein. Alle liegen auf DERSELBEN Leinwand (1200 × 540);
+ohne das springt der Gegenstand bei jedem Wechsel.
 
-**Drei Fehler, die nur eine Messung findet:**
+### Fehler, die nur eine Messung findet
 
 - `justify-self` war bei den Hälften vertauscht — die Bruchkante zeigte nach
-  aussen. Das war der Grund, warum das Schiff dreimal „falsch rum" aufging.
-- Die Hälften waren einzeln auf ihren Inhalt zugeschnitten (696 / 692 / 1100 px)
-  und passten deshalb nie zusammen. Sie tragen jetzt alle die volle Leinwand.
-- Die Leinwände massen sich mit `getBoundingClientRect` — also in der
-  TRANSFORMIERTEN Grösse. Im skalierten Schiff hiess das 158 px Speicher für
-  eine Fläche, die bis 608 px wächst. Jetzt `offsetWidth`.
+  aussen. Grund für dreimal „falsch rum".
+- Die Hälften waren einzeln zugeschnitten und passten nie zusammen. Volle
+  Leinwand für alle.
+- Die Leinwände massen sich mit `getBoundingClientRect`, also TRANSFORMIERT: im
+  skalierten Schiff 158 px Speicher für eine Fläche, die auf 608 px wächst.
+  Jetzt `offsetWidth`.
+- Die Käsefäden waren GESTRICHENE Kurven. Ein Strich hat eine Stärke — die
+  Einschnürung, die Käse ausmacht, ist damit nicht zeichenbar. Jetzt gefüllte
+  Bänder mit eigener Halbbreite je Abtastpunkt.
+- Der Dampfton `warm` hat einen dunklen Saum. Über Clay verschwindet sein heller
+  Kern und übrig bleibt ein RING. Neuer Ton `ofen`, streng monoton fallend.
+- Die Überschrift der Ofensektion stand auf ihrem eigenen Etikett: `useVersatz`
+  rechnet seinen Bereich aus der Dokumentposition, und die ist in einem
+  klebenden Block konstant. Text gehört NICHT in eine klebende Bühne.
+- Der Balken unter dem Hero stand in ZWEI Regeln: `94svh` am Rechner und
+  `92svh` im Handy-Block. Beide auf `100lvh`.
 
 ---
 
