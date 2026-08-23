@@ -1,53 +1,46 @@
 import { useEffect, useRef, useState } from 'react'
 
 import reiseRoh from '../../inhalt/reise.json'
-import { useMedienabfrage, werkzeugHolen } from '../bewegung.ts'
+import { useFlug, useMedienabfrage, werkzeugHolen } from '../bewegung.ts'
 import Dampf from './ui/Dampf.tsx'
 import Funken from './ui/Funken.tsx'
+import Kaesefaeden from './ui/Kaesefaeden.tsx'
 import Mehlwolke from './ui/Mehlwolke.tsx'
-import { Sektion } from './ui/bausteine.tsx'
+import { Kopf, Sektion } from './ui/bausteine.tsx'
 
 type Mass = { breite: number; hoehe: number }
 const M = reiseRoh as Record<string, Mass>
 
 /**
- * Die Reise — EIN Gegenstand, gross, der aufbricht.
+ * Die Reise — das Käseschiff FLIEGT mit, und reisst erst am Ende.
  *
- * ═══ Von vier Takten auf einen ═══
+ * ═══ Was an den beiden Vorfassungen falsch war ═══
  *
- * Vorher flogen hier drei Gegenstände nacheinander durch: eine Scheibe, ein
- * Fatayer, dann das Schiffchen. Karol nach dem Ansehen: „ich glaube es ist
- * nichts davon geeignet für diese Scroll-Reise, ich sag ehrlich hässlich. Das
- * Käseschiff sollte XL grossflächig als EINZELNE Animation eingesetzt werden."
+ * Fassung 1 liess drei Gegenstände nacheinander durch eine angeheftete Bühne
+ * fliegen. Fassung 2 machte daraus einen einzigen, sehr grossen, der aus der
+ * Tiefe kam und aufbrach. Karol zu beiden: falsch.
  *
- * Er hat die Freisteller gesehen, ich nicht. Aber der Grund, warum er recht
- * hat, lässt sich auch ohne Augen nennen: drei mittelgrosse Gegenstände
- * nacheinander sind eine Aufzählung. Jeder bekommt ein Fünftel der Fläche und
- * ein Fünftel der Zeit, und keiner bekommt genug von beidem, um zu wirken.
- * Ein Gegenstand, der den halben Bildschirm füllt und aufbricht, ist ein
- * Ereignis.
+ * Sein Bild ist ein anderes, und er hat es genau beschrieben: „wenn man
+ * scrollt, soll das Käseschiff mit dem Scrollen mit runtergehen … wie so ein
+ * magischer Cursor als Pide." Nicht auftreten und stehen bleiben, sondern
+ * MITKOMMEN. Und: „nicht so gross wie in dieser einen Sektion … drei bis vier
+ * oder fünf Mal so gross wie die Dinger, die da rumfliegen."
  *
- * Das ist auch der billigere Bau: ein Gegenstand braucht ein gutes Foto,
- * drei brauchen drei.
+ * Damit fällt die Anheftung weg. Eine angeheftete Bühne HÄLT AN — und ein
+ * Gegenstand, der einen begleitet, kann nicht anhalten. Er hängt jetzt am
+ * Scroll und läuft ihm nach: die Seite zieht hoch, das Schiff bleibt zurück
+ * und wandert dadurch langsam über den Bildschirm.
  *
- * ═══ Die drei Takte ═══
+ * ═══ Und das Abreissen ═══
  *
- *   Feuer    die leere Bühne, Funken. Wer hier arbeitet und seit wann.
- *   Ankunft  das Schiffchen kommt von hinten heran, XL, mit einem Stoss Mehl
- *            beim Aufsetzen.
- *   Bruch    es GEHT AUF — zwei Hälften schwingen auseinander, Dampf quillt
- *            aus der Bruchstelle.
+ * „Das muss voneinander am Ende, wenn man unten ist, getrennt werden … als
+ * würde man ein Käseschiff so in ein Stück abreissen, wie im echten Leben."
  *
- * ═══ PLATZHALTER — bitte lesen, bevor jemand das hier fertig nennt ═══
- *
- * Der Gegenstand in `public/bilder/reise/` ist aus einem WhatsApp-Foto
- * freigestellt und laut Karol nicht gut genug. Er ist hier drin, damit die
- * Choreografie steht und geprüft werden kann — nicht, weil er bleiben soll.
- *
- * Was ihn ersetzt, steht in ABLICHTUNG.md: ein Foto mit genau den
- * Eigenschaften, die ein Gegenstand braucht, der aufbrechen soll. Sobald es
- * da ist, sind es zwei Zeilen: freistellen, brechen lassen, fertig — die
- * Zeitleiste bleibt unverändert.
+ * Der Riss steht deshalb ganz am Schluss der Sektion, nicht in ihrer Mitte, und
+ * er ist kein Auseinanderschieben mehr: zwischen den Hälften stehen Käsefäden,
+ * die sich straffen, einschnüren und nacheinander reissen. Was aus zwei
+ * verschobenen Bildhälften ein Abreissen macht, ist der WIDERSTAND — siehe
+ * ui/Kaesefaeden.tsx.
  */
 export default function Reise() {
   const schmal = useMedienabfrage('(max-width: 719px)')
@@ -57,7 +50,39 @@ export default function Reise() {
   const rechts = useRef<HTMLImageElement>(null)
   const bruchdampf = useRef<HTMLDivElement>(null)
   const [mehlstoss, setMehlstoss] = useState(0)
-  const texte = useRef<HTMLOListElement>(null)
+
+  /**
+   * Der Flug. Er hängt an der SEKTION, nicht am Schiff — hinge er am Schiff,
+   * verschöbe sich sein eigener Auslösebereich mit jeder Bewegung.
+   *
+   * `y` von −0,45 auf 0,55 Fensterhöhen: das Schiff beginnt oberhalb der Mitte
+   * und endet darunter. Es wandert also über die ganze Durchfahrt langsam nach
+   * unten, während die Seite nach oben zieht — das ist das Begleiten, das
+   * Karol meint. Ein Gegenstand, der GEGEN den Scroll steigt, zieht vorbei;
+   * einer, der mit ihm sinkt, bleibt bei einem.
+   */
+  const flug = useFlug<HTMLDivElement>({
+    /* Von 0 auf 2,05 Fensterhöhen. Die erste Fassung stand auf −0,45 bis 0,55
+       und ist gemessen GESTIEGEN statt zu sinken: die Sektion scrollt über ihre
+       ganze Länge an einem vorbei — knapp drei Fensterhöhen — und ein
+       Gegenstand, der dabei nur eine Fensterhöhe mitwandert, bleibt netto
+       zurück und läuft nach oben aus dem Bild.
+       Damit er MITKOMMT, muss er fast so weit wandern wie die Sektion lang
+       ist. Bei 2,05 sinkt er sichtbar, ohne die Sektion zu verlassen. */
+    /* Ein knappes Drittel Bildschirmhöhe Drift, nicht mehr. Das Kleben hält
+       den Gegenstand im Bild; die Bahn gibt ihm nur die Bewegung darin.
+       Frühere Fassungen haben beides über die Bahn lösen wollen und sind
+       gestiegen statt zu sinken. */
+    y: [-0.16, 0.3],
+    x: [-6, 6],
+    dreh: [-9, 7],
+    drehY: [-16, 14],
+    drehX: [7, -5],
+    z: [-140, 40],
+    skala: [0.86, 1.06],
+    buehne: '.reise',
+    abBreite: 0,
+  })
 
   useEffect(() => {
     const b = buehne.current
@@ -72,147 +97,64 @@ export default function Reise() {
       const mm = gsap.matchMedia()
 
       mm.add('(prefers-reduced-motion: no-preference)', () => {
-        const zeilen = texte.current
-          ? Array.from(texte.current.querySelectorAll<HTMLElement>('li'))
-          : []
-
-        /* Ausgangslage. Sie steht HIER und nicht im Stilblatt: was eine
-           Zeitleiste bewegt, soll sie auch setzen — sonst stehen Anfangswerte
-           an zwei Orten und laufen beim nächsten Umbau auseinander. */
-        gsap.set(schiff.current, { autoAlpha: 0 })
         gsap.set([links.current, rechts.current], { xPercent: 0, rotationY: 0 })
         gsap.set(bruchdampf.current, { autoAlpha: 0 })
-        gsap.set(zeilen, { autoAlpha: 0, y: 18 })
+        gsap.set(b, { '--spanne': 0 })
 
-        const tl = gsap.timeline({
+        /**
+         * Der Riss — die letzten dreissig Prozent der Sektion.
+         *
+         * Er hat einen EIGENEN Auslöser und hängt nicht am Flug: der Flug
+         * beginnt, sobald die Sektion von unten ins Bild kommt, der Riss erst,
+         * wenn man wirklich unten ist. Zwei Ereignisse, zwei Bereiche.
+         *
+         * `--spanne` ist der gemeinsame Takt: die Hälften lesen sie über ihre
+         * eigenen Tweens, die Käsefäden lesen sie in jedem Frame aus dem
+         * berechneten Stil. Eine Zahl, drei Verbraucher — so kann nichts
+         * auseinanderlaufen.
+         */
+        const riss = gsap.timeline({
           defaults: { ease: 'none' },
           scrollTrigger: {
             trigger: b,
-            start: 'top top',
-            /* Drei Bildschirmhöhen für vier Takte. Mehr wäre bequemer zu
-               choreografieren und würde die Seite auf über sechzehn
-               Bildschirmhöhen treiben — auf einem Daumen ist das Arbeit. */
-            /* Zweieinhalb statt drei Bildschirmhöhen: ein Takt weniger, und
-               die Seite lag bei 15,7 Bildschirmhöhen — zu viel Daumen. */
-            end: () => `+=${window.innerHeight * 2.4}`,
-            pin: true,
-            /* `transform` statt `fixed`: eine angeheftete Sektion in `fixed`
-               nimmt ihren Platz aus dem Fluss und verschiebt alles darunter.
-               Das hat auf dieser Seite schon einmal CLS 0,525 gekostet. */
-            pinType: 'transform',
+            /* Erst am ENDE. Die erste Fassung begann eine Vierteilfensterhöhe
+               BEVOR die Sektion unten ankam und war bei halbem Weg schon fertig
+               — gemessen Spanne 1,0 bei 50 %. Karol: „das muss voneinander am
+               Ende, wenn man unten ist, getrennt werden."
+               Jetzt beginnt der Riss, wenn die Unterkante der Sektion die
+               Unterkante des Fensters erreicht, und braucht dafür eine halbe
+               Fensterhöhe. */
+            start: 'bottom bottom',
+            end: 'bottom bottom-=55%',
             scrub: true,
-            anticipatePin: 1,
             invalidateOnRefresh: true,
           },
         })
+        riss.to(b, { '--spanne': 1, duration: 1 }, 0)
+        /* Die Hälften kippen nach VORN auf: der Blick fällt in das Gebäck
+           hinein statt daran vorbei. Man soll Käse sehen, nicht Rinde. */
+        riss.to(links.current, { xPercent: -30, rotationY: 30, duration: 1 }, 0)
+        riss.to(rechts.current, { xPercent: 30, rotationY: -30, duration: 1 }, 0)
+        /* Dampf kommt erst, wenn der Spalt da ist — und bleibt danach. */
+        riss.to(bruchdampf.current, { autoAlpha: 1, duration: 0.45 }, 0.2)
 
-        const zeigen = (i: number, ab: number, bis: number) => {
-          tl.to(zeilen[i]!, { autoAlpha: 1, y: 0, duration: 0.09 }, ab)
-          tl.to(zeilen[i]!, { autoAlpha: 0, y: -14, duration: 0.08 }, bis)
-        }
-
-        /**
-         * ═══ Der Rhythmus — Karol: „mach einen angenehmen Flow draus, das ist
-         *     noch viel zu unkonsistent in der Abfolge" ═══
-         *
-         * Die erste Fassung hatte Löcher. Die Ankunft endete bei 0,52, der
-         * Bruch begann bei 0,62 — dazwischen zehn Prozent des Scrollwegs, in
-         * denen nichts passierte, und das ist genau die Stelle, an der eine
-         * Bewegung „unrund" wird. Ein Betrachter merkt nicht, dass etwas fehlt;
-         * er merkt, dass es stockt.
-         *
-         * Jetzt greift jeder Takt in den nächsten, und zwar mit fester
-         * Überlappung: was aufhört, ist noch da, während das Nächste beginnt.
-         *
-         *   0,00 ─────── 0,22   Feuer, Satz 1
-         *          0,14 ─────── 0,48   Ankunft aus der Tiefe
-         *                 0,30 ─────── 0,58   Satz 2
-         *                        0,50 ─────── 0,84   der Bruch
-         *                             0,58 ─────── 0,98   Satz 3, Dampf
-         *
-         * Kein Abschnitt beginnt, wo der vorige endet. Das ist der ganze
-         * Unterschied zwischen einer Folge und einer Liste.
-         */
-
-        /* ── Takt 1: Feuer ─────────────────────────────────────────────── */
-        zeigen(0, 0.01, 0.22)
-
-        /* ── Takt 2: die Ankunft ───────────────────────────────────────────
-           Von hinten heran und gross werden — nicht von der Seite herein. Ein
-           Gegenstand, der von links kommt, zieht vorbei; einer, der aus der
-           Tiefe wächst, kommt AUF EINEN ZU. Das ist der Unterschied zwischen
-           einer Parade und einem Auftritt.
-
-           `z` von −900 auf 0 statt eines blossen Massstabs: mit Perspektive
-           wächst die Silhouette so, wie ein Ding wächst, das näher kommt. */
-        tl.fromTo(
-          schiff.current,
-          { autoAlpha: 0, z: -900, yPercent: 12, rotationX: 22, rotationY: -10 },
-          { autoAlpha: 1, z: 0, yPercent: 0, rotationX: 0, rotationY: 0, duration: 0.34 },
-          0.14,
-        )
-        /* 0,26 statt 0,30: Satz 1 blendet bei 0,22 aus und braucht dafür 0,08.
-           Beginnt der zweite erst bei 0,30, steht zwischen 0,28 und 0,30 gar
-           nichts — gemessen war das die Lücke, die die Abfolge stocken liess.
-           Jetzt greift der zweite, während der erste noch geht. */
-        zeigen(1, 0.26, 0.56)
-
-        /**
-         * Der Mehlstoss beim AUFSETZEN — ein eigener Auslöser, keine Zeile in
-         * der Zeitleiste.
-         *
-         * Eine Zeitleiste mit `scrub` läuft rückwärts, wenn man zurückscrollt.
-         * Ein Stoss kann das nicht: er hat einen Anfang und ein Ende, und
-         * rückwärts abgespielt wäre er eine Wolke, die ins Blech zurückspringt.
-         * Deshalb ein Ereignis, das in BEIDE Richtungen dasselbe tut.
-         */
+        /* Der Mehlstoss beim Eintreten: ein EREIGNIS, keine Zeile in einer
+           gescrubbten Leiste. Rückwärts abgespielt wäre eine Wolke, die ins
+           Blech zurückspringt. */
         const stoss = ScrollTrigger.create({
           trigger: b,
-          start: () => `top+=${window.innerHeight * 2.4 * 0.4} top`,
-          end: () => `top+=${window.innerHeight * 2.4 * 0.5} top`,
+          start: 'top center',
+          end: 'top top',
           onEnter: () => setMehlstoss((n) => n + 1),
           onEnterBack: () => setMehlstoss((n) => n + 1),
           invalidateOnRefresh: true,
         })
 
-        /**
-         * ═══ Takt 3: der Bruch — und zwar ANDERSHERUM ═══
-         *
-         * Karol: „das Käseschiff soll genau andersrum aufgehen, nicht so."
-         *
-         * Vorher drehten die Hälften mit dem Rücken zum Betrachter auf: die
-         * linke nach links WEG, die rechte nach rechts weg. Man sah dabei
-         * genau das, was ein aufbrechendes Gebäck NICHT zeigen soll — die
-         * Aussenseiten, also Kruste. Die Bruchflächen zeigten voneinander weg.
-         *
-         * Jetzt kippen sie zum Betrachter hin: die Bruchflächen drehen nach
-         * VORN, und der Blick fällt in das Gebäck hinein statt daran vorbei.
-         * Es ist dieselbe Bewegung mit umgekehrtem Vorzeichen, und sie
-         * entscheidet, ob man Käse sieht oder Rinde.
-         *
-         * Die Hälften drehen UND schieben: nur drehen sähe aus wie zwei Türen,
-         * nur schieben wie ein Schnitt. Beides zusammen ist ein Bruch.
-         */
-        tl.to(links.current, { xPercent: -24, rotationY: 34, duration: 0.34 }, 0.5)
-        tl.to(rechts.current, { xPercent: 24, rotationY: -34, duration: 0.34 }, 0.5)
-        zeigen(2, 0.58, 0.98)
-        /* Der Dampf beginnt, wenn der Spalt DA ist — nicht davor. Dampf aus
-           einem geschlossenen Gebäck ist die Aussage, bevor sie stimmt.
-           Er läuft länger als der Bruch: was aufsteigt, hört nicht auf, wenn
-           die Bewegung darunter endet. */
-        tl.to(bruchdampf.current, { autoAlpha: 1, duration: 0.22 }, 0.58)
-
         return () => {
           stoss.kill()
-          tl.scrollTrigger?.kill()
-          tl.kill()
-          gsap.set(
-            [
-              schiff.current, links.current, rechts.current, bruchdampf.current,
-              ...zeilen,
-            ],
-            { clearProps: 'all' },
-          )
+          riss.scrollTrigger?.kill()
+          riss.kill()
+          gsap.set([links.current, rechts.current, bruchdampf.current, b], { clearProps: 'all' })
         }
       })
 
@@ -227,30 +169,26 @@ export default function Reise() {
   }, [])
 
   return (
-    <Sektion id="reise" grund="glut" klasse="reise" beschriftetVon="reise-titel">
-      <h2 id="reise-titel" className="visuell-versteckt">
-        Wie bei Aram gebacken wird
-      </h2>
-
+    <Sektion id="reise" grund="tief" klasse="reise" beschriftetVon="reise-titel">
       <div className="reise__buehne" ref={buehne}>
-        {/* Am Handy halb so viele. Gemessen mit vierfach gebremster
-            Rechenleistung: die Bühne trieb die zähen Bilder von 5,8 auf
-            10,5 %. Ein Funkenfeld ist der billigste Posten, den man halbieren
-            kann, ohne dass es auffällt — bei 34 Funken sieht niemand, dass es
-            16 sind, aber jeder spürt den Unterschied beim Wischen. */}
-        <Funken klasse="reise__funken" menge={schmal ? 16 : 34} />
+        <Funken klasse="reise__funken" menge={schmal ? 14 : 28} />
 
-        <div className="reise__flug" aria-hidden="true">
-          {/* Der Stoss wird über einen ZÄHLER ausgelöst, nicht über Deckkraft.
-              Eine Wolke, die man einblendet, ist eine stehende Wolke, die
-              sichtbar wird — sie hat keinen Zeitpunkt. Ein Stoss beginnt. */}
+        <div className="schale reise__wort">
+          <Kopf
+            id="reise-titel"
+            etikett="Ofenfrisch"
+            titel="Und dann bricht es auf"
+            lead="Zweiundzwanzig Sorten Fata’er, von Hand gerollt und erst bei deiner Bestellung belegt. Das Käseschiffchen kommt als Letztes aus dem Ofen — und hält am längsten warm."
+          />
+        </div>
+
+        <div className="reise__flug" ref={flug} aria-hidden="true">
           <div className="reise__mehl">
-            <Mehlwolke stoss={mehlstoss} menge={schmal ? 46 : 96} />
+            <Mehlwolke stoss={mehlstoss} menge={schmal ? 40 : 84} />
           </div>
 
           <div className="reise__schiff" ref={schiff}>
-            {/* Der Dampf liegt HINTER den Hälften: er kommt aus dem Spalt,
-                nicht davor. Davor wäre er ein Schleier über dem Produkt. */}
+            {/* Dampf HINTER den Hälften: er kommt aus dem Spalt, nicht davor. */}
             <div className="reise__bruchdampf" ref={bruchdampf}>
               <Dampf ton="hell" />
             </div>
@@ -274,26 +212,11 @@ export default function Reise() {
               loading="lazy"
               decoding="async"
             />
+            {/* Die Fäden liegen ÜBER den Hälften: sie spannen zwischen den
+                Bruchflächen, und eine Bruchfläche liegt vorne. */}
+            <Kaesefaeden klasse="reise__faeden" menge={schmal ? 6 : 10} />
           </div>
         </div>
-
-        {/* Die Texte sind eine ECHTE Liste in Leserichtung. Wer nicht scrollen
-            kann oder vorgelesen bekommt, hört vier Sätze in der richtigen
-            Reihenfolge — die Bewegung ist die Zugabe, nicht der Inhalt. */}
-        <ol className="reise__texte" ref={texte}>
-          <li>
-            <span className="etikett">Seit über 25 Jahren</span>
-            <p>Fünf Brüder, ein Steinofen, jeden Morgen ab sechs.</p>
-          </li>
-          <li>
-            <span className="etikett">Von Hand gerollt</span>
-            <p>Weizenmehl, Hirtenkäse, und zweiundzwanzig Sorten Fata’er — belegt erst bei deiner Bestellung.</p>
-          </li>
-          <li>
-            <span className="etikett">Ofenfrisch</span>
-            <p>Und dann bricht es auf, und es dampft. Dafür stehen wir um sechs auf.</p>
-          </li>
-        </ol>
       </div>
     </Sektion>
   )

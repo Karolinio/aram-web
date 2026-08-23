@@ -86,6 +86,7 @@ export default function Backstube() {
   }, [])
 
   return (
+    <>
     <section className="backstube" id="start" aria-labelledby="backstube-titel">
       <div className="backstube__grund" aria-hidden="true">
         <video
@@ -121,19 +122,29 @@ export default function Backstube() {
         <div className="backstube__schleier" />
       </div>
 
+      {/* ═══ Über dem Video steht NUR das Logo ═══
+
+          Karol, zum dritten Mal an derselben Stelle: „mach diesen hässlichen
+          weissen Rauch weg auf der Startseite, diesen weissen Schimmer weg."
+
+          Erst war es ein Schleier über dem ganzen Bild. Dann eine Platte hinter
+          dem Text. Beides hat er gesehen und beides wollte er nicht — und er
+          hat jedes Mal dasselbe gemeint: über dem Video soll nichts liegen.
+
+          Es lässt sich nicht beides haben, und das ist gemessen: das Video
+          läuft von rgb(59,2,0) bis rund 230. Über diese Spanne trägt KEINE
+          Schriftfarbe — dunkle Schrift fällt auf den dunklen Stellen durch,
+          helle auf den hellen. Ohne Fläche darunter ist Schrift auf diesem
+          Video nicht lesbar, egal welche Farbe.
+
+          Also geht die Schrift vom Video herunter. Der Hero zeigt das Video und
+          ihr Logo, sonst nichts; die Worte stehen direkt darunter auf Clay, wo
+          sie ohne jeden Trick 11:1 haben.
+
+          Das Logo bleibt oben: es ist ein Rasterbild mit eigener Kontur und
+          eigenem Schatten und braucht keinen Grund. */}
       <div className="schale backstube__mitte">
         <Ladenschild />
-
-        <h1 id="backstube-titel" className="backstube__titel" ref={titel}>
-          Jeder Teig wird morgens von Hand gerollt
-        </h1>
-
-        {/* Jetzt echte Angaben statt einer Behauptung — beide stehen auf ihrem
-            eigenen Flyer, siehe rohbilder/FUNDE.md. Auf einer Gastro-Seite ist
-            „wo" und „wann" die Frage, mit der die meisten kommen. */}
-        <p className="backstube__ort">
-          {ARAM.ort.strasse} · {ARAM.ort.stadtteil}
-        </p>
 
         <a className="backstube__weiter" href="#karte">
           <span>Zur Karte</span>
@@ -144,5 +155,19 @@ export default function Backstube() {
         </a>
       </div>
     </section>
+
+      {/* Der Satz steht auf Clay, nicht auf dem Video. Gemessen 11,18:1 — ohne
+          Schleier, ohne Platte, ohne Lichthof. */}
+      <div className="backstube__wort">
+        <div className="schale">
+          <h1 id="backstube-titel" className="backstube__titel" ref={titel}>
+            Jeder Teig wird morgens von Hand gerollt
+          </h1>
+          <p className="backstube__ort">
+            {ARAM.ort.strasse} · {ARAM.ort.stadtteil}
+          </p>
+        </div>
+      </div>
+    </>
   )
 }

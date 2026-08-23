@@ -645,47 +645,9 @@
  * ist er die Voreinstellung jeder Vorlage, als einmaliges Ereignis am Anfang
  * ist er ein Vorhang, der aufgeht.
  */
-/**
- * ═══ Eine PLATTE hinter dem Text, kein Filter über dem Video ═══
- *
- * Karol: „ohne diesen weissen Filter da drauf auf dem Video." Der Schleier ist
- * weg — und damit stand die dunkle Schrift auf einem ungefilterten Video.
- *
- * Gemessen über sechs Videobilder, dunkelste Stelle unter der Schlagzeile:
- * rgb(59, 2, 0). Die Schrift ist rgb(67, 38, 16). Das ist kein Kontrastproblem,
- * das ist dieselbe Helligkeit. Und es lässt sich nicht wegschatten: mit
- * kräftigem Lichthof stieg der Wert von 1,28 auf 2,1 — die Grenze ist 4,5.
- *
- * Das Video läuft von rgb(59,2,0) bis rund 230. Über diese Spanne trägt KEINE
- * Schriftfarbe, hell wie dunkel. Das ist Arithmetik, nicht Geschmack.
- *
- * Also eine Platte, die genau so gross ist wie der Text, mit weichen Kanten —
- * und nicht eine Fläche über dem Bild. Der Unterschied ist nicht Wortklauberei:
- * der Schleier vorher deckte 110 % der Breite bei 88 %; diese Platte deckt die
- * Textspalte und läuft nach aussen aus. Das Video bleibt daneben, darüber und
- * darunter unberührt.
- *
- * `radial-gradient` statt einer Fläche mit Rundung: eine Kante, die man sieht,
- * wäre ein Kasten. Eine, die ausläuft, ist ein Lichtschein.
- */
-.backstube__mitte::before {
-  content: '';
-  position: absolute;
-  z-index: -1;
-  left: 50%;
-  top: 50%;
-  translate: -50% -50%;
-  width: min(96%, 46rem);
-  height: min(120%, 34rem);
-  background: radial-gradient(
-    60% 50% at 50% 50%,
-    color-mix(in oklch, var(--ton-hell) 92%, transparent) 0%,
-    color-mix(in oklch, var(--ton-hell) 82%, transparent) 42%,
-    color-mix(in oklch, var(--ton-hell) 56%, transparent) 70%,
-    transparent 100%
-  );
-  pointer-events: none;
-}
+/* Die Platte hinter dem Text ist weg — Karol: „diesen weissen Schimmer weg."
+   Sie war die dritte Fläche über diesem Video, und die dritte, die er nicht
+   wollte. Statt einer vierten steht die Schrift jetzt darunter auf Clay. */
 
 .backstube__mitte {
   position: relative;
@@ -2600,205 +2562,157 @@
 
 /* ── Die Reise ────────────────────────────────────────────────────────────
  *
- * Eine angeheftete Bühne, vier Takte, ein stehender Grund. Alles darin ist
- * absolut gesetzt und mittig verankert — die Zeitleiste in Reise.tsx rechnet
- * in Prozent der Elementgrösse, und das geht nur bei einer festen Ausgangslage.
+ * Keine Anheftung mehr. Das Schiff hängt am Scroll und läuft ihm nach — die
+ * Seite zieht hoch, es bleibt zurück und wandert dadurch langsam nach unten.
+ * Ein Gegenstand, der einen begleitet, kann nicht anhalten.
  */
 .reise {
   position: relative;
-  overflow: clip;
+  /* Weg zum Fliegen. Ohne Mindesthöhe ist die Sektion nur so hoch wie ihr Text,
+     und die halbe Bahn fällt aus. */
+  min-height: 190vh;
+  overflow-x: clip;
+  overflow-y: visible;
+  /* Gemeinsamer Fluchtpunkt für alle Kippbewegungen des Schiffs. */
+  perspective: 1500px;
+  perspective-origin: 50% 45%;
 }
 
-.reise__buehne {
-  position: relative;
-  display: grid;
-  place-items: center;
-  /* Fast volle Höhe. Ein angehefteter Abschnitt, der kleiner ist als der
-     Bildschirm, sieht aus wie ein eingebettetes Kästchen. */
-  min-height: 88svh;
-  /* Der gemeinsame Fluchtpunkt für alle Drehungen der Gegenstände. Er sitzt
-     auf der Bühne, nicht auf den Bildern: jedes Bild mit eigener Perspektive
-     dreht sich um sich selbst, und die Folge zerfällt. */
-  perspective: 1600px;
-  perspective-origin: 50% 44%;
-}
+/* Die Bühne muss so hoch sein wie die Sektion, sonst hat das klebende Element
+   keinen Klebebereich: `sticky` klebt innerhalb seines Elternblocks, nicht
+   innerhalb der Sektion. Ohne diese Zeile war der Bereich nur so lang wie
+   Text plus eine Bildschirmhöhe — und das Schiff lief oben heraus. */
+.reise__buehne { position: relative; min-height: 175vh; }
 
-/* Die Funken kommen aus dem unteren Rand der Bühne, wie aus einer Glut vor
-   einem Ofen. Sie liegen HINTER allem — Funken vor dem Gebäck wären Konfetti. */
+/* Der Text steht oben und bleibt stehen — er ist der Grund, warum die Sektion
+   überhaupt Höhe hat. Das Schiff zieht daran vorbei. */
+.reise__wort { position: relative; z-index: 2; padding-top: var(--raum-block); }
+
 .reise__funken {
   position: absolute;
   inset: auto 0 0;
-  height: 78%;
+  height: 55%;
   z-index: 0;
-  opacity: 0.85;
-}
-
-.reise__flug {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  display: grid;
-  place-items: center;
-  transform-style: preserve-3d;
-  /* Schmuck fängt keine Klicks. Ohne die Zeile läge am Handy ein
-     freigestelltes Gebäck über der Bestellleiste und schluckte jede Berührung. */
-  pointer-events: none;
-}
-
-.reise__stueck,
-.reise__schiff {
-  grid-area: 1 / 1;
-  transform-style: preserve-3d;
-  /* Der einzige Schatten dieser Sektion — der Eigenschatten der Gegenstände.
-     Er macht sie zu Dingen statt zu Aufklebern und fällt nach unten rechts,
-     weil das Licht von links oben kommt. */
-  filter:
-    drop-shadow(0 18px 26px oklch(20% 0.05 45 / 0.42))
-    drop-shadow(0 3px 8px oklch(20% 0.05 45 / 0.3));
+  opacity: 0.6;
 }
 
 /**
- * XL — Karol: „das Käseschiff sollte XL grossflächig als einzelne Animation
- * eingesetzt werden."
+ * Die Flugebene. Sie klebt oben in der Sektion und wird vom Haken verschoben —
+ * `sticky` statt `absolute`, damit das Schiff über die ganze Länge im Bild
+ * bleiben KANN und nicht nach der ersten Bildschirmhöhe verschwindet.
+ */
+.reise__flug {
+  /**
+   * ═══ Eine volle Bildschirmhöhe, klebend ═══
+   *
+   * Zuerst stand hier `height: 0`. Ein klebendes Element ohne Höhe hat keinen
+   * Klebebereich — es verhielt sich wie ein normales und lief nach oben aus
+   * dem Bild. Gemessen stieg das Schiff von y 1475 auf 589, statt zu sinken.
+   *
+   * Der zweite Anlauf wollte das über die Flugbahn ausgleichen. Das geht,
+   * verlangt aber, dass der Gegenstand WEITER wandert als die Sektion lang ist
+   * — bei drei Bildschirmhöhen Sektion also über drei Bildschirmhöhen
+   * Versatz. Er hinge dann weit ausserhalb seiner Sektion.
+   *
+   * Richtig ist die Arbeitsteilung: das Kleben hält ihn im Bild, die Flugbahn
+   * gibt ihm die Drift. Eine volle Bildschirmhöhe als Klebefläche, der
+   * Gegenstand mittig darin, und der Haken verschiebt ihn darin um ein
+   * knappes Drittel nach unten.
+   */
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  height: 100vh;
+  transform-style: preserve-3d;
+  pointer-events: none;
+}
+
+/**
+ * ═══ Die Grösse — Karols „drei bis vier oder fünf Mal so gross" ═══
  *
- * 34 -> 56 rem, und am Handy 92 statt 76 Prozent der Breite. Es ist jetzt der
- * einzige Gegenstand auf der Bühne; die Fläche, die sich drei geteilt haben,
- * bekommt einer. Ein Gegenstand, der den halben Bildschirm füllt und aufbricht,
- * ist ein Ereignis — drei mittelgrosse nacheinander sind eine Aufzählung.
+ * Die fliegenden Gebäcke im Schwarm liegen bei 7 bis 11 % der Fensterbreite.
+ * Das Fünffache davon wären 35 bis 55 %. Die vorige Fassung stand bei 62 % und
+ * war ihm zu gross, der Schwarm bei 9 % zu klein.
+ *
+ * 34 vw ist das Vierfache des Schwarms und knapp die Hälfte der alten Fassung.
+ * Gross genug, dass man den Riss sieht; klein genug, dass es fliegt statt zu
+ * stehen.
  */
 .reise__schiff {
   position: relative;
   display: grid;
   place-items: center;
-  width: min(92vw, 56rem);
+  width: min(86vw, 34rem);
+  transform-style: preserve-3d;
+  filter:
+    drop-shadow(0 20px 30px oklch(30% 0.055 55 / 0.34))
+    drop-shadow(0 4px 9px oklch(30% 0.055 55 / 0.26));
 }
 
 .reise__haelfte {
   grid-area: 1 / 1;
   width: 50.4%;
   height: auto;
-  /* Die Hälften sind an ihrer BRUCHKANTE verankert, nicht in ihrer Mitte:
-     sie sollen sich um die Bruchstelle öffnen wie ein Buch, nicht um ihren
-     eigenen Schwerpunkt kippen. */
 }
+/* An der BRUCHKANTE verankert, nicht in der Mitte: die Hälften öffnen sich wie
+   ein Buch, statt um ihren eigenen Schwerpunkt zu kippen. */
 .reise__haelfte--links  { justify-self: end;   transform-origin: right center; }
 .reise__haelfte--rechts { justify-self: start; transform-origin: left center; }
 
-/* Der Dampf sitzt in der Bruchstelle und ragt weit darüber hinaus — Dampf
-   breitet sich aus und bleibt nicht in der Breite seines Gegenstands. */
-/* Der Dampf war auf 300×150 Pixel eingesperrt — gemessen. Aus einem
-   aufgebrochenen Gebäck quillt er weit über den Gegenstand hinaus; deshalb
-   bemisst er sich jetzt an der BÜHNE und nicht am Schiffchen. Der Ursprung
-   bleibt die Bruchstelle, die Ausdehnung ist frei. */
+/* Die Fäden spannen über die ganze Breite des Schiffs und etwas darüber
+   hinaus — Käse, der reisst, hängt nach unten aus dem Bild heraus. */
+.reise__faeden {
+  /* KEIN `grid-area` neben `position: absolute` — absolut gesetzte Kinder
+     nehmen nicht am Raster teil, und die Angabe verwirrt nur den nächsten,
+     der es liest. */
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 150%;
+  z-index: 3;
+}
+
 .reise__bruchdampf {
   position: absolute;
-  left: -60%;
-  right: -60%;
-  bottom: 0;
-  height: 420%;
+  left: -50%;
+  right: -50%;
+  bottom: 10%;
+  height: 320%;
   z-index: 0;
   pointer-events: none;
 }
 
-/* Die Wolke bekommt die halbe Bühne, nicht ein Kästchen unter dem Gebäck.
-   Gemessen war die alte Fassung 122 leuchtende Pixel auf 1440×900 — 0,009 %.
-   Ein Mehlstoss, der aus einem Blech springt, füllt den Raum darüber; wer ihn
-   in die Grösse des Gegenstands sperrt, sieht ihn nicht. */
 .reise__mehl {
+  grid-area: 1 / 1;
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 18%;
-  height: 72%;
+  left: -40%;
+  right: -40%;
+  bottom: -20%;
+  height: 220%;
   z-index: 2;
   pointer-events: none;
 }
 
-/* ── Die Texte ────────────────────────────────────────────────────────────
- *
- * Sie stehen unten, nicht neben den Gegenständen. Nebeneinander müsste der
- * Gegenstand kleiner werden, um Platz zu lassen — und dann fliegt er nicht
- * mehr, er illustriert. Unten hat er die ganze Fläche und der Satz seine Zeile.
- */
-.reise__texte {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: clamp(1.5rem, 5vh, 4rem);
-  z-index: 3;
-  display: grid;
-  margin: 0;
-  padding: 0 var(--rinne);
-  list-style: none;
-  text-align: center;
-  pointer-events: none;
-}
-
-/* Alle vier liegen ÜBEREINANDER in derselben Rasterzelle. Nur so bleibt die
-   Höhe der Bühne konstant, egal welcher Satz gerade sichtbar ist — untereinander
-   würde die Bühne bei jedem Takt eine andere Höhe haben. */
-.reise__texte li {
-  grid-area: 1 / 1;
-  display: grid;
-  gap: 0.5rem;
-  justify-items: center;
-}
-
-.reise__texte .etikett { color: var(--glut-marke); }
-
-.reise__texte p {
-  margin: 0;
-  max-width: 34ch;
-  font-family: var(--font-display);
-  font-variation-settings: var(--wonk-kopf);
-  font-size: clamp(1.15rem, 0.95rem + 1.1vw, 1.85rem);
-  font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: var(--sperr-kopf);
-  text-wrap: balance;
-  color: var(--glut-schrift);
+@media (max-width: 719px) {
+  .reise { min-height: 150vh; }
+  .reise__flug { top: 22vh; }
+  .reise__schiff {
+    width: 78vw;
+    filter: drop-shadow(0 14px 20px oklch(30% 0.055 55 / 0.36));
+  }
 }
 
 /**
- * Ohne Bewegungswunsch: keine Anheftung, keine Flugbahn. Die vier Takte werden
- * zu vier Absätzen untereinander, jeder mit seinem Gegenstand daneben.
- *
- * Ersatz, nicht Abschaltung — dieselbe Reihenfolge, dieselben Sätze, dieselben
- * Bilder. Eine Bewegung, die etwas erklärt hat, hinterlässt ersatzlos ein Loch.
+ * Ohne Bewegungswunsch: kein Flug, kein Riss. Das Schiff steht ganz und ruhig
+ * in der Sektion. Ersatz, nicht Abschaltung — dieselbe Aussage, ohne Bewegung.
  */
-/* Am Handy EIN Schattenwurf statt zwei. Zwei gestapelte `drop-shadow` auf
-   einem Bild, das sich in jedem Frame dreht, werden in jedem Frame neu
-   gerastert — nach den Funken der teuerste Posten dieser Sektion. */
-@media (max-width: 719px) {
-  .reise__stueck,
-  .reise__schiff {
-    filter: drop-shadow(0 12px 18px oklch(20% 0.05 45 / 0.45));
-  }
-  .reise__buehne { min-height: 82svh; }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .reise__buehne { min-height: 0; display: block; padding-block: var(--raum-block); }
-  .reise__flug { position: static; display: none; }
-  .reise__funken { display: none; }
-  .reise__texte {
-    position: static;
-    display: grid;
-    gap: var(--raum-block);
-    padding: 0;
-    text-align: start;
-  }
-  .reise__texte li { grid-area: auto; justify-items: start; opacity: 1 !important; visibility: visible !important; }
-}
-
-/* Die Nummer vor dem Gerichtnamen. Sie ist eine Ordnungszahl, kein Teil des
-   Namens — deshalb leiser, mit Tabellenziffern, damit die Spalte steht. */
-.zeile__nr {
-  display: inline-block;
-  min-width: 1.7em;
-  font-variant-numeric: tabular-nums;
-  font-weight: 600;
-  color: var(--tinte-leise);
+  .reise { min-height: 0; padding-block: var(--raum-block); }
+  .reise__flug { position: static; height: auto; margin-top: var(--raum-block); }
+  .reise__funken, .reise__faeden, .reise__mehl { display: none; }
 }
 
 /**
@@ -2821,19 +2735,54 @@
  * Die Werte sind gemessen, nicht geschätzt — die tatsächlichen Höhen der
  * beiden Abschnitte bei 1440 px.
  */
-.prozess {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 1510px;
-}
+/* ═══ KEIN `content-visibility` auf Abschnitten mit scrollgesteuerter
+       Bewegung ═══
+
+   Es stand hier und auf der Reise, und auf der Reise hat es einen Fehler
+   erzeugt, den ich lange für einen Rechenfehler in meinen Werten hielt:
+   solange ein Abschnitt übersprungen wird, meldet er die Höhe aus
+   `contain-intrinsic-size` statt seiner echten. ScrollTrigger legt seine
+   Bereiche aber genau darauf an — gemessen 1700 gegen 1953 px, und der Riss
+   war dadurch bei halbem Weg schon fertig.
+
+   Auf der Karte bleibt es: dort steht Text, keine Bewegung. */
 
 .karte {
   content-visibility: auto;
   contain-intrinsic-size: auto 2400px;
 }
 
-/* Die Reise ebenso: drei grosse Freisteller plus drei Leinwände. Der Wert ist
-   die gemessene Höhe der angehefteten Bühne bei 1440 px. */
-.reise {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 792px;
+
+
+
+/**
+ * Der Satz unter dem Video.
+ *
+ * Er stand drei Fassungen lang ÜBER dem Bild und hat drei verschiedene
+ * Hilfskonstruktionen gebraucht, damit er lesbar war: einen Schleier, einen
+ * Lichthof, eine Platte. Jede davon hat Karol gesehen und weggewollt.
+ *
+ * Auf Clay braucht er nichts davon — 11,18:1, gemessen, ohne einen einzigen
+ * Zusatz. Das ist die Lehre: wenn Text auf einem Bild drei Krücken braucht,
+ * gehört er nicht auf das Bild.
+ */
+.backstube__wort {
+  background: var(--ton-hell);
+  padding-block: clamp(2rem, 1rem + 4vw, 4rem) clamp(1.5rem, 1rem + 2.5vw, 2.75rem);
+  text-align: center;
+}
+
+.backstube__wort .backstube__titel {
+  margin-inline: auto;
+  /* Grösser als über dem Video: hier steht sie allein auf einer ruhigen Fläche
+     und darf die Schlagzeile sein, die sie ist. */
+  font-size: clamp(1.9rem, 1.2rem + 2.6vw, 3.4rem);
+  max-width: 20ch;
+  text-shadow: none;
+}
+
+.backstube__wort .backstube__ort {
+  margin: clamp(0.9rem, 2vw, 1.4rem) auto 0;
+  color: var(--tinte-leise);
+  text-shadow: none;
 }
