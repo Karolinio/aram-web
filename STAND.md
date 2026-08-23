@@ -7,6 +7,49 @@ weiterzubauen.
 
 ---
 
+## Speisekarte und Laden — 23.08.
+
+**Die Gerichte laufen zweispaltig** (`columns`, nicht Raster: eine gesetzte
+Karte liest sich spaltenweise, 1–12 links, 13–22 rechts). Zweispaltig war die
+Karte vorher schon — aber auf GRUPPEN-Ebene, und es gibt nur eine Gruppe.
+
+    Liste 2414 → 1383 px    Sektion 3124 → 2093 px
+
+**Der Bildplatz steht, die Bilder fehlen.** `Gerichtbild` in inhalt.ts,
+Vorschaubild als Knopf, `Bildschau.tsx` als natives `dialog`. Ohne Foto steht
+kein Platzhalter da; sobald EIN Gericht der Gruppe eines hat, bekommen alle
+Zeilen den Einzug. Was der Inhaber liefern muss, steht in ABLICHTUNG.md.
+
+**Der Laden** hat zwei echte Fotos statt einem (`team-laden.webp` lag ungenutzt
+herum), als Stapel mit eigenem Tempo je Bild. Die Öffnungszeiten sind kein
+Sechszeiler mehr, sondern ein Satz — GERECHNET aus den Daten
+(`wochenbloecke` in oeffnung.ts), nicht getippt: mehrere Zeitblöcke oder ein
+Ruhetag mittendrin bringen die Aufzählung von selbst zurück.
+
+### Drei Fehler, die erst diese Runde sichtbar wurden
+
+- **560 px Sprung unterhalb der Speisekarte.** Mein eigener Zweispalter hatte
+  `contain-intrinsic-size` überholt. Kein CLS — es passiert ausserhalb des
+  Bildes, deshalb meldet der Prüfer es nicht — aber ein Scrollbalken, der
+  mitten auf der Seite springt. Und der Wert beschreibt den INHALTSKASTEN: das
+  Polster kommt obendrauf, sonst zählt es doppelt. Jetzt 0 px Drift.
+- **Jede Überschrift der Seite lief in ihr eigenes Etikett.** Die Parallaxe hing
+  an der `h2` und legt 36 px zurück; über der Überschrift sind 14 px Platz,
+  darunter 16. Sie hängt jetzt am ganzen Kopfblock — Etikett, Titel und
+  Vorspann bewegen sich gemeinsam. Gemessen über 700 Scrollschritte bleiben die
+  Abstände konstant.
+- **`team-laden.webp` ist 1024 × 784, nicht 900 × 675.** Geschätzt statt
+  gemessen; der Fabrikprüfer hat es gefunden.
+
+### Bekannte Einschränkung
+
+Am Handy streift das Schiff im Riss-Abschnitt kurz den Vorspann. Die Bahn ist
+an 1440 × 900 gemessen; am Handy liegt sie um 0,22 Fensterhöhen tiefer
+(`tiefer` in Kaeseschiff.tsx). Eine zweite Wegpunkttabelle wäre die
+naheliegende Antwort und die schlechtere — zwei Tabellen laufen auseinander.
+
+---
+
 ## Die Ofenreise — der Stand vom 23.08.
 
 Das Käseschiff wohnt in KEINER Sektion. Es liegt fest im Fenster

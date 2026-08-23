@@ -234,8 +234,24 @@ export default function Kaeseschiff() {
         const vw = window.innerWidth
         const vh = window.innerHeight
 
+        /**
+         * ═══ Am Handy fliegt alles TIEFER ═══
+         *
+         * Die Wegpunkte sind an 1440 × 900 gemessen. Am Handy ist das
+         * Verhältnis ein anderes: die Sektionen sind kürzer, die Überschriften
+         * stehen deshalb länger im Bild, und das Fenster ist hochkant. Gemessen
+         * stand das gebackene Schiff dadurch mitten auf „Und dann bricht es
+         * auf".
+         *
+         * Eine zweite Wegpunkttabelle wäre die naheliegende Antwort und die
+         * schlechtere: zwei Tabellen laufen auseinander, sobald jemand nur eine
+         * davon anfasst. Ein Versatz auf der Hochachse löst denselben Fall mit
+         * einer Zahl — die Bahn bleibt die Bahn, sie liegt nur tiefer.
+         */
+        const tiefer = schmal ? 0.22 : 0
+
         el.style.transform =
-          `translate3d(${(w.x / 100) * vw}px, ${w.y * vh}px, 0)` +
+          `translate3d(${(w.x / 100) * vw}px, ${(w.y + tiefer) * vh}px, 0)` +
           ` rotateY(${w.drehY}deg) rotateX(${w.drehX}deg)` +
           ` rotate(${w.dreh}deg) scale(${w.skala})`
         el.style.opacity = String(w.deck)
@@ -313,7 +329,7 @@ export default function Kaeseschiff() {
       tot = true
       abraeumen?.()
     }
-  }, [bereit, ruhig])
+  }, [bereit, ruhig, schmal])
 
   /* Ohne Bewegungswunsch fliegt hier gar nichts — die Sektionen tragen dann
      ihren Text und ihre Bilder, und das genügt. */

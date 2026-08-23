@@ -149,19 +149,41 @@ export function Kopf({ id, etikett, titel, lead, klasse }: KopfProps) {
    * ist etwas anderes: sie soll sich eine Spur LANGSAMER bewegen als der Text
    * darunter. Daraus entsteht Tiefe, ohne dass sich etwas sichtbar verschiebt.
    *
-   * Der Auftritt bleibt daneben bestehen und stört nicht: er verwandelt die
-   * WÖRTER, die Parallaxe die Überschrift. Zwei Knoten, zwei `transform`.
+   * ═══ Warum sie am BLOCK hängt und nicht an der Überschrift ═══
+   *
+   * Sie hing bis zum 23.08. an der `h2` allein. Gemessen über alle sieben
+   * Sektionsköpfe der Seite:
+   *
+   *   Etikett → Überschrift   14 px
+   *   Überschrift → Vorspann  16 px
+   *   Weg der Parallaxe       36 px
+   *
+   * Der Weg ist also mehr als doppelt so gross wie der Platz, und zwar in
+   * BEIDE Richtungen. Auf jeder Sektion der Seite lief die Überschrift an
+   * irgendeinem Scrollpunkt in ihr eigenes Etikett hinein — Karol hat es an
+   * der Ofensektion gesehen („Und dann" stand auf „In die Glut"), aber es galt
+   * überall. Ich hatte es dort für einen Sonderfall der klebenden Bühne
+   * gehalten; das war es nicht.
+   *
+   * Am ganzen Block gibt es das Problem nicht: Etikett, Überschrift und
+   * Vorspann bewegen sich gemeinsam, ihre Abstände zueinander bleiben, und
+   * unter dem Block sind gemessen mindestens 72 px frei. Die Tiefenwirkung
+   * bleibt dieselbe — sie entsteht daraus, dass der Kopf sich gegen den
+   * SEKTIONSINHALT verschiebt, nicht gegen sein eigenes Etikett.
+   *
+   * Der Auftritt stört nicht: er verwandelt die WÖRTER, die Parallaxe den
+   * Block. Zwei Knoten, zwei `transform`.
    */
-  const schwebt = useVersatz<HTMLHeadingElement>(-0.04)
+  const schwebt = useVersatz<HTMLElement>(-0.04)
 
   return (
-    <header className={`kopfblock${klasse ? ' ' + klasse : ''}`}>
+    <header className={`kopfblock${klasse ? ' ' + klasse : ''}`} ref={schwebt}>
       <Etikett>{etikett}</Etikett>
       {/* JEDE Sektionsüberschrift bekommt den Auftritt — automatisch, weil sie
           alle durch diesen Baustein gehen. Genau dafür gibt es ihn: eine
           Animation, die man pro Sektion von Hand setzen müsste, wird irgendwo
           vergessen, und dann ist sie keine Regel mehr, sondern ein Zufall. */}
-      <h2 id={id} className="lebt" ref={schwebt}>
+      <h2 id={id} className="lebt">
         <Auftritt>{titel}</Auftritt>
       </h2>
       {lead && <p className="lead kopfblock__lead">{lead}</p>}

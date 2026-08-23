@@ -2175,19 +2175,133 @@
  * breit und hoch. Der Versatz nach unten ist das eigentliche Mittel; er nimmt
  * der Zeile die Symmetrie, ohne dass etwas überlappen muss.
  */
-.laden__bild {
-  grid-column: 1 / 5;
-  margin-top: clamp(3rem, 7vw, 7rem);
+/**
+ * ═══ Der Stapel ═══
+ *
+ * Aus einem Foto sind zwei geworden, und sie liegen ÜBEREINANDER wie auf einem
+ * Tisch — versetzt, leicht gedreht, jedes mit eigenem Tempo beim Scrollen.
+ * Daraus entsteht Bewegung, ohne dass sich etwas dreht oder skaliert: derselbe
+ * Griff wie in der Galerie, nur enger gesetzt.
+ *
+ * Die Drehung steht als Variable am Element, weil `useVersatz` `transform`
+ * schreibt und beide sich sonst gegenseitig überschreiben würden. Zwei
+ * Bewegungen, zwei Knoten — die Regel dieser Seite, seit derselbe Fehler dem
+ * Hero einmal die Kamerafahrt gekostet hat.
+ */
+.laden__stapel {
+  grid-column: 1 / 6;
+  position: relative;
+  margin-top: clamp(2rem, 5vw, 5rem);
+  /* Weg für die untere Aufnahme, die über den Fluss hinausragt. */
+  padding-bottom: clamp(4rem, 9vw, 8rem);
 }
-.laden__bild img { width: 100%; height: auto; }
 
-.laden__wort { grid-column: 6 / 13; }
+.ladenbild {
+  margin: 0;
+  transform: rotate(var(--dreh));
+  filter: drop-shadow(0 14px 26px oklch(30% 0.055 55 / 0.2));
+}
+
+.ladenbild img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--rund-klein, 0.5rem);
+}
+
+.ladenbild figcaption {
+  margin-top: 0.6rem;
+  font-size: var(--text-micro);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--tinte-leise);
+}
+
+/* Die zweite liegt ÜBER der ersten und schaut rechts unten hervor. Absolut
+   gesetzt, damit sie keinen eigenen Fluss aufmacht — der Stapel soll so hoch
+   sein wie das erste Bild plus Überhang, nicht wie beide zusammen. */
+.ladenbild--2 {
+  position: absolute;
+  right: -8%;
+  bottom: 0;
+  width: 54%;
+  z-index: 1;
+}
+
+@media (max-width: 900px) {
+  .ladenbild--2 { right: 0; width: 48%; }
+}
+
+.laden__wort { grid-column: 7 / 13; }
 
 /* Die Datenzeilen liefen über sieben Spalten und wurden dadurch zu dünnen
    Balken. Auf Lesebreite gebracht stehen sie als Block. */
 .laden__wort .daten { max-width: 34rem; }
 
 .daten { margin-top: 2rem; }
+
+/**
+ * ═══ Die Zeiten als Aussage ═══
+ *
+ * Vorher eine Aufzählung von sechs Zeilen, in denen fünfmal dasselbe stand.
+ * Jetzt ein Satz in Auszeichnungsgrösse — denn dass jeden Tag ausser Montag
+ * dasselbe gilt, IST die Auskunft.
+ *
+ * Warum die Uhrzeit gross und der Tagesbereich klein ist: gefragt wird „wann
+ * habt ihr auf", und die Antwort darauf ist eine Uhrzeit. Der Tagesbereich ist
+ * die Einschränkung dazu.
+ */
+.laden__zeiten {
+  margin-top: clamp(1.6rem, 3vw, 2.4rem);
+  padding-top: clamp(1.2rem, 2.5vw, 1.8rem);
+  border-top: 1px solid var(--linie);
+}
+
+.zeitblock__lauf {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.2rem 1rem;
+  margin: 0.6rem 0 0;
+}
+
+.zeitblock__tage {
+  font-family: var(--font-display);
+  font-variation-settings: var(--wonk-klein);
+  font-size: clamp(1rem, 0.95rem + 0.3vw, 1.15rem);
+  font-weight: 600;
+  /* Sonst schiebt eine lange Spanne („Donnerstag bis Sonntag") die Uhrzeit am
+     Handy aus der Zeile. */
+  min-width: 0;
+}
+
+.zeitblock__uhr {
+  font-family: var(--font-display);
+  font-variation-settings: var(--wonk-kopf);
+  font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.3rem);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.zeitblock__ruhe {
+  margin: 0.7rem 0 0;
+  font-size: var(--text-meta);
+  color: var(--tinte-leise);
+}
+/* Ein Punkt davor, in Akzentfarbe: er markiert die Ausnahme, ohne sie zu
+   betonen. Dieselbe Rolle wie der Statuspunkt in der Kopfzeile. */
+.zeitblock__ruhe::before {
+  content: '';
+  display: inline-block;
+  width: 0.42em;
+  height: 0.42em;
+  margin-right: 0.55em;
+  border-radius: 50%;
+  background: var(--akzent);
+  vertical-align: 0.06em;
+}
 
 
 
@@ -2947,7 +3061,10 @@
 }
 
 @media (max-width: 719px) {
-  .ofen { min-height: 215vh; }
+  /* Kürzer als am Rechner. Der Fabrikprüfer hat 15,2 Bildschirmhöhen bis zum
+     Seitenende gemeldet — am Daumen ist das Arbeit. Der Klebeweg bleibt
+     ausreichend, weil am Handy auch die Bühne kleiner ist. */
+  .ofen { min-height: 178vh; }
   .ofen__maul { width: 150vw; margin-left: calc(150vw * -0.323); }
 }
 
@@ -3152,9 +3269,40 @@
 
    Auf der Karte bleibt es: dort steht Text, keine Bewegung. */
 
+/**
+ * ═══ Der Ersatzwert muss zur SPALTENZAHL passen ═══
+ *
+ * Hier stand einmal `2400px` für alle Breiten. Seit die Gerichte zweispaltig
+ * laufen, ist die Karte am Rechner nur noch 2093 px hoch — und die 307 px
+ * Differenz plus die Reserve summierten sich gemessen auf einen Sprung von
+ * 560 px: alles unterhalb der Karte rutschte beim ersten Hineinscrollen nach
+ * oben, die Seite wurde von 14314 auf 13754 px kürzer.
+ *
+ * Kein CLS (es passiert ausserhalb des Bildes, und genau deshalb hat der
+ * Prüfer es nicht gemeldet), aber ein Scrollbalken, der mitten auf der Seite
+ * springt — und für jeden ScrollTrigger, der je unterhalb der Karte hängt, ein
+ * um 560 px falscher Bereich.
+ *
+ * Zwei Werte, weil die Karte oberhalb 900 px zwei Spalten hat und darunter
+ * eine. Gemessen wurden 2093 px bei 1440 und 3247 px bei 393 — und hier steht
+ * jeweils WENIGER, nämlich 1840 und 2990.
+ *
+ * Der Unterschied ist der Innenabstand: `contain-intrinsic-size` beschreibt den
+ * INHALTSKASTEN, das Polster kommt obendrauf. Mit der vollen Höhe gemessen
+ * meldete der übersprungene Abschnitt 2353 statt 2093 — die 253 px Polster
+ * doppelt. Ein Fehler, der sich nur zeigt, wenn man die Restdrift nachmisst
+ * statt sie für erledigt zu halten.
+ *
+ * `auto` davor heisst: sobald der Abschnitt einmal gesehen wurde, merkt der
+ * Browser sich die ECHTE Höhe. Der Wert hier gilt nur bis dahin.
+ */
 .karte {
   content-visibility: auto;
-  contain-intrinsic-size: auto 2400px;
+  contain-intrinsic-size: auto 2990px;
+}
+
+@media (min-width: 900px) {
+  .karte { contain-intrinsic-size: auto 1840px; }
 }
 
 

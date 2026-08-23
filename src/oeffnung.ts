@@ -153,3 +153,78 @@ export const statusText = (s: Status): string | null => {
   const wann = s.tageBis === 0 ? 'heute' : s.tageBis === 1 ? 'morgen' : s.wochentag
   return `Geschlossen · öffnet ${wann} um ${s.von} Uhr`
 }
+
+/**
+ * Die Woche in BLÖCKE zusammenfassen.
+ *
+ * ═══ Warum eine Tabelle mit sechs gleichen Zeilen falsch ist ═══
+ *
+ * Aram hat dienstags bis sonntags von 08:00 bis 19:00 auf, montags nicht. Als
+ * Tabelle sind das sechs Zeilen, in denen fünfmal dasselbe steht wie in der
+ * ersten. Gemessen an dem, was ein Gast wissen will — „wann kann ich hin?" —
+ * ist die Antwort EIN Satz, und die Tabelle ist die Rohform davon.
+ *
+ * Sechs identische Zeilen sagen ausserdem etwas Falsches über den Betrieb: sie
+ * lassen ihn kompliziert aussehen. Dass jeden Tag dasselbe gilt, IST die
+ * Auskunft — und sie geht in der Aufzählung unter.
+ *
+ * ═══ Warum das gerechnet und nicht geschrieben wird ═══
+ *
+ * „Dienstag bis Sonntag, 8 bis 19 Uhr" liesse sich in eine Zeile tippen. Dann
+ * stimmt sie genau so lange, bis der Inhaber im Editor eine Zeit ändert — und
+ * niemand merkt, dass die Überschrift daneben etwas anderes behauptet als die
+ * Daten darunter. Hier kommt beides aus derselben Quelle.
+ *
+ * Die Woche beginnt am MONTAG, nicht am Sonntag: ein Gastronomiebetrieb denkt
+ * in Werktagen, und ein Ruhetag am Wochenanfang liest sich nur dann richtig.
+ *
+ * @returns `offen` sind zusammenhängende Läufe gleicher Zeiten,
+ *          `zu` sind die Tage ohne Eintrag — in Montagsordnung.
+ */
+export type Block = {
+  /** Erster Tag des Laufs, als `Date.getDay()`-Zahl. */
+  vonTag: number
+  /** Letzter Tag des Laufs. Gleich `vonTag`, wenn der Lauf einen Tag lang ist. */
+  bisTag: number
+  von: string
+  bis: string
+}
+
+/** Die Wochentage in der Reihenfolge, in der ein Betrieb sie denkt. */
+const MONTAGSWOCHE = [1, 2, 3, 4, 5, 6, 0]
+
+export function wochenbloecke(zeiten: Spanne[] = ZEITEN): { offen: Block[]; zu: number[] } {
+  const offen: Block[] = []
+  const zu: number[] = []
+
+  for (const tag of MONTAGSWOCHE) {
+    /* Mehrere Spannen an einem Tag (Mittagspause) gibt es hier nicht — käme das
+       je vor, würde `find` die erste nehmen und die zweite still verschlucken.
+       Deshalb wird das ausdrücklich geprüft und der Tag dann NICHT
+       zusammengefasst: lieber die Tabelle als eine Zeile, die etwas verschweigt. */
+    const spannen = zeiten.filter((z) => z.tag === tag)
+    if (spannen.length !== 1) {
+      if (spannen.length === 0) zu.push(tag)
+      else return { offen: [], zu: [] } /* mehrdeutig — der Aufrufer zeigt die Tabelle */
+      continue
+    }
+    const s = spannen[0]!
+    const letzter = offen[offen.length - 1]
+    /* Nur anhängen, wenn der Lauf UNUNTERBROCHEN ist: ein geschlossener Tag
+       dazwischen beendet ihn. Sonst stünde „Dienstag bis Sonntag" da, wo
+       Donnerstag Ruhetag ist. */
+    const ununterbrochen =
+      letzter !== undefined &&
+      MONTAGSWOCHE.indexOf(letzter.bisTag) === MONTAGSWOCHE.indexOf(tag) - 1
+    if (letzter && ununterbrochen && letzter.von === s.von && letzter.bis === s.bis) {
+      letzter.bisTag = tag
+    } else {
+      offen.push({ vonTag: tag, bisTag: tag, von: s.von, bis: s.bis })
+    }
+  }
+
+  return { offen, zu }
+}
+
+/** "Dienstag" für 2. Für die Anzeige, nicht für Vergleiche. */
+export const tagName = (tag: number): string => WOCHENTAGE[tag] ?? ''
