@@ -31,6 +31,31 @@ type Werkzeug = {
 let lader: Promise<Werkzeug | null> | null = null
 
 /**
+ * ═══ Zwei Nachlaufwerte, und beide haben eine Regel ═══
+ *
+ * Gemessen am 24.08. standen VIER verschiedene auf der Seite: `true`, `0.35`,
+ * `0.4` und irgendwo noch eine `1` im Kommentar. Keiner davon hatte eine
+ * Begründung, die über „hat sich damals gut angefühlt" hinausging.
+ *
+ * Es braucht zwei, nicht einen — aber jeder mit einem Grund:
+ *
+ *   FLAECHE   Bilder und Hintergründe, die dem Scroll folgen sollen. Sie sind
+ *             keine Gegenstände, sie sind Grund. Ein Nachlauf macht sie zu
+ *             etwas, das hinterherrutscht, und genau das hat Karol am 21.08.
+ *             als „haperig" gemeldet. Kein Nachlauf; die Glättung liefert
+ *             Lenis.
+ *   KOERPER   Freigestellte Dinge, die im Raum fliegen. Sie haben Masse, und
+ *             Masse heisst Trägheit. 0,4 Sekunden sind gemessen der Punkt, an
+ *             dem es nach Gewicht aussieht und noch nicht nach Verzögerung:
+ *             bei 0,35 kommen 52 % der Bewegung in den ersten 100 ms an, bei
+ *             1,0 nur 16 %.
+ *
+ * Wer einen dritten Wert einträgt, soll ihn hier eintragen und begründen.
+ */
+export const SCRUB_FLAECHE = true
+export const SCRUB_KOERPER = 0.4
+
+/**
  * GSAP holen — genau einmal, und mit Auffangnetz.
  *
  * ═══ Warum EIN geteilter Ladevorgang ═══
@@ -109,7 +134,7 @@ export function useVersatz<T extends HTMLElement>(tempo: number) {
             trigger: el,
             start: 'top bottom',
             end: 'bottom top',
-            scrub: true,
+            scrub: SCRUB_FLAECHE,
             invalidateOnRefresh: true,
             onToggle: ({ isActive }) => {
               el.style.willChange = isActive ? 'transform' : ''
@@ -180,7 +205,7 @@ export function useDrehung<T extends HTMLElement>(grad: number) {
             trigger: '.backstube',
             start: 'top top',
             end: 'bottom top',
-            scrub: 0.35,
+            scrub: SCRUB_KOERPER,
             invalidateOnRefresh: true,
             onToggle: ({ isActive }) => {
               el.style.willChange = isActive ? 'transform' : ''
@@ -243,7 +268,7 @@ export function useAbgang<T extends HTMLElement>(buehneWahl: string) {
           /* Nach sechzig Prozent der Sektion ist es weg. Bis zum Ende
              mitzufahren hiesse, es bis in die nächste Sektion zu schleppen. */
           end: '60% top',
-          scrub: 0.35,
+          scrub: SCRUB_KOERPER,
           invalidateOnRefresh: true,
           onToggle: ({ isActive }) => {
             el.style.willChange = isActive ? 'transform, opacity' : ''
@@ -452,7 +477,7 @@ export function useFlug<T extends HTMLElement>(f: Flug) {
             /* `1` statt `true`: eine Sekunde Nachlauf. Starr gescrubbt ist
                technisch richtig und fühlt sich mechanisch an — das ist der
                Unterschied, der eine Seite teuer wirken lässt. */
-            scrub: 0.35,
+            scrub: SCRUB_KOERPER,
             invalidateOnRefresh: true,
             onToggle: ({ isActive }) => {
               el.style.willChange = isActive ? 'transform' : ''
@@ -537,7 +562,7 @@ export function useKamerafahrt<T extends HTMLElement>(
             trigger: buehne,
             start: 'top top',
             end: 'bottom top',
-            scrub: 0.35,
+            scrub: SCRUB_KOERPER,
             invalidateOnRefresh: true,
             onToggle: ({ isActive }) => {
               el.style.willChange = isActive ? 'transform' : ''
@@ -565,3 +590,88 @@ export function useKamerafahrt<T extends HTMLElement>(
 
 /** Kurzform für „breiter als ein Telefon". Spart die Zeichenkette an drei Stellen. */
 export const useMedienabfrageBreit = (): boolean => useMedienabfrage('(min-width: 1000px)')
+
+
+/**
+ * Auftauchen — ein Block kommt aus der Tiefe an seinen Platz.
+ *
+ * ═══ Wofür das da ist ═══
+ *
+ * Die Seite zerfiel in zwei Hälften: oben ein Raum, in dem Gegenstände fliegen,
+ * sich drehen und Schatten werfen — unten ein Dokument. Speisekarte, Laden und
+ * Bestellen hatten KEINE einzige Bewegung ausser dem Auftritt ihrer
+ * Überschriften.
+ *
+ * Genau das liest sich als „nicht konsistent", ohne dass man es benennen kann:
+ * nicht die Werte waren verschieden, sondern die WELT. Ein Gegenstand, der in
+ * der Galerie Tiefe hat und in der Karte keine, war nie in einem Raum.
+ *
+ * ═══ Warum es so klein ist ═══
+ *
+ * 6 % Grösse und 4 % Fensterhöhe. Das ist bewusst an der Schwelle: man soll es
+ * nicht als Animation bemerken, sondern nur merken, dass der Block ankommt
+ * statt dazustehen. Eine Speisekarte, deren Gruppen hereinfliegen, ist eine
+ * Speisekarte, die man nicht lesen kann.
+ *
+ * ═══ Warum kein `once` ═══
+ *
+ * Weil es gescrubbt ist und nicht abgespielt. Ein Auftritt, der einmal läuft,
+ * gehört der Überschrift (siehe Auftritt.tsx); dieser hier gehört dem Scroll
+ * und läuft rückwärts mit, wenn man zurückscrollt. Beides auf derselben Seite
+ * ist kein Widerspruch: das eine ist ein Ereignis, das andere ein Zustand.
+ */
+export function useAuftauchen<T extends HTMLElement>(tiefe = 1) {
+  const ref = useRef<T>(null)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    let tot = false
+    let abraeumen: (() => void) | undefined
+
+    void werkzeugHolen().then((werkzeug) => {
+      if (tot || !werkzeug) return
+      const { gsap } = werkzeug
+
+      const tween = gsap.fromTo(
+        el,
+        { y: () => 0.04 * tiefe * window.innerHeight, scale: 1 - 0.06 * tiefe, autoAlpha: 0.45 },
+        {
+          y: 0,
+          scale: 1,
+          autoAlpha: 1,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: el,
+            /* Von „taucht am unteren Rand auf" bis „steht im unteren Drittel".
+               Nicht bis zur Mitte: dann wäre die halbe Sektion vorbei, bevor
+               der Block angekommen ist. */
+            start: 'top bottom',
+            end: 'top 68%',
+            scrub: SCRUB_KOERPER,
+            invalidateOnRefresh: true,
+            onToggle: ({ isActive }) => {
+              el.style.willChange = isActive ? 'transform, opacity' : ''
+            },
+          },
+        },
+      )
+
+      abraeumen = () => {
+        tween.scrollTrigger?.kill()
+        tween.kill()
+        el.style.willChange = ''
+        gsap.set(el, { clearProps: 'all' })
+      }
+    })
+
+    return () => {
+      tot = true
+      abraeumen?.()
+    }
+  }, [tiefe])
+
+  return ref
+}

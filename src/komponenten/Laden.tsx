@@ -1,6 +1,6 @@
 import { ARAM } from '../aram.config.ts'
 import { tagName, wochenbloecke, ZEITEN } from '../oeffnung.ts'
-import { useVersatz } from '../bewegung.ts'
+import { useAuftauchen, useVersatz } from '../bewegung.ts'
 import { Datenzeile, Etikett, Kopf, Sektion } from './ui/bausteine.tsx'
 
 /**
@@ -138,6 +138,8 @@ function Zeiten() {
 }
 
 export default function Laden() {
+  const wort = useAuftauchen<HTMLDivElement>(0.9)
+
   return (
     <Sektion id="laden" grund="tief" kante klasse="laden" beschriftetVon="laden-titel">
       <div className="schale laden__gitter">
@@ -147,7 +149,7 @@ export default function Laden() {
           ))}
         </div>
 
-        <div className="laden__wort">
+        <div className="laden__wort" ref={wort}>
           <Kopf
             id="laden-titel"
             etikett="Der Laden"

@@ -19,7 +19,7 @@ import Galerie from './komponenten/Galerie.tsx'
 import Handarbeit from './komponenten/Handarbeit.tsx'
 import Reise from './komponenten/Reise.tsx'
 import Karte from './komponenten/Karte.tsx'
-import Ofen from './komponenten/Ofen.tsx'
+import Vorhang from './komponenten/Vorhang.tsx'
 import Laden from './komponenten/Laden.tsx'
 import Bestellen from './komponenten/Bestellen.tsx'
 import Fusszeile from './komponenten/Fusszeile.tsx'
@@ -140,15 +140,28 @@ function Seite() {
             Höhepunkt. */}
         <Galerie />
 
-        {/* Der Ofen — die einzige dunkle Sektion. Hier fällt das Schiff ins
-            Maul, und hier ist die Reise am Umkehrpunkt: alles davor ist roh,
-            alles danach gebacken. */}
-        <Ofen />
-
-        {/* Der letzte Takt: hier reisst das Schiff auseinander. Die Sektion
-            selbst enthält es nicht — sie hält nur den Raum dafür frei, und
-            alles, was heiss ist. */}
+        {/* Der letzte Takt der Reise: hier reisst das Käseschiff auseinander. */}
         <Reise />
+
+        {/* ═══ Der Ofen ist RAUS ═══
+
+            Karol am 24.08.: „Das mit dem Ofen ist mir noch nicht ganz koscher.
+            Das sieht irgendwie nicht so gut aus. Mach den Ofen raus."
+
+            Er hatte recht, und ich kann sagen woran es lag: der Ofen war das
+            einzige Element der Seite, das aus einer FOTOGRAFIE einen Raum
+            machen wollte. Alles andere sind freigestellte Gegenstände auf einer
+            Fläche — ein Bildausschnitt mit weichen Rändern gehorcht anderen
+            Regeln, und die beiden lassen sich nicht mischen. Es war kein
+            Ausführungsfehler, es war die falsche Art Element.
+
+            Ofen.tsx, ofenbild.py und ofen-maul.webp bleiben liegen. Die
+            Teigstufen daraus BLEIBEN in Betrieb — die Verwandlung passiert
+            jetzt während des Flugs. */}
+
+        {/* Der Vorhang: eine Scheibe dreht sich, teilt sich, und die
+            Speisekarte fliegt hindurch herein. */}
+        <Vorhang />
 
         <Karte />
         <Laden />

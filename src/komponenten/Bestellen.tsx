@@ -1,3 +1,4 @@
+import { useAuftauchen } from '../bewegung.ts'
 import { ARAM } from '../aram.config.ts'
 import Oeffnung from './ui/Oeffnung.tsx'
 import { Etikett, Kopf, Sektion } from './ui/bausteine.tsx'
@@ -26,6 +27,7 @@ const DIENSTE = [
  * deshalb als Vorschau da, sichtbar unfertig, bis jemand nachgesehen hat.
  */
 export default function Bestellen() {
+  const wege = useAuftauchen<HTMLDivElement>(0.9)
   return (
     <Sektion id="bestellen" grund="hell" kante klasse="bestellen" beschriftetVon="bestellen-titel">
       {/* Dieselbe Technik wie im Hero: echte Fotografie, darüber ein deckender
@@ -58,7 +60,7 @@ export default function Bestellen() {
             was noch offen ist. Untereinander gestellt läse sich die Vorschau
             wie ein gleichwertiges Angebot. */}
         <div className="bestellen__gitter">
-        <div className="bestellen__wege">
+        <div className="bestellen__wege" ref={wege}>
           <a className="weg" href={ARAM.kontakt.telefonHref}>
             <Etikett klasse="weg__art">Anrufen</Etikett>
             <span className="weg__wert">{ARAM.kontakt.telefon}</span>

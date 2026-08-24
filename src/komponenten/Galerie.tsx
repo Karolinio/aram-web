@@ -66,7 +66,15 @@ function Blatt({ bild, bahn, i }: { bild: Bild; bahn: (typeof BAHNEN)[number]; i
     dreh: bahn.dreh,
     /* Ein Hauch Kippen um die Hochachse. Mehr wäre ein Effekt; so viel ist
        das, was ein Blatt Papier tut, das durch die Luft geht. */
-    drehY: [i % 2 ? 8 : -8, i % 2 ? -6 : 6],
+    /* ═══ Die Kippung kommt aus der SPUR, nicht aus dem Index ═══
+       Ein Blatt in der linken Spur dreht sich zur Mitte hin, eins in der
+       rechten dagegen — so schauen beide den Betrachter an, und der Raum hat
+       eine Mitte.
+       Vorher stand hier `i % 2`. Das ergab dasselbe Ergebnis, aber nur durch
+       Zufall: die Bahnen wechseln sich ab, und es sind gerade sieben Bilder.
+       Bei acht Bildern oder einer anderen Bahnenliste hätte sich die Hälfte
+       falsch herum gedreht. */
+    drehY: bahn.spur === 'links' ? [10, -7] : [-10, 7],
     drehX: [4, -3],
     z: [-60, 0],
     skala: bahn.skala,

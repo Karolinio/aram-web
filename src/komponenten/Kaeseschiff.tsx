@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 import reiseRoh from '../../inhalt/reise.json'
-import { useMedienabfrage, werkzeugHolen } from '../bewegung.ts'
+import { SCRUB_KOERPER, useMedienabfrage, werkzeugHolen } from '../bewegung.ts'
 import Dampf from './ui/Dampf.tsx'
 import Kaesefaeden from './ui/Kaesefaeden.tsx'
 import Kaesetropfen from './ui/Kaesetropfen.tsx'
@@ -15,11 +15,19 @@ const M = reiseRoh as Record<string, Mass>
  * ═══ Was hier erzählt wird ═══
  *
  * Karol am 23.08.: „Wie aus dem Mehl irgendwie durch dieses Walzen so ein
- * Käseschiff wird, dann fliegt das und landet dann unten im Ofen."
+ * Käseschiff wird, dann fliegt das."
  *
- * Genau das, und in dieser Reihenfolge:
+ * ═══ Der Ofen ist am 24.08. wieder rausgeflogen ═══
  *
- *   Teigkugel  →  gewalzt  →  belegt  →  IN DEN OFEN  →  gebacken  →  reisst
+ * „Das mit dem Ofen ist mir noch nicht ganz koscher … mach den Ofen raus."
+ * Die Verwandlung BLEIBT — sie braucht den Ofen nicht. Der Teig wird während
+ * des Flugs zu Gebäck, und das liest sich sogar geradliniger: ein Gegenstand,
+ * der sich auf dem Weg verwandelt, statt eines, der in einem Loch verschwindet
+ * und anders wieder herauskommt.
+ *
+ * Die Reihenfolge:
+ *
+ *   Teigkugel  →  gewalzt  →  belegt  →  gebacken  →  reisst auf
  *
  * Ein Gegenstand, der so weit reist, kann in keiner Sektion wohnen — er wäre
  * an deren Unterkante zu Ende. Er liegt fest im Fenster (`position: fixed`)
@@ -84,27 +92,14 @@ const BAHN: readonly Punkt[] = [
   { p: 0.0, x: -32, y: -0.94, dreh: -24, drehY: 44, drehX: 16, skala: 0.24, deck: 0 },
   { p: 0.07, x: -33, y: -0.26, dreh: -18, drehY: 34, drehX: 11, skala: 0.32, deck: 1 },
   { p: 0.19, x: -28, y: 0.26, dreh: -11, drehY: 24, drehX: 4, skala: 0.38, deck: 1 },
-  { p: 0.31, x: -33, y: -0.06, dreh: -3, drehY: 12, drehX: -2, skala: 0.44, deck: 1 },
-  { p: 0.44, x: 29, y: 0.22, dreh: 10, drehY: -19, drehX: -6, skala: 0.5, deck: 1 },
-  { p: 0.56, x: 33, y: -0.14, dreh: 17, drehY: -34, drehX: -10, skala: 0.56, deck: 1 },
-  /* ── Der Anflug auf den Ofen ─────────────────────────────────────────────
-     Ab hier zieht es zur Mitte und sinkt. Es wird KLEINER, nicht grösser: was
-     in eine Öffnung fällt, entfernt sich vom Betrachter. */
-  { p: 0.66, x: 16, y: -0.3, dreh: 9, drehY: -14, drehX: -3, skala: 0.5, deck: 1 },
-  { p: 0.72, x: 2, y: -0.08, dreh: 2, drehY: -3, drehX: 12, skala: 0.36, deck: 1 },
-  /* Im Maul. Der Deckkraftabfall macht das Verschwinden; das Maul selbst ist
-     schwarz, und ein Gegenstand, der darin blasser wird, ist verschluckt. */
-  /* Die Maulmitte liegt gemessen bei y +0,10 Fensterhöhen — das Ofenbild ist
-     unten verankert, 597 px hoch, und sein dunkelster Punkt sitzt bei 37 %
-     seiner Höhe. Wer das Bild oder seine Grösse ändert, misst neu
-     (werkzeug/ofenbild.py meldet den Wert). */
-  { p: 0.76, x: 0, y: 0.1, dreh: 0, drehY: 0, drehX: 24, skala: 0.2, deck: 0 },
-  { p: 0.79, x: 0, y: 0.12, dreh: 0, drehY: 0, drehX: 24, skala: 0.2, deck: 0 },
-  /* ── Und wieder heraus, gebacken ────────────────────────────────────────── */
-  { p: 0.83, x: -4, y: 0.1, dreh: -3, drehY: 8, drehX: 8, skala: 0.46, deck: 1 },
-  { p: 0.9, x: -6, y: 0.24, dreh: 1, drehY: 4, drehX: 1, skala: 0.78, deck: 1 },
-  { p: 0.95, x: 0, y: 0.04, dreh: -2, drehY: 5, drehX: 2, skala: 0.94, deck: 1 },
-  { p: 0.98, x: 0, y: 0.0, dreh: 0, drehY: 0, drehX: 0, skala: 1.0, deck: 1 },
+  { p: 0.33, x: -33, y: -0.06, dreh: -3, drehY: 12, drehX: -2, skala: 0.46, deck: 1 },
+  { p: 0.47, x: 30, y: 0.22, dreh: 10, drehY: -19, drehX: -6, skala: 0.55, deck: 1 },
+  { p: 0.62, x: 34, y: -0.14, dreh: 18, drehY: -37, drehX: -11, skala: 0.64, deck: 1 },
+  /* Tief im Bild, solange die Überschrift der Riss-Sektion oben steht. */
+  { p: 0.76, x: -18, y: 0.24, dreh: 6, drehY: -10, drehX: -3, skala: 0.78, deck: 1 },
+  { p: 0.86, x: -6, y: 0.24, dreh: 1, drehY: 3, drehX: 1, skala: 0.88, deck: 1 },
+  { p: 0.93, x: 0, y: 0.04, dreh: -2, drehY: 5, drehX: 2, skala: 0.96, deck: 1 },
+  { p: 0.97, x: 0, y: 0.0, dreh: 0, drehY: 0, drehX: 0, skala: 1.0, deck: 1 },
   /* Und dann ist es weg. Ohne diese Zeile bliebe ein aufgerissenes Gebäck in
      voller Grösse über der Speisekarte stehen — gemessen über 6000 px Scroll,
      weil ein festes Element nicht von selbst geht. */
@@ -127,12 +122,19 @@ const BAHN: readonly Punkt[] = [
  * denselben Gegenstand.
  */
 const STUFEN: readonly { klasse: string; quelle: string; von: number; bis: number }[] = [
-  { klasse: 'kugel', quelle: '/bilder/reise/stufe-1-kugel.webp', von: 0.0, bis: 0.17 },
-  { klasse: 'gewalzt', quelle: '/bilder/reise/stufe-2-gewalzt.webp', von: 0.13, bis: 0.35 },
-  { klasse: 'belegt', quelle: '/bilder/reise/stufe-3-belegt.webp', von: 0.31, bis: 0.78 },
+  { klasse: 'kugel', quelle: '/bilder/reise/stufe-1-kugel.webp', von: 0.0, bis: 0.15 },
+  { klasse: 'gewalzt', quelle: '/bilder/reise/stufe-2-gewalzt.webp', von: 0.11, bis: 0.33 },
+  { klasse: 'belegt', quelle: '/bilder/reise/stufe-3-belegt.webp', von: 0.29, bis: 0.58 },
 ]
-/** Ab hier ist es gebacken — die Hälften übernehmen. */
-const GEBACKEN_AB = 0.79
+/**
+ * Ab hier ist es gebacken — die Hälften übernehmen.
+ *
+ * Vorher lag der Wert bei 0,79, weil dort der Ofen war: roh hinein, gebacken
+ * heraus. Ohne Ofen bräunt es unterwegs, und dann gehört der Übergang in die
+ * MITTE der Reise, nicht an ihr Ende — sonst fliegt zwei Drittel des Wegs ein
+ * roher Teig, und das Gebäck, um das es geht, sieht man erst kurz vor dem Riss.
+ */
+const GEBACKEN_AB = 0.6
 
 /** Von wo bis wo gerissen wird. Danach bleibt Weg zum Verschwinden. */
 const RISS_AB = 0.86
@@ -210,7 +212,6 @@ export default function Kaeseschiff() {
     const links = el.querySelector<HTMLElement>('.schiff__haelfte--links')
     const rechts = el.querySelector<HTMLElement>('.schiff__haelfte--rechts')
     const stufen = STUFEN.map((s) => el.querySelector<HTMLElement>(`.schiff__stufe--${s.klasse}`))
-    const wurzel = document.documentElement
 
     let tot = false
     let abraeumen: (() => void) | undefined
@@ -280,16 +281,6 @@ export default function Kaeseschiff() {
           rechts.style.transform = `translateX(${30 * spanne}%) rotateY(${-32 * spanne}deg)`
         }
 
-        /**
-         * Die Glut im Ofen. Sie geht dort auf, wo das Schiff eintaucht, und
-         * wieder zurück, wenn es heraus ist.
-         *
-         * Sie steht auf dem Wurzelelement und nicht auf der Ofensektion: das
-         * Schiff kennt die Sektion nicht, und es soll sie auch nicht kennen
-         * müssen. Wer die Glut sonst noch brauchen will, liest dieselbe
-         * Variable.
-         */
-        wurzel.style.setProperty('--ofen-glut', String(fenster(p, 0.71, 0.84, 0.07)))
       }
 
       const tween = gsap.to(zustand, {
@@ -304,12 +295,11 @@ export default function Kaeseschiff() {
           start: 'top 88%',
           endTrigger: '.reise',
           end: 'bottom bottom',
-          scrub: 0.4,
+          scrub: SCRUB_KOERPER,
           invalidateOnRefresh: true,
           onToggle: ({ isActive }) => {
             setAktiv(isActive)
             el.style.willChange = isActive ? 'transform, opacity' : ''
-            if (!isActive) wurzel.style.setProperty('--ofen-glut', '0')
           },
         },
       })
@@ -321,7 +311,6 @@ export default function Kaeseschiff() {
         tween.scrollTrigger?.kill()
         tween.kill()
         el.style.willChange = ''
-        wurzel.style.removeProperty('--ofen-glut')
       }
     })
 

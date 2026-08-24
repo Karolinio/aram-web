@@ -243,9 +243,57 @@
      Der einzige Schatten der ganzen Seite ist der Eigenschatten der
      freigestellten Gerichte. Er macht sie zu Gegenständen statt zu Aufklebern,
      und er fällt nach unten rechts, weil das Licht vom Fenster links oben kommt. */
+/**
+ * ═══ EIN Schatten für alles, was freigestellt ist ═══
+ *
+ * Der Satz oben stand hier seit dem ersten Tag — und dann hat ihn niemand
+ * benutzt. Gemessen am 24.08.: FÜNF verschiedene Rezepte für dieselbe Aufgabe,
+ * in drei verschiedenen Farbtönen und vier Geometrien:
+ *
+ *   Gerichte      0 18px 28px  oklch(24% 0.03  50 / 0.22)   ← dieses Token
+ *   Ladenbilder   0 14px 26px  oklch(30% 0.055 55 / 0.20)
+ *   Käseschiff    0 22px 34px  oklch(30% 0.055 55 / 0.30)
+ *   … am Handy    0 14px 22px  oklch(30% 0.055 55 / 0.34)
+ *   Vorhang       0 26px 44px  oklch( 8% 0.02  50 / 0.55)
+ *
+ * Fünf Lichtquellen in einem Raum. Genau das meint „nicht konsistent", und man
+ * sieht es, ohne es benennen zu können.
+ *
+ * ═══ Warum ein starres Token nicht reicht ═══
+ *
+ * Ein Schatten, der unter einem 200-px-Gebäck stimmt, ist unter einer 900-px-
+ * Scheibe ein Strich. Ein geworfener Schatten wächst mit dem Gegenstand.
+ * Deshalb `--wurf`: das Rezept bleibt, der Massstab kommt vom Gegenstand.
+ *
+ * Und `--schatten-ton` deshalb, weil ein dunkler Schatten auf schwarzem Grund
+ * unsichtbar ist. Das ist keine Inkonsistenz, sondern Physik — der dunkle
+ * Abschnitt vertieft denselben Schatten, statt einen eigenen zu erfinden.
+ */
+  --schatten-ton: oklch(24% 0.03 50 / 0.22);
+  --schatten-ton-nah: oklch(24% 0.03 50 / 0.16);
+  /** Massstab des Wurfs. 1 = ein Gericht im Schwarm. Je Gegenstand gesetzt. */
+  --wurf: 1;
   --schatten-speise:
-    drop-shadow(0 18px 28px oklch(24% 0.03 50 / 0.22))
-    drop-shadow(0 3px 8px oklch(24% 0.03 50 / 0.16));
+    drop-shadow(0 calc(18px * var(--wurf)) calc(28px * var(--wurf)) var(--schatten-ton))
+    drop-shadow(0 calc(3px * var(--wurf)) calc(8px * var(--wurf)) var(--schatten-ton-nah));
+
+  /**
+   * ═══ EIN Fluchtpunkt ═══
+   *
+   * Gemessen standen vier verschiedene Perspektiven auf der Seite: 900, 1400
+   * und zweimal 1600 px, mit drei verschiedenen Ursprüngen. Jede Sektion war
+   * damit ein eigener Raum, und ein Gegenstand, der von einer in die nächste
+   * fliegt, wechselt dabei die Optik.
+   *
+   * 1500 px auf einem 1440er Bildschirm heisst: etwa eine Bildschirmbreite
+   * Abstand zum Betrachter. Weiter weg und die Drehungen werden zur Stauchung,
+   * näher und die Kanten laufen auseinander.
+   *
+   * Der Ursprung liegt bei 44 % und nicht bei 50 %: der Blick auf einer Seite
+   * ruht über der Mitte, nicht darin.
+   */
+  --flucht: 1500px;
+  --flucht-punkt: 50% 44%;
 
   /**
    * ── Typografie ─────────────────────────────────────────────────────────

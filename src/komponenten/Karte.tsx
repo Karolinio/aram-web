@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 
 import { inhalt, type Gericht } from '../inhalt.ts'
 import { anzahlVon, minus, plus } from '../bestellung.ts'
+import { useAuftauchen } from '../bewegung.ts'
 import { useBestellung } from '../useBestellung.ts'
 import Bildschau from './ui/Bildschau.tsx'
 import { Kopf, Sektion } from './ui/bausteine.tsx'
@@ -44,6 +45,7 @@ export default function Karte() {
   const [versteckt, setVersteckt] = useState<string[]>([])
   /* Welches Gericht gerade gross zu sehen ist. `null` heisst: keins. */
   const [gross, setGross] = useState<Gericht | null>(null)
+  const kopf = useAuftauchen<HTMLDivElement>(0.8)
   useBestellung() /* neu rendern, sobald sich die Auswahl ändert */
 
   /* Nur Allergene anbieten, die auf dieser Karte wirklich vorkommen. Ein Knopf
@@ -95,7 +97,11 @@ export default function Karte() {
             UNTER dem Kopf, und die rechte Hälfte des Bildschirms blieb über
             eine halbe Bildschirmhöhe leer. Ein Werkzeug gehört neben das, was
             es bedient. */}
-        <div className="karte__kopfzeile">
+        {/* Der Kopfblock taucht auf — dieselbe Bewegung wie in Laden und
+            Bestellen. Nicht die Gerichteliste: ein 1400 px hoher Block, der
+            aus halber Deckkraft kommt, sieht aus wie ein Ladefehler, und man
+            sieht ohnehin nur sein oberes Fünftel dabei. */}
+        <div className="karte__kopfzeile" ref={kopf}>
         <Kopf
           id="karte-titel"
           etikett="Speisekarte"
@@ -108,8 +114,12 @@ export default function Karte() {
               </>
             ) : (
               <>
-                Zweiundzwanzig Sorten, jede von Hand gerollt. Die Nummer vor dem Namen ist
-                dieselbe wie auf unserer Karte im Laden.
+                {/* „Zweiundzwanzig Sorten" steht seit dem 24.08. schon eine
+                    Bildschirmhöhe weiter oben im Vorhang. Zweimal dieselbe Zahl
+                    in zwei aufeinanderfolgenden Sektionen liest sich nicht als
+                    Betonung, sondern als Versehen. Hier bleibt, was der
+                    Vorhang NICHT sagt. */}
+                Die Nummer vor dem Namen ist dieselbe wie auf unserer Karte im Laden.
               </>
             )
           }

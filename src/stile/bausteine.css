@@ -87,6 +87,10 @@
   background: var(--nacht);
   color: var(--creme);
   --linie: oklch(42% 0.03 55);
+  /* DASSELBE Rezept, nur tiefer: ein Schatten in Clay-Braun ist auf ihrem
+     Schwarz unsichtbar. Kein eigenes Rezept — nur der Ton. */
+  --schatten-ton: oklch(6% 0.02 50 / 0.6);
+  --schatten-ton-nah: oklch(6% 0.02 50 / 0.42);
 }
 .sektion--nacht .etikett { color: var(--glut-marke); }
 .sektion--nacht h1,
