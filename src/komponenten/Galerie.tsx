@@ -1,6 +1,4 @@
 import galerieRoh from '../../inhalt/galerie.json'
-import type { CSSProperties } from 'react'
-
 import { useSchub } from '../bewegung.ts'
 import { Kopf, Sektion } from './ui/bausteine.tsx'
 
@@ -84,13 +82,27 @@ const BILDER = galerieRoh as Bild[]
  * Bild fährt. Nichts hält an.
  */
 
-/** Wie hoch der Bogen steht. Drei Werte im Wechsel — sonst ist es eine Mauer. */
-const HOEHEN = [1, 0.86, 0.94, 0.8, 1, 0.88, 0.92] as const
+/**
+ * ═══ Alle Bögen gleich hoch ═══
+ *
+ * Hier standen sieben verschiedene Höhen im Wechsel — als Rhythmus gedacht.
+ * Karol: „die Bilder müssen formatierter und mittiger, die sind nicht
+ * zentriert und somit unübersichtlich."
+ *
+ * Er hat recht, und es ist sogar architektonisch falsch: eine Arkade besteht
+ * aus GLEICHEN Bögen. Das ist ihre Definition. Ungleich hohe Bögen
+ * nebeneinander sind keine Arkade, sondern eine Baustelle — und dass sie
+ * unten bündig standen statt auf einer Mittelachse, machte daraus eine
+ * Zackenlinie.
+ *
+ * Der Rhythmus kommt jetzt aus den Bildern selbst: sieben verschiedene Motive
+ * hinter sieben gleichen Bögen. Das reicht.
+ */
 
 function Bogen({ bild, i }: { bild: Bild; i: number }) {
   const nr = String(bild.nr).padStart(2, '0')
   return (
-    <li className="bogen" style={{ '--hoch': HOEHEN[i % HOEHEN.length] } as CSSProperties}>
+    <li className="bogen">
       <div className="bogen__rahmen">
         <img
           src={`/bilder/galerie/${nr}.webp`}
@@ -119,12 +131,19 @@ export default function Galerie() {
 
   return (
     <Sektion id="galerie" grund="tief" klasse="galerie" beschriftetVon="galerie-titel">
-      <Kopf
-        id="galerie-titel"
-        etikett="Aus dem Laden"
-        titel="Was an einem Morgen entsteht"
-        lead="Vom Blech über die Glut auf den Tisch."
-      />
+      {/* ═══ Die Überschrift stand AUSSERHALB der Schale ═══
+          Karol am 26.08.: „Überschrift muss weiter rechts formatiert."
+          Sie klebte am Fensterrand — als einzige Überschrift der Seite. Jede
+          andere Sektion legt ihren Kopf in `.schale`; beim Umbau der Galerie
+          auf die Arkade ist der Wrapper verlorengegangen. */}
+      <div className="schale">
+        <Kopf
+          id="galerie-titel"
+          etikett="Aus dem Laden"
+          titel="Was an einem Morgen entsteht"
+          lead="Vom Blech über die Glut auf den Tisch."
+        />
+      </div>
 
       {/* Eine echte Liste in Leserichtung. Für ein Vorleseprogramm ist der
           Unterschied, ob es „Liste mit sieben Einträgen" ansagt oder gar

@@ -2758,8 +2758,11 @@
   position: relative;
   /* Die Bilder brauchen Weg zum Fliegen. Ohne Mindesthöhe ist die Sektion nur
      so hoch wie ihr Inhalt, und die halbe Bahn fällt aus. */
-  min-height: 190vh;
-  /* Die Bahnen ragen über die Kante hinaus; ohne `clip` entstünde daraus eine
+  /* Kürzer als zur Zeit der fliegenden Bilder: die Arkade braucht nur so viel
+     Weg, wie das Band zum Wandern hat. 190 vh liessen zwischen Überschrift und
+     Bögen eine halbe leere Bildschirmhöhe. */
+  min-height: 126vh;
+  /* Das Band ragt über die Kante hinaus; ohne `clip` entstünde daraus eine
      waagerechte Scrollleiste. Senkrecht bleibt offen, damit die Überlappung
      zur nächsten Sektion sichtbar ist. */
   overflow-x: clip;
@@ -2783,13 +2786,19 @@
      Sektion: die Sektion trägt den Schatten der Bögen, und `overflow: clip`
      dort würde ihn mit abschneiden. */
   overflow: clip;
-  margin-top: clamp(2rem, 6vh, 4.5rem);
+  /* Die Arkade sitzt in der MITTE der Sektion, nicht an ihrem Fuss. Beim
+     Durchfahren steht sie dadurch mittig im Fenster — Karol: „die sind nicht
+     zentriert und somit unübersichtlich". */
+  margin-top: clamp(1.5rem, 4vh, 3rem);
   padding-block: clamp(1rem, 3vh, 2.5rem);
 }
 
 .galerie__arkade {
   display: flex;
-  align-items: flex-end;
+  /* Auf EINER Mittelachse. Unten bündig ergab bei verschieden hohen Bögen eine
+     Zackenlinie; jetzt sind sie ohnehin alle gleich hoch, und die Mittelachse
+     hält sie auch dann zusammen, wenn eine Bildzeile zweizeilig umbricht. */
+  align-items: center;
   gap: clamp(1rem, 2.5vw, 2.5rem);
   margin: 0;
   padding: 0 var(--raum-schale, 1.5rem);
@@ -2801,7 +2810,11 @@
 
 .bogen {
   flex: 0 0 auto;
-  width: clamp(11rem, 24vw, 20rem);
+  /* Keine eigene Breite mehr — der Bogen ist so breit, wie seine Form es
+     vorgibt. Das hält die Reihe gleichmässig. */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /**
@@ -2819,9 +2832,12 @@
  */
 .bogen__rahmen {
   position: relative;
+  /* Eine feste Höhe für alle — eine Arkade hat gleiche Bögen. Die Breite folgt
+     daraus über das Seitenverhältnis, damit jeder Bogen dieselbe Form hat,
+     egal ob das Foto quer oder hoch ist. */
   aspect-ratio: 3 / 4;
-  height: calc(var(--hoch) * clamp(15rem, 32vw, 26rem));
-  width: 100%;
+  height: clamp(13rem, 25vw, 20.5rem);
+  width: auto;
   padding: clamp(0.3rem, 0.7vw, 0.55rem);
   background: var(--creme);
   border: 1px solid var(--linie);
@@ -2854,8 +2870,7 @@
  * sieht man weniger davon gleichzeitig. Zusammengelegt, nicht weggelassen.
  */
 @media (max-width: 719px) {
-  .bogen { width: 62vw; }
-  .bogen__rahmen { height: calc(var(--hoch) * 62vw * 1.33); }
+  .bogen__rahmen { height: 62vh; }
 }
 
 @media (prefers-reduced-motion: reduce) {
