@@ -675,3 +675,83 @@ export function useAuftauchen<T extends HTMLElement>(tiefe = 1) {
 
   return ref
 }
+
+/**
+ * Ein Band wandert WAAGERECHT, während seine Sektion durchs Bild fährt.
+ *
+ * ═══ Der Unterschied zu `useVersatz` ═══
+ *
+ * Derselbe Gedanke, andere Achse: dort verschiebt der Scroll ein Element auf
+ * der Hochachse, hier auf der Querachse. Getrennte Haken und keine Achse als
+ * Parameter, weil beide etwas anderes bedeuten — der eine macht Rhythmus in
+ * einer Spalte, der andere führt eine Reihe an einem vorbei.
+ *
+ * ═══ Warum das KEIN angeheftetes waagerechtes Scrollen ist ═══
+ *
+ * Die übliche Bauform wäre: Sektion anheften, den Scrollweg in eine
+ * waagerechte Fahrt umrechnen. Das hat auf dieser Seite schon einmal drei
+ * Runden gekostet — eine angeheftete Sektion HÄLT AN, und der Wechsel von
+ * „scrollt" auf „steht" ist ein Bruch, den keine Dämpfung glättet. Karol hat
+ * ihn dreimal als „haperig" gemeldet.
+ *
+ * Hier hält nichts an. Das Band ist breiter als das Fenster und verschiebt
+ * sich, solange die Sektion in Sicht ist; die Seite scrollt dabei normal
+ * weiter. Man geht an einer Arkade vorbei, statt vor ihr stehenzubleiben.
+ *
+ * @param tempo Wie weit verschoben wird, in Anteilen der EIGENEN Breite über
+ *              die ganze Durchfahrt. Negativ = nach links.
+ */
+export function useSchub<T extends HTMLElement>(tempo: number) {
+  const ref = useRef<T>(null)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    const buehne = el.closest('section') ?? el
+    let tot = false
+    let abraeumen: (() => void) | undefined
+
+    void werkzeugHolen().then((werkzeug) => {
+      if (tot || !werkzeug) return
+      const { gsap } = werkzeug
+
+      const tween = gsap.fromTo(
+        el,
+        { xPercent: 0 },
+        {
+          xPercent: tempo * 100,
+          ease: 'none',
+          scrollTrigger: {
+            /* Die SEKTION ist der Auslöser, nicht das Band: hinge er am Band,
+               verschöbe sich sein eigener Bereich mit jeder Bewegung. */
+            trigger: buehne,
+            start: 'top bottom',
+            end: 'bottom top',
+            /* Eine Fläche, kein Körper — siehe BEWEGUNG.md, Regel 3. */
+            scrub: SCRUB_FLAECHE,
+            invalidateOnRefresh: true,
+            onToggle: ({ isActive }) => {
+              el.style.willChange = isActive ? 'transform' : ''
+            },
+          },
+        },
+      )
+
+      abraeumen = () => {
+        tween.scrollTrigger?.kill()
+        tween.kill()
+        el.style.willChange = ''
+        el.style.transform = ''
+      }
+    })
+
+    return () => {
+      tot = true
+      abraeumen?.()
+    }
+  }, [tempo])
+
+  return ref
+}

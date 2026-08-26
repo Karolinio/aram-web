@@ -95,23 +95,16 @@ const BAHN: readonly Punkt[] = [
   { p: 0.62, x: 34, y: -0.14, dreh: 18, drehY: -37, drehX: -11, skala: 0.64, deck: 1 },
   /* Tief im Bild, solange die Überschrift der Riss-Sektion oben steht. */
   { p: 0.76, x: -18, y: 0.24, dreh: 6, drehY: -10, drehX: -3, skala: 0.78, deck: 1 },
-  { p: 0.86, x: -6, y: 0.22, dreh: 1, drehY: 3, drehX: 1, skala: 0.9, deck: 1 },
-  /* ═══ Zwei Wegpunkte standen hier auf demselben `p` ═══
-     Ein Tippfehler beim Nachjustieren, und er wäre irgendwann teuer geworden:
-     `aufDerBahn` teilt durch `b.p − a.p`, und das ist bei gleichen Werten null.
-     Sichtbar wäre es als Gegenstand, der an einer Stelle verschwindet.
-     Die Reihenfolge muss STRENG steigen. */
-  { p: 0.9, x: 0, y: 0.04, dreh: -2, drehY: 5, drehX: 2, skala: 1.0, deck: 1 },
-  /* Und dann ist es weg. Ohne diese Zeile bliebe ein aufgerissenes Gebäck in
-     voller Grösse über der Speisekarte stehen — gemessen über 6000 px Scroll,
-     weil ein festes Element nicht von selbst geht. */
-  /* Weg bei 0,93, nicht erst bei 1,0. Gemessen erscheint die Überschrift der
-     Speisekarte bei p 0,949 im Bild — bei einem Ausblenden bis 1,0 lag das
-     aufgerissene Gebäck dort noch mit 0,3 Deckung über den ersten Gerichten.
-     Ein grosses helles Bild bei 30 % auf hellem Grund ist nicht „fast weg",
-     sondern ein Schleier. */
-  { p: 0.93, x: 0, y: 0.08, dreh: 0, drehY: 0, drehX: 0, skala: 1.04, deck: 0 },
-  { p: 1.0, x: 0, y: 0.1, dreh: 0, drehY: 0, drehX: 0, skala: 1.06, deck: 0 },
+  /* In der Mitte, ruhig, gross — hier reisst es. Von 0,80 bis 0,86 passiert in
+     der Bahn NICHTS ausser dem Wachsen: der Riss soll die einzige Bewegung im
+     Bild sein, wenn er kommt. */
+  { p: 0.8, x: -4, y: 0.16, dreh: 1, drehY: 2, drehX: 1, skala: 0.9, deck: 1 },
+  { p: 0.86, x: 0, y: 0.06, dreh: 0, drehY: 0, drehX: 0, skala: 1.0, deck: 1 },
+  /* Und weg zur Seite — nach rechts, weil die Leserichtung dorthin zeigt und
+     ein Gegenstand, der entgegen ihr verschwindet, wie ein Rückschritt
+     aussieht. Was aus dem Bild fliegt, dreht sich dabei. */
+  { p: 0.93, x: 58, y: -0.06, dreh: 14, drehY: -26, drehX: -8, skala: 1.1, deck: 0 },
+  { p: 1.0, x: 78, y: -0.12, dreh: 20, drehY: -34, drehX: -10, skala: 1.16, deck: 0 },
 ]
 
 /**
@@ -150,32 +143,26 @@ const STUFEN: readonly { klasse: string; bei: number }[] = [
   { klasse: 'stufe-3-belegt', bei: 0.32 },
   /* Die lange Strecke: gebacken, und so fliegt es über zwei Sektionen. */
   { klasse: 'stufe-4-gebacken', bei: 0.55 },
-  /* ── Der Riss ───────────────────────────────────────────────────────────
-     Vier Aufnahmen dicht hintereinander. Karol: „nicht zu zäh machen, einfach
-     nahtlos voneinander trennen und nicht ruckelig … harmonischer Übergang."
-     Die Abstände werden nach hinten kleiner: das Auseinandergehen beschleunigt,
-     wie es das im Echten auch tut, sobald die Fäden nachgeben. */
-  { klasse: 'riss-1', bei: 0.815 },
-  { klasse: 'riss-2', bei: 0.85 },
-  { klasse: 'riss-3', bei: 0.878 },
-  /* ═══ Der Fahrplan folgt der SEKTIONSGEOMETRIE, nicht dem Gefühl ═══
-     Gemessen liegt die Riss-Sektion zwischen p 0,73 und 1,0 — das sind rund
-     2230 px. Darin muss dreierlei Platz haben, und in dieser Reihenfolge:
-       0,73…0,81   das ganze Gebäck, während man die Überschrift liest
-       0,81…0,90   der Riss
-       0,90…0,96   das Ausblenden, bevor die Speisekarte hereinkommt
-     Beim ersten Anlauf lag das Ausblenden bei 0,93…1,0 — gemessen stand das
-     aufgerissene Gebäck dadurch noch bei voller Deckung über „Was es gibt".
-
-     Fertig gerissen also bei 0,90, nicht bei 1,0. Denn nach
-     `p = 1` bleibt IMMER eine Fensterhöhe Sektion übrig — der Auslöser endet,
-     wenn die Unterkante der Sektion die Unterkante des Fensters erreicht, und
-     bis sie oben herausgescrollt ist, vergeht noch ein ganzer Bildschirm.
-     Gemessen standen dort 800 px leerer Clay.
-     Jetzt liegt das aufgerissene Gebäck diese Strecke noch da und verschwindet
-     erst am Schluss — Karol: „Käse trennt sich, ein, zwei Sekunden sichtbar
-     und weg." */
-  { klasse: 'riss-4', bei: 0.9 },
+  /**
+   * ═══ EINE Aufnahme für den Riss, nicht vier ═══
+   *
+   * Karol am 26.08.: „Ohne viel Ruckeln, ohne mehrere Szenen, in eine Szene,
+   * wo es wegfliegt zur Seite. Bom, fertig."
+   *
+   * Hier standen vier — angerissen, gezogen, weit gezogen, getrennt. Einzeln
+   * gut, in der Folge falsch: vier Fotos desselben Gegenstands in vier
+   * Zuständen sind vier Überblendungen, und jede ist ein Moment, in dem zwei
+   * Bilder halb durchsichtig übereinanderliegen. Auch bei perfekt gerechneter
+   * Kette bleibt das ein Flackern — man sieht keine Bewegung, man sieht einen
+   * Diaprojektor.
+   *
+   * Eine Aufnahme ist besser, weil danach GAR NICHT mehr überblendet wird: der
+   * Käsezug steckt im Foto, und was folgt, ist reine Bewegung.
+   *
+   * Genommen ist die dramatischste (k33): lange dünne Fäden, ein paar schon
+   * zurückgeschnellt. Die drei anderen bleiben in public/bilder/riss/ liegen.
+   */
+  { klasse: 'riss-3', bei: 0.86 },
 ]
 
 /** Weiche Überblendung statt Knick. Ohne sie hat die Bahn an jedem Wegpunkt eine Ecke. */

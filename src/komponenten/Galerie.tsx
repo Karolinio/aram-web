@@ -1,7 +1,7 @@
 import galerieRoh from '../../inhalt/galerie.json'
 import type { CSSProperties } from 'react'
 
-import { useVersatz } from '../bewegung.ts'
+import { useSchub } from '../bewegung.ts'
 import { Kopf, Sektion } from './ui/bausteine.tsx'
 
 type Bild = { nr: number; titel: string; lage: 'hoch' | 'quer'; breite: number; hoehe: number }
@@ -42,91 +42,81 @@ const BILDER = galerieRoh as Bild[]
  */
 
 /**
- * ═══ Der Stapel ═══
+ * ═══ Die Arkade ═══
  *
- * Karol, dreimal in Folge: „Die Galerie ist immer noch furchtbar." Beim
- * dritten Mal habe ich gemacht, was er beim zweiten schon verlangt hatte, und
- * bei Mobbin nachgesehen. Die Antwort ist **Nite Riot**, und sie sagt genau,
- * was hier falsch war:
+ * Karol, zum vierten Mal: „Die Galerie ist immer noch kacke. Will einen ganz
+ * anderen Ansatz, von links nach rechts … die Bilder sollen thematisch
+ * umrahmt sein, irgendwie in arabischer Rahmen-UI."
  *
- *   RAHMEN       Dort sind es nackte Fotos. Hier lag jedes in einem
- *                cremefarbenen Passepartout mit Radius und drei Schatten —
- *                eine Bedienoberflächen-Karte, keine Fotografie.
- *   ABSTAND      Dort überlappen sie einander. Hier standen sie in einem
- *                Raster mit einer freien Mittelspalte, das eine Berührung
- *                ausgeschlossen hat.
- *   GRÖSSE       Dort reicht das grösste an das Vierfache des kleinsten. Hier
- *                waren alle fast gleich.
- *   RAND         Dort laufen sie aus dem Bild. Hier endeten sie brav an der
- *                Schale.
- *   BESCHRIFTUNG Dort keine. Hier trug jedes eine Nummer und eine Bildzeile —
- *                und genau das macht aus einer Wand voller Fotos eine
- *                Dokumentation.
+ * Zwei Vorfassungen sind gescheitert, und beide aus demselben Grund: sie waren
+ * SENKRECHT. Erst zwei Spuren, die von unten nach oben flogen, dann ein
+ * überlappender Stapel — beide Male scrollte man an Bildern vorbei, statt
+ * durch sie hindurchzugehen.
  *
- * Jeder dieser fünf Punkte für sich wäre Geschmack. Zusammen sind sie der
- * Unterschied zwischen einem Stapel Abzüge auf einem Tisch und einer
- * Bildergalerie in einem Formular.
+ * ═══ Was Mobbin dazu sagt ═══
+ *
+ * MOUTHWASH Studio führt ein waagerechtes Band quer durch die Bildmitte: alle
+ * Bilder auf einer Höhe, gleiche Grösse, ruhig, in Leserichtung. Kein Stapel,
+ * keine Streuung. Das ist die Form, die „von links nach rechts" wirklich
+ * einlöst — und sie ist ruhig genug, dass der Rahmen etwas zu sagen bekommt.
+ *
+ * ═══ Warum ein RUNDBOGEN und kein Ornament ═══
+ *
+ * „Arabische Rahmen-UI" liesse sich mit Maschrabiyya-Gittern oder
+ * Achteckmustern bedienen. Das wäre von der Stange und hätte mit Aram nichts
+ * zu tun.
+ *
+ * Ihr Ofen IST ein Bogen — ein gemauerter Rundbogen, auf Galeriefoto 09 und 12
+ * deutlich zu sehen. Eine Reihe von Rundbögen ist ausserdem genau das, was
+ * eine Arkade ist: die Grundform jedes Basars und jeder Moschee.
+ *
+ * Der Rahmen kommt damit nicht aus einem Musterbuch, sondern aus ihrem eigenen
+ * Laden. Das ist der Unterschied zwischen orientalisch AUSSEHEN und
+ * orientalisch SEIN.
+ *
+ * ═══ Warum nicht angeheftet ═══
+ *
+ * Weil das Anheften schon einmal der Fehler war: eine angeheftete Sektion hält
+ * die Seite an, und der Wechsel von „scrollt" auf „steht" ist ein Bruch, den
+ * keine Dämpfung glättet. Karol hat ihn dreimal als „haperig" gemeldet.
+ *
+ * Das Band wandert stattdessen einfach nach links, während die Sektion durchs
+ * Bild fährt. Nichts hält an.
  */
 
-/**
- * Wo jedes Blatt liegt — in Prozent der Bühne.
- *
- * `li` und `ob` sind die linke und obere Kante, `gr` die Breite. Negative
- * Werte und Werte über 100 sind ABSICHT: was über den Rand läuft, wird
- * beschnitten, und genau das nimmt der Wand ihre Kastenform.
- *
- * `tempo` ist der Versatz gegen den Scroll. Weil er sich von Blatt zu Blatt
- * unterscheidet, ÄNDERN sich die Überlappungen beim Scrollen — der Stapel
- * ordnet sich neu, während man daran vorbeifährt. Das ist die eigentliche
- * Bewegung; die Drehung ist nur die Handschrift.
- */
-const LAGEN = [
-  { li: -7, ob: 0, gr: 47, dreh: -5.5, tempo: -0.16, ebene: 2 },
-  { li: 52, ob: 7, gr: 33, dreh: 4, tempo: 0.1, ebene: 1 },
-  { li: 20, ob: 21, gr: 41, dreh: -2.5, tempo: -0.06, ebene: 3 },
-  { li: 63, ob: 30, gr: 44, dreh: 6.5, tempo: 0.18, ebene: 2 },
-  { li: 2, ob: 48, gr: 31, dreh: -7, tempo: 0.08, ebene: 1 },
-  { li: 30, ob: 55, gr: 45, dreh: 2, tempo: -0.13, ebene: 3 },
-  { li: 66, ob: 71, gr: 39, dreh: -4, tempo: 0.14, ebene: 2 },
-] as const
+/** Wie hoch der Bogen steht. Drei Werte im Wechsel — sonst ist es eine Mauer. */
+const HOEHEN = [1, 0.86, 0.94, 0.8, 1, 0.88, 0.92] as const
 
-function Blatt({ bild, lage, i }: { bild: Bild; lage: (typeof LAGEN)[number]; i: number }) {
-  const ref = useVersatz<HTMLLIElement>(lage.tempo)
+function Bogen({ bild, i }: { bild: Bild; i: number }) {
   const nr = String(bild.nr).padStart(2, '0')
-
   return (
-    <li
-      className="galerie__stueck"
-      ref={ref}
-      style={
-        {
-          left: `${lage.li}%`,
-          top: `${lage.ob}%`,
-          width: `${lage.gr}%`,
-          zIndex: lage.ebene,
-          '--dreh': `${lage.dreh}deg`,
-        } as CSSProperties
-      }
-    >
-      {/* Nacktes Bild, kein Rahmen, keine Bildzeile. Der Titel steht im
-          Alternativtext — ein Vorleseprogramm bekommt ihn, das Auge nicht.
-          Was hier zu sehen ist, braucht keine Unterschrift; die Sektion hat
-          eine Überschrift, und die sagt es für alle sieben. */}
-      <img
-        src={`/bilder/galerie/${nr}.webp`}
-        srcSet={`/bilder/galerie/${nr}-klein.webp 520w, /bilder/galerie/${nr}.webp 900w`}
-        sizes="(max-width: 719px) 86vw, 42vw"
-        alt={bild.titel}
-        width={bild.breite}
-        height={bild.hoehe}
-        loading={i < 2 ? 'eager' : 'lazy'}
-        decoding="async"
-      />
+    <li className="bogen" style={{ '--hoch': HOEHEN[i % HOEHEN.length] } as CSSProperties}>
+      <div className="bogen__rahmen">
+        <img
+          src={`/bilder/galerie/${nr}.webp`}
+          srcSet={`/bilder/galerie/${nr}-klein.webp 520w, /bilder/galerie/${nr}.webp 900w`}
+          sizes="(max-width: 719px) 62vw, 26vw"
+          alt={bild.titel}
+          width={bild.breite}
+          height={bild.hoehe}
+          loading={i < 3 ? 'eager' : 'lazy'}
+          decoding="async"
+        />
+      </div>
+      {/* Die Bildzeile steht wieder da — anders als beim Stapel. Dort war sie
+          falsch, weil ein Stapel Abzüge keine Beschriftung hat; unter einem
+          Bogen in einer Arkade ist sie eine Tafel, und die gehört dorthin. */}
+      <p className="bogen__wort">{bild.titel}</p>
     </li>
   )
 }
 
 export default function Galerie() {
+  /* Waagerecht statt senkrecht: derselbe Haken, andere Achse. Der Wert ist
+     negativ, damit das Band beim Herunterscrollen nach LINKS läuft — die
+     Leserichtung bleibt links nach rechts, die Bewegung führt sie fort. */
+  const band = useSchub<HTMLUListElement>(-0.42)
+
   return (
     <Sektion id="galerie" grund="tief" klasse="galerie" beschriftetVon="galerie-titel">
       <Kopf
@@ -139,11 +129,16 @@ export default function Galerie() {
       {/* Eine echte Liste in Leserichtung. Für ein Vorleseprogramm ist der
           Unterschied, ob es „Liste mit sieben Einträgen" ansagt oder gar
           nichts — die Flugbahnen sind die Zugabe, nicht der Inhalt. */}
-      <ul className="galerie__bahn">
-        {BILDER.map((bild, i) => (
-          <Blatt key={bild.nr} bild={bild} lage={LAGEN[i % LAGEN.length]!} i={i} />
-        ))}
-      </ul>
+      {/* Das Band ist breiter als das Fenster und wandert nach links, während
+          die Sektion durchfährt. Der Haken ist derselbe, der überall auf
+          dieser Seite Flächen bewegt — siehe BEWEGUNG.md, Regel 3. */}
+      <div className="galerie__fahrt">
+        <ul className="galerie__arkade" ref={band}>
+          {BILDER.map((bild, i) => (
+            <Bogen key={bild.nr} bild={bild} i={i} />
+          ))}
+        </ul>
+      </div>
     </Sektion>
   )
 }

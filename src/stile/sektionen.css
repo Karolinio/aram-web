@@ -2772,104 +2772,95 @@
 }
 
 /**
- * Die Bühne des Stapels.
+ * ═══ Die Arkade ═══
  *
- * `position: relative` und eine Höhe in vh: die Blätter liegen absolut darin,
- * überlappen einander und laufen an den Seiten hinaus. Ein Raster kann das
- * nicht — es hält seine Kinder auseinander, und genau das war der Fehler.
+ * Ein waagerechtes Band aus Rundbögen, breiter als das Fenster, das nach links
+ * wandert, während die Sektion durchfährt. Der Bogen ist IHR Ofen (Galeriefoto
+ * 09) — siehe den Kopf von Galerie.tsx.
  */
-.galerie__bahn {
-  position: relative;
-  height: 190vh;
-  margin: clamp(2rem, 6vh, 5rem) 0 0;
-  padding: 0;
-  list-style: none;
+.galerie__fahrt {
+  /* Was über den Rand läuft, wird beschnitten — und zwar hier, nicht an der
+     Sektion: die Sektion trägt den Schatten der Bögen, und `overflow: clip`
+     dort würde ihn mit abschneiden. */
+  overflow: clip;
+  margin-top: clamp(2rem, 6vh, 4.5rem);
+  padding-block: clamp(1rem, 3vh, 2.5rem);
 }
 
-.galerie__stueck {
-  position: absolute;
+.galerie__arkade {
+  display: flex;
+  align-items: flex-end;
+  gap: clamp(1rem, 2.5vw, 2.5rem);
   margin: 0;
-  transform: rotate(var(--dreh));
-  /* Der Wurf ist kürzer als beim Käseschiff: ein Abzug liegt auf der Fläche,
-     er schwebt nicht darüber. Dasselbe Rezept, anderer Massstab. */
+  padding: 0 var(--raum-schale, 1.5rem);
+  list-style: none;
+  /* Breiter als das Fenster — sonst gäbe es nichts zu fahren. */
+  width: max-content;
+  will-change: transform;
+}
+
+.bogen {
+  flex: 0 0 auto;
+  width: clamp(11rem, 24vw, 20rem);
+}
+
+/**
+ * ═══ Der Rundbogen ═══
+ *
+ * Oben halbrund, unten gerade — die Form ihres Ofenmauls. Als `border-radius`
+ * mit getrennten Achsen: die erste Zahlengruppe ist der waagerechte, die
+ * zweite der senkrechte Radius. 50 % / 46 % ergibt einen Bogen, der etwas
+ * flacher ist als ein Halbkreis; ein exakter Halbkreis sieht bei hohen
+ * Bildern aus wie ein Tunnel.
+ *
+ * Zwei Linien statt einer: eine dünne aussen, eine innen, dazwischen der
+ * Cremeton. Das ist die einfachste Form eines Ziergewändes, und sie kostet
+ * kein Bild.
+ */
+.bogen__rahmen {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  height: calc(var(--hoch) * clamp(15rem, 32vw, 26rem));
+  width: 100%;
+  padding: clamp(0.3rem, 0.7vw, 0.55rem);
+  background: var(--creme);
+  border: 1px solid var(--linie);
+  border-radius: 50% 50% 3px 3px / 46% 46% 3px 3px;
   --wurf: 0.7;
   filter: var(--schatten-speise);
 }
 
-/**
- * ═══ Kein Rahmen, kein Radius ═══
- *
- * Hier stand ein cremefarbenes Passepartout mit `border-radius`, drei
- * gestapelten `box-shadow`-Durchgängen und einer Innenkontur. Das ist die
- * Anatomie einer Bedienoberflächen-Karte, und ein Foto darin liest sich als
- * Inhalt EINER Karte statt als Fotografie.
- *
- * Bei Nite Riot (Mobbin) liegen die Abzüge nackt übereinander. Der Schatten
- * bleibt — er ist das Einzige, was einen Abzug von einem Aufkleber trennt —
- * und kommt aus demselben Rezept wie überall sonst (siehe BEWEGUNG.md, 1).
- */
-.galerie__stueck img {
+.bogen__rahmen img {
   display: block;
   width: 100%;
-  height: auto;
-  border-radius: 0;
-  box-shadow: none;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 42%;
+  border-radius: 50% 50% 2px 2px / 46% 46% 2px 2px;
+}
+
+.bogen__wort {
+  margin: 0.75rem 0 0;
+  text-align: center;
+  font-size: var(--text-micro);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--tinte-leise);
+  max-width: none;
 }
 
 /**
- * Am Handy hat ein Stapel keinen Platz.
- *
- * Nebeneinanderliegende Abzüge brauchen Breite; auf 393 px wäre jeder davon
- * handtellergross. Dort werden sie deshalb ZUSAMMENGELEGT, nicht weggelassen:
- * volle Breite, leicht versetzt, knapp überlappend — derselbe Stapel, nur in
- * einer Spalte.
+ * Am Handy ist die Arkade schmaler und fährt weiter — die Bögen bleiben, nur
+ * sieht man weniger davon gleichzeitig. Zusammengelegt, nicht weggelassen.
  */
 @media (max-width: 719px) {
-  /**
-   * ═══ Auch am Handy ein STAPEL, kein Turm ═══
-   *
-   * Erster Anlauf: sieben Bilder untereinander mit Abstand. Gemessen wurde die
-   * Seite dadurch 17,6 Bildschirmhöhen lang — der Prüfer meldet ab etwa 15,
-   * und er hat recht, das ist am Daumen Arbeit.
-   *
-   * Ein Stapel stapelt aber. Negative Aussenabstände lassen die Abzüge
-   * einander überlappen, genau wie am Rechner; abwechselnd links und rechts
-   * ausgerichtet bleibt die Unordnung erhalten. Zusammengelegt, nicht
-   * weggelassen — dieselbe Regel wie überall auf dieser Seite.
-   */
-  .galerie__bahn {
-    height: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
-  .galerie__stueck {
-    position: static;
-    width: 78% !important;
-    align-self: flex-start;
-    margin-top: -9vh;
-  }
-  .galerie__stueck:first-child { margin-top: 0; }
-  .galerie__stueck:nth-child(even) { align-self: flex-end; width: 66% !important; }
-  /* Die Stapelordnung wechselt, sonst liegt immer das spätere Bild oben und
-     der Stapel bekommt eine Richtung, die er nicht haben soll. */
-  .galerie__stueck:nth-child(3n) { z-index: 4; }
+  .bogen { width: 62vw; }
+  .bogen__rahmen { height: calc(var(--hoch) * 62vw * 1.33); }
+}
 
-  /**
-   * Am Handy werden die Abzüge BESCHNITTEN, nicht verkleinert.
-   *
-   * Fünf der sieben Aufnahmen sind Hochformate. Sieben Hochformate
-   * untereinander sind gemessen 2,8 Bildschirmhöhen, selbst mit Überlappung.
-   *
-   * Ein Zuschnitt auf 4:3 nimmt davon gut ein Drittel, ohne ein einziges Bild
-   * wegzulassen. Was verlorengeht, ist Rand: der Ausschnitt liegt in der
-   * oberen Bildhälfte, weil dort bei Essensfotos das Essen liegt.
-   */
-  .galerie__stueck img {
-    aspect-ratio: 4 / 3;
-    object-fit: cover;
-    object-position: 50% 40%;
-  }
+@media (prefers-reduced-motion: reduce) {
+  .galerie__fahrt { overflow-x: auto; }
+  .galerie__arkade { transform: none !important; }
 }
 
 /* ── Der Vorhang ──────────────────────────────────────────────────────────
