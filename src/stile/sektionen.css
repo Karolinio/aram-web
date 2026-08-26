@@ -2756,12 +2756,17 @@
  */
 .galerie {
   position: relative;
-  /* Die Bilder brauchen Weg zum Fliegen. Ohne Mindesthöhe ist die Sektion nur
-     so hoch wie ihr Inhalt, und die halbe Bahn fällt aus. */
-  /* Kürzer als zur Zeit der fliegenden Bilder: die Arkade braucht nur so viel
-     Weg, wie das Band zum Wandern hat. 190 vh liessen zwischen Überschrift und
-     Bögen eine halbe leere Bildschirmhöhe. */
-  min-height: 126vh;
+  /* ═══ Eine Bildschirmhöhe, nicht mehr ═══
+     190 vh stammten von den fliegenden Bildern, 126 vh vom wandernden Band.
+     Beide brauchten Scrollweg, weil ihre Bewegung aus dem Scroll kam. Die
+     Arkade bewegt sich jetzt an der Hand — sie braucht Weg auf der WAAGERECHTEN
+     und gar keinen auf der senkrechten. Jede zusätzliche Höhe wäre nur noch
+     leerer Grund zwischen Überschrift und Bögen, und genau das hat Karol an
+     der Vorfassung bemängelt. */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   /* Das Band ragt über die Kante hinaus; ohne `clip` entstünde daraus eine
      waagerechte Scrollleiste. Senkrecht bleibt offen, damit die Überlappung
      zur nächsten Sektion sichtbar ist. */
@@ -2777,20 +2782,134 @@
 /**
  * ═══ Die Arkade ═══
  *
- * Ein waagerechtes Band aus Rundbögen, breiter als das Fenster, das nach links
- * wandert, während die Sektion durchfährt. Der Bogen ist IHR Ofen (Galeriefoto
- * 09) — siehe den Kopf von Galerie.tsx.
+ * Ein waagerechtes Band aus gleichen Rundbögen, breiter als das Fenster. Der
+ * Bogen ist IHR Ofen (Galeriefoto 09) — siehe den Kopf von Galerie.tsx.
+ *
+ * ═══ Ein echter Überlauf, keine gerechnete Verschiebung ═══
+ *
+ * Vorher wanderte das Band per `transform` mit dem Scrollstand. Jetzt scrollt
+ * es der Browser, und der Besucher bedient es: ziehen, wischen, Pfeiltasten,
+ * Knöpfe. Was dabei an den Browser zurückgeht, ist nicht wenig — Schwung am
+ * Finger, die Grenzen an beiden Enden, die Tastatur, das Einrasten. Alles
+ * davon von Hand nachzubauen wäre mehr Code und weniger Verhalten.
  */
+/* Der Kopfblock trägt überall auf der Seite einen Abstand nach unten, der für
+   eine folgende TEXTSPALTE gedacht ist. Hier folgt keine, sondern eine Leiste
+   und ein Bildband — gemessen blieben dadurch 145 px leerer Grund zwischen
+   Vorspann und Bögen stehen. */
+.galerie .kopfblock { margin-bottom: 0; }
+
+.galerie__leiste {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  /* Die Leiste gehört zur Arkade, nicht zur Überschrift — sie rückt deshalb
+     dicht an das Band. Zwischen Vorspann und Bögen standen 218 px leerer
+     Grund; genau die Art Loch, die Karol an der Vorfassung „unübersichtlich"
+     genannt hat. */
+  margin-top: clamp(0.5rem, 1.2vh, 0.9rem);
+}
+
+.galerie__hinweis {
+  margin: 0;
+  max-width: none;
+  font-size: var(--text-micro);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--tinte-leise);
+}
+
+.galerie__pfeile {
+  display: flex;
+  gap: 0.5rem;
+  flex: 0 0 auto;
+}
+
+/* Rund, weil die Bögen rund sind — und in derselben Linienstärke wie ihr
+   Gewände. Ein eckiger Knopf neben einer Arkade ist ein Fremdkörper. */
+.galerie__pfeil {
+  inline-size: 2.6rem;
+  block-size: 2.6rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--linie);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--tinte);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background var(--dauer-schnell) var(--ease-weich),
+    border-color var(--dauer-schnell) var(--ease-weich),
+    color var(--dauer-schnell) var(--ease-weich);
+}
+
+.galerie__pfeil:hover:not(:disabled) {
+  background: var(--glut-marke);
+  border-color: var(--glut-marke);
+  color: var(--creme);
+}
+
+/* Nicht ausblenden, sondern abschwächen: ein Knopf, der verschwindet, sobald
+   man am Ende ist, lässt die Zeile springen — und man verliert den Anhalt
+   dafür, wo man ist. */
+.galerie__pfeil:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
 .galerie__fahrt {
-  /* Was über den Rand läuft, wird beschnitten — und zwar hier, nicht an der
-     Sektion: die Sektion trägt den Schatten der Bögen, und `overflow: clip`
-     dort würde ihn mit abschneiden. */
-  overflow: clip;
-  /* Die Arkade sitzt in der MITTE der Sektion, nicht an ihrem Fuss. Beim
-     Durchfahren steht sie dadurch mittig im Fenster — Karol: „die sind nicht
-     zentriert und somit unübersichtlich". */
-  margin-top: clamp(1.5rem, 4vh, 3rem);
-  padding-block: clamp(1rem, 3vh, 2.5rem);
+  /* Waagerecht scrollbar, senkrecht nicht. `hidden` und nicht `visible`:
+     sobald eine Achse scrollt, macht der Browser aus `visible` ohnehin `auto`
+     — und dann hätte die Sektion eine zweite, senkrechte Bildlaufleiste. Der
+     Platz für den Wurf der Bögen kommt deshalb aus dem Innenabstand. */
+  overflow: auto hidden;
+  /* Am Ende der Reihe nicht die Seite zurückblättern lassen. Ohne diese Zeile
+     löst ein Wisch über das letzte Bild hinaus auf dem Trackpad die
+     Zurück-Geste des Browsers aus. */
+  overscroll-behavior-x: contain;
+  /* Einrasten, aber sanft: `proximity` fängt das Bild ein, wenn man in seiner
+     Nähe loslässt, und lässt einen sonst in Ruhe. `mandatory` würde bei
+     sieben Bögen jedes Ziehen zu einem Rasten machen. */
+  scroll-snap-type: x proximity;
+  margin-top: 0;
+  /* Innenabstand statt Aussenabstand: hier drin liegt der Wurf der Bögen, und
+     `overflow` schneidet ihn sonst ab. */
+  padding-block: clamp(0.9rem, 2.2vh, 1.6rem);
+  cursor: grab;
+  /* Die Reihe läuft an beiden Seiten aus, statt an einer Kante abgeschnitten
+     zu werden. Das sagt ohne Worte, dass es weitergeht. */
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 clamp(2rem, 6vw, 5rem),
+    #000 calc(100% - clamp(2rem, 6vw, 5rem)),
+    transparent 100%
+  );
+  scrollbar-width: thin;
+  scrollbar-color: var(--linie) transparent;
+}
+
+.galerie__fahrt:focus-visible {
+  outline: 2px solid var(--glut-marke);
+  outline-offset: 4px;
+}
+
+.galerie__fahrt::-webkit-scrollbar { height: 6px; }
+.galerie__fahrt::-webkit-scrollbar-thumb {
+  background: var(--linie);
+  border-radius: 3px;
+}
+
+/* Solange gezogen wird: geschlossene Hand, kein Einrasten, keine Textauswahl.
+   Das Einrasten muss weg, weil es sonst gegen jeden gesetzten Scrollwert
+   arbeitet und das Band unter der Hand zurückzuckt. */
+.galerie__fahrt.zieht {
+  cursor: grabbing;
+  scroll-snap-type: none;
+  user-select: none;
 }
 
 .galerie__arkade {
@@ -2803,18 +2922,16 @@
   margin: 0;
   padding: 0 var(--raum-schale, 1.5rem);
   list-style: none;
-  /* Breiter als das Fenster — sonst gäbe es nichts zu fahren. */
+  /* Breiter als das Fenster — sonst gäbe es nichts zu ziehen. */
   width: max-content;
-  will-change: transform;
 }
 
 .bogen {
   flex: 0 0 auto;
-  /* Keine eigene Breite mehr — der Bogen ist so breit, wie seine Form es
-     vorgibt. Das hält die Reihe gleichmässig. */
   display: flex;
   flex-direction: column;
   align-items: center;
+  scroll-snap-align: center;
 }
 
 /**
@@ -2825,10 +2942,6 @@
  * zweite der senkrechte Radius. 50 % / 46 % ergibt einen Bogen, der etwas
  * flacher ist als ein Halbkreis; ein exakter Halbkreis sieht bei hohen
  * Bildern aus wie ein Tunnel.
- *
- * Zwei Linien statt einer: eine dünne aussen, eine innen, dazwischen der
- * Cremeton. Das ist die einfachste Form eines Ziergewändes, und sie kostet
- * kein Bild.
  */
 .bogen__rahmen {
   position: relative;
@@ -2853,6 +2966,11 @@
   object-fit: cover;
   object-position: 50% 42%;
   border-radius: 50% 50% 2px 2px / 46% 46% 2px 2px;
+  /* Ein Bild ist für den Browser etwas, das man auf den Schreibtisch ziehen
+     kann — und diese Geste gewinnt gegen unsere. Ohne diese Zeile hängt beim
+     Ziehen ein Geisterbild am Zeiger, statt dass sich die Reihe bewegt. */
+  -webkit-user-drag: none;
+  user-select: none;
 }
 
 .bogen__wort {
@@ -2866,16 +2984,12 @@
 }
 
 /**
- * Am Handy ist die Arkade schmaler und fährt weiter — die Bögen bleiben, nur
- * sieht man weniger davon gleichzeitig. Zusammengelegt, nicht weggelassen.
+ * Am Handy ist die Arkade schmaler — die Bögen bleiben gleich, man sieht nur
+ * weniger davon gleichzeitig, und wischt sich durch. Zusammengelegt, nicht
+ * weggelassen.
  */
 @media (max-width: 719px) {
-  .bogen__rahmen { height: 62vh; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .galerie__fahrt { overflow-x: auto; }
-  .galerie__arkade { transform: none !important; }
+  .bogen__rahmen { height: 56vh; }
 }
 
 /* ── Der Vorhang ──────────────────────────────────────────────────────────
@@ -2974,9 +3088,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.9rem;
+  /* Eng an der Tafel: bei 0,9 rem stand der Knopf frei im Schwarzen und sah
+     aus wie ein zweites, unbeteiligtes Element. */
+  gap: 1.5rem;
   text-align: center;
-  max-width: 34rem;
+  max-width: 40rem;
   padding-inline: var(--raum-schale, 1.5rem);
   opacity: 0;
   will-change: transform, opacity;
@@ -2985,62 +3101,116 @@
 .vorhang__einladung .etikett { color: var(--glut-marke); }
 
 /**
- * ═══ Der Zettel ═══
+ * ═══ Die Karte im Vorhang — eine Tafel im Bogen ═══
  *
- * Karol am 26.08.: „Die Karte bitte cooler, kleiner, nicht so prägnant. Mach
- * das eher so wie ein Zettelchen, dass es sich nahtlos in dieses arabische
- * Feeling einreiht. Mach auf diesem Zettel handgeschrieben mit dieser
- * arabischen Font, die wir die ganze Zeit nutzen."
+ * Karol am 26.08.: „Die Karte kann man vielleicht noch irgendwie anders
+ * designen. Nutze bitte Mobbin, um die Karte nochmal visuell zu überarbeiten."
  *
- * Der erste Bau war eine gesetzte Speisekarte in Fraunces, 28 rem breit, mit
- * Kopfzeile und Fusszeile — also eine zweite Speisekarte, eine Bildschirmhöhe
- * über der eigentlichen. Das war zu viel und zu ähnlich.
+ * ═══ Was auf seinem Bildschirm stand ═══
  *
- * Jetzt ein Zettel: 19 rem, fünf Zeilen, DURCHGEHEND Reem Kufi. Das ist die
- * arabische Familie der Seite — sie trägt hier auch eine echte arabische
- * Zeile, dieselbe, die über ihrer Ladentür steht.
+ * Ein weisses Rechteck von 19 rem, zwei Grad gekippt, mit Schlagschatten,
+ * mittig in einer sonst leeren schwarzen Bildschirmhöhe — und darunter, ohne
+ * Verbindung, ein umrandeter Knopf. Das ist der Notizzettel aus jedem
+ * Baukasten. Er sah nicht deshalb aus wie vorher, weil die Schrift falsch war,
+ * sondern weil die FORM keine Aussage macht.
  *
- * Reem Kufi statt Fraunces ist der ganze Unterschied: die Serife ist die
- * Stimme der Seite, die Kufi die Stimme des LADENS. Auf einem Zettel, der
- * aussehen soll, als läge er auf der Theke, spricht der Laden.
+ * ═══ Was Mobbin dazu sagt ═══
+ *
+ * Monte setzt seine Karte ganz ohne Kasten: drei Spalten Schrift direkt auf
+ * den Grund, Kategorien im warmen Rot, Preise in einer schmalen Spalte rechts.
+ * Studio Freight setzt eine reine Namensliste so gross, dass sie die Seite
+ * trägt. Beide zeigen dasselbe: eine Karte lebt von der Schrift, nicht von
+ * ihrer Umrandung — und wenn sie klein gesetzt ist, hilft kein Rahmen.
+ *
+ * ═══ Was daraus hier wird ═══
+ *
+ * Die Tafel wird von 19 auf 29 rem grösser, die Schrift von 0,92 rem auf
+ * knapp das Anderthalbfache, und die Kippung fällt weg. Sie bekommt ausserdem
+ * den RUNDBOGEN, den die Arkade zwei Sektionen höher schon trägt — die Form
+ * ihres Ofenmauls (Galeriefoto 09).
+ *
+ * Das ist der Punkt: Karol hat an dieser Seite immer wieder Konsistenz
+ * verlangt. Zwei Sektionen, die dieselbe Form aus dem Laden benutzen, sind
+ * konsistent; ein Rechteck neben einer Arkade ist es nicht. Und „arabisches
+ * Feeling" entsteht damit aus ihrem eigenen Ofen statt aus einem
+ * Maschrabiyya-Muster von der Stange.
+ *
+ * Reem Kufi bleibt. Die Serife ist die Stimme der SEITE, die Kufi die Stimme
+ * des LADENS — und auf ihrer Karte spricht der Laden.
  */
 .kartenblatt {
-  --wurf: 0.9;
-  width: min(78vw, 19rem);
-  padding: 1.15rem 1.25rem 1rem;
+  --wurf: 1.5;
+  width: min(86vw, 29rem);
+  /* Oben viel Luft: der Bogen senkt sich an den Ecken um gut ein Viertel der
+     Höhe, und Text, der dort beginnt, wird angeschnitten. */
+  padding: 3.8rem 2.1rem 1.9rem;
   background: var(--creme);
   color: var(--tinte);
   font-family: var(--font-text);
-  /* Ein Zettel liegt nie gerade. Zwei Grad reichen — bei fünf sieht es aus
-     wie ein Effekt, bei null wie ein Kasten im Raster. */
-  transform: rotate(-2deg);
-  filter: var(--schatten-speise);
   text-align: left;
-  /* Keine Rundung: gerissenes Papier hat keine, und ein Radius machte daraus
-     wieder eine Karte im Sinne einer Benutzeroberfläche. */
-  border-radius: 0;
+  position: relative;
+  /* Derselbe Bogen wie in der Arkade, nur flacher: die Tafel ist breiter als
+     hoch, und 46 % senkrechter Radius ergäben darauf eine Tonne statt eines
+     Bogens. */
+  border-radius: 50% 50% 4px 4px / 26% 26% 4px 4px;
+  border: 1px solid var(--linie);
+  filter: var(--schatten-speise);
+}
+
+/* Die innere Linie — dasselbe zweizeilige Gewände wie am Bogen der Arkade,
+   und es kostet kein Bild. */
+.kartenblatt::before {
+  content: '';
+  position: absolute;
+  inset: 7px;
+  border: 1px solid var(--linie);
+  border-radius: 50% 50% 2px 2px / 25% 25% 2px 2px;
+  pointer-events: none;
 }
 
 .kartenblatt__kopf {
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
-  margin: 0 0 0.85rem;
-  padding-bottom: 0.6rem;
+  align-items: center;
+  gap: 0.3rem;
+  margin: 0 0 1.35rem;
+  padding-bottom: 0.9rem;
   border-bottom: 1px solid var(--linie);
+  text-align: center;
 }
 
+/**
+ * Die arabische Zeile ist gross und im Rot der Marke.
+ *
+ * Beides ist eine Auskunft und keine Verzierung: es ist die Zeile, die über
+ * ihrer Ladentür steht („Orientalisches Gebäck"), und Rot ist auf dieser Seite
+ * die Farbe der Marke — dieselbe, die jede Überschrift beim Überfahren
+ * annimmt. Klein und grau war sie eine Fussnote zu ihrem eigenen Namen.
+ */
 .kartenblatt__arabisch {
   font-family: var(--font-text);
-  font-size: 1.3rem;
+  font-size: clamp(1.7rem, 1.2rem + 1.6vw, 2.2rem);
   font-weight: 500;
-  line-height: 1.1;
-  color: var(--tinte);
+  line-height: 1.15;
+  /**
+   * ═══ NICHT `--glut-marke` ═══
+   *
+   * Das wäre der naheliegende Griff und war der erste: es ist der Markenton,
+   * den jede Überschrift beim Überfahren annimmt. Er ist aber für DUNKLE
+   * Gründe gebaut — ein Gold bei 92 % Helligkeit, gemessen 5,05 auf dem
+   * Glut-Grund. Diese Tafel ist creme und liegt nur zufällig in der dunklen
+   * Sektion; darauf verschwindet das Gold fast vollständig.
+   *
+   * Ein Farbwert ist nie „die Markenfarbe", sondern immer ein Paar aus Farbe
+   * und Grund. Hier steht deshalb der gebrannte Ton, der auf hellem Grund
+   * dieselbe Rolle spielt.
+   */
+  color: var(--glut-grund);
 }
 
 .kartenblatt__ort {
-  font-size: 0.68rem;
-  letter-spacing: 0.14em;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--tinte-leise);
 }
@@ -3050,16 +3220,18 @@
 .kartenblatt__liste li {
   display: flex;
   align-items: baseline;
-  gap: 0.4rem;
-  padding-block: 0.22rem;
-  font-size: 0.92rem;
+  gap: 0.5rem;
+  padding-block: 0.4rem;
+  /* Gross genug, um sie im Vorbeiscrollen zu LESEN. Bei 0,92 rem war die Karte
+     ein Bild von einer Karte. */
+  font-size: clamp(1rem, 0.9rem + 0.4vw, 1.2rem);
 }
 
 .kartenblatt__nr {
-  min-width: 1.2em;
+  min-width: 1.4em;
   font-variant-numeric: tabular-nums;
   color: var(--tinte-leise);
-  font-size: 0.78rem;
+  font-size: 0.8em;
 }
 
 .kartenblatt__name { font-weight: 500; }
@@ -3079,11 +3251,12 @@
 }
 
 .kartenblatt__fuss {
-  margin: 0.7rem 0 0;
-  padding-top: 0.55rem;
+  margin: 1rem 0 0;
+  padding-top: 0.8rem;
   border-top: 1px solid var(--linie);
-  font-size: 0.74rem;
-  letter-spacing: 0.06em;
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+  text-align: center;
   color: var(--tinte-leise);
   max-width: none;
 }
@@ -3276,7 +3449,11 @@
      Comic. */
   height: 175%;
   z-index: 0;
-  opacity: 0.85;
+  /* Die Deckkraft schreibt Kaeseschiff.tsx je nach Scrollstand — vor 0,7 ist
+     sie null. Der Startwert gehört trotzdem hierher: bis das Werkzeug geladen
+     ist, hat noch niemand gezeichnet, und ein Dampf, der eine halbe Sekunde
+     lang bei 0,85 steht und dann auf null springt, ist ein Blitzer. */
+  opacity: 0;
   pointer-events: none;
 }
 

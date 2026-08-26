@@ -1,102 +1,53 @@
 import galerieRoh from '../../inhalt/galerie.json'
-import { useSchub } from '../bewegung.ts'
+import { useZiehband } from '../ziehen.ts'
 import { Kopf, Sektion } from './ui/bausteine.tsx'
 
 type Bild = { nr: number; titel: string; lage: 'hoch' | 'quer'; breite: number; hoehe: number }
 const BILDER = galerieRoh as Bild[]
 
 /**
- * Die Galerie — die Bilder FLIEGEN, sie fahren nicht.
+ * Die Galerie — eine Arkade, die der Besucher selbst bewegt.
  *
- * ═══ Warum die angeheftete Bahn weg ist ═══
+ * ═══ Die Form: ein waagerechtes Band aus Rundbögen ═══
  *
- * Karol, dreimal in Folge: „das Scrollgefühl ist immer noch zu haperig, also
- * sprich zu ruckelig, nicht konsistent, kein konsistenter Flow … wir hatten
- * mal eine Referenz, wo man gescrollt hat und Bilder auf der linken oder
- * rechten Seite von unten nach oben durchgeflogen sind."
+ * Karol, viermal in Folge unzufrieden: „Will einen ganz anderen Ansatz, von
+ * links nach rechts … die Bilder sollen thematisch umrahmt sein, irgendwie in
+ * arabischer Rahmen-UI."
  *
- * Zweimal habe ich am Nachlauf geschraubt und die Zahlen verbessert — von
- * 16 auf 52 Prozent Weg in den ersten hundert Millisekunden. Das Ruckeln blieb,
- * und es lag nicht am Nachlauf: es lag am PIN.
- *
- * Eine angeheftete Sektion hält die Seite an. Beim Betreten und beim Verlassen
- * gibt es einen Übergabepunkt, an dem die Seite von „scrollt" auf „steht" und
- * zurück wechselt. Dieser Wechsel ist kein Bildratenproblem — er ist ein
- * Bruch im Gefühl, und keine Dämpfung der Welt glättet ihn weg. Dazu kommt:
- * der senkrechte Scroll steuert eine waagerechte Bewegung. Hand und Bild
- * zeigen in verschiedene Richtungen.
- *
- * Jetzt fliegen die Bilder mit dem Scroll, nicht gegen ihn: von unten nach
- * oben, in zwei Spuren, jede mit eigenem Tempo. Nichts hält an, nichts wird
- * umgelenkt. Es ist derselbe Haken, der schon den Gebäckschwarm trägt —
- * `useFlug`, erprobt, ohne Anheftung.
- *
- * ═══ Warum von unten nach oben ═══
- *
- * Ein Gegenstand, der beim Herunterscrollen MITFÄLLT, steht relativ zur Seite
- * fast still — man sieht ihn kaum. Einer, der dabei AUFSTEIGT, bewegt sich
- * gegen den Scroll und wird dadurch doppelt so schnell. Genau daher kommt bei
- * der Savor-Referenz das Gefühl von Tiefe.
- */
-
-/**
- * ═══ Die Arkade ═══
- *
- * Karol, zum vierten Mal: „Die Galerie ist immer noch kacke. Will einen ganz
- * anderen Ansatz, von links nach rechts … die Bilder sollen thematisch
- * umrahmt sein, irgendwie in arabischer Rahmen-UI."
- *
- * Zwei Vorfassungen sind gescheitert, und beide aus demselben Grund: sie waren
+ * Zwei Vorfassungen sind gescheitert, beide aus demselben Grund: sie waren
  * SENKRECHT. Erst zwei Spuren, die von unten nach oben flogen, dann ein
  * überlappender Stapel — beide Male scrollte man an Bildern vorbei, statt
- * durch sie hindurchzugehen.
+ * durch sie hindurchzugehen. MOUTHWASH Studio (Mobbin) führt stattdessen ein
+ * waagerechtes Band quer durchs Bild: alle Bilder auf einer Höhe, gleiche
+ * Grösse, ruhig, in Leserichtung.
  *
- * ═══ Was Mobbin dazu sagt ═══
+ * Der Rahmen ist ein RUNDBOGEN und kein Ornament. „Arabische Rahmen-UI"
+ * liesse sich mit Maschrabiyya-Gittern bedienen — von der Stange und ohne
+ * Bezug zu Aram. Ihr Ofen IST ein Bogen, auf Galeriefoto 09 und 12 deutlich zu
+ * sehen, und eine Reihe von Rundbögen ist genau das, was eine Arkade ist: die
+ * Grundform jedes Basars. Der Rahmen kommt damit aus ihrem Laden, nicht aus
+ * einem Musterbuch.
  *
- * MOUTHWASH Studio führt ein waagerechtes Band quer durch die Bildmitte: alle
- * Bilder auf einer Höhe, gleiche Grösse, ruhig, in Leserichtung. Kein Stapel,
- * keine Streuung. Das ist die Form, die „von links nach rechts" wirklich
- * einlöst — und sie ist ruhig genug, dass der Rahmen etwas zu sagen bekommt.
+ * Alle Bögen sind GLEICH hoch. Hier standen sieben Höhen im Wechsel, als
+ * Rhythmus gedacht; eine Arkade besteht aber definitionsgemäss aus gleichen
+ * Bögen. Der Rhythmus kommt aus den sieben Motiven dahinter.
  *
- * ═══ Warum ein RUNDBOGEN und kein Ornament ═══
+ * ═══ Die Bewegung: die Hand, nicht der Scroll ═══
  *
- * „Arabische Rahmen-UI" liesse sich mit Maschrabiyya-Gittern oder
- * Achteckmustern bedienen. Das wäre von der Stange und hätte mit Aram nichts
- * zu tun.
+ * Karol am 26.08.: „Man soll die Bögen selber mit der Maus nach links oder
+ * rechts bewegen und nicht durch einfaches Runterscrollen. Sonst kann es
+ * passieren, dass Kunden nicht jedes Bild am Ende genießen können."
  *
- * Ihr Ofen IST ein Bogen — ein gemauerter Rundbogen, auf Galeriefoto 09 und 12
- * deutlich zu sehen. Eine Reihe von Rundbögen ist ausserdem genau das, was
- * eine Arkade ist: die Grundform jedes Basars und jeder Moschee.
+ * Vorher wanderte das Band mit dem Scrollstand nach links — ein Effekt, der
+ * gut aussieht und die Sektion um ihre Aufgabe bringt: wer zügig scrollt,
+ * bekommt die letzten Bilder nie zu sehen, und wer eines länger ansehen will,
+ * kann es nicht. Eine Galerie ist eine Pause in der Seite, und eine Pause
+ * lässt sich nicht an den Scroll hängen.
  *
- * Der Rahmen kommt damit nicht aus einem Musterbuch, sondern aus ihrem eigenen
- * Laden. Das ist der Unterschied zwischen orientalisch AUSSEHEN und
- * orientalisch SEIN.
- *
- * ═══ Warum nicht angeheftet ═══
- *
- * Weil das Anheften schon einmal der Fehler war: eine angeheftete Sektion hält
- * die Seite an, und der Wechsel von „scrollt" auf „steht" ist ein Bruch, den
- * keine Dämpfung glättet. Karol hat ihn dreimal als „haperig" gemeldet.
- *
- * Das Band wandert stattdessen einfach nach links, während die Sektion durchs
- * Bild fährt. Nichts hält an.
- */
-
-/**
- * ═══ Alle Bögen gleich hoch ═══
- *
- * Hier standen sieben verschiedene Höhen im Wechsel — als Rhythmus gedacht.
- * Karol: „die Bilder müssen formatierter und mittiger, die sind nicht
- * zentriert und somit unübersichtlich."
- *
- * Er hat recht, und es ist sogar architektonisch falsch: eine Arkade besteht
- * aus GLEICHEN Bögen. Das ist ihre Definition. Ungleich hohe Bögen
- * nebeneinander sind keine Arkade, sondern eine Baustelle — und dass sie
- * unten bündig standen statt auf einer Mittelachse, machte daraus eine
- * Zackenlinie.
- *
- * Der Rhythmus kommt jetzt aus den Bildern selbst: sieben verschiedene Motive
- * hinter sieben gleichen Bögen. Das reicht.
+ * Jetzt ist es ein echter waagerechter Überlauf: ziehen mit der Maus, wischen
+ * am Finger, Pfeiltasten, zwei Knöpfe. Die Mechanik steht in src/ziehen.ts.
+ * Der senkrechte Scroll bleibt, was er überall sonst ist — er scrollt die
+ * Seite weiter.
  */
 
 function Bogen({ bild, i }: { bild: Bild; i: number }) {
@@ -124,10 +75,7 @@ function Bogen({ bild, i }: { bild: Bild; i: number }) {
 }
 
 export default function Galerie() {
-  /* Waagerecht statt senkrecht: derselbe Haken, andere Achse. Der Wert ist
-     negativ, damit das Band beim Herunterscrollen nach LINKS läuft — die
-     Leserichtung bleibt links nach rechts, die Bewegung führt sie fort. */
-  const band = useSchub<HTMLUListElement>(-0.42)
+  const { ref: bahn, stand, schieben } = useZiehband<HTMLDivElement>()
 
   return (
     <Sektion id="galerie" grund="tief" klasse="galerie" beschriftetVon="galerie-titel">
@@ -145,14 +93,51 @@ export default function Galerie() {
         />
       </div>
 
-      {/* Eine echte Liste in Leserichtung. Für ein Vorleseprogramm ist der
-          Unterschied, ob es „Liste mit sieben Einträgen" ansagt oder gar
-          nichts — die Flugbahnen sind die Zugabe, nicht der Inhalt. */}
-      {/* Das Band ist breiter als das Fenster und wandert nach links, während
-          die Sektion durchfährt. Der Haken ist derselbe, der überall auf
-          dieser Seite Flächen bewegt — siehe BEWEGUNG.md, Regel 3. */}
-      <div className="galerie__fahrt">
-        <ul className="galerie__arkade" ref={band}>
+      {/* ═══ Warum der Hinweis dasteht ═══
+          Ein Band, das man ziehen kann, sieht aus wie ein Band, das man nicht
+          ziehen kann. Der Zeiger verrät es erst, wenn man schon darüber ist —
+          und wer es nicht ausprobiert, sieht vier von sieben Bildern. Ein Satz
+          und zwei Pfeile kosten eine Zeile und lösen genau das. */}
+      <div className="schale galerie__leiste">
+        <p className="galerie__hinweis">Ziehen oder blättern — es sind {BILDER.length}.</p>
+        <div className="galerie__pfeile">
+          <button
+            type="button"
+            className="galerie__pfeil"
+            onClick={() => schieben(-1)}
+            disabled={!stand.links}
+          >
+            <span aria-hidden="true">←</span>
+            <span className="visuell-versteckt">Ein Bild zurück</span>
+          </button>
+          <button
+            type="button"
+            className="galerie__pfeil"
+            onClick={() => schieben(1)}
+            disabled={!stand.rechts}
+          >
+            <span aria-hidden="true">→</span>
+            <span className="visuell-versteckt">Ein Bild weiter</span>
+          </button>
+        </div>
+      </div>
+
+      {/* `tabIndex` und ein Name machen aus dem Überlauf einen Bereich, den
+          die Tabulatortaste erreicht und die Pfeiltasten bewegen. Das ist kein
+          Zusatz, sondern die Bedingung dafür, dass ein waagerechter Überlauf
+          überhaupt ohne Maus bedienbar ist — der Browser bringt es mit, sobald
+          das Element fokussierbar ist und einen Namen hat. */}
+      <div
+        className="galerie__fahrt"
+        ref={bahn}
+        tabIndex={0}
+        role="group"
+        aria-label={`Bilder aus dem Laden, ${BILDER.length} Stück — mit den Pfeiltasten bewegen`}
+      >
+        {/* Eine echte Liste in Leserichtung. Für ein Vorleseprogramm ist der
+            Unterschied, ob es „Liste mit sieben Einträgen" ansagt oder gar
+            nichts. */}
+        <ul className="galerie__arkade">
           {BILDER.map((bild, i) => (
             <Bogen key={bild.nr} bild={bild} i={i} />
           ))}
