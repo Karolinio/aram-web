@@ -61,7 +61,27 @@ nur 16 %. Beides steht in `bewegung.ts`.
 andere. Eine Kurve auf einer gescrubbten Leiste kämpft gegen den Daumen und
 liest sich als Verzögerung.
 
-## 5. Überlagerung: komponiert ja, zufällig nein
+## 5. Gerechnet nur dort, wo es kein Foto geben kann
+
+Dampf, Mehl und Funken sind gerechnet, weil es von ihnen keine brauchbare
+Aufnahme gibt — und weil sie keine Form haben, die man wiedererkennt.
+
+Käse hat eine. Die Käsefäden waren gerechnet: gefüllte Bänder mit
+Einschnürung, Durchhang und gestaffelten Reisspunkten, physikalisch richtig
+und trotzdem als Zeichnung erkennbar — weil daneben ein FOTOGRAFIERTES Gebäck
+lag. Dasselbe galt für die Käsetropfen, die ich dreimal nachgebessert habe,
+jedes Mal messbar besser und keinmal gut.
+
+Beide sind durch Fotografien ersetzt (`werkzeug/kaesriss.py`). Die Regel für
+alles Weitere:
+
+> Eine gerechnete Zeichnung neben einem fotografierten Gegenstand verliert
+> immer. Wenn es das Ding fotografieren lässt, wird es fotografiert.
+
+`Kaesefaeden.tsx` und `Kaesetropfen.tsx` bleiben liegen — über einer Fläche
+ohne Foto wären sie richtig.
+
+## 6. Überlagerung: komponiert ja, zufällig nein
 
 Bei **Eat Hungry Tiger** (Mobbin) verdeckt das Produkt einen Buchstaben der
 Schlagzeile. Genau das macht aus einem Bild in einem Kasten einen Gegenstand im

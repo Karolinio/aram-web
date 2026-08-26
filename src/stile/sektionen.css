@@ -3163,6 +3163,107 @@
 
 .vorhang__einladung .etikett { color: var(--glut-marke); }
 
+/**
+ * ═══ Das Kartenblatt ═══
+ *
+ * Karol: „nachdem der Lahmacun auf ist, soll einfach so eine schön designte
+ * Karte, und dann steht da so ‚Zur Karte' drunter."
+ *
+ * Es ist buchstäblich eine Karte: cremefarbenes Blatt, ihr Name oben, sechs
+ * echte Gerichte mit echten Preisen, Punktlinien dazwischen. Vorher stand dort
+ * eine Schlagzeile mit einer Behauptung — ein Blatt mit Namen und Preisen ist
+ * ein Beweis.
+ *
+ * Es liegt LEICHT GEDREHT auf der Fläche. Ein Blatt, das exakt an den Achsen
+ * ausgerichtet ist, liest sich als Kasten in einem Raster; eines mit einem
+ * Grad Neigung als Gegenstand, den jemand hingelegt hat.
+ */
+.kartenblatt {
+  --wurf: 1.4;
+  width: min(92vw, 28rem);
+  padding: clamp(1.3rem, 3vw, 2rem) clamp(1.2rem, 3vw, 1.9rem);
+  background: var(--ton-hell);
+  color: var(--tinte);
+  border-radius: var(--rund-klein, 0.5rem);
+  transform: rotate(-1.4deg);
+  filter: var(--schatten-speise);
+  text-align: left;
+}
+
+.kartenblatt__kopf {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0 0 0.9rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid var(--linie);
+}
+
+.kartenblatt__marke {
+  font-family: var(--font-display);
+  font-variation-settings: var(--wonk-kopf);
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+.kartenblatt__ort {
+  font-size: var(--text-micro);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tinte-leise);
+}
+
+.kartenblatt__liste { list-style: none; margin: 0; padding: 0; }
+
+.kartenblatt__liste li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  padding-block: 0.3rem;
+}
+
+.kartenblatt__nr {
+  min-width: 1.4em;
+  font-variant-numeric: tabular-nums;
+  color: var(--tinte-leise);
+  font-size: var(--text-meta);
+}
+
+.kartenblatt__name {
+  font-family: var(--font-display);
+  font-variation-settings: var(--wonk-klein);
+  font-weight: 600;
+}
+
+/* Dieselbe Punktlinie wie in der Speisekarte — sie führt vom Gericht zum
+   Preis, auf einer Grundlinie. Zwei verschiedene Leitern für dieselbe Aufgabe
+   wären genau die Art Inkonsistenz, die BEWEGUNG.md beschreibt. */
+.kartenblatt__leiter {
+  flex: 1 1 auto;
+  min-width: 1.5rem;
+  border-bottom: 1px dotted var(--linie);
+  transform: translateY(-0.28em);
+}
+
+.kartenblatt__preis {
+  font-family: var(--font-display);
+  font-variation-settings: var(--wonk-klein);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.kartenblatt__fuss {
+  margin: 0.9rem 0 0;
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--linie);
+  font-size: var(--text-meta);
+  color: var(--tinte-leise);
+  max-width: none;
+}
+
 .vorhang__zahl {
   margin: 0;
   font-family: var(--font-display);
@@ -3279,8 +3380,14 @@
   position: absolute;
   inset: 0;
   margin: auto;
-  width: min(84vw, 38rem);
-  aspect-ratio: 1200 / 540;
+  /* ═══ Grösser als vorher, und das ist Arithmetik ═══
+     Der gemeinsame Rahmen ist so breit wie die WEITESTE Stufe (die gezogene),
+     das ganze Gebäck füllt davon nur 70 %. Bei den alten 38 rem wäre es
+     dadurch von 608 auf 425 px geschrumpft — dieselbe Zahl im Stilblatt, ein
+     Drittel weniger Gebäck im Bild.
+     52 rem bringen es auf 582 px zurück, also knapp über die alte Grösse. */
+  width: min(96vw, 52rem);
+  aspect-ratio: 1500 / 603;
   display: grid;
   place-items: stretch;
   transform-style: preserve-3d;
@@ -3292,62 +3399,45 @@
 }
 
 /**
- * ═══ Beide Hälften tragen die VOLLE Leinwand ═══
+ * ═══ Die acht Stufen ═══
  *
- * Vorher war jede auf ihren Inhalt zugeschnitten und wurde mit `width: 50.4 %`
- * und `justify-self` an ihren Platz gerückt. Das konnte nicht aufgehen: die
- * linke Hälfte war 696 px breit, die rechte 692, das Ganze 1100 — drei Bilder
- * mit drei Bezugsrahmen. Sichtbar war das als Spalt und als Versatz nach oben.
+ * Alle in DERSELBEN Rasterzelle, alle in voller Breite, überblendet über
+ * `opacity`. Sie tragen alle denselben Rahmen (1500 × 603, siehe
+ * werkzeug/kaesriss.py) — deshalb springt beim Wechsel nichts.
  *
- * Jetzt sind beide 1100 × 454, also deckungsgleich mit dem Ganzen. Sie liegen
- * einfach übereinander, und die Drehachse liegt bei beiden in der Mitte — was
- * genau die Bruchkante ist. Damit fällt `justify-self` ersatzlos weg, und mit
- * ihm der Fehler, den Karol dreimal gemeldet hat.
- */
-/**
- * Die Teigstufen. Sie liegen in derselben Rasterzelle wie die Hälften und in
- * derselben Grösse — alle Quellen tragen dieselbe Leinwand (1200 × 540), damit
- * beim Überblenden nichts springt.
+ * `grid-area: 1 / 1` ist hier keine Feinheit, sondern das Ganze: ohne die
+ * Zeile legt das Raster acht Zeilen an. Gemessen war der Kasten dann
+ * 667 × 4170 px statt 667 × 268, und es standen zwei Gebäcke gleichzeitig
+ * untereinander im Bild. Die Regel war bei einer CSS-Operation mit
+ * weggefallen, in der ich die alten Hälften entfernt habe.
+ *
+ * `height: auto` dazu: die Zelle ist durch `aspect-ratio` am Elternblock
+ * höher als das Bild, und `place-items: stretch` zöge es sonst auf
+ * Zellenhöhe — gemessen 541 × 536 bei einem Bild im Verhältnis 2,49.
  */
 .schiff__stufe {
   grid-area: 1 / 1;
+  align-self: center;
   width: 100%;
   height: auto;
   opacity: 0;
   backface-visibility: hidden;
 }
 
-.schiff__haelfte {
-  grid-area: 1 / 1;
-  width: 100%;
-  height: auto;
-  transform-origin: 50% 50%;
-  backface-visibility: hidden;
-}
-
-.schiff__faeden {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  /* Doppelte Gebäckhöhe. Die Fäden setzen im oberen Viertel der Leinwand an
-     (siehe Kaesefaeden.tsx) und brauchen den Rest zum Durchhängen — Käse, der
-     reisst, bleibt nicht im Rechteck. */
-  height: 200%;
-  z-index: 3;
-}
-
-/* Getropft wird aus der Unterkante nach unten. Der Bereich beginnt bei 62 %
-   der Bildhöhe: dort endet die Käsefläche, darunter ist nur noch Kruste. */
-.schiff__tropfen {
-  position: absolute;
-  left: 6%;
-  right: 6%;
-  top: 62%;
-  height: 145%;
-  z-index: 2;
-  pointer-events: none;
-}
+/**
+ * ═══ Die Hälften und die Käsefäden sind RAUS ═══
+ *
+ * Hier standen `.schiff__haelfte` und `.schiff__faeden`: zwei Bildhälften, die
+ * auseinanderfuhren, und eine Leinwand, die Käsefäden dazwischen rechnete —
+ * mit Einschnürung, Durchhang und gestaffelten Reisspunkten.
+ *
+ * Sie sind durch VIER FOTOGRAFIEN ersetzt (werkzeug/kaesriss.py). Der Grund
+ * steht dort ausführlich; kurz: eine gerechnete Zeichnung neben einem
+ * fotografierten Gebäck verliert immer. Karol: „muss echter aussehen … keine
+ * Demo."
+ *
+ * Kaesefaeden.tsx bleibt liegen. Über einer Fläche ohne Foto wäre es richtig.
+ */
 
 /* Dampf steigt HINTER dem Gebäck auf, nicht davor — sonst liegt Nebel auf dem
    Käse statt darüber. */
@@ -3368,7 +3458,7 @@
 
 @media (max-width: 719px) {
   .schiff {
-    width: 88vw;
+    width: 116vw;
     /* Am Handy ist derselbe Gegenstand kleiner dargestellt — also ein
        kürzerer Wurf, nicht ein anderes Rezept. */
     --wurf: 1.05;

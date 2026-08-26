@@ -1,13 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 
-import reiseRoh from '../../inhalt/reise.json'
+import rissRoh from '../../inhalt/riss.json'
 import { SCRUB_KOERPER, useMedienabfrage, werkzeugHolen } from '../bewegung.ts'
 import Dampf from './ui/Dampf.tsx'
-import Kaesefaeden from './ui/Kaesefaeden.tsx'
-import Kaesetropfen from './ui/Kaesetropfen.tsx'
 
 type Mass = { breite: number; hoehe: number }
-const M = reiseRoh as Record<string, Mass>
+const M = rissRoh as Record<string, Mass>
 
 /**
  * Das Käseschiff — eine Reise vom Teig durch den Ofen bis zum Riss.
@@ -121,24 +119,18 @@ const BAHN: readonly Punkt[] = [
  * Hälften bei Spanne null. Ein fünftes Bild wäre eine zweite Wahrheit über
  * denselben Gegenstand.
  */
-const STUFEN: readonly { klasse: string; quelle: string; von: number; bis: number }[] = [
-  { klasse: 'kugel', quelle: '/bilder/reise/stufe-1-kugel.webp', von: 0.0, bis: 0.15 },
-  { klasse: 'gewalzt', quelle: '/bilder/reise/stufe-2-gewalzt.webp', von: 0.11, bis: 0.33 },
-  { klasse: 'belegt', quelle: '/bilder/reise/stufe-3-belegt.webp', von: 0.29, bis: 0.58 },
+const STUFEN: readonly { klasse: string; von: number; bis: number }[] = [
+  { klasse: 'stufe-1-kugel', von: 0.0, bis: 0.13 },
+  { klasse: 'stufe-2-gewalzt', von: 0.1, bis: 0.3 },
+  { klasse: 'stufe-3-belegt', von: 0.27, bis: 0.5 },
+  /* Die lange Strecke: gebacken, und so fliegt es über zwei Sektionen. */
+  { klasse: 'stufe-4-gebacken', von: 0.47, bis: 0.85 },
+  /* Und dann reisst es — in vier Aufnahmen, nicht in einer Rechnung. */
+  { klasse: 'riss-1', von: 0.83, bis: 0.895 },
+  { klasse: 'riss-2', von: 0.885, bis: 0.935 },
+  { klasse: 'riss-3', von: 0.925, bis: 0.975 },
+  { klasse: 'riss-4', von: 0.965, bis: 1.2 },
 ]
-/**
- * Ab hier ist es gebacken — die Hälften übernehmen.
- *
- * Vorher lag der Wert bei 0,79, weil dort der Ofen war: roh hinein, gebacken
- * heraus. Ohne Ofen bräunt es unterwegs, und dann gehört der Übergang in die
- * MITTE der Reise, nicht an ihr Ende — sonst fliegt zwei Drittel des Wegs ein
- * roher Teig, und das Gebäck, um das es geht, sieht man erst kurz vor dem Riss.
- */
-const GEBACKEN_AB = 0.6
-
-/** Von wo bis wo gerissen wird. Danach bleibt Weg zum Verschwinden. */
-const RISS_AB = 0.86
-const RISS_BIS = 0.98
 
 /** Weiche Überblendung statt Knick. Ohne sie hat die Bahn an jedem Wegpunkt eine Ecke. */
 const glatt = (t: number) => t * t * (3 - 2 * t)
@@ -209,8 +201,6 @@ export default function Kaeseschiff() {
     const el = schiff.current
     if (!el || !bereit || ruhig) return
 
-    const links = el.querySelector<HTMLElement>('.schiff__haelfte--links')
-    const rechts = el.querySelector<HTMLElement>('.schiff__haelfte--rechts')
     const stufen = STUFEN.map((s) => el.querySelector<HTMLElement>(`.schiff__stufe--${s.klasse}`))
 
     let tot = false
@@ -265,21 +255,6 @@ export default function Kaeseschiff() {
           if (k) k.style.opacity = String(fenster(p, s.von, s.bis))
         }
 
-        /* Der Riss. Eine Zahl, drei Verbraucher: die beiden Hälften hier
-           direkt, die Käsefäden über den berechneten Stil. */
-        const spanne = klemmen((p - RISS_AB) / (RISS_BIS - RISS_AB))
-        el.style.setProperty('--spanne', String(spanne))
-
-        if (links && rechts) {
-          const gebacken = String(fenster(p, GEBACKEN_AB, 1.2))
-          links.style.opacity = gebacken
-          rechts.style.opacity = gebacken
-          /* Genau 30 % — dieselbe Zahl, mit der Kaesefaeden.tsx die Ansatz-
-             punkte auseinanderzieht. Weichen sie ab, hängen die Fäden neben
-             der Bruchkante statt daran. */
-          links.style.transform = `translateX(${-30 * spanne}%) rotateY(${32 * spanne}deg)`
-          rechts.style.transform = `translateX(${30 * spanne}%) rotateY(${-32 * spanne}deg)`
-        }
 
       }
 
@@ -334,42 +309,17 @@ export default function Kaeseschiff() {
           </div>
         )}
 
-        {STUFEN.map((s) => (
+        {STUFEN.map((x) => (
           <img
-            key={s.klasse}
-            className={`schiff__stufe schiff__stufe--${s.klasse}`}
-            src={s.quelle}
-            width={M['stufe-1-kugel']!.breite}
-            height={M['stufe-1-kugel']!.hoehe}
+            key={x.klasse}
+            className={`schiff__stufe schiff__stufe--${x.klasse}`}
+            src={`/bilder/riss/${x.klasse}.webp`}
+            width={M['stufe-4-gebacken']!.breite}
+            height={M['stufe-4-gebacken']!.hoehe}
             alt=""
             decoding="async"
           />
         ))}
-
-        <img
-          className="schiff__haelfte schiff__haelfte--links"
-          src="/bilder/reise/schiff-links.webp"
-          width={M['schiff-links']!.breite}
-          height={M['schiff-links']!.hoehe}
-          alt=""
-          decoding="async"
-        />
-        <img
-          className="schiff__haelfte schiff__haelfte--rechts"
-          src="/bilder/reise/schiff-rechts.webp"
-          width={M['schiff-rechts']!.breite}
-          height={M['schiff-rechts']!.hoehe}
-          alt=""
-          decoding="async"
-        />
-
-        {/* Die Fäden liegen ÜBER den Hälften — eine Bruchfläche liegt vorn. */}
-        {aktiv && <Kaesefaeden klasse="schiff__faeden" menge={schmal ? 4 : 6} />}
-
-        {/* Getropft wird nur am Rechner. Am Handy ist unter dem Schiff kein
-            Weg, auf dem ein Tropfen etwas erzählen könnte — und die drei
-            Leinwände dort kosten ohnehin schon zu viel. */}
-        {aktiv && !schmal && <Kaesetropfen klasse="schiff__tropfen" menge={6} />}
       </div>
     </div>
   )

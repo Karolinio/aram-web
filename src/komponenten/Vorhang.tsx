@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 
 import vorhangRoh from '../../inhalt/vorhang.json'
 import { SCRUB_KOERPER, useMedienabfrage, werkzeugHolen } from '../bewegung.ts'
-import { Etikett } from './ui/bausteine.tsx'
+import { inhalt } from '../inhalt.ts'
 
 type Mass = { breite: number; hoehe: number }
 const M = vorhangRoh as Record<string, Mass>
@@ -47,6 +47,20 @@ const M = vorhangRoh as Record<string, Mass>
  * gerade darunter liegt, entscheidet der Scrollstand. Komponierte Überlagerung
  * ist Tiefe, zufällige ist ein Fehler.
  */
+
+/**
+ * Sechs Gerichte als Probe — aus DERSELBEN Quelle wie die Speisekarte.
+ *
+ * Nicht abgetippt: eine zweite Liste wäre eine zweite Wahrheit, und sie stünde
+ * spätestens dann falsch da, wenn der Inhaber im Editor einen Preis ändert.
+ *
+ * Sechs, weil eine Karte, die man in einem Blick liest, höchstens so viele
+ * Zeilen hat. Es sind die ersten sechs ihrer eigenen Nummerierung — also die,
+ * die auch auf dem Blatt an ihrer Wand oben stehen.
+ */
+const ALLE = inhalt.speisekarte.flatMap((gr) => gr.gerichte)
+const PROBE = ALLE.filter((g): g is typeof g & { preis: number } => g.preis !== null).slice(0, 6)
+const ZAHL_REST = ALLE.length - PROBE.length
 
 /** Wo im Verlauf sich die Scheibe teilt. Davor dreht sie, danach fliegt die Karte herein. */
 const TEILT_AB = 0.46
@@ -221,17 +235,45 @@ export default function Vorhang() {
           />
         </div>
 
-        {/* Was durch den Spalt hereinkommt. Es steht IM Baum, nicht in einer
-            zweiten Sektion: ein Vorleseprogramm liest hier einmal, was ein
-            sehendes Auge einmal sieht. */}
+        {/* ═══ Was durch den Spalt hereinkommt: eine KARTE ═══
+
+            Karol am 26.08.: „Dieses 22 Sorten, jede von Hand und so, weg damit
+            … nachdem der Lahmacun auf ist, soll einfach so eine schön designte
+            Karte, und dann steht da so ‚Zur Karte' drunter."
+
+            Vorher stand dort eine Schlagzeile mit einem Versprechen. Das war
+            zweimal falsch: die Zahl steht schon weiter oben, und eine
+            Behauptung ist kein Beweis. Eine Karte mit echten Namen und echten
+            Preisen ist einer.
+
+            Die Gerichte kommen aus derselben Quelle wie die Speisekarte —
+            wenn der Inhaber im Editor einen Preis ändert, ändert er sich hier
+            mit. Eine zweite, abgetippte Liste wäre eine zweite Wahrheit. */}
         <div className="vorhang__einladung">
-          <Etikett>Orientalisches Gebäck in Bonn-Hardtberg</Etikett>
-          <h2 className="vorhang__zahl lebt" id="vorhang-titel">
-            Zweiundzwanzig Sorten, jede von Hand
-          </h2>
-          <p className="vorhang__zeile">
-            Keine liegt vorgebacken herum. Belegt wird, wenn du bestellst.
-          </p>
+          <div className="kartenblatt">
+            <p className="kartenblatt__kopf">
+              <span className="kartenblatt__marke">Aram</span>
+              <span className="kartenblatt__ort">Bonn-Hardtberg</span>
+            </p>
+
+            <ul className="kartenblatt__liste">
+              {PROBE.map((g) => (
+                <li key={g.name}>
+                  <span className="kartenblatt__nr">{g.nr}</span>
+                  <span className="kartenblatt__name">{g.name}</span>
+                  <span className="kartenblatt__leiter" aria-hidden="true" />
+                  <span className="kartenblatt__preis">
+                    {g.preis.toFixed(2).replace('.', ',')} €
+                  </span>
+                </li>
+              ))}
+            </ul>
+
+            <p className="kartenblatt__fuss">
+              und {ZAHL_REST} weitere — von Hand gerollt, belegt bei deiner Bestellung
+            </p>
+          </div>
+
           <a className="knopf vorhang__knopf" href="#karte">
             Zur Karte
           </a>

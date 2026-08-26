@@ -1,0 +1,34 @@
+{
+ "stufe-1-kugel": {
+  "breite": 1500,
+  "hoehe": 603
+ },
+ "stufe-2-gewalzt": {
+  "breite": 1500,
+  "hoehe": 603
+ },
+ "stufe-3-belegt": {
+  "breite": 1500,
+  "hoehe": 603
+ },
+ "stufe-4-gebacken": {
+  "breite": 1500,
+  "hoehe": 603
+ },
+ "riss-1": {
+  "breite": 1500,
+  "hoehe": 603
+ },
+ "riss-2": {
+  "breite": 1500,
+  "hoehe": 603
+ },
+ "riss-3": {
+  "breite": 1500,
+  "hoehe": 603
+ },
+ "riss-4": {
+  "breite": 1500,
+  "hoehe": 603
+ }
+}
