@@ -179,7 +179,7 @@ export default function Karte() {
                  jede zweite Zeile um 5 rem versetzt. */
               data-mit-bild={gr.gerichte.some((x) => x.bild) ? 'ja' : 'nein'}
             >
-              <h3 className="gruppe__titel">{gr.gruppe}</h3>
+              <h3 className="gruppe__titel lebt">{gr.gruppe}</h3>
               {gr.hinweis && <p className="gruppe__hinweis">{gr.hinweis}</p>}
 
               <ul className="gruppe__liste">

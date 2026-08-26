@@ -1408,85 +1408,89 @@
 .prozess__buehne { position: relative; z-index: 2; }
 
 
-.prozess__gitter {
+/**
+ * ═══ Die Treppe ═══
+ *
+ * Drei gleiche Glieder nebeneinander, in Lesereihenfolge — und jedes liegt
+ * etwas tiefer als das davor (`--stufe`). Der Versatz IST die Leserichtung:
+ * das Auge folgt einer absteigenden Kante von selbst, und deshalb braucht es
+ * weder Pfeil noch Linie zwischen den Schritten.
+ *
+ * Vorher standen sie in zwei Spalten — eine klebende links mit Schritt 03, eine
+ * Liste rechts mit 01 und 02. Von links nach rechts gelesen war das 3 → 1 → 2.
+ */
+.prozess__schritte {
+  list-style: none;
+  margin: clamp(2.5rem, 6vw, 5rem) 0 0;
+  padding: 0;
   display: grid;
-  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
   gap: clamp(1.5rem, 3vw, 3rem);
+  align-items: start;
 }
 
-/**
- * Die Spur, auf der das Gericht klebt.
- *
- * `position: sticky` und nicht GSAPs `pin`. Beide halten ein Element fest;
- * `pin` schiebt dafür einen Platzhalter ins Layout, und dieser Platzhalter
- * kämpft mit den negativen Aussenabständen, aus denen hier die Überlappungen
- * bestehen. Sticky greift nicht ins Layout ein, kostet keinen Frame und kann
- * nicht in der falschen Höhe enden, wenn sich das Fenster ändert.
- *
- * Die Spur muss so hoch sein wie die Folge daneben — sonst hat das klebende
- * Element keinen Weg, auf dem es kleben könnte. Genau dafür ist sie ein
- * Gitterelement, das sich streckt.
- */
-.spur {
-  position: relative;
-  align-self: stretch;
-  /* Der Schwarm hängt nicht mehr an der Spur, sondern an der Sektion — die
-     Mindesthöhe steht deshalb jetzt dort. */
-  /* Damit die Gebäcke einen Raum haben, in dem sie sich drehen können, statt
-     flach projiziert zu werden. Die Sektion setzt die Perspektive, dieser
-     Kasten reicht sie an seine Kinder weiter. */
-  transform-style: preserve-3d;
+@media (min-width: 860px) {
+  .prozess__schritte { grid-template-columns: repeat(3, 1fr); }
+  /* 0, 1, 2 mal die Stufenhöhe. Auf einer Spalte fällt sie weg — dort ist die
+     Reihenfolge schon durch das Untereinander eindeutig. */
+  .schritt { margin-top: calc(var(--stufe) * clamp(2rem, 4vw, 4.5rem)); }
 }
 
-/* Die Beschriftung klebt; der Schwarm fliegt daran vorbei. */
-.klebt {
-  position: sticky;
-  top: 22vh;
-  /* Über dem Schwarm. Ein Gebäck, das über der Beschriftung liegt, ist ein
-     schöner Effekt und ein unlesbarer Satz. */
-  z-index: 4;
-  max-width: 17ch;
+.schritt { position: relative; }
+
+.schritt__bild {
+  margin-bottom: clamp(0.9rem, 2vw, 1.4rem);
 }
 
-/* Diese drei Regeln waren beim Umbau auf den Schwarm versehentlich mit dem
-   alten Flieger-Block gelöscht worden. Ohne sie liefen Titel und Text in einer
-   Zeile zusammen: „Erst dann belegtUnd in den heissen Ofen." */
-.flieger__wort { margin: 0; }
-
-.flieger__titel {
+.schritt__bild img {
   display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Ein FOTO hat eine Kante und bekommt einen Radius; ein Freisteller hat keine
+   und bekäme davon einen Schnitt. Dieselbe Regel wie beim Schwarm. */
+.schritt[data-art='foto'] .schritt__bild img {
+  border-radius: var(--rund-klein, 0.5rem);
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.schritt[data-art='freisteller'] .schritt__bild {
+  /* Auf dieselbe Höhe gebracht wie die beiden Fotos, damit die Zahlen darunter
+     auf einer Linie stehen. Ohne das läge die 03 höher als die 01. */
+  aspect-ratio: 4 / 3;
+  display: grid;
+  place-items: center;
+}
+.schritt[data-art='freisteller'] .schritt__bild img {
+  width: 96%;
+  --wurf: 0.85;
+  filter: var(--schatten-speise);
+}
+
+.schritt__zahl {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: var(--akzent);
+  font-variant-numeric: tabular-nums;
+}
+
+.schritt__titel {
+  margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.3rem);
-  font-weight: 570;
   font-variation-settings: var(--wonk-klein);
-  margin: 0.15rem 0 0.35rem;
+  font-size: clamp(1.15rem, 1rem + 0.6vw, 1.45rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
 }
 
-.flieger__text {
-  display: block;
-  font-size: var(--text-meta);
+.schritt__text {
+  margin: 0.45rem 0 0;
   color: var(--tinte-leise);
+  max-width: 28ch;
 }
 
-/**
- * Der Schwarm liegt über dem Grund und UNTER dem Text.
- *
- * ═══ Warum die Perspektive HIER sitzt und nicht an der Sektion ═══
- *
- * Zuerst stand `perspective` an `.prozess`. Damit wurde die ganze Sektion zum
- * 3D-Raum — und in einem 3D-Raum sortiert der Browser nach ECHTER Tiefe, nicht
- * nach `z-index`. Die Gerichte haben `translateZ` bis +160 px, und damit flogen
- * sie VOR der Überschrift, obwohl der Text die höhere Stapelnummer trug.
- * Gemessen an „Alles entsteht vor deinen Augen", das von einem Fata'er
- * angeschnitten wurde.
- *
- * Jetzt ist der Schwarm sein eigener 3D-Raum: innen drehen sich die Gerichte
- * weiter im Raum, nach aussen ist er eine einzige flache Ebene mit `z-index: 1`
- * — und die liegt sauber unter dem Text.
- *
- * Das ist die Schichtung von Goldsand: die Gegenstände sind im Raum, die
- * Schrift liegt davor.
- */
 .schwarm {
   position: absolute;
   inset: 0;
@@ -1592,58 +1596,22 @@
   .koerner { display: none; }
 }
 
-.folge {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Anders breit, seitlich versetzt, vertikal überlappend — die drei Zahlen sind
-   das ganze Savor-Rezept. Alle drei lehnen nach rechts, damit die linke Bahn
-   für den Flieger frei bleibt. */
-.schritt {
-  position: relative;
-  display: flex;
-  align-items: flex-end;
-  gap: clamp(1rem, 2.5vw, 2.5rem);
-}
-
-.schritt--1 { width: 62%; margin-inline-start: 38%; }
-.schritt--2 {
-  width: 54%;
-  margin-inline-start: 30%;
-  margin-top: clamp(-7rem, -6vw, -2.5rem);
-}
-
-.schritt__bild { flex: 1 1 auto; min-width: 0; margin: 0; }
-.schritt__bild img { width: 100%; height: auto; }
-
-.schritt__wort { flex: 0 0 clamp(7rem, 12vw, 11rem); padding-bottom: 0.4rem; }
-
-.schritt__zahl {
-  display: block;
-  font-family: var(--font-display);
-  font-size: 1.1rem;
-  font-weight: 600;
-  font-variation-settings: var(--wonk-klein);
-  font-variant-numeric: tabular-nums;
-  line-height: 1;
-  color: var(--akzent);
-  margin-bottom: 0.5rem;
-}
-
-.schritt__titel {
-  font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.3rem);
-  margin-bottom: 0.3rem;
-}
-
-.schritt__text {
-  font-size: var(--text-meta);
-  color: var(--tinte-leise);
-  max-width: 22ch;
-}
+/**
+ * ═══ Hier stand ein ZWEITER Satz `.schritt`-Regeln ═══
+ *
+ * Das alte Savor-Rezept: `display: flex`, `width: 62 %`, negative Aussenabstände
+ * und `margin-inline-start: 38 %`. Es stand WEITER UNTEN in derselben Datei als
+ * die neuen Regeln und hat sie deshalb überschrieben — gleiche Spezifität, die
+ * spätere gewinnt.
+ *
+ * Sichtbar war das sofort: drei Spalten von je wenigen Zentimetern, in denen
+ * „Morgens um sieben, bevor der erste Gast kommt" ein Wort pro Zeile stand.
+ *
+ * Genau davor warnt die eigene Regel in coding-style: auf Spezifitäten achten,
+ * weil sich Klassen sonst still gegenseitig aufheben. Beim Ersetzen eines
+ * Layouts reicht es nicht, den Block zu tauschen, den man gesucht hat — man
+ * muss nach ALLEN Vorkommen des Namens greifen.
+ */
 
 /* ── Die Karte ────────────────────────────────────────────────────────────── */
 
@@ -1802,7 +1770,11 @@
   margin: 1rem 0 0;
 }
 
-@media (min-width: 900px) {
+/* 760 statt 900: gemessen ist die Karte auf einem Tablet einspaltig 3,3
+   Bildschirme lang — der längste Abschnitt der ganzen Seite, und der Prüfer
+   meldet den Scrollweg. Bei 768 px bleiben je Spalte rund 340 px; Name,
+   Punktlinie, Preis und Zähler passen dort, geprüft auf Überlauf. */
+@media (min-width: 760px) {
   .gruppe__liste {
     columns: 2;
     column-gap: clamp(2rem, 4vw, 4rem);
@@ -2740,21 +2712,22 @@
 
 /* ── Was nach dem Umbau auf Bausteine noch sektionseigen ist ─────────────── */
 
-/* Der Prozesskopf steht schmaler als der Standard, weil links die Flugbahn
-   frei bleiben muss. Alles andere an ihm kommt aus dem Baustein. */
-.prozess__kopf { max-width: 30rem; }
+/* Der Prozesskopf darf wieder die Standardbreite haben. Die 30 rem stammten
+   aus der Zeit, als links eine eigene Spalte für den Flieger frei bleiben
+   musste — die gibt es seit dem Umbau auf die Schritt-Treppe nicht mehr. */
+.prozess__kopf { max-width: 38rem; }
 
 /* Die Schrittzahl ist ein Etikett — aber ohne Strich, weil sie in einer
    nummerierten Folge steht und der Strich dort wie ein Minus läse. */
 .schritt__zahl::before,
 .weg__art::before { display: none; }
 
+/* Die Zahl ist ein Etikett in Displayschrift — grösser als ein gewöhnliches
+   Etikett, weil sie in einer Folge steht und man ihr folgen können muss. */
 .schritt__zahl {
   font-family: var(--font-display);
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-variation-settings: var(--wonk-klein);
-  font-variant-numeric: tabular-nums;
-  margin-bottom: 0.5rem;
 }
 
 .weg__art { margin-bottom: 0.15rem; }
@@ -3477,7 +3450,12 @@
   contain-intrinsic-size: auto 2990px;
 }
 
-@media (min-width: 900px) {
+/* DIESELBE Grenze wie der Spaltenumbruch der Gerichteliste (760 px). Standen
+   sie auseinander, meldete der übersprungene Abschnitt auf einem Tablet die
+   einspaltige Höhe, obwohl er zweispaltig gebaut wird — gemessen 15,2
+   Bildschirmhöhen im Prüfer gegen 14,3 in Wirklichkeit.
+   Wer den einen Wert ändert, ändert den anderen mit. */
+@media (min-width: 760px) {
   .karte { contain-intrinsic-size: auto 1840px; }
 }
 

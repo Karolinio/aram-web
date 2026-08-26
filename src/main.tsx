@@ -127,6 +127,18 @@ function Seite() {
             nicht zwischen zwei Sektionen. */}
         <Kaeseschiff />
 
+        {/* ═══ Der Vorhang steht GANZ VORN ═══
+
+            Karol am 26.08.: „Bevor das kommt, soll als Erstes die allererste
+            Sektion nach der Startseite kommen, und die soll riesen Manakisch
+            sein."
+
+            Er stand vorher direkt vor der Speisekarte. Als Eröffnung ist er
+            besser aufgehoben: nach einem Video, das nur zeigt, kommt der erste
+            SATZ der Seite — und er kommt durch ein aufgeteiltes Manakisch
+            herein, statt einfach dazustehen. */}
+        <Vorhang />
+
         <Handarbeit />
 
         {/* Die Galerie steht VOR der Karte, nicht dahinter. Wer wissen will,
@@ -161,7 +173,6 @@ function Seite() {
 
         {/* Der Vorhang: eine Scheibe dreht sich, teilt sich, und die
             Speisekarte fliegt hindurch herein. */}
-        <Vorhang />
 
         <Karte />
         <Laden />

@@ -192,7 +192,12 @@ export default function Vorhang() {
       <div className="vorhang__buehne" ref={buehne}>
         {/* Die Schlagzeile liegt UNTER der Scheibe — siehe Kopf der Datei. */}
         <p className="vorhang__wort" aria-hidden="true">
-          Und alles frisch belegt
+          {/* Von IHREM Ladenschild abgelesen, nicht erfunden: über der Tür
+              steht „MEHR ALS 25 JAHRE ERFAHRUNG" (Foto 11 in rohbilder/eingang).
+              Eine Zahl, die ein Betrieb sich selbst an die Fassade schreibt,
+              ist die einzige Art Behauptung, die diese Seite ungeprüft
+              übernehmen darf. */}
+          Mehr als 25 Jahre
         </p>
 
         <div className="vorhang__scheibe" aria-hidden="true">
@@ -220,9 +225,9 @@ export default function Vorhang() {
             zweiten Sektion: ein Vorleseprogramm liest hier einmal, was ein
             sehendes Auge einmal sieht. */}
         <div className="vorhang__einladung">
-          <Etikett>Die Karte</Etikett>
-          <h2 className="vorhang__zahl" id="vorhang-titel">
-            Zweiundzwanzig Sorten
+          <Etikett>Orientalisches Gebäck in Bonn-Hardtberg</Etikett>
+          <h2 className="vorhang__zahl lebt" id="vorhang-titel">
+            Zweiundzwanzig Sorten, jede von Hand
           </h2>
           <p className="vorhang__zeile">
             Keine liegt vorgebacken herum. Belegt wird, wenn du bestellst.

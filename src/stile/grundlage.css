@@ -226,11 +226,39 @@ h3 { font-size: var(--text-gericht); font-variation-settings: var(--wonk-klein);
     color var(--dauer-mikro) var(--ease-teig);
 }
 
+/**
+ * ═══ EIN Verhalten für jede Überschrift ═══
+ *
+ * Karol am 26.08.: „Wenn ich mit der Maus draufgehe, verändert sich die Schrift
+ * zum Roten … das gilt konsistent für alle Schriften, für alle Überschriften
+ * bitte."
+ *
+ * Es gab das Verhalten schon, aber nur an den Sektionsköpfen (`Kopf`). Die
+ * Gruppentitel der Speisekarte, die Schritte der Handarbeit, der Titel in der
+ * grossen Ansicht und die Überschrift des Vorhangs hatten es nicht — vier
+ * Stellen, an denen dieselbe Art Zeile sich anders verhielt.
+ *
+ * Zwei Achsen ändern sich zugleich: die Farbe zum Akzent und `SOFT` von 90 auf
+ * 25. Fraunces wird dadurch KANTIGER, nicht weicher — die Zeile schärft sich,
+ * wenn man sie ansieht. Nur eine Farbe zu wechseln wäre ein Link; hier ist es
+ * die Schrift selbst, die reagiert.
+ *
+ * NICHT auf der Startseite. Die h1 dort liegt auf laufendem Video und trägt
+ * einen dunklen Saum, der auf ihre Farbe abgestimmt ist — gemessen 4,85 im
+ * schlechtesten Videobild. Eine zweite Farbe bräuchte einen zweiten Saum, und
+ * die Zeile ist ohnehin nichts, worauf man zeigt.
+ */
 @media (hover: hover) {
   .lebt:hover {
     font-variation-settings: 'opsz' 96, 'SOFT' 25, 'WONK' 1;
     color: var(--akzent);
   }
+}
+
+/* Auf dunklem Grund ist der Akzent zu dunkel — dort geht die Zeile ins Gold,
+   dieselbe Farbe wie die Etiketten. */
+@media (hover: hover) {
+  .sektion--nacht .lebt:hover { color: var(--glut-marke); }
 }
 
 @media (prefers-reduced-motion: reduce) {

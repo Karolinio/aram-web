@@ -2,7 +2,7 @@ import type { CSSProperties } from 'react'
 
 import { useBildfolge, useFlug, useMedienabfrageBreit, useVersatz } from '../bewegung.ts'
 import { GEBAECKE, type Gebaeck } from '../gebaecke.ts'
-import { Bild, Etikett, Kopf, Sektion } from './ui/bausteine.tsx'
+import { Etikett, Kopf, Sektion } from './ui/bausteine.tsx'
 
 /**
  * Der Weg zum Fata’er — die Savor-Sequenz.
@@ -36,49 +36,92 @@ import { Bild, Etikett, Kopf, Sektion } from './ui/bausteine.tsx'
  * entschieden, die übrigen vier erzeugen zu lassen.
  */
 
-const RECHTECKE = [
+/**
+ * ═══ Drei Schritte, gleich gebaut, in Lesereihenfolge ═══
+ *
+ * Karol am 26.08.: „Da steht 01, 02, 03 … das ist irgendwie sehr unlogisch.
+ * Einfach sehr, sehr unkonsistent."
+ *
+ * Er hatte recht, und es war schlimmer als unschön: die 03 stand LINKS in einer
+ * eigenen klebenden Spalte, die 01 und die 02 rechts in einer Liste. Wer von
+ * links nach rechts liest, las die Schritte in der Reihenfolge 3 → 1 → 2. Eine
+ * nummerierte Folge, die man nicht der Reihe nach lesen kann, ist keine Folge,
+ * sondern Dekoration mit Ziffern.
+ *
+ * Dazu waren die drei ungleich gebaut: zwei mit Foto in einem Rechteck, einer
+ * als blosser Text ohne Bild. Drei Schritte eines Vorgangs müssen dieselbe
+ * Form haben, sonst liest man sie als drei verschiedene Dinge.
+ *
+ * Jetzt: ein Datensatz, drei gleiche Glieder, nebeneinander in der Reihenfolge
+ * 01 → 02 → 03. Der dritte trägt einen Freisteller statt eines Fotos — das
+ * Bild „belegt und in den Ofen" gibt es von Aram nicht, und ein Foto zu
+ * erfinden kommt nicht in Frage. Ein freigestellter Gegenstand ist auf dieser
+ * Seite eine eigene, ehrliche Form.
+ */
+const SCHRITTE = [
   {
     zahl: '01',
     titel: 'Mehl auf die Fläche',
     text: 'Morgens um sieben, bevor der erste Gast kommt.',
+    art: 'foto' as const,
     quelle: '/bilder/textur/mehl-holz.webp',
-    alt: '',
+    alt: 'Bemehlte Holzarbeitsfläche mit Spuren vom Ausrollen',
     breite: 1700,
     hoehe: 949,
+    /* Der Versatz ist die Treppe: jeder Schritt liegt etwas tiefer als der
+       davor. Daraus entsteht die Leserichtung, ohne dass ein Pfeil nötig wäre. */
+    versatz: 0,
     tempo: -0.05,
   },
   {
     zahl: '02',
     titel: 'Von Hand gerollt',
     text: 'Jede Scheibe einzeln, nicht aus der Kiste.',
+    art: 'foto' as const,
     quelle: '/bilder/echt/handarbeit.webp',
     alt: 'Zwei Bäcker drücken Teigscheiben auf der bemehlten Arbeitsfläche, daneben ein Stapel fertiger Fladen',
     breite: 500,
     hoehe: 600,
+    versatz: 1,
     tempo: 0.04,
   },
-]
+  {
+    zahl: '03',
+    titel: 'Erst dann belegt',
+    text: 'Und in den heissen Ofen. Deshalb dauert es ein paar Minuten.',
+    art: 'freisteller' as const,
+    quelle: '/bilder/reise/stufe-3-belegt.webp',
+    alt: 'Ein belegtes, noch ungebackenes Käseschiffchen',
+    breite: 1200,
+    hoehe: 540,
+    versatz: 2,
+    tempo: -0.03,
+  },
+] as const
 
-function Rechteck({ s, i }: { s: (typeof RECHTECKE)[number]; i: number }) {
+
+function Schritt({ s }: { s: (typeof SCHRITTE)[number] }) {
   const ref = useVersatz<HTMLLIElement>(s.tempo)
 
   return (
-    <li className={`schritt schritt--${i + 1}`} ref={ref}>
-      <Bild
-        klasse="schritt__bild"
-        quelle={s.quelle}
-        alt={s.alt}
-        breite={s.breite}
-        hoehe={s.hoehe}
-      />
-      <div className="schritt__wort">
-        <Etikett klasse="schritt__zahl">{s.zahl}</Etikett>
-        <h3 className="schritt__titel">{s.titel}</h3>
-        <p className="schritt__text">{s.text}</p>
+    <li className="schritt" data-art={s.art} style={{ '--stufe': s.versatz } as CSSProperties} ref={ref}>
+      <div className="schritt__bild">
+        <img
+          src={s.quelle}
+          alt={s.alt}
+          width={s.breite}
+          height={s.hoehe}
+          loading="lazy"
+          decoding="async"
+        />
       </div>
+      <Etikett klasse="schritt__zahl">{s.zahl}</Etikett>
+      <h3 className="schritt__titel lebt">{s.titel}</h3>
+      <p className="schritt__text">{s.text}</p>
     </li>
   )
 }
+
 
 /**
  * Ein Gebäck auf seiner Bahn.
@@ -179,26 +222,11 @@ export default function Handarbeit() {
             klasse="prozess__kopf"
           />
 
-          <div className="prozess__gitter">
-            {/* Die linke Spur. Sie ist so hoch wie die Folge daneben — nur
-                deshalb haben die Gebäcke einen Weg zum Fliegen. */}
-            <div className="spur">
-              <p className="klebt flieger__wort">
-                <Etikett klasse="schritt__zahl">03</Etikett>
-                <span className="flieger__titel">Erst dann belegt</span>
-                <span className="flieger__text">
-                  Und in den heissen Ofen. Deshalb dauert es ein paar Minuten.
-                </span>
-              </p>
-
-            </div>
-
-            <ol className="folge">
-              {RECHTECKE.map((s, i) => (
-                <Rechteck key={s.zahl} s={s} i={i} />
-              ))}
-            </ol>
-          </div>
+          <ol className="prozess__schritte">
+            {SCHRITTE.map((x) => (
+              <Schritt key={x.zahl} s={x} />
+            ))}
+          </ol>
         </div>
 
         {/* Der Schwarm liegt jetzt auf SEKTIONSEBENE, nicht mehr in der linken

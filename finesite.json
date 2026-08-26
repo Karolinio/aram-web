@@ -42,5 +42,11 @@
       "hinweis",
       "speisekarte"
     ]
+  },
+  "herkunft": {
+    "art": "eigener-entwurf",
+    "quelle": null,
+    "portfolio": true,
+    "_vermerkt_am": "2026-08-25"
   }
 }

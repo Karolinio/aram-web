@@ -108,7 +108,7 @@ export default function Bildschau({ gericht, schliessen }: Props) {
           )}
 
           <div className="bildschau__wort">
-            <h2 className="bildschau__titel" id="bildschau-titel">
+            <h2 className="bildschau__titel lebt" id="bildschau-titel">
               {gericht.nr != null && <span className="zeile__nr">{gericht.nr}</span>}
               {gericht.name}
             </h2>
