@@ -54,12 +54,12 @@ const M = vorhangRoh as Record<string, Mass>
  * Nicht abgetippt: eine zweite Liste wäre eine zweite Wahrheit, und sie stünde
  * spätestens dann falsch da, wenn der Inhaber im Editor einen Preis ändert.
  *
- * Sechs, weil eine Karte, die man in einem Blick liest, höchstens so viele
+ * Fünf, weil ein Zettel, den man in einem Blick liest, höchstens so viele
  * Zeilen hat. Es sind die ersten sechs ihrer eigenen Nummerierung — also die,
  * die auch auf dem Blatt an ihrer Wand oben stehen.
  */
 const ALLE = inhalt.speisekarte.flatMap((gr) => gr.gerichte)
-const PROBE = ALLE.filter((g): g is typeof g & { preis: number } => g.preis !== null).slice(0, 6)
+const PROBE = ALLE.filter((g): g is typeof g & { preis: number } => g.preis !== null).slice(0, 5)
 const ZAHL_REST = ALLE.length - PROBE.length
 
 /** Wo im Verlauf sich die Scheibe teilt. Davor dreht sie, danach fliegt die Karte herein. */
@@ -205,14 +205,19 @@ export default function Vorhang() {
     <section className="sektion sektion--nacht vorhang" aria-labelledby="vorhang-titel">
       <div className="vorhang__buehne" ref={buehne}>
         {/* Die Schlagzeile liegt UNTER der Scheibe — siehe Kopf der Datei. */}
-        <p className="vorhang__wort" aria-hidden="true">
-          {/* Von IHREM Ladenschild abgelesen, nicht erfunden: über der Tür
-              steht „MEHR ALS 25 JAHRE ERFAHRUNG" (Foto 11 in rohbilder/eingang).
-              Eine Zahl, die ein Betrieb sich selbst an die Fassade schreibt,
-              ist die einzige Art Behauptung, die diese Seite ungeprüft
-              übernehmen darf. */}
-          Mehr als 25 Jahre
-        </p>
+        {/* ═══ Hier stand „Mehr als 25 Jahre" ═══
+
+            Karol am 26.08.: „Diese 25 Jahre musst du rausnehmen bei diesem
+            Lahmacun."
+
+            Die Zahl stimmt und steht auf ihrem Ladenschild — sie stand nur an
+            der falschen Stelle. Eine Schlagzeile hinter einem Gegenstand, der
+            sie zur Hälfte verdeckt, funktioniert nur, wenn man sie ohnehin
+            nicht lesen muss. „Mehr als 25 Jahre" ist aber eine Auskunft, kein
+            Ornament: halb verdeckt ist sie halb verschenkt.
+
+            Sie gehört in „Der Laden", wo Anschrift und Zeiten stehen. Dort
+            steht sie jetzt. */}
 
         <div className="vorhang__scheibe" aria-hidden="true">
           <img
@@ -252,8 +257,15 @@ export default function Vorhang() {
         <div className="vorhang__einladung">
           <div className="kartenblatt">
             <p className="kartenblatt__kopf">
-              <span className="kartenblatt__marke">Aram</span>
-              <span className="kartenblatt__ort">Bonn-Hardtberg</span>
+              {/* Arabisch, wie es über ihrer Tür steht: „Orientalisches
+                  Gebäck". Reem Kufi bringt die arabische Untergruppe mit —
+                  geladen wird sie nur, weil hier tatsächlich arabische Zeichen
+                  vorkommen. Das entscheidet der `unicode-range` der Schrift,
+                  nicht wir. */}
+              <span className="kartenblatt__arabisch" lang="ar" dir="rtl">
+                مخبوزات شرقية
+              </span>
+              <span className="kartenblatt__ort">Aram · Bonn-Hardtberg</span>
             </p>
 
             <ul className="kartenblatt__liste">
@@ -269,9 +281,7 @@ export default function Vorhang() {
               ))}
             </ul>
 
-            <p className="kartenblatt__fuss">
-              und {ZAHL_REST} weitere — von Hand gerollt, belegt bei deiner Bestellung
-            </p>
+            <p className="kartenblatt__fuss">und {ZAHL_REST} weitere</p>
           </div>
 
           <a className="knopf vorhang__knopf" href="#karte">

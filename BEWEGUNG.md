@@ -81,7 +81,25 @@ alles Weitere:
 `Kaesefaeden.tsx` und `Kaesetropfen.tsx` bleiben liegen — über einer Fläche
 ohne Foto wären sie richtig.
 
-## 6. Überlagerung: komponiert ja, zufällig nein
+## 6. Fotos liegen übereinander, nicht nebeneinander
+
+Bei **Nite Riot** (Mobbin) liegen die Abzüge nackt und überlappend auf der
+Fläche, in stark verschiedenen Grössen, und laufen an den Rändern hinaus. Die
+Galerie hier war das Gegenteil und wurde dreimal beanstandet, bis ich
+nachgesehen habe. Fünf Unterschiede, und keiner davon ist Geschmack:
+
+| | falsch | richtig |
+|---|---|---|
+| Rahmen | Passepartout, Radius, drei Schatten | nacktes Foto, EIN Wurf |
+| Abstand | Raster mit freier Mittelspalte | Überlappung |
+| Grösse | alle fast gleich | grösstes ~1,5× kleinstes |
+| Rand | endet an der Schale | läuft hinaus |
+| Beschriftung | Nummer + Bildzeile je Foto | keine, nur der Sektionskopf |
+
+Zusammen sind sie der Unterschied zwischen einem Stapel Abzüge auf einem Tisch
+und einer Bildergalerie in einem Formular.
+
+## 7. Überlagerung: komponiert ja, zufällig nein
 
 Bei **Eat Hungry Tiger** (Mobbin) verdeckt das Produkt einen Buchstaben der
 Schlagzeile. Genau das macht aus einem Bild in einem Kasten einen Gegenstand im

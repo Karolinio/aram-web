@@ -1,5 +1,7 @@
 import galerieRoh from '../../inhalt/galerie.json'
-import { useFlug } from '../bewegung.ts'
+import type { CSSProperties } from 'react'
+
+import { useVersatz } from '../bewegung.ts'
 import { Kopf, Sektion } from './ui/bausteine.tsx'
 
 type Bild = { nr: number; titel: string; lage: 'hoch' | 'quer'; breite: number; hoehe: number }
@@ -40,69 +42,86 @@ const BILDER = galerieRoh as Bild[]
  */
 
 /**
- * Die Flugbahnen. Zwei Spuren, unterschiedliche Tempi — das ist die Tiefe.
+ * ═══ Der Stapel ═══
  *
- * `y` ist der Weg in Fensterhöhen: alle starten unterhalb und enden oberhalb,
- * aber unterschiedlich weit. Wer weiter fliegt, wirkt näher.
+ * Karol, dreimal in Folge: „Die Galerie ist immer noch furchtbar." Beim
+ * dritten Mal habe ich gemacht, was er beim zweiten schon verlangt hatte, und
+ * bei Mobbin nachgesehen. Die Antwort ist **Nite Riot**, und sie sagt genau,
+ * was hier falsch war:
  *
- * Die Werte sind gesetzt, nicht gewürfelt: kein Nachbarpaar hat dasselbe
- * Tempo, und die beiden Spuren wechseln sich ab, damit nie zwei Bilder auf
- * derselben Höhe nebeneinanderstehen.
+ *   RAHMEN       Dort sind es nackte Fotos. Hier lag jedes in einem
+ *                cremefarbenen Passepartout mit Radius und drei Schatten —
+ *                eine Bedienoberflächen-Karte, keine Fotografie.
+ *   ABSTAND      Dort überlappen sie einander. Hier standen sie in einem
+ *                Raster mit einer freien Mittelspalte, das eine Berührung
+ *                ausgeschlossen hat.
+ *   GRÖSSE       Dort reicht das grösste an das Vierfache des kleinsten. Hier
+ *                waren alle fast gleich.
+ *   RAND         Dort laufen sie aus dem Bild. Hier endeten sie brav an der
+ *                Schale.
+ *   BESCHRIFTUNG Dort keine. Hier trug jedes eine Nummer und eine Bildzeile —
+ *                und genau das macht aus einer Wand voller Fotos eine
+ *                Dokumentation.
+ *
+ * Jeder dieser fünf Punkte für sich wäre Geschmack. Zusammen sind sie der
+ * Unterschied zwischen einem Stapel Abzüge auf einem Tisch und einer
+ * Bildergalerie in einem Formular.
  */
-const BAHNEN = [
-  { spur: 'links',  y: [0.62, -0.72] as [number, number], dreh: [-7, 4] as [number, number],  skala: [0.9, 1.04] as [number, number] },
-  { spur: 'rechts', y: [0.48, -0.54] as [number, number], dreh: [5, -6] as [number, number],   skala: [0.94, 1] as [number, number] },
-  { spur: 'links',  y: [0.55, -0.62] as [number, number], dreh: [3, -5] as [number, number],   skala: [0.88, 1.02] as [number, number] },
-  { spur: 'rechts', y: [0.7, -0.8] as [number, number],   dreh: [-6, 6] as [number, number],   skala: [0.92, 1.06] as [number, number] },
-  { spur: 'links',  y: [0.44, -0.5] as [number, number],  dreh: [6, -3] as [number, number],   skala: [0.95, 1] as [number, number] },
-  { spur: 'rechts', y: [0.58, -0.66] as [number, number], dreh: [-4, 5] as [number, number],   skala: [0.9, 1.03] as [number, number] },
-  { spur: 'links',  y: [0.66, -0.76] as [number, number], dreh: [4, -6] as [number, number],   skala: [0.93, 1.05] as [number, number] },
-]
 
-function Blatt({ bild, bahn, i }: { bild: Bild; bahn: (typeof BAHNEN)[number]; i: number }) {
-  const flug = useFlug<HTMLLIElement>({
-    y: bahn.y,
-    x: [0, 0],
-    dreh: bahn.dreh,
-    /* Ein Hauch Kippen um die Hochachse. Mehr wäre ein Effekt; so viel ist
-       das, was ein Blatt Papier tut, das durch die Luft geht. */
-    /* ═══ Die Kippung kommt aus der SPUR, nicht aus dem Index ═══
-       Ein Blatt in der linken Spur dreht sich zur Mitte hin, eins in der
-       rechten dagegen — so schauen beide den Betrachter an, und der Raum hat
-       eine Mitte.
-       Vorher stand hier `i % 2`. Das ergab dasselbe Ergebnis, aber nur durch
-       Zufall: die Bahnen wechseln sich ab, und es sind gerade sieben Bilder.
-       Bei acht Bildern oder einer anderen Bahnenliste hätte sich die Hälfte
-       falsch herum gedreht. */
-    drehY: bahn.spur === 'links' ? [10, -7] : [-10, 7],
-    drehX: [4, -3],
-    z: [-60, 0],
-    skala: bahn.skala,
-    buehne: '.galerie',
-    abBreite: 720,
-  })
+/**
+ * Wo jedes Blatt liegt — in Prozent der Bühne.
+ *
+ * `li` und `ob` sind die linke und obere Kante, `gr` die Breite. Negative
+ * Werte und Werte über 100 sind ABSICHT: was über den Rand läuft, wird
+ * beschnitten, und genau das nimmt der Wand ihre Kastenform.
+ *
+ * `tempo` ist der Versatz gegen den Scroll. Weil er sich von Blatt zu Blatt
+ * unterscheidet, ÄNDERN sich die Überlappungen beim Scrollen — der Stapel
+ * ordnet sich neu, während man daran vorbeifährt. Das ist die eigentliche
+ * Bewegung; die Drehung ist nur die Handschrift.
+ */
+const LAGEN = [
+  { li: -7, ob: 0, gr: 47, dreh: -5.5, tempo: -0.16, ebene: 2 },
+  { li: 52, ob: 7, gr: 33, dreh: 4, tempo: 0.1, ebene: 1 },
+  { li: 20, ob: 21, gr: 41, dreh: -2.5, tempo: -0.06, ebene: 3 },
+  { li: 63, ob: 30, gr: 44, dreh: 6.5, tempo: 0.18, ebene: 2 },
+  { li: 2, ob: 48, gr: 31, dreh: -7, tempo: 0.08, ebene: 1 },
+  { li: 30, ob: 55, gr: 45, dreh: 2, tempo: -0.13, ebene: 3 },
+  { li: 66, ob: 71, gr: 39, dreh: -4, tempo: 0.14, ebene: 2 },
+] as const
+
+function Blatt({ bild, lage, i }: { bild: Bild; lage: (typeof LAGEN)[number]; i: number }) {
+  const ref = useVersatz<HTMLLIElement>(lage.tempo)
+  const nr = String(bild.nr).padStart(2, '0')
 
   return (
-    <li className="galerie__stueck" data-spur={bahn.spur} data-lage={bild.lage} ref={flug}>
-      <figure className="galerie__blatt">
-        {/* Die Nummer ist keine Verzierung: die sieben sind eine Folge — vom
-            Blech über die Glut auf den Tisch — und eine Folge, die man nicht
-            zählen kann, liest sich als Haufen. */}
-        <span className="galerie__nr" aria-hidden="true">
-          {String(i + 1).padStart(2, '0')}
-        </span>
-        <img
-          src={`/bilder/galerie/${String(bild.nr).padStart(2, '0')}.webp`}
-          srcSet={`/bilder/galerie/${String(bild.nr).padStart(2, '0')}-klein.webp 520w, /bilder/galerie/${String(bild.nr).padStart(2, '0')}.webp 900w`}
-          sizes="(max-width: 719px) 78vw, 30vw"
-          alt={bild.titel}
-          width={bild.breite}
-          height={bild.hoehe}
-          loading={i < 2 ? 'eager' : 'lazy'}
-          decoding="async"
-        />
-        <figcaption>{bild.titel}</figcaption>
-      </figure>
+    <li
+      className="galerie__stueck"
+      ref={ref}
+      style={
+        {
+          left: `${lage.li}%`,
+          top: `${lage.ob}%`,
+          width: `${lage.gr}%`,
+          zIndex: lage.ebene,
+          '--dreh': `${lage.dreh}deg`,
+        } as CSSProperties
+      }
+    >
+      {/* Nacktes Bild, kein Rahmen, keine Bildzeile. Der Titel steht im
+          Alternativtext — ein Vorleseprogramm bekommt ihn, das Auge nicht.
+          Was hier zu sehen ist, braucht keine Unterschrift; die Sektion hat
+          eine Überschrift, und die sagt es für alle sieben. */}
+      <img
+        src={`/bilder/galerie/${nr}.webp`}
+        srcSet={`/bilder/galerie/${nr}-klein.webp 520w, /bilder/galerie/${nr}.webp 900w`}
+        sizes="(max-width: 719px) 86vw, 42vw"
+        alt={bild.titel}
+        width={bild.breite}
+        height={bild.hoehe}
+        loading={i < 2 ? 'eager' : 'lazy'}
+        decoding="async"
+      />
     </li>
   )
 }
@@ -122,7 +141,7 @@ export default function Galerie() {
           nichts — die Flugbahnen sind die Zugabe, nicht der Inhalt. */}
       <ul className="galerie__bahn">
         {BILDER.map((bild, i) => (
-          <Blatt key={bild.nr} bild={bild} bahn={BAHNEN[i % BAHNEN.length]!} i={i} />
+          <Blatt key={bild.nr} bild={bild} lage={LAGEN[i % LAGEN.length]!} i={i} />
         ))}
       </ul>
     </Sektion>

@@ -87,7 +87,15 @@ export default function Reise() {
             id="reise-titel"
             etikett="Ofenfrisch"
             titel="Und dann bricht es auf"
-            lead="Zweiundzwanzig Sorten Fata’er, von Hand gerollt und erst bei deiner Bestellung belegt. Das Käseschiffchen kommt als Letztes aus dem Ofen — und hält am längsten warm."
+            /* ═══ Der Vorspann war eine Wiederholung ═══
+               Karol am 26.08.: „Bin ich mir nicht sicher, ob das so notwendig
+               ist, weil das die Scroll-History einfach doppelt erzählt."
+
+               Er hatte recht: „Zweiundzwanzig Sorten" steht auf dem Zettel im
+               Vorhang, „von Hand gerollt" in der Handarbeit, „erst bei deiner
+               Bestellung belegt" in beiden. Übrig bleibt der eine Satz, den
+               nur diese Sektion sagen kann. */
+            lead="Das Käseschiffchen kommt als Letztes aus dem Ofen — und hält am längsten warm."
           />
         </div>
 

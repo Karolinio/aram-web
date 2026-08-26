@@ -1428,11 +1428,24 @@
   align-items: start;
 }
 
+/**
+ * Am Handy zwei Spalten, nicht vier und nicht eine.
+ *
+ * Vier Schritte untereinander sind auf 393 px gemessen 2,8 Bildschirmhöhen —
+ * der längste Abschnitt der Seite nach der Speisekarte. Zwei mal zwei nimmt
+ * davon die Hälfte, und die Lesereihenfolge bleibt: erst die obere Zeile,
+ * dann die untere. Zusammengelegt, nicht weggelassen.
+ */
+@media (max-width: 859px) {
+  .prozess__schritte { grid-template-columns: 1fr 1fr; }
+  .schritt__text { font-size: var(--text-meta); }
+}
+
 @media (min-width: 860px) {
-  .prozess__schritte { grid-template-columns: repeat(3, 1fr); }
+  .prozess__schritte { grid-template-columns: repeat(4, 1fr); }
   /* 0, 1, 2 mal die Stufenhöhe. Auf einer Spalte fällt sie weg — dort ist die
      Reihenfolge schon durch das Untereinander eindeutig. */
-  .schritt { margin-top: calc(var(--stufe) * clamp(2rem, 4vw, 4.5rem)); }
+  .schritt { margin-top: calc(var(--stufe) * clamp(1.4rem, 3vw, 3.2rem)); }
 }
 
 .schritt { position: relative; }
@@ -2758,303 +2771,105 @@
   perspective-origin: var(--flucht-punkt);
 }
 
+/**
+ * Die Bühne des Stapels.
+ *
+ * `position: relative` und eine Höhe in vh: die Blätter liegen absolut darin,
+ * überlappen einander und laufen an den Seiten hinaus. Ein Raster kann das
+ * nicht — es hält seine Kinder auseinander, und genau das war der Fehler.
+ */
 .galerie__bahn {
   position: relative;
-  display: grid;
-  /* Zwei Spalten, und die MITTE bleibt frei. Der Text steht dort, und ein
-     Bild, das durch eine Textspalte fliegt, ist kein Bild mehr, sondern eine
-     Störung. */
-  grid-template-columns: minmax(0, 1fr) clamp(2rem, 12vw, 12rem) minmax(0, 1fr);
-  align-items: start;
-  gap: clamp(3rem, 9vh, 8rem) 0;
+  height: 190vh;
   margin: clamp(2rem, 6vh, 5rem) 0 0;
   padding: 0;
   list-style: none;
-  transform-style: preserve-3d;
 }
 
 .galerie__stueck {
+  position: absolute;
   margin: 0;
-  transform-style: preserve-3d;
-  /* `will-change` steht NICHT hier. In der Fassung vom 17.08. hielt es dreissig
-     Ebenen ab dem Laden — der Haken setzt es beim Eintreten und räumt es
-     danach weg. */
+  transform: rotate(var(--dreh));
+  /* Der Wurf ist kürzer als beim Käseschiff: ein Abzug liegt auf der Fläche,
+     er schwebt nicht darüber. Dasselbe Rezept, anderer Massstab. */
+  --wurf: 0.7;
+  filter: var(--schatten-speise);
 }
-
-/* Links und rechts wechseln sich ab; jede Spur füllt ihre Spalte ganz. */
-.galerie__stueck[data-spur='links']  { grid-column: 1; justify-self: end; }
-.galerie__stueck[data-spur='rechts'] { grid-column: 3; justify-self: start; }
-
-/* Hochformate schmaler als Querformate — sonst wird das eine winzig. */
-.galerie__stueck[data-lage='hoch'] { width: min(100%, 21rem); }
-.galerie__stueck[data-lage='quer'] { width: min(100%, 27rem); }
 
 /**
- * Das Passepartout: eine schmale helle Fläche zwischen Bild und Welt, wie sie
- * ein gerahmter Abzug hat. Ein gezeichneter Rahmen sähe aus wie eine
- * Bilderrahmen-Grafik; das Passepartout sieht nach Abzug aus.
+ * ═══ Kein Rahmen, kein Radius ═══
  *
- * Das Schweben kommt vom WEITEN, blassen Schatten. Ein enger dunkler klebt
- * einen Gegenstand an den Grund.
+ * Hier stand ein cremefarbenes Passepartout mit `border-radius`, drei
+ * gestapelten `box-shadow`-Durchgängen und einer Innenkontur. Das ist die
+ * Anatomie einer Bedienoberflächen-Karte, und ein Foto darin liest sich als
+ * Inhalt EINER Karte statt als Fotografie.
+ *
+ * Bei Nite Riot (Mobbin) liegen die Abzüge nackt übereinander. Der Schatten
+ * bleibt — er ist das Einzige, was einen Abzug von einem Aufkleber trennt —
+ * und kommt aus demselben Rezept wie überall sonst (siehe BEWEGUNG.md, 1).
  */
-.galerie__blatt {
-  position: relative;
-  margin: 0;
-  padding: clamp(0.45rem, 1vw, 0.85rem);
-  background: var(--creme);
-  border-radius: calc(var(--radius-gross) + 0.4rem);
-  box-shadow:
-    0 1px 2px oklch(30% 0.055 55 / 0.12),
-    0 10px 20px -8px oklch(30% 0.055 55 / 0.2),
-    0 40px 60px -28px oklch(30% 0.055 55 / 0.36);
-}
-
-.galerie__blatt img {
+.galerie__stueck img {
+  display: block;
   width: 100%;
   height: auto;
-  display: block;
-  border-radius: var(--radius-gross);
-  box-shadow: inset 0 0 0 1px oklch(30% 0.055 55 / 0.12);
-}
-
-.galerie__nr {
-  position: absolute;
-  top: clamp(0.7rem, 1.5vw, 1.1rem);
-  left: clamp(0.8rem, 1.7vw, 1.2rem);
-  z-index: 2;
-  font-family: var(--font-display);
-  font-variation-settings: var(--wonk-klein);
-  font-size: var(--text-micro);
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  font-variant-numeric: tabular-nums;
-  color: var(--creme);
-  text-shadow: 0 1px 3px oklch(12% 0.02 55 / 0.8);
-}
-
-.galerie__blatt figcaption {
-  margin-top: 0.7rem;
-  font-family: var(--font-display);
-  font-variation-settings: var(--wonk-klein);
-  font-size: var(--text-meta);
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  color: var(--tinte-leise);
+  border-radius: 0;
+  box-shadow: none;
 }
 
 /**
- * Am Handy wird ZUSAMMENGELEGT, nicht weggelassen: aus zwei Spuren wird eine
- * Spalte, aus dem Flug ein Versatz. Der Haken fliegt unter 720 px ohnehin
- * nicht — zwei Spuren auf 393 px wären zwei Briefmarken nebeneinander.
- */
-/**
- * Am Handy wird GEWISCHT, nicht gestapelt.
+ * Am Handy hat ein Stapel keinen Platz.
  *
- * Zwei Spuren auf 393 px wären zwei Briefmarken nebeneinander — also lag es
- * nahe, sie zu einer Spalte zu stapeln. Gemessen kostete das fünf
- * Bildschirmhöhen: die Seite sprang von 13,5 auf 15,5, und der Prüfer schlug
- * an. Sieben Bilder untereinander sind am Daumen Arbeit.
- *
- * Eine waagerechte Rolle mit Schnappen kostet EINE Bildschirmhöhe und ist die
- * Geste, die dort ohnehin jeder für eine Galerie erwartet. Das ist kein
- * Weglassen — dieselben Bilder, dieselbe Reihenfolge, ein anderer Antrieb.
- *
- * `scroll-snap` ist kein Schmuck: eine frei laufende Rolle bleibt zwischen
- * zwei Bildern stehen, und dann sieht man zwei halbe.
+ * Nebeneinanderliegende Abzüge brauchen Breite; auf 393 px wäre jeder davon
+ * handtellergross. Dort werden sie deshalb ZUSAMMENGELEGT, nicht weggelassen:
+ * volle Breite, leicht versetzt, knapp überlappend — derselbe Stapel, nur in
+ * einer Spalte.
  */
 @media (max-width: 719px) {
-  .galerie { min-height: 0; perspective: none; overflow-x: clip; }
-  .galerie__bahn {
-    display: flex;
-    grid-template-columns: none;
-    gap: 1rem;
-    overflow-x: auto;
-    overflow-y: visible;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    padding-bottom: 0.5rem;
-  }
-  .galerie__bahn::-webkit-scrollbar { display: none; }
-  .galerie__stueck[data-spur='links'],
-  .galerie__stueck[data-spur='rechts'] {
-    grid-column: auto;
-    justify-self: auto;
-    flex: none;
-    scroll-snap-align: center;
-    /* Die Flugbahn ist unter 720 px ohnehin abgeschaltet — der Haken prüft
-       `abBreite`. Diese Zeile räumt auf, falls das Fenster grösser war. */
-    transform: none !important;
-  }
-  .galerie__stueck[data-lage='hoch'] { width: 62vw; }
-  .galerie__stueck[data-lage='quer'] { width: 76vw; }
-  .galerie__blatt {
-    box-shadow:
-      0 1px 2px oklch(30% 0.055 55 / 0.14),
-      0 8px 16px -8px oklch(30% 0.055 55 / 0.24);
-  }
-}
-
-@media (max-width: 719px) {
-  .galerie .kopfblock { padding-left: 0; }
-  .galerie__bahn { padding-left: 0; }
-}
-
-/* ── Die Riss-Sektion ─────────────────────────────────────────────────────
- *
- * Sie enthält das Schiff NICHT mehr — das liegt fest im Fenster und wird von
- * Kaeseschiff.tsx geführt. Was hier bleibt, ist der Raum, in dem gerissen
- * wird: Höhe, damit der Riss Weg hat, und alles, was heiss ist.
- */
-.reise {
-  position: relative;
-  /* Weg für den letzten Takt. Zwei Bildschirmhöhen: die erste bringt das
-     Schiff in die Mitte, die zweite reisst es auf. */
-  min-height: 185vh;
-  overflow-x: clip;
-  overflow-y: visible;
-}
-
-.reise__buehne { position: relative; min-height: 175vh; }
-
-/* Der Text steht OBEN, nicht in der Mitte — in der Mitte reisst es. Er ist
-   zugleich der Grund, warum die Sektion überhaupt Höhe hat. */
-.reise__wort { position: relative; z-index: 2; padding-top: var(--raum-block); }
-
-.reise__funken {
-  position: absolute;
-  inset: auto 0 0;
-  height: 62%;
-  z-index: 0;
-  opacity: 0.62;
-}
-
-.reise__mehl {
-  position: absolute;
-  inset: 26% 0 auto;
-  height: 62%;
-  z-index: 1;
-  pointer-events: none;
-}
-
-@media (max-width: 719px) {
-  .reise { min-height: 150vh; }
-  .reise__buehne { min-height: 140vh; }
-}
-
-/* ── Der Ofen ─────────────────────────────────────────────────────────────
- *
- * Die einzige dunkle Sektion. Sie hält den Ofen an seinem Platz, damit das
- * Schiff — das fest im Fenster liegt — ein festes Ziel hat: ohne `sticky`
- * wäre das Maul bei jedem Scrollschritt woanders, und die Bahn träfe es nie.
- */
-.ofen {
-  position: relative;
   /**
-   * ═══ Warum sie so hoch sein muss ═══
+   * ═══ Auch am Handy ein STAPEL, kein Turm ═══
    *
-   * Der Klebebereich ist NICHT die Sektionshöhe, sondern was übrig bleibt:
-   * Sektion minus Textblock minus Bühnenhöhe. Bei 190 vh waren das gemessen
-   * 315 px — eine Drittel-Bildschirmhöhe, in der der ganze Ofensturz stattfinden
-   * sollte. Sichtbar war das als Ofen, der schon wieder nach oben wegrutschte,
-   * während das Schiff noch anflog.
+   * Erster Anlauf: sieben Bilder untereinander mit Abstand. Gemessen wurde die
+   * Seite dadurch 17,6 Bildschirmhöhen lang — der Prüfer meldet ab etwa 15,
+   * und er hat recht, das ist am Daumen Arbeit.
    *
-   *   Sektion 260 vh − Text 55 vh − Bühne 100 vh  =  105 vh Klebeweg
+   * Ein Stapel stapelt aber. Negative Aussenabstände lassen die Abzüge
+   * einander überlappen, genau wie am Rechner; abwechselnd links und rechts
+   * ausgerichtet bleibt die Unordnung erhalten. Zusammengelegt, nicht
+   * weggelassen — dieselbe Regel wie überall auf dieser Seite.
    */
-  min-height: 260vh;
-  overflow: clip;
-}
-
-/* Sie klebt, damit das Maul ein FESTES Ziel im Fenster ist. Ohne das läge es
-   bei jedem Scrollschritt woanders, und die Bahn des Schiffs träfe es nie. */
-.ofen__buehne {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  overflow: clip;
-}
-
-/* Der Text steht VOR der klebenden Bühne im Fluss und scrollt normal davon —
-   siehe den Kommentar in Ofen.tsx, dort steht der gemessene Grund. */
-.ofen__wort {
-  position: relative;
-  z-index: 2;
-  padding-block: var(--raum-block) 0;
-}
-
-/**
- * Das Maul liegt im Foto NICHT mittig, sondern bei 32,3 % seiner Breite —
- * gemessen in werkzeug/ofenbild.py, nicht geschätzt. Der Versatz schiebt genau
- * diesen Punkt in die Fenstermitte, damit das Schiff hineinfällt statt
- * danebenzutreffen. Wer das Foto tauscht, misst neu.
- */
-.ofen__maul {
-  position: absolute;
-  left: 50%;
-  bottom: -2vh;
-  /* Gross genug, dass der Bogen als Bogen zu lesen ist, klein genug, dass er
-     ganz ins Bild passt. Bei 74 rem lag die rechte Ziegelkante ausserhalb des
-     Fensters, und übrig blieb eine dunkle Fläche mit Feuer — kein Ofen. */
-  width: min(88vw, 56rem);
-  margin-left: calc(min(88vw, 56rem) * -0.323);
-  z-index: 1;
-  pointer-events: none;
-}
-
-.ofen__maul img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-/**
- * Die Glut. Sie hängt an `--ofen-glut` — gesetzt vom Käseschiff, in demselben
- * Frame, in dem es eintaucht. Eine zweite Zeitleiste für dasselbe Ereignis war
- * schon einmal der Fehler.
- *
- * Ein Radialverlauf über dem Maul, in `screen` gemischt: er hellt auf, ohne
- * die Ziegel zu überdecken. Eine deckende Fläche wäre ein Fleck.
- */
-.ofen__glut {
-  position: absolute;
-  /* Auf dem MAUL, nicht irgendwo im Bild: 32,3 % / 37 % sind die gemessenen
-     Koordinaten des dunkelsten Punktes (werkzeug/ofenbild.py). Der erste
-     Anlauf stand bei 20/16 und war ein oranger Kreis neben dem Feuer. */
-  left: 32.3%;
-  top: 37%;
-  width: 17%;
-  aspect-ratio: 1;
-  transform: translate(-50%, -50%) scale(calc(1 + var(--ofen-glut, 0) * 1.6));
-  background: radial-gradient(
-    circle,
-    oklch(95% 0.14 78 / 0.72) 0%,
-    oklch(78% 0.19 56 / 0.34) 34%,
-    oklch(62% 0.2 42 / 0) 68%
-  );
-  mix-blend-mode: screen;
-  opacity: var(--ofen-glut, 0);
-  will-change: opacity, transform;
-}
-
-@media (max-width: 719px) {
-  /* Kürzer als am Rechner. Der Fabrikprüfer hat 15,2 Bildschirmhöhen bis zum
-     Seitenende gemeldet — am Daumen ist das Arbeit. Der Klebeweg bleibt
-     ausreichend, weil am Handy auch die Bühne kleiner ist. */
-  .ofen { min-height: 178vh; }
-  .ofen__maul { width: 150vw; margin-left: calc(150vw * -0.323); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .ofen { min-height: 0; padding-block: var(--raum-block); }
-  .ofen__buehne { position: static; height: auto; }
-  .ofen__maul {
-    position: relative;
-    left: auto;
-    bottom: auto;
-    width: 100%;
-    margin: var(--raum-block) 0 0;
+  .galerie__bahn {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
   }
-  .ofen__glut { display: none; }
+  .galerie__stueck {
+    position: static;
+    width: 78% !important;
+    align-self: flex-start;
+    margin-top: -9vh;
+  }
+  .galerie__stueck:first-child { margin-top: 0; }
+  .galerie__stueck:nth-child(even) { align-self: flex-end; width: 66% !important; }
+  /* Die Stapelordnung wechselt, sonst liegt immer das spätere Bild oben und
+     der Stapel bekommt eine Richtung, die er nicht haben soll. */
+  .galerie__stueck:nth-child(3n) { z-index: 4; }
+
+  /**
+   * Am Handy werden die Abzüge BESCHNITTEN, nicht verkleinert.
+   *
+   * Fünf der sieben Aufnahmen sind Hochformate. Sieben Hochformate
+   * untereinander sind gemessen 2,8 Bildschirmhöhen, selbst mit Überlappung.
+   *
+   * Ein Zuschnitt auf 4:3 nimmt davon gut ein Drittel, ohne ein einziges Bild
+   * wegzulassen. Was verlorengeht, ist Rand: der Ausschnitt liegt in der
+   * oberen Bildhälfte, weil dort bei Essensfotos das Essen liegt.
+   */
+  .galerie__stueck img {
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    object-position: 50% 40%;
+  }
 }
 
 /* ── Der Vorhang ──────────────────────────────────────────────────────────
@@ -3164,52 +2979,61 @@
 .vorhang__einladung .etikett { color: var(--glut-marke); }
 
 /**
- * ═══ Das Kartenblatt ═══
+ * ═══ Der Zettel ═══
  *
- * Karol: „nachdem der Lahmacun auf ist, soll einfach so eine schön designte
- * Karte, und dann steht da so ‚Zur Karte' drunter."
+ * Karol am 26.08.: „Die Karte bitte cooler, kleiner, nicht so prägnant. Mach
+ * das eher so wie ein Zettelchen, dass es sich nahtlos in dieses arabische
+ * Feeling einreiht. Mach auf diesem Zettel handgeschrieben mit dieser
+ * arabischen Font, die wir die ganze Zeit nutzen."
  *
- * Es ist buchstäblich eine Karte: cremefarbenes Blatt, ihr Name oben, sechs
- * echte Gerichte mit echten Preisen, Punktlinien dazwischen. Vorher stand dort
- * eine Schlagzeile mit einer Behauptung — ein Blatt mit Namen und Preisen ist
- * ein Beweis.
+ * Der erste Bau war eine gesetzte Speisekarte in Fraunces, 28 rem breit, mit
+ * Kopfzeile und Fusszeile — also eine zweite Speisekarte, eine Bildschirmhöhe
+ * über der eigentlichen. Das war zu viel und zu ähnlich.
  *
- * Es liegt LEICHT GEDREHT auf der Fläche. Ein Blatt, das exakt an den Achsen
- * ausgerichtet ist, liest sich als Kasten in einem Raster; eines mit einem
- * Grad Neigung als Gegenstand, den jemand hingelegt hat.
+ * Jetzt ein Zettel: 19 rem, fünf Zeilen, DURCHGEHEND Reem Kufi. Das ist die
+ * arabische Familie der Seite — sie trägt hier auch eine echte arabische
+ * Zeile, dieselbe, die über ihrer Ladentür steht.
+ *
+ * Reem Kufi statt Fraunces ist der ganze Unterschied: die Serife ist die
+ * Stimme der Seite, die Kufi die Stimme des LADENS. Auf einem Zettel, der
+ * aussehen soll, als läge er auf der Theke, spricht der Laden.
  */
 .kartenblatt {
-  --wurf: 1.4;
-  width: min(92vw, 28rem);
-  padding: clamp(1.3rem, 3vw, 2rem) clamp(1.2rem, 3vw, 1.9rem);
-  background: var(--ton-hell);
+  --wurf: 0.9;
+  width: min(78vw, 19rem);
+  padding: 1.15rem 1.25rem 1rem;
+  background: var(--creme);
   color: var(--tinte);
-  border-radius: var(--rund-klein, 0.5rem);
-  transform: rotate(-1.4deg);
+  font-family: var(--font-text);
+  /* Ein Zettel liegt nie gerade. Zwei Grad reichen — bei fünf sieht es aus
+     wie ein Effekt, bei null wie ein Kasten im Raster. */
+  transform: rotate(-2deg);
   filter: var(--schatten-speise);
   text-align: left;
+  /* Keine Rundung: gerissenes Papier hat keine, und ein Radius machte daraus
+     wieder eine Karte im Sinne einer Benutzeroberfläche. */
+  border-radius: 0;
 }
 
 .kartenblatt__kopf {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
-  margin: 0 0 0.9rem;
-  padding-bottom: 0.7rem;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin: 0 0 0.85rem;
+  padding-bottom: 0.6rem;
   border-bottom: 1px solid var(--linie);
 }
 
-.kartenblatt__marke {
-  font-family: var(--font-display);
-  font-variation-settings: var(--wonk-kopf);
-  font-size: 1.35rem;
-  font-weight: 700;
-  letter-spacing: -0.015em;
+.kartenblatt__arabisch {
+  font-family: var(--font-text);
+  font-size: 1.3rem;
+  font-weight: 500;
+  line-height: 1.1;
+  color: var(--tinte);
 }
 
 .kartenblatt__ort {
-  font-size: var(--text-micro);
+  font-size: 0.68rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--tinte-leise);
@@ -3220,46 +3044,40 @@
 .kartenblatt__liste li {
   display: flex;
   align-items: baseline;
-  gap: 0.45rem;
-  padding-block: 0.3rem;
+  gap: 0.4rem;
+  padding-block: 0.22rem;
+  font-size: 0.92rem;
 }
 
 .kartenblatt__nr {
-  min-width: 1.4em;
+  min-width: 1.2em;
   font-variant-numeric: tabular-nums;
   color: var(--tinte-leise);
-  font-size: var(--text-meta);
+  font-size: 0.78rem;
 }
 
-.kartenblatt__name {
-  font-family: var(--font-display);
-  font-variation-settings: var(--wonk-klein);
-  font-weight: 600;
-}
+.kartenblatt__name { font-weight: 500; }
 
-/* Dieselbe Punktlinie wie in der Speisekarte — sie führt vom Gericht zum
-   Preis, auf einer Grundlinie. Zwei verschiedene Leitern für dieselbe Aufgabe
-   wären genau die Art Inkonsistenz, die BEWEGUNG.md beschreibt. */
+/* Dieselbe Punktlinie wie in der Speisekarte — zwei verschiedene Leitern für
+   dieselbe Aufgabe wären genau die Art Inkonsistenz, die BEWEGUNG.md meint. */
 .kartenblatt__leiter {
   flex: 1 1 auto;
-  min-width: 1.5rem;
+  min-width: 1rem;
   border-bottom: 1px dotted var(--linie);
-  transform: translateY(-0.28em);
+  transform: translateY(-0.22em);
 }
 
 .kartenblatt__preis {
-  font-family: var(--font-display);
-  font-variation-settings: var(--wonk-klein);
-  font-weight: 600;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
 .kartenblatt__fuss {
-  margin: 0.9rem 0 0;
-  padding-top: 0.7rem;
+  margin: 0.7rem 0 0;
+  padding-top: 0.55rem;
   border-top: 1px solid var(--linie);
-  font-size: var(--text-meta);
+  font-size: 0.74rem;
+  letter-spacing: 0.06em;
   color: var(--tinte-leise);
   max-width: none;
 }
@@ -3469,6 +3287,19 @@
  * Ohne Bewegungswunsch fliegt gar nichts — Kaeseschiff.tsx rendert dann nichts.
  * Die Riss-Sektion schrumpft entsprechend auf ihren Text zusammen.
  */
+/**
+ * ═══ Die Handy-Höhe war verlorengegangen ═══
+ *
+ * Bei einem früheren Umbau ist `.reise { min-height: 150vh }` für schmale
+ * Fenster mit einem ersetzten Block verschwunden. Gemessen war die Sektion am
+ * Handy danach 481 px hoch — 0,7 Bildschirme für einen Riss, der am Rechner
+ * anderthalb bekommt. Er lief dort in einem Wimpernschlag ab.
+ */
+@media (max-width: 719px) {
+  .reise { min-height: 132vh; }
+  .reise__buehne { min-height: 120vh; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .reise { min-height: 0; padding-block: var(--raum-block); }
   .reise__buehne { min-height: 0; }

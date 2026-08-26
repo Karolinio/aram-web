@@ -154,7 +154,12 @@ export default function Laden() {
             id="laden-titel"
             etikett="Der Laden"
             titel="Ein kleiner Laden in Bonn-Hardtberg"
-            lead="Geführt wird der Laden vom Inhaber und seinen Brüdern. Wer hereinkommt, sieht die Arbeitsfläche, das Blech mit den Teigscheiben und den Ofen — es gibt nichts, was hinter einer Tür passiert."
+            /* „Mehr als 25 Jahre Erfahrung" steht über ihrer Ladentür (Foto 11 in
+               rohbilder/eingang). Die Zahl stand kurz als Schlagzeile hinter dem
+               Manakisch im Vorhang — dort war sie halb verdeckt, und eine
+               Auskunft, die man nicht lesen kann, ist keine. Hier steht sie
+               neben Anschrift und Zeiten, wo man sie sucht. */
+            lead="Mehr als 25 Jahre, geführt vom Inhaber und seinen Brüdern. Wer hereinkommt, sieht die Arbeitsfläche, das Blech mit den Teigscheiben und den Ofen — es gibt nichts, was hinter einer Tür passiert."
           />
 
           {/* Die Zeiten stehen VOR der Adresse und ausserhalb der Datenliste.

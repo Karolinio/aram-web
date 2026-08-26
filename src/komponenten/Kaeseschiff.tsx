@@ -95,17 +95,42 @@ const BAHN: readonly Punkt[] = [
   { p: 0.62, x: 34, y: -0.14, dreh: 18, drehY: -37, drehX: -11, skala: 0.64, deck: 1 },
   /* Tief im Bild, solange die Überschrift der Riss-Sektion oben steht. */
   { p: 0.76, x: -18, y: 0.24, dreh: 6, drehY: -10, drehX: -3, skala: 0.78, deck: 1 },
-  { p: 0.86, x: -6, y: 0.24, dreh: 1, drehY: 3, drehX: 1, skala: 0.88, deck: 1 },
-  { p: 0.93, x: 0, y: 0.04, dreh: -2, drehY: 5, drehX: 2, skala: 0.96, deck: 1 },
-  { p: 0.97, x: 0, y: 0.0, dreh: 0, drehY: 0, drehX: 0, skala: 1.0, deck: 1 },
+  { p: 0.86, x: -6, y: 0.22, dreh: 1, drehY: 3, drehX: 1, skala: 0.9, deck: 1 },
+  /* ═══ Zwei Wegpunkte standen hier auf demselben `p` ═══
+     Ein Tippfehler beim Nachjustieren, und er wäre irgendwann teuer geworden:
+     `aufDerBahn` teilt durch `b.p − a.p`, und das ist bei gleichen Werten null.
+     Sichtbar wäre es als Gegenstand, der an einer Stelle verschwindet.
+     Die Reihenfolge muss STRENG steigen. */
+  { p: 0.9, x: 0, y: 0.04, dreh: -2, drehY: 5, drehX: 2, skala: 1.0, deck: 1 },
   /* Und dann ist es weg. Ohne diese Zeile bliebe ein aufgerissenes Gebäck in
      voller Grösse über der Speisekarte stehen — gemessen über 6000 px Scroll,
      weil ein festes Element nicht von selbst geht. */
-  { p: 1.0, x: 0, y: 0.08, dreh: 0, drehY: 0, drehX: 0, skala: 1.05, deck: 0 },
+  /* Weg bei 0,93, nicht erst bei 1,0. Gemessen erscheint die Überschrift der
+     Speisekarte bei p 0,949 im Bild — bei einem Ausblenden bis 1,0 lag das
+     aufgerissene Gebäck dort noch mit 0,3 Deckung über den ersten Gerichten.
+     Ein grosses helles Bild bei 30 % auf hellem Grund ist nicht „fast weg",
+     sondern ein Schleier. */
+  { p: 0.93, x: 0, y: 0.08, dreh: 0, drehY: 0, drehX: 0, skala: 1.04, deck: 0 },
+  { p: 1.0, x: 0, y: 0.1, dreh: 0, drehY: 0, drehX: 0, skala: 1.06, deck: 0 },
 ]
 
 /**
- * Wann welche Stufe zu sehen ist.
+ * Wann welche Stufe zu sehen ist — als ÜBERBLENDKETTE, nicht als Fenster.
+ *
+ * ═══ Warum das der zweite Anlauf ist ═══
+ *
+ * Zuerst hatte jede Stufe ein eigenes Fenster mit weichen Rändern. Das klingt
+ * gleichwertig und ist es nicht: an den Rändern überlagerten sich zwei
+ * Aufnahmen zu je etwa der Hälfte, und zwei halbdurchsichtige Fotos desselben
+ * Gegenstands in verschiedenen Zuständen ergeben ein Geisterbild. Dazwischen
+ * gab es Stellen, an denen eine Stufe allein bei voller Deckung stand und die
+ * nächste noch gar nicht begonnen hatte — daher das Ruckeln, das Karol
+ * gemeldet hat.
+ *
+ * Jetzt trägt jede Stufe einen PUNKT, an dem sie voll sichtbar ist. Zwischen
+ * zwei Punkten wird linear überblendet, und die beiden Deckkräfte ergeben
+ * IMMER genau eins. Es sind also nie mehr als zwei Aufnahmen im Bild, sie
+ * verdecken einander vollständig, und es gibt keine Lücke.
  *
  * Die Bilder liegen ÜBEREINANDER und werden nur ein- und ausgeblendet. Der
  * naheliegende Weg wäre, `src` umzusetzen — dann muss der Browser beim ersten
@@ -119,17 +144,38 @@ const BAHN: readonly Punkt[] = [
  * Hälften bei Spanne null. Ein fünftes Bild wäre eine zweite Wahrheit über
  * denselben Gegenstand.
  */
-const STUFEN: readonly { klasse: string; von: number; bis: number }[] = [
-  { klasse: 'stufe-1-kugel', von: 0.0, bis: 0.13 },
-  { klasse: 'stufe-2-gewalzt', von: 0.1, bis: 0.3 },
-  { klasse: 'stufe-3-belegt', von: 0.27, bis: 0.5 },
+const STUFEN: readonly { klasse: string; bei: number }[] = [
+  { klasse: 'stufe-1-kugel', bei: 0.0 },
+  { klasse: 'stufe-2-gewalzt', bei: 0.14 },
+  { klasse: 'stufe-3-belegt', bei: 0.32 },
   /* Die lange Strecke: gebacken, und so fliegt es über zwei Sektionen. */
-  { klasse: 'stufe-4-gebacken', von: 0.47, bis: 0.85 },
-  /* Und dann reisst es — in vier Aufnahmen, nicht in einer Rechnung. */
-  { klasse: 'riss-1', von: 0.83, bis: 0.895 },
-  { klasse: 'riss-2', von: 0.885, bis: 0.935 },
-  { klasse: 'riss-3', von: 0.925, bis: 0.975 },
-  { klasse: 'riss-4', von: 0.965, bis: 1.2 },
+  { klasse: 'stufe-4-gebacken', bei: 0.55 },
+  /* ── Der Riss ───────────────────────────────────────────────────────────
+     Vier Aufnahmen dicht hintereinander. Karol: „nicht zu zäh machen, einfach
+     nahtlos voneinander trennen und nicht ruckelig … harmonischer Übergang."
+     Die Abstände werden nach hinten kleiner: das Auseinandergehen beschleunigt,
+     wie es das im Echten auch tut, sobald die Fäden nachgeben. */
+  { klasse: 'riss-1', bei: 0.815 },
+  { klasse: 'riss-2', bei: 0.85 },
+  { klasse: 'riss-3', bei: 0.878 },
+  /* ═══ Der Fahrplan folgt der SEKTIONSGEOMETRIE, nicht dem Gefühl ═══
+     Gemessen liegt die Riss-Sektion zwischen p 0,73 und 1,0 — das sind rund
+     2230 px. Darin muss dreierlei Platz haben, und in dieser Reihenfolge:
+       0,73…0,81   das ganze Gebäck, während man die Überschrift liest
+       0,81…0,90   der Riss
+       0,90…0,96   das Ausblenden, bevor die Speisekarte hereinkommt
+     Beim ersten Anlauf lag das Ausblenden bei 0,93…1,0 — gemessen stand das
+     aufgerissene Gebäck dadurch noch bei voller Deckung über „Was es gibt".
+
+     Fertig gerissen also bei 0,90, nicht bei 1,0. Denn nach
+     `p = 1` bleibt IMMER eine Fensterhöhe Sektion übrig — der Auslöser endet,
+     wenn die Unterkante der Sektion die Unterkante des Fensters erreicht, und
+     bis sie oben herausgescrollt ist, vergeht noch ein ganzer Bildschirm.
+     Gemessen standen dort 800 px leerer Clay.
+     Jetzt liegt das aufgerissene Gebäck diese Strecke noch da und verschwindet
+     erst am Schluss — Karol: „Käse trennt sich, ein, zwei Sekunden sichtbar
+     und weg." */
+  { klasse: 'riss-4', bei: 0.9 },
 ]
 
 /** Weiche Überblendung statt Knick. Ohne sie hat die Bahn an jedem Wegpunkt eine Ecke. */
@@ -155,13 +201,6 @@ function aufDerBahn(p: number): Punkt {
   }
 }
 
-/** Ein Fenster mit weichen Rändern: 0 draussen, 1 drinnen, dazwischen glatt. */
-function fenster(p: number, von: number, bis: number, rand = 0.045): number {
-  if (p <= von - rand || p >= bis + rand) return 0
-  if (p < von) return glatt((p - (von - rand)) / rand)
-  if (p > bis) return glatt((bis + rand - p) / rand)
-  return 1
-}
 
 export default function Kaeseschiff() {
   const schmal = useMedienabfrage('(max-width: 719px)')
@@ -247,12 +286,23 @@ export default function Kaeseschiff() {
           ` rotate(${w.dreh}deg) scale(${w.skala})`
         el.style.opacity = String(w.deck)
 
-        /* Die Stufen. Jede hat ihr Fenster; die Ränder überlappen, damit
-           überblendet und nicht geschaltet wird. */
-        for (let i = 0; i < stufen.length; i++) {
-          const s = STUFEN[i]!
-          const k = stufen[i]
-          if (k) k.style.opacity = String(fenster(p, s.von, s.bis))
+        /**
+         * Die Überblendkette. Gesucht sind die beiden Stufen, zwischen denen
+         * `p` liegt; alle anderen stehen auf null.
+         *
+         * `glatt` auf dem Übergang, nicht linear: eine lineare Überblendung
+         * zwischen zwei Fotos hat an beiden Enden eine Kante, an der die
+         * Änderungsrate springt — genau das liest sich als Ruck.
+         */
+        let i = 0
+        while (i < STUFEN.length - 2 && p > STUFEN[i + 1]!.bei) i++
+        const von = STUFEN[i]!.bei
+        const bis = STUFEN[i + 1]!.bei
+        const t = glatt(klemmen((p - von) / (bis - von)))
+        for (let k = 0; k < stufen.length; k++) {
+          const el2 = stufen[k]
+          if (!el2) continue
+          el2.style.opacity = k === i ? String(1 - t) : k === i + 1 ? String(t) : '0'
         }
 
 
@@ -269,7 +319,15 @@ export default function Kaeseschiff() {
           trigger: '.prozess',
           start: 'top 88%',
           endTrigger: '.reise',
-          end: 'bottom bottom',
+          /* `bottom top`, nicht `bottom bottom`. Der Unterschied ist eine
+             ganze Bildschirmhöhe: bei `bottom bottom` endet der Auslöser,
+             sobald die Unterkante der Sektion die Unterkante des Fensters
+             erreicht — danach muss die Sektion noch einen ganzen Bildschirm
+             weit hochgescrollt werden, und in dieser Zeit ist das Schiff schon
+             weg. Gemessen 800 px leerer Clay hinter dem Riss.
+             Bei `bottom top` endet die Reise genau dann, wenn die Sektion oben
+             hinausgeht. */
+          end: 'bottom top',
           scrub: SCRUB_KOERPER,
           invalidateOnRefresh: true,
           onToggle: ({ isActive }) => {

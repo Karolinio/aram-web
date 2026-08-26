@@ -88,7 +88,7 @@ const SCHRITTE = [
   {
     zahl: '03',
     titel: 'Erst dann belegt',
-    text: 'Und in den heissen Ofen. Deshalb dauert es ein paar Minuten.',
+    text: 'Käse, Zaatar, Hackfleisch — was du bestellst.',
     art: 'freisteller' as const,
     quelle: '/bilder/reise/stufe-3-belegt.webp',
     alt: 'Ein belegtes, noch ungebackenes Käseschiffchen',
@@ -96,6 +96,26 @@ const SCHRITTE = [
     hoehe: 540,
     versatz: 2,
     tempo: -0.03,
+  },
+  {
+    /* ═══ Der vierte Schritt war nur ein Satz ═══
+       Karol am 26.08.: „Kann man das noch weiterführen mit irgendwelchen
+       Bildern, die der Chef mir gegeben hat, oder sind wir da fertig?"
+
+       Wir waren nicht fertig. Das Etikett der Sektion verspricht „Rollen,
+       belegen, in den heissen Ofen" — den Ofen gab es nur als Nebensatz unter
+       Schritt 03. In rohbilder/eingang liegt dafür genau eine Aufnahme:
+       Bild 23, der Schieber fährt ins Feuer. Sie war unbenutzt. */
+    zahl: '04',
+    titel: 'In die Glut',
+    text: 'Sechs Minuten auf dem Stein, bei offener Flamme.',
+    art: 'foto' as const,
+    quelle: '/bilder/echt/ofenschieber.webp',
+    alt: 'Ein Holzschieber schiebt belegte Fladen in den brennenden Steinofen',
+    breite: 900,
+    hoehe: 675,
+    versatz: 3,
+    tempo: 0.05,
   },
 ] as const
 
