@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 import rissRoh from '../../inhalt/riss.json'
+import { pfad } from '../pfad.ts'
 import { SCRUB_KOERPER, useMedienabfrage, werkzeugHolen } from '../bewegung.ts'
 import Dampf from './ui/Dampf.tsx'
 
@@ -610,7 +611,7 @@ export default function Kaeseschiff() {
           <img
             key={klasse}
             className={`schiff__stufe schiff__stufe--${klasse}`}
-            src={`/bilder/riss/${klasse}.webp`}
+            src={pfad(`bilder/riss/${klasse}.webp`)}
             /* Jede Stufe mit IHREN Massen: die drei Teigstufen liegen als
                760 px breite Fassungen vor, weil sie nie grösser gezeigt
                werden. Ein festes Mass für alle hiesse hier, dem Browser eine

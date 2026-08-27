@@ -1,4 +1,5 @@
 import galerieRoh from '../../inhalt/galerie.json'
+import { pfad } from '../pfad.ts'
 import { useZiehband } from '../ziehen.ts'
 import { Kopf, Sektion } from './ui/bausteine.tsx'
 
@@ -56,8 +57,10 @@ function Bogen({ bild, i }: { bild: Bild; i: number }) {
     <li className="bogen">
       <div className="bogen__rahmen">
         <img
-          src={`/bilder/galerie/${nr}.webp`}
-          srcSet={`/bilder/galerie/${nr}-klein.webp 520w, /bilder/galerie/${nr}.webp 900w`}
+          /* Über `pfad` und nicht als blosse Zeichenkette — siehe src/pfad.ts.
+             Genau hier ging es unter einem Unterpfad kaputt. */
+          src={pfad(`bilder/galerie/${nr}.webp`)}
+          srcSet={`${pfad(`bilder/galerie/${nr}-klein.webp`)} 520w, ${pfad(`bilder/galerie/${nr}.webp`)} 900w`}
           sizes="(max-width: 719px) 62vw, 26vw"
           alt={bild.titel}
           width={bild.breite}
