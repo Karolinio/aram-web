@@ -3432,8 +3432,31 @@
      Transformation gehört dem Flug, und zwei Schreiber auf derselben
      Eigenschaft überschreiben einander still. */
   position: absolute;
-  inset: 0;
-  margin: auto;
+  /**
+   * ═══ Warum NICHT `inset: 0; margin: auto` ═══
+   *
+   * Das stand hier und ist der übliche Griff zum Zentrieren. Er hat eine
+   * Bedingung, die hier nicht mehr gilt: der Kasten muss SCHMALER sein als
+   * sein Rahmen. Ist er breiter, ist die Rechnung überbestimmt, der Browser
+   * verwirft nach Regel die rechte Bindung — und der Kasten steht links
+   * bündig statt mittig.
+   *
+   * Seit der Höhepunkt 100 rem breit ist, war genau das der Fall: gemessen lag
+   * die Mitte des Gebäcks auf 800 px statt auf 720. Karol: „das Highlight muss
+   * mehr zentriert sein, bisher ist das schon sehr zu sehr rechts." Am Handy
+   * (210 vw) hätte es die Mitte um eine halbe Fensterbreite verfehlt.
+   *
+   * `left: 50%` plus ein negativer Rand von der halben Breite kennt diese
+   * Bedingung nicht. Die Breite steht dafür in einer eigenen Variablen — sie
+   * wird an drei Stellen gebraucht, und drei Abschriften derselben Zahl laufen
+   * beim ersten Ändern auseinander.
+   */
+  --breite: min(124vw, 100rem);
+  left: 50%;
+  top: 50%;
+  margin-left: calc(var(--breite) / -2);
+  /* Die Höhe folgt aus dem Seitenverhältnis der Leinwand (1500 × 603). */
+  margin-top: calc(var(--breite) * 603 / 1500 / -2);
   /* ═══ Grösser als vorher, und das ist Arithmetik ═══
      Der gemeinsame Rahmen ist so breit wie die WEITESTE Stufe (die gezogene),
      das ganze Gebäck füllt davon nur 70 %. Bei den alten 38 rem wäre es
@@ -3459,7 +3482,7 @@
    * Die Wegpunkte sind entsprechend halbiert — dieselbe Zahl bedeutet dort
    * jetzt das Doppelte.
    */
-  width: min(124vw, 100rem);
+  width: var(--breite);
   aspect-ratio: 1500 / 603;
   display: grid;
   place-items: stretch;
@@ -3538,8 +3561,9 @@
   .schiff {
     /* Am Handy ist das Fenster hochkant: 124 vw wären hier 460 px und damit
        kein Höhepunkt. 210 vw bringen das Gebäck im Riss auf gut anderthalb
-       Fensterbreiten — es läuft über beide Kanten, und genau das ist gemeint. */
-    width: 210vw;
+       Fensterbreiten — es läuft über beide Kanten, und genau das ist gemeint.
+       Nur die Variable wird gesetzt; Breite und Ränder rechnen sich daraus. */
+    --breite: 210vw;
   }
 }
 
@@ -3555,8 +3579,40 @@
  * Handy danach 481 px hoch — 0,7 Bildschirme für einen Riss, der am Rechner
  * anderthalb bekommt. Er lief dort in einem Wimpernschlag ab.
  */
+/**
+ * ═══ Der Höhepunkt braucht eine eigene Bildschirmhöhe ═══
+ *
+ * Die Sektion war 1,46 Bildschirme hoch und hatte keine eigene Mindesthöhe —
+ * sie ergab sich aus ihrem Inhalt. Das reichte, solange das Gebäck 832 px
+ * breit war. Bei 1728 px reicht es nicht: gemessen lag beim Riss die untere
+ * Hälfte des Fensters schon auf der Speisekarte, und das Gebäck deckte deren
+ * Überschrift zu.
+ *
+ * 233 vh geben der Reise ein Fenster, in dem NUR sie zu sehen ist — von
+ * Scrollstand 5760 bis 6957 —, und der ganze dritte Takt liegt darin. Karol:
+ * „das soll 100 % grösser werden nachher bei dem freien Space in der Sektion."
+ * Der freie Space muss dafür existieren.
+ *
+ * Kostenpunkt: gut 0,8 Bildschirmhöhen mehr Seite. Das ist der Preis für
+ * einen Höhepunkt, der nicht in die nächste Sektion hineinragt.
+ */
+.reise {
+  min-height: 233vh;
+  /* Die Bühne muss die ganze Sektion füllen, sonst endet der Weg der
+     angehefteten Überschrift dort, wo der INHALT endet — gemessen nach 1059
+     von 2097 px, also mitten im Höhepunkt. Ein `sticky`-Element wandert nur
+     innerhalb seines Elternkastens. */
+  display: flex;
+  flex-direction: column;
+}
+
+.reise__buehne { flex: 1; }
+
 @media (max-width: 719px) {
-  .reise { min-height: 132vh; }
+  /* Am Handy ist das Fenster hochkant und die Sektion damit ohnehin kürzer in
+     Pixeln. 170 vh statt 233 — genug für den Takt, ohne den Daumenweg
+     unnötig zu verlängern. */
+  .reise { min-height: 170vh; }
   .reise__buehne { min-height: 120vh; }
 }
 

@@ -117,26 +117,32 @@ const BAHN: readonly Punkt[] = [
   { p: 0.07, x: -33, y: -0.26, dreh: -18, drehY: 34, drehX: 11, skala: 0.17, deck: 0.46 },
   { p: 0.19, x: -28, y: 0.26, dreh: -11, drehY: 24, drehX: 4, skala: 0.2, deck: 0.46 },
   { p: 0.33, x: -33, y: -0.06, dreh: -3, drehY: 12, drehX: -2, skala: 0.24, deck: 0.46 },
-  { p: 0.45, x: 28, y: 0.2, dreh: 10, drehY: -19, drehX: -6, skala: 0.28, deck: 0.46 },
-  { p: 0.56, x: 34, y: -0.16, dreh: 18, drehY: -37, drehX: -11, skala: 0.32, deck: 0.46 },
+  { p: 0.44, x: 28, y: 0.2, dreh: 10, drehY: -19, drehX: -6, skala: 0.28, deck: 0.46 },
+  { p: 0.52, x: 34, y: -0.16, dreh: 18, drehY: -37, drehX: -11, skala: 0.32, deck: 0.46 },
   /* ═══ Zweiter Takt: der Auftritt ═══
      Es kommt nach vorn — Deckkraft, Grösse und Stapelordnung wechseln
      gemeinsam. Karol: „teilweise transparent hinter dem eigentlichen Inhalt
-     verborgen, und dann irgendwie danach auftreten." */
-  { p: 0.66, x: -14, y: 0.22, dreh: 6, drehY: -10, drehX: -3, skala: 0.44, deck: 0.72 },
-  { p: 0.72, x: -2, y: 0.1, dreh: 1, drehY: 2, drehX: 1, skala: 0.72, deck: 1 },
+     verborgen, und dann irgendwie danach auftreten."
+     Bei 0,56 endet die Galerie gerade (Scrollstand 5827 gegen 5760): das
+     Schiff tritt in dem Moment hervor, in dem die letzte Sektion, in der es
+     nichts zu suchen hat, aus dem Bild geht. */
+  { p: 0.58, x: -14, y: 0.22, dreh: 6, drehY: -10, drehX: -3, skala: 0.46, deck: 0.8 },
+  { p: 0.62, x: -2, y: 0.1, dreh: 1, drehY: 2, drehX: 1, skala: 0.74, deck: 1 },
   /* ═══ Dritter Takt: der Höhepunkt ═══
-     Mittig, ruhig, und so gross wie das Fenster. Hier reisst es. Zwischen 0,78
-     und 0,86 passiert ausser dem Wachsen NICHTS — der Riss soll die einzige
-     Bewegung im Bild sein, wenn er kommt. */
-  { p: 0.78, x: 0, y: 0.02, dreh: 0, drehY: 0, drehX: 0, skala: 1.0, deck: 1 },
+     Von 0,66 bis 0,78 steht x auf NULL. Der Riss fällt mitten hinein, und die
+     Bewegung, die ihn trägt, kommt allein aus der Grösse: 0,96 → 1,09.
+     Gedreht wird hier nicht — `rotateY` verschiebt einen 1750 px breiten
+     Gegenstand unter der Perspektive seitlich, gemessen 71 px bei sechs Grad,
+     und genau das las Karol als „zu weit rechts". */
+  { p: 0.66, x: 0, y: 0.02, dreh: 0, drehY: 0, drehX: 0, skala: 0.96, deck: 1 },
+  { p: 0.72, x: 0, y: 0.0, dreh: 0, drehY: 0, drehX: 0, skala: 1.03, deck: 1 },
+  { p: 0.78, x: 0, y: -0.01, dreh: 0, drehY: 0, drehX: 0, skala: 1.09, deck: 1 },
   /* Und weg zur Seite — nach rechts, weil die Leserichtung dorthin zeigt.
-     Es fliegt raus statt zu verblassen; die Deckkraft fällt erst, wenn ohnehin
-     nichts mehr zu sehen ist. Ein fest im Fenster liegender Gegenstand bliebe
-     am Ende der Bahn sonst dort stehen. */
-  { p: 0.86, x: 46, y: -0.04, dreh: 11, drehY: -22, drehX: -7, skala: 1.02, deck: 1 },
-  { p: 0.93, x: 96, y: -0.1, dreh: 17, drehY: -31, drehX: -9, skala: 1.05, deck: 1 },
-  { p: 1.0, x: 138, y: -0.14, dreh: 21, drehY: -36, drehX: -10, skala: 1.06, deck: 0 },
+     Über 0,22 des Verlaufs statt über 0,14: ein langer Abflug liest sich
+     ruhig, ein kurzer als Zucken. */
+  { p: 0.86, x: 54, y: -0.05, dreh: 11, drehY: -22, drehX: -7, skala: 1.1, deck: 1 },
+  { p: 0.94, x: 108, y: -0.11, dreh: 18, drehY: -32, drehX: -9, skala: 1.12, deck: 1 },
+  { p: 1.0, x: 142, y: -0.14, dreh: 21, drehY: -36, drehX: -10, skala: 1.13, deck: 0 },
 ]
 
 /**
@@ -186,9 +192,9 @@ const BAHN: readonly Punkt[] = [
  */
 const STUFEN: readonly { klasse: string; ab: number }[] = [
   { klasse: 'stufe-1-kugel', ab: 0.0 },
-  { klasse: 'stufe-2-gewalzt', ab: 0.15 },
-  { klasse: 'stufe-3-belegt', ab: 0.31 },
-  { klasse: 'stufe-4-gebacken', ab: 0.47 },
+  { klasse: 'stufe-2-gewalzt', ab: 0.13 },
+  { klasse: 'stufe-3-belegt', ab: 0.27 },
+  { klasse: 'stufe-4-gebacken', ab: 0.4 },
 ]
 
 /** Wie lang ein Stufenwechsel dauert, in Anteilen des Verlaufs. */
@@ -206,7 +212,7 @@ const WECHSEL = 0.05
  * Riss dort auf Scrollstand 6470 — die Speisekarte, eine Sektion zu spät.
  * Der Höhepunkt gehört dorthin, wo der Text dazu steht.
  */
-const SCHNITT = 0.8
+const SCHNITT = 0.7
 
 /**
  * Wo der Auftritt liegt: davor hinten und gedämpft, danach vorn und voll.
@@ -217,7 +223,7 @@ const SCHNITT = 0.8
  * die Deckkraft ohnehin schon fast oben ist: der Wechsel fällt dann mit einer
  * Bewegung zusammen statt für sich zu stehen.
  */
-const VORN_AB = 0.66
+const VORN_AB = 0.56
 
 /** Weiche Überblendung statt Knick. Ohne sie hat die Bahn an jedem Wegpunkt eine Ecke. */
 const glatt = (t: number) => t * t * (3 - 2 * t)
@@ -324,10 +330,24 @@ export default function Kaeseschiff() {
          */
         const tiefer = schmal ? 0.22 : 0
 
+        /**
+         * ═══ Der Ruck im Moment des Aufbrechens ═══
+         *
+         * Eine halbe Sinuswelle über drei Prozent des Verlaufs, auf die Grösse
+         * gelegt: das Gebäck springt beim Reissen um dreieinhalb Prozent auf
+         * und geht sofort wieder zurück.
+         *
+         * Das ist kein Effekt, sondern Physik. Etwas, das unter Spannung
+         * steht, macht beim Bruch genau diese eine Bewegung — und sie ist der
+         * Grund, warum ein Schnitt als BEWEGUNG gelesen wird statt als
+         * Bildwechsel. Karol: „das Highlight muss flüssiger werden."
+         */
+        const ruck = p >= SCHNITT ? Math.sin(klemmen((p - SCHNITT) / 0.03) * Math.PI) * 0.035 : 0
+
         el.style.transform =
           `translate3d(${(w.x / 100) * vw}px, ${(w.y + tiefer) * vh}px, 0)` +
           ` rotateY(${w.drehY}deg) rotateX(${w.drehX}deg)` +
-          ` rotate(${w.dreh}deg) scale(${w.skala})`
+          ` rotate(${w.dreh}deg) scale(${w.skala * (1 + ruck)})`
         el.style.opacity = String(w.deck)
 
         /**
@@ -380,7 +400,12 @@ export default function Kaeseschiff() {
          * Ab 0,7 ist das Schiff bei 78 % seiner Grösse und kommt auf den
          * Bruchpunkt zu. Dort ist Dampf eine Auskunft (es ist heiss, es kommt
          * gerade auf), vorher war er Deko. */
-        if (dampf) dampf.style.opacity = String(glatt(klemmen((p - 0.7) / 0.16)) * 0.5)
+        /* Karol: „der Dampf soll bleiben, das ist top … den darf man schon noch
+           etwas stärker machen." Von 0,5 auf 0,9, und er setzt früher ein —
+           ab 0,62 statt 0,70, damit er schon steht, wenn das Gebäck nach vorn
+           kommt. Dampf, der erst mit dem Höhepunkt erscheint, sieht aus, als
+           hätte ihn jemand eingeschaltet. */
+        if (dampf) dampf.style.opacity = String(glatt(klemmen((p - 0.56) / 0.12)) * 0.9)
       }
 
       const tween = gsap.to(zustand, {
@@ -392,7 +417,17 @@ export default function Kaeseschiff() {
              gerissen wird. Beide werden über Klassen gesucht statt über IDs:
              die Überschriften kommen noch vom Inhaber, die Klassen bleiben. */
           trigger: '.prozess',
-          start: 'top 88%',
+          /* ═══ Nicht mehr 88 %, sondern am oberen Rand ═══
+             Karol: „nach dieser Lahmacun-Drehseite kommt das schon fertig in
+             den Bildschirm rein, obwohl ich meinte, dass die Backlogik zu
+             sehen sein soll."
+             Bei 88 % begann die Reise 792 px VOR der Handarbeit — also noch
+             über dem dunklen Vorhang. Dort ist ein blasser Teigling bei knapp
+             halber Deckkraft praktisch unsichtbar, und wer weiterscrollt,
+             sieht als Erstes das fertige Gebäck. Die Verwandlung fiel damit
+             genau in den einzigen Abschnitt, in dem man sie nicht sehen kann.
+             Jetzt beginnt sie mit der Sektion, die sie erklärt. */
+          start: 'top top',
           endTrigger: '.reise',
           /* `bottom top`, nicht `bottom bottom`. Der Unterschied ist eine
              ganze Bildschirmhöhe: bei `bottom bottom` endet der Auslöser,
