@@ -1,0 +1,3 @@
+# Vorschau, nicht live. Siehe den Kommentar in index.html.
+User-agent: *
+Disallow: /
