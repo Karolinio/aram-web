@@ -153,13 +153,33 @@ export default function Laden() {
           <Kopf
             id="laden-titel"
             etikett="Der Laden"
-            titel="Ein kleiner Laden in Bonn-Hardtberg"
-            /* „Mehr als 25 Jahre Erfahrung" steht über ihrer Ladentür (Foto 11 in
-               rohbilder/eingang). Die Zahl stand kurz als Schlagzeile hinter dem
-               Manakisch im Vorhang — dort war sie halb verdeckt, und eine
-               Auskunft, die man nicht lesen kann, ist keine. Hier steht sie
-               neben Anschrift und Zeiten, wo man sie sucht. */
-            lead="Mehr als 25 Jahre, geführt vom Inhaber und seinen Brüdern. Wer hereinkommt, sieht die Arbeitsfläche, das Blech mit den Teigscheiben und den Ofen — es gibt nichts, was hinter einer Tür passiert."
+            /* ═══ „Ein kleiner Laden in Bonn-Hardtberg" ist raus ═══
+
+               Karol am 27.08.: „Das stimmt halt nicht … die Texte sollte er
+               mir eh sagen. Das macht keinen Sinn, Texte zu schreiben, die
+               nicht von ihm kommen."
+
+               Er hat in beidem recht, und der zweite Punkt wiegt schwerer.
+               „Klein" war eine Zuschreibung, die niemand geprüft hat. Auch der
+               Vorspann war erfunden: „geführt vom Inhaber und seinen Brüdern"
+               stammt aus einem Foto, „es gibt nichts, was hinter einer Tür
+               passiert" aus meiner Feder. Beides klingt gut und ist unbelegt.
+
+               Zum Stadtteil, damit die Zahl nicht zweimal geändert wird:
+               Hardtberg ist der STADTBEZIRK und für die Rochusstraße 246 in
+               53123 richtig; der Ortsteil darin heisst Lessenich/Meßdorf.
+               Welche der beiden Bezeichnungen der Inhaber führen will, sagt
+               er — es steht auf seiner Liste.
+
+               Stehen bleibt nur, was auf ihrer eigenen Ladentür steht
+               (Foto 11 in rohbilder/eingang): mehr als 25 Jahre. */
+            titel="Mehr als 25 Jahre"
+            lead={
+              <>
+                <span className="luecke">Diesen Absatz schreibt der Inhaber selbst</span> — was
+                seinen Laden ausmacht, weiss er besser als wir.
+              </>
+            }
           />
 
           {/* Die Zeiten stehen VOR der Adresse und ausserhalb der Datenliste.

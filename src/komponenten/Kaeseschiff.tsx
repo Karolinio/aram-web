@@ -148,7 +148,16 @@ const BAHN: readonly Punkt[] = [
   /* Und weg zur Seite — nach rechts, weil die Leserichtung dorthin zeigt.
      Über 0,22 des Verlaufs statt über 0,14: ein langer Abflug liest sich
      ruhig, ein kurzer als Zucken. */
-  { p: 0.86, x: 54, y: -0.05, dreh: 11, drehY: -22, drehX: -7, skala: 1.1, deck: 1 },
+  /* ═══ Dieser Punkt existiert nur wegen der Kurve ═══
+     Zwischen 0,78 und 0,86 springt x von 0 auf 54. Die Steigung am Punkt 0,78
+     wird aus seinen Nachbarn gebildet und wird dadurch so gross, dass die
+     Kurve schon VOR 0,78 nach links unterschwingt — gemessen −1,71 % der
+     Fensterbreite bei p = 0,74, also 25 px neben der Mitte. Genau das, was
+     Karol als „zu weit rechts" beziehungsweise als Wackeln sieht.
+     Ein Zwischenpunkt nimmt der Steigung die Wucht: der Abflug beginnt sanft
+     und wird erst danach schnell. */
+  { p: 0.81, x: 6, y: -0.02, dreh: 2, drehY: -4, drehX: -1, skala: 1.1, deck: 1 },
+  { p: 0.86, x: 54, y: -0.05, dreh: 11, drehY: -22, drehX: -7, skala: 1.11, deck: 1 },
   { p: 0.94, x: 108, y: -0.11, dreh: 18, drehY: -32, drehX: -9, skala: 1.12, deck: 1 },
   { p: 1.0, x: 142, y: -0.14, dreh: 21, drehY: -36, drehX: -10, skala: 1.13, deck: 0 },
 ]
@@ -240,29 +249,102 @@ const SCHNITT = 0.7
  */
 const VORN_AB = 0.56
 
-/** Weiche Überblendung statt Knick. Ohne sie hat die Bahn an jedem Wegpunkt eine Ecke. */
+/** Weiche Überblendung für DECKKRÄFTE. Für die Bahn taugt sie nicht — siehe unten. */
 const glatt = (t: number) => t * t * (3 - 2 * t)
 const klemmen = (t: number) => (t < 0 ? 0 : t > 1 ? 1 : t)
+
+/**
+ * ═══ Warum die Bahn NICHT mit `glatt` gerechnet wird ═══
+ *
+ * Karol, mehrfach: „der Scroll Flow ist ruckelig, von der Käseschiff-Animation."
+ *
+ * Zuerst habe ich die Bildrate verdächtigt und dort auch etwas gefunden — das
+ * 95. Perzentil lag bei 30 ms und liegt jetzt bei 20. Das Ruckeln blieb. Es
+ * war auch nie eine Bildrate.
+ *
+ * `glatt` ist eine Smoothstep-Kurve. Sie hat an BEIDEN Enden die Steigung
+ * null — das ist ihr Zweck, wenn man eine einzelne Bewegung anfahren und
+ * ausrollen lässt. Auf jeden Abschnitt einer Wegpunkttabelle angewandt heisst
+ * es aber: der Gegenstand steht an jedem Wegpunkt still und fährt danach neu
+ * an. Gemessen an dieser Bahn mit vierzehn Punkten:
+ *
+ *   Fast-Stillstände mitten im Flug   7
+ *   dx/dp an den Wegpunkten           −0,2 · 0,3 · −0,2 · 0,7 · 0,9 · 0,0 · 0,0
+ *
+ * Zwölfmal bremsen und wieder anfahren, bei durchgehend sauberen Bildern. Das
+ * IST das Ruckeln, und keine Optimierung der Bildrate hätte es je behoben.
+ *
+ * ═══ Was stattdessen läuft ═══
+ *
+ * Kubische Hermite-Interpolation mit Steigungen aus dem zentralen Differenzen-
+ * quotienten — die für ungleich verteilte Stützstellen verallgemeinerte
+ * Catmull-Rom-Kurve. Jeder Wegpunkt bekommt eine Steigung aus seinen beiden
+ * Nachbarn, und die Kurve übernimmt sie auf beiden Seiten. Damit ist die
+ * Geschwindigkeit über die ganze Bahn stetig: das Schiff hält nirgends mehr an,
+ * ausser dort, wo es soll.
+ *
+ * Ungleiche Abstände sind hier keine Feinheit: die Wegpunkte liegen zwischen
+ * 0,02 und 0,14 auseinander. Die gewöhnliche Catmull-Rom-Formel setzt gleiche
+ * Abstände voraus und knickt sonst genau dort, wo der Takt wechselt.
+ */
+const GRoeSSEN = ['x', 'y', 'dreh', 'drehY', 'drehX', 'skala', 'deck'] as const
+type Groesse = (typeof GRoeSSEN)[number]
+
+/**
+ * Die Steigung an jedem Wegpunkt, je Grösse — einmal beim Laden gerechnet.
+ *
+ * Am Rand einseitig, in der Mitte über beide Nachbarn. Der Nenner ist die
+ * Spanne in `p` und nicht die Anzahl der Schritte: nur so ist es eine
+ * Steigung im Verlauf und nicht eine je Tabellenzeile.
+ */
+const STEIGUNG: Record<Groesse, number[]> = (() => {
+  const out = {} as Record<Groesse, number[]>
+  for (const g of GRoeSSEN) {
+    out[g] = BAHN.map((_, i) => {
+      const a = BAHN[Math.max(0, i - 1)]!
+      const b = BAHN[Math.min(BAHN.length - 1, i + 1)]!
+      const spanne = b.p - a.p
+      return spanne === 0 ? 0 : (b[g] - a[g]) / spanne
+    })
+  }
+  return out
+})()
 
 function aufDerBahn(p: number): Punkt {
   let i = 0
   while (i < BAHN.length - 2 && p > BAHN[i + 1]!.p) i++
   const a = BAHN[i]!
   const b = BAHN[i + 1]!
-  const t = glatt(klemmen((p - a.p) / (b.p - a.p)))
-  const m = (von: number, bis: number) => von + (bis - von) * t
+  const h = b.p - a.p
+  const t = klemmen((p - a.p) / h)
+  const t2 = t * t
+  const t3 = t2 * t
+  /* Die vier Hermite-Basisfunktionen. Zwei gewichten die Werte an den Enden,
+     zwei die Steigungen — Letztere mit `h` multipliziert, weil die Steigung
+     in `p` gilt und `t` auf null bis eins normiert ist. */
+  const h00 = 2 * t3 - 3 * t2 + 1
+  const h10 = t3 - 2 * t2 + t
+  const h01 = -2 * t3 + 3 * t2
+  const h11 = t3 - t2
+
+  const m = (g: Groesse) =>
+    h00 * a[g] + h10 * h * STEIGUNG[g][i]! + h01 * b[g] + h11 * h * STEIGUNG[g][i + 1]!
+
   return {
     p,
-    x: m(a.x, b.x),
-    y: m(a.y, b.y),
-    dreh: m(a.dreh, b.dreh),
-    drehY: m(a.drehY, b.drehY),
-    drehX: m(a.drehX, b.drehX),
-    skala: m(a.skala, b.skala),
-    deck: m(a.deck, b.deck),
+    x: m('x'),
+    y: m('y'),
+    dreh: m('dreh'),
+    drehY: m('drehY'),
+    drehX: m('drehX'),
+    /* Grösse und Deckkraft werden geklemmt. Eine Hermite-Kurve darf über ihre
+       Stützstellen hinausschiessen — bei einer Bahn ist das erwünscht (daher
+       kommt der natürliche Bogen), bei einer Deckkraft von 1,04 wäre es
+       bedeutungslos und bei einer negativen Grösse ein umgedrehtes Gebäck. */
+    skala: Math.max(0.02, m('skala')),
+    deck: klemmen(m('deck')),
   }
 }
-
 
 export default function Kaeseschiff() {
   const schmal = useMedienabfrage('(max-width: 719px)')
