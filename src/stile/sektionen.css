@@ -2861,6 +2861,10 @@
 }
 
 .galerie__fahrt {
+  /* Über der Schiffbahn — sie liegt ausserhalb der Schale und braucht die
+     Anhebung deshalb selbst. */
+  position: relative;
+  z-index: 2;
   /* Waagerecht scrollbar, senkrecht nicht. `hidden` und nicht `visible`:
      sobald eine Achse scrollt, macht der Browser aus `visible` ohnehin `auto`
      — und dann hätte die Sektion eine zweite, senkrechte Bildlaufleiste. Der
@@ -3344,10 +3348,28 @@
 .schiffbahn {
   position: fixed;
   inset: 0;
-  /* Unter der Kopfzeile (100) und unter der Bestellleiste, über allem
-     Sektionsinhalt. Ein Gegenstand, der VOR dem Kopf fliegt, verdeckt die
-     Telefonnummer — die wichtigste Zeile dieser Seite. */
-  z-index: 40;
+  /**
+   * ═══ Zwei Ebenen, nicht eine ═══
+   *
+   * Im ersten Takt liegt die Bahn UNTER den Sektionen (die tragen eine 1) —
+   * das Schiff verwandelt sich hinter Bildern und Text, gedämpft, als
+   * Begleitung zum Lesen. Für den Höhepunkt schaltet Kaeseschiff.tsx auf 40:
+   * über allem Sektionsinhalt, aber weiterhin unter der Kopfzeile (100). Ein
+   * Gegenstand, der VOR dem Kopf fliegt, verdeckt die Telefonnummer — die
+   * wichtigste Zeile dieser Seite.
+   *
+   * ═══ Warum 1 und nicht 0 ═══
+   *
+   * `<Kaeseschiff />` steht in main.tsx VOR allen Sektionen. Die Sektionen
+   * sind `position: relative` ohne eigene Zahl, zählen also wie null — und bei
+   * Gleichstand gewinnt das spätere Element im Baum. Mit einer 0 lag das
+   * Schiff damit unter jeder Grundfläche und war im ersten Takt schlicht
+   * unsichtbar; gemessen an Scrollstand 4100 war von einem angeblich zu 34 %
+   * deckenden Gebäck kein Pixel zu sehen.
+   * Die 1 hebt es über die Grundflächen. Der Inhalt trägt eine 2 (siehe
+   * `.schale` in bausteine.css) und bleibt darüber.
+   */
+  z-index: 1;
   pointer-events: none;
   /* Der gemeinsame Fluchtpunkt für alle Kippbewegungen. Ohne ihn ist `rotateY`
      eine Stauchung und keine Drehung. */
@@ -3357,6 +3379,41 @@
      Bildlaufleiste über die ganze Seite. */
   overflow: clip;
 }
+
+/* NACH `.schiffbahn`, nicht davor. Beide Wähler haben dieselbe Spezifität —
+   bei Gleichstand gewinnt der SPÄTERE. Stand sie oben, setzte `z-index: 0` sie
+   wieder zurück, und der Höhepunkt blieb hinter der Speisekarte verborgen. */
+.schiffbahn--vorn { z-index: 40; }
+
+/**
+ * ═══ Die Überschrift der Reise bleibt stehen ═══
+ *
+ * Bei Shupatto nachgesehen (Mobbin): dort wechselt ein Produkt seinen
+ * Zustand, während die Beschriftung daneben STEHEN BLEIBT. Erst dadurch wird
+ * aus einer Bildfolge eine Erklärung — man weiss jederzeit, wovon gerade die
+ * Rede ist.
+ *
+ * Hier war es umgekehrt: „Und dann bricht es auf" stand am Kopf der Sektion
+ * und war weggescrollt, wenn es tatsächlich aufbrach. Gemessen lag der Riss
+ * bei Scrollstand 6470, die Überschrift endete bei 6100 — der Satz und sein
+ * Bild haben sich nie getroffen.
+ *
+ * Angeheftet kostet das keine einzige Bildschirmhöhe zusätzlich, und es löst
+ * ausserdem Karols andere Klage: die Sektion zieht sich nicht mehr, weil man
+ * durchgehend sieht, worum es geht.
+ */
+/* Angeheftet wird die SCHALE, nicht der Kopfblock. Ein `sticky`-Element wandert
+   nur innerhalb seines Elternkastens — und die Schale ist genau so hoch wie die
+   Überschrift, also war der Weg null. Die Bühne dagegen ist so hoch wie die
+   Sektion; erst darin hat das Anheften Platz. */
+.reise__wort {
+  position: sticky;
+  top: clamp(5.5rem, 13vh, 8rem);
+  /* Nur die Textspalte fängt Zeiger ab. Ohne das läge ein unsichtbarer,
+     bildschirmbreiter Kasten über der halben Sektion. */
+  pointer-events: none;
+}
+.reise__wort > * { pointer-events: auto; }
 
 /**
  * ═══ Die Grösse — Karols „drei bis vier oder fünf Mal so gross" ═══
@@ -3383,14 +3440,34 @@
      dadurch von 608 auf 425 px geschrumpft — dieselbe Zahl im Stilblatt, ein
      Drittel weniger Gebäck im Bild.
      52 rem bringen es auf 582 px zurück, also knapp über die alte Grösse. */
-  width: min(96vw, 52rem);
+  /**
+   * ═══ Doppelt so gross wie vorher ═══
+   *
+   * Karol: „den Highlight-Moment, wo das Käseschiff auseinandergeht, ein
+   * bisschen grösser machen … das soll 100 % grösser werden nachher bei dem
+   * freien Space in der Sektion."
+   *
+   * Der Rahmen ist so breit wie die WEITESTE Stufe (die gerissene); das Gebäck
+   * füllt davon etwa 70 %. Bei 52 rem war das Gebäck im Höhepunkt 582 px
+   * breit. 100 rem bringen es auf 1120 — also knapp das Doppelte, und auf
+   * einem 1440er Fenster reicht es fast von Rand zu Rand.
+   *
+   * Dass es dabei über die Kanten läuft, ist beabsichtigt: `overflow: clip`
+   * auf der Bahn schneidet ab, und ein Gebäck, das grösser ist als das
+   * Fenster, ist genau das, was „Höhepunkt" heisst.
+   *
+   * Die Wegpunkte sind entsprechend halbiert — dieselbe Zahl bedeutet dort
+   * jetzt das Doppelte.
+   */
+  width: min(124vw, 100rem);
   aspect-ratio: 1500 / 603;
   display: grid;
   place-items: stretch;
   transform-style: preserve-3d;
-  /* Der grösste fliegende Gegenstand der Seite — sein Wurf ist entsprechend
-     lang. Dasselbe Rezept, anderer Massstab. */
-  --wurf: 1.6;
+  /* Den Wurf setzt Kaeseschiff.tsx je nach Takt: hinten kurz, vorn lang. Ein
+     Schatten, der nicht zur Deckkraft passt, lässt eine Ebene aufgeklebt
+     aussehen. Der Startwert gilt, bis das Werkzeug geladen ist. */
+  --wurf: 0.5;
   filter: var(--schatten-speise);
   will-change: transform, opacity;
 }
@@ -3459,10 +3536,10 @@
 
 @media (max-width: 719px) {
   .schiff {
-    width: 116vw;
-    /* Am Handy ist derselbe Gegenstand kleiner dargestellt — also ein
-       kürzerer Wurf, nicht ein anderes Rezept. */
-    --wurf: 1.05;
+    /* Am Handy ist das Fenster hochkant: 124 vw wären hier 460 px und damit
+       kein Höhepunkt. 210 vw bringen das Gebäck im Riss auf gut anderthalb
+       Fensterbreiten — es läuft über beide Kanten, und genau das ist gemeint. */
+    width: 210vw;
   }
 }
 

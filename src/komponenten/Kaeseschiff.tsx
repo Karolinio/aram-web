@@ -107,104 +107,117 @@ type Punkt = {
  */
 const BAHN: readonly Punkt[] = [
   //  p     x %vw    y %vh   dreh  drehY  drehX  skala  deck
-  { p: 0.0, x: -32, y: -0.94, dreh: -24, drehY: 44, drehX: 16, skala: 0.24, deck: 0 },
-  { p: 0.07, x: -33, y: -0.26, dreh: -18, drehY: 34, drehX: 11, skala: 0.32, deck: 1 },
-  { p: 0.19, x: -28, y: 0.26, dreh: -11, drehY: 24, drehX: 4, skala: 0.38, deck: 1 },
-  { p: 0.33, x: -33, y: -0.06, dreh: -3, drehY: 12, drehX: -2, skala: 0.46, deck: 1 },
-  /* ═══ Über der Arkade, nicht hindurch ═══
-     Die Galerie war eine hohe Sektion, deren Bilder unten sassen — das Schiff
-     zog darüber weg. Seit sie eine Arkade auf einer Bildschirmhöhe ist,
-     stehen die Bögen in der Bildmitte, und die alte Bahn führte mitten
-     hindurch: gemessen bis zu 168 000 Quadratpixel Überdeckung.
-     Das ist nicht nur unschön, sondern falsch herum: die Arkade ist das
-     einzige Element der Seite, das der Besucher mit der Hand BEDIENT. Etwas
-     Grosses darüber fliegen zu lassen, während er zieht, ist, als lege man
-     eine Hand auf die Karte, die jemand gerade liest.
-     Es fliegt deshalb am oberen Rand vorbei — halb hinter der Kopfzeile, die
-     eine Ebene höher liegt. Ein Vorbeiflug am Bildrand liest sich ohnehin
-     schneller als einer durch die Mitte. */
-  { p: 0.47, x: 24, y: -0.36, dreh: 10, drehY: -19, drehX: -6, skala: 0.55, deck: 1 },
-  { p: 0.55, x: 36, y: -0.52, dreh: 15, drehY: -30, drehX: -9, skala: 0.6, deck: 1 },
-  /* ═══ Hier geht es kurz aus dem Bild ═══
-     Gemessen: die Arkade steht zwischen p 0,40 und 0,67 im Fenster, und ihre
-     Oberkante wandert dabei von unten nach oben durch. Ab etwa 0,575 ist der
-     Streifen über ihr schmaler als das Schiff und der Streifen unter ihr noch
-     nicht frei — es gibt in diesem Fenster keinen Weg vorbei, nur hindurch.
-     Also darüber hinaus. Das ist kein Ausweichen, sondern das Richtige: die
-     Galerie ist der einzige Ort der Seite, an dem der Besucher selbst etwas
-     in die Hand nimmt. Dort hat nichts zu fliegen. Es ist eine durchgehende
-     Bewegung, kein Schnitt und keine Blende — das Schiff steigt rechts oben
-     aus dem Bild und kommt für den Schluss zurück. */
-  { p: 0.6, x: 40, y: -0.78, dreh: 17, drehY: -35, drehX: -10, skala: 0.63, deck: 1 },
-  { p: 0.65, x: 22, y: -0.1, dreh: 14, drehY: -26, drehX: -7, skala: 0.68, deck: 1 },
-  { p: 0.68, x: 10, y: 0.06, dreh: 12, drehY: -22, drehX: -6, skala: 0.7, deck: 1 },
-  /* Tief im Bild, solange die Überschrift der Riss-Sektion oben steht. */
-  { p: 0.76, x: -18, y: 0.24, dreh: 6, drehY: -10, drehX: -3, skala: 0.78, deck: 1 },
-  /* In der Mitte, ruhig, gross — hier reisst es. Von 0,80 bis 0,86 passiert in
-     der Bahn NICHTS ausser dem Wachsen: der Riss soll die einzige Bewegung im
-     Bild sein, wenn er kommt. */
-  { p: 0.8, x: -4, y: 0.16, dreh: 1, drehY: 2, drehX: 1, skala: 0.9, deck: 1 },
-  { p: 0.86, x: 0, y: 0.06, dreh: 0, drehY: 0, drehX: 0, skala: 1.0, deck: 1 },
-  /* Und weg zur Seite — nach rechts, weil die Leserichtung dorthin zeigt und
-     ein Gegenstand, der entgegen ihr verschwindet, wie ein Rückschritt
-     aussieht. Was aus dem Bild fliegt, dreht sich dabei.
-
-     ═══ Es fliegt jetzt WEITER, statt sich aufzulösen ═══
-
-     Vorher stand hier `deck: 0` ab 0,93 — das Schiff wurde bei x = 58 % blass
-     und war dabei noch zur Hälfte im Bild. Ein Gebäck, das mitten im Fenster
-     durchsichtig wird, ist genau das „Transparente", das Karol gemeldet hat,
-     nur am anderen Ende der Bahn.
-     Jetzt fliegt es raus wie ein Gegenstand: 46 → 96 → 138 % der Fensterbreite.
-     Bei 96 % ist auch am Handy nichts mehr davon zu sehen (dort ist es 116 vw
-     breit, also 58 vw je Seite — 96 − 58 = 38 vw jenseits der Mitte bei 50 vw
-     halber Fensterbreite). Die Deckkraft fällt erst danach, weil ein fest im
-     Fenster liegender Gegenstand am Ende der Bahn dort STEHEN BLEIBT, wenn man
-     ihn nicht abräumt. */
-  { p: 0.93, x: 46, y: -0.04, dreh: 11, drehY: -22, drehX: -7, skala: 1.08, deck: 1 },
-  { p: 0.97, x: 96, y: -0.1, dreh: 17, drehY: -31, drehX: -9, skala: 1.13, deck: 1 },
-  { p: 1.0, x: 138, y: -0.14, dreh: 21, drehY: -36, drehX: -10, skala: 1.16, deck: 0 },
+  /* ═══ Erster Takt: die Verwandlung, im HINTERGRUND ═══
+     Klein und gedämpft, hinter Bildern und Text. Es begleitet das Lesen,
+     statt es zu unterbrechen. Die Skala ist gegenüber der Vorfassung halbiert
+     — nicht weil das Schiff kleiner wurde, sondern weil sein Rahmen doppelt
+     so gross ist (siehe .schiff im Stilblatt): dieselbe Zahl bedeutet jetzt
+     das Doppelte. */
+  { p: 0.0, x: -32, y: -0.94, dreh: -24, drehY: 44, drehX: 16, skala: 0.13, deck: 0 },
+  { p: 0.07, x: -33, y: -0.26, dreh: -18, drehY: 34, drehX: 11, skala: 0.17, deck: 0.46 },
+  { p: 0.19, x: -28, y: 0.26, dreh: -11, drehY: 24, drehX: 4, skala: 0.2, deck: 0.46 },
+  { p: 0.33, x: -33, y: -0.06, dreh: -3, drehY: 12, drehX: -2, skala: 0.24, deck: 0.46 },
+  { p: 0.45, x: 28, y: 0.2, dreh: 10, drehY: -19, drehX: -6, skala: 0.28, deck: 0.46 },
+  { p: 0.56, x: 34, y: -0.16, dreh: 18, drehY: -37, drehX: -11, skala: 0.32, deck: 0.46 },
+  /* ═══ Zweiter Takt: der Auftritt ═══
+     Es kommt nach vorn — Deckkraft, Grösse und Stapelordnung wechseln
+     gemeinsam. Karol: „teilweise transparent hinter dem eigentlichen Inhalt
+     verborgen, und dann irgendwie danach auftreten." */
+  { p: 0.66, x: -14, y: 0.22, dreh: 6, drehY: -10, drehX: -3, skala: 0.44, deck: 0.72 },
+  { p: 0.72, x: -2, y: 0.1, dreh: 1, drehY: 2, drehX: 1, skala: 0.72, deck: 1 },
+  /* ═══ Dritter Takt: der Höhepunkt ═══
+     Mittig, ruhig, und so gross wie das Fenster. Hier reisst es. Zwischen 0,78
+     und 0,86 passiert ausser dem Wachsen NICHTS — der Riss soll die einzige
+     Bewegung im Bild sein, wenn er kommt. */
+  { p: 0.78, x: 0, y: 0.02, dreh: 0, drehY: 0, drehX: 0, skala: 1.0, deck: 1 },
+  /* Und weg zur Seite — nach rechts, weil die Leserichtung dorthin zeigt.
+     Es fliegt raus statt zu verblassen; die Deckkraft fällt erst, wenn ohnehin
+     nichts mehr zu sehen ist. Ein fest im Fenster liegender Gegenstand bliebe
+     am Ende der Bahn sonst dort stehen. */
+  { p: 0.86, x: 46, y: -0.04, dreh: 11, drehY: -22, drehX: -7, skala: 1.02, deck: 1 },
+  { p: 0.93, x: 96, y: -0.1, dreh: 17, drehY: -31, drehX: -9, skala: 1.05, deck: 1 },
+  { p: 1.0, x: 138, y: -0.14, dreh: 21, drehY: -36, drehX: -10, skala: 1.06, deck: 0 },
 ]
 
 /**
- * Die zwei Aufnahmen — und der Schnitt dazwischen.
+ * Die Verwandlung — und der Schnitt am Ende.
  *
- * ═══ Hier standen fünf ═══
+ * ═══ Warum die Stufen wieder da sind ═══
  *
- * Kugel, gewalzt, belegt, gebacken, gerissen — überblendet in einer Kette, bei
- * der die beiden Deckkräfte immer eins ergaben. Rechnerisch sauber, im Bild
- * falsch: zwei Fotos mit je halber Deckkraft verdecken den Grund nicht, sie
- * lassen ihn durch. Man sieht kein halb verwandeltes Gebäck, man sieht zwei
- * durchsichtige. Der Beweis liegt in Karols Aufnahme vom 26.08.: hinter dem
- * scharfen Käseschiff steht ein zweiter, blasser Umriss.
+ * Sie waren einen Bau lang draussen, weil Karol sie als „mehrere Bilder, die
+ * zusammengeknallt wurden" gelesen hat. Das war richtig beobachtet und falsch
+ * zugeordnet: schuld war nicht die Abfolge, sondern die ÜBERBLENDUNG — zwei
+ * Fotos zu je halber Deckkraft lassen den Grund durch, und was man sieht, sind
+ * zwei Geister statt eines Gegenstands.
  *
- * Der übliche Ausweg wäre, die untere Aufnahme bei voller Deckung stehen zu
- * lassen und nur die obere einzublenden. Für den Riss taugt er nicht: das
- * gerissene Gebäck hat in der Mitte einen SPALT, und durch den sähe man dann
- * das heile Gebäck darunter — noch schlimmer als ein Geist.
+ * Ohne die Stufen fehlte dann aber die Ordnung: „die Scroll History ist nicht
+ * mehr logisch strukturell … das Schiff soll am Anfang so wie Mehl sein und
+ * sich dann über die Schritte verwandeln bis fertig, und dann Highlight."
  *
- * Also ein Schnitt. Er ist nicht der Kompromiss, sondern das Richtige: ein
- * Gebäck bricht nicht über eine halbe Sekunde auf, es bricht. Und ein Schnitt
- * mitten in einer schnellen Bewegung ist unsichtbar — darauf beruht jede
- * Filmmontage. Deshalb liegt er nicht auf dem ruhigen Punkt bei 0,86, sondern
- * ein Stück danach, wenn das Schiff schon nach rechts wegzieht.
+ * ═══ Woran die Stufen jetzt hängen ═══
+ *
+ * Bei Shupatto nachgesehen (Mobbin): dort wechselt EIN Produkt seinen Zustand,
+ * und daneben steht, bei welchem Schritt man ist. Der Zähler macht aus einer
+ * Bildfolge eine Erklärung. Seed macht dasselbe mit einer beschrifteten
+ * Zeitleiste.
+ *
+ * Diese Seite hat beides schon: die Handarbeit zählt 01 bis 04 und beschriftet
+ * jeden Schritt. Die Stufen sind deshalb an DIESE Schritte gebunden — das
+ * Schiff zeigt, wovon der Text gerade spricht:
+ *
+ *   01 Mehl auf die Fläche   →  Teigkugel
+ *   02 Von Hand gerollt      →  gewalzt
+ *   03 Erst dann belegt      →  belegt
+ *   04 In die Glut           →  gebacken
+ *   Und dann bricht es auf   →  gerissen
+ *
+ * ═══ Zwei verschiedene Übergänge, und das mit Absicht ═══
+ *
+ * TEIG → GEBACKEN wird übergeblendet, aber „darüber" statt „gegeneinander":
+ * die untere Stufe bleibt bei voller Deckung stehen, die neue kommt darüber
+ * von null auf eins. Das Ergebnis ist an jeder Stelle undurchsichtig — es gibt
+ * keinen Moment, in dem der Grund durchscheint. Möglich ist das nur, weil jede
+ * Stufe die vorige weitgehend verdeckt: der Teig wächst.
+ *
+ * GEBACKEN → GERISSEN wird GESCHNITTEN. Derselbe Kniff geht hier nicht: das
+ * gerissene Gebäck hat in der Mitte einen Spalt, und durch den sähe man das
+ * heile darunter — schlimmer als ein Geist. Ein Schnitt ist hier ohnehin das
+ * Richtige: ein Gebäck bricht nicht über eine halbe Sekunde auf, es bricht.
  */
-const GANZ = 'stufe-4-gebacken'
-const GERISSEN = 'riss-3'
+const STUFEN: readonly { klasse: string; ab: number }[] = [
+  { klasse: 'stufe-1-kugel', ab: 0.0 },
+  { klasse: 'stufe-2-gewalzt', ab: 0.15 },
+  { klasse: 'stufe-3-belegt', ab: 0.31 },
+  { klasse: 'stufe-4-gebacken', ab: 0.47 },
+]
+
+/** Wie lang ein Stufenwechsel dauert, in Anteilen des Verlaufs. */
+const WECHSEL = 0.05
 
 /**
  * Wo geschnitten wird.
  *
- * 0,885 und nicht 0,86: bei 0,86 steht das Schiff still und gross in der
- * Mitte — dort wäre der Schnitt ein Sprung. Zwischen 0,86 und 0,93 legt es
- * 46 % der Fensterbreite zurück; bei 0,885 ist es schon unterwegs und dreht
+ * 0,80 und nicht 0,78: bei 0,78 steht das Schiff still und gross in der
+ * Mitte — dort wäre der Schnitt ein Sprung. Zwischen 0,78 und 0,86 legt es
+ * 46 % der Fensterbreite zurück; bei 0,80 ist es schon unterwegs und dreht
  * sich dabei. Genau dort fällt ein Wechsel nicht auf.
  *
- * Von den vier fotografierten Riss-Zuständen (werkzeug/kaesriss.py) ist k33
- * genommen — der dramatischste: lange dünne Fäden, ein paar schon
- * zurückgeschnellt. Die anderen drei bleiben in public/bilder/riss/ liegen.
+ * Der ganze dritte Takt liegt jetzt früher als im Vorbau. Gemessen fiel der
+ * Riss dort auf Scrollstand 6470 — die Speisekarte, eine Sektion zu spät.
+ * Der Höhepunkt gehört dorthin, wo der Text dazu steht.
  */
-const SCHNITT = 0.885
+const SCHNITT = 0.8
+
+/**
+ * Wo der Auftritt liegt: davor hinten und gedämpft, danach vorn und voll.
+ *
+ * Die Zahl steuert nicht nur die Deckkraft (die steht in der Bahn), sondern
+ * die STAPELORDNUNG — und die kann nicht weich sein. Ein Gegenstand ist
+ * entweder vor oder hinter einer Fläche. Der Umschlag liegt deshalb dort, wo
+ * die Deckkraft ohnehin schon fast oben ist: der Wechsel fällt dann mit einer
+ * Bewegung zusammen statt für sich zu stehen.
+ */
+const VORN_AB = 0.66
 
 /** Weiche Überblendung statt Knick. Ohne sie hat die Bahn an jedem Wegpunkt eine Ecke. */
 const glatt = (t: number) => t * t * (3 - 2 * t)
@@ -268,8 +281,9 @@ export default function Kaeseschiff() {
     const el = schiff.current
     if (!el || !bereit || ruhig) return
 
-    const ganz = el.querySelector<HTMLElement>(`.schiff__stufe--${GANZ}`)
-    const gerissen = el.querySelector<HTMLElement>(`.schiff__stufe--${GERISSEN}`)
+    const bahn = el.parentElement!
+    const stufen = STUFEN.map((x) => el.querySelector<HTMLElement>(`.schiff__stufe--${x.klasse}`))
+    const gerissen = el.querySelector<HTMLElement>('.schiff__stufe--riss-3')
     const dampf = el.querySelector<HTMLElement>('.schiff__dampf')
 
     let tot = false
@@ -316,12 +330,43 @@ export default function Kaeseschiff() {
           ` rotate(${w.dreh}deg) scale(${w.skala})`
         el.style.opacity = String(w.deck)
 
-        /* Der Schnitt. Kein Zwischenwert — eins oder null, nie 0,5. Das ist
-           der ganze Punkt: es gibt keinen Moment, in dem zwei Gebäcke
-           halbdurchsichtig übereinanderliegen. */
+        /**
+         * Welche Stufe, und wie weit ist die nächste schon darüber.
+         *
+         * Über dem Schnitt gilt nichts davon mehr: dann steht das gerissene
+         * Gebäck allein da, und alle Teigstufen sind aus. Kein Zwischenwert,
+         * nie zwei halbdurchsichtige Gebäcke übereinander.
+         */
         const auf = p >= SCHNITT
-        if (ganz) ganz.style.opacity = auf ? '0' : '1'
         if (gerissen) gerissen.style.opacity = auf ? '1' : '0'
+
+        let i = STUFEN.length - 1
+        while (i > 0 && p < STUFEN[i]!.ab) i--
+        /* Wie weit die Stufe `i` schon eingeblendet ist. Die Stufen darunter
+           bleiben bei EINS stehen, solange der Wechsel läuft — dadurch ist das
+           Bild an jeder Stelle undurchsichtig. Ist er durch, gehen sie auf
+           null, damit kein Rand einer älteren Stufe hervorlugt. */
+        const ein = glatt(klemmen((p - STUFEN[i]!.ab) / WECHSEL))
+        for (let k = 0; k < stufen.length; k++) {
+          const el2 = stufen[k]
+          if (!el2) continue
+          if (auf) el2.style.opacity = '0'
+          else if (k === i) el2.style.opacity = String(ein)
+          else if (k === i - 1) el2.style.opacity = String(ein < 1 ? 1 : 0)
+          else el2.style.opacity = k < i ? '0' : '0'
+        }
+
+        /**
+         * Vorn oder hinten.
+         *
+         * Der Wurf des Schattens geht mit: ein gedämpfter Gegenstand hinter
+         * einer Fläche wirft keinen langen Schatten nach vorn. Ein Schatten,
+         * der nicht zur Deckkraft passt, ist genau der Grund, warum eine
+         * Ebene „aufgeklebt" aussieht.
+         */
+        const vorne = p >= VORN_AB
+        bahn.classList.toggle('schiffbahn--vorn', vorne)
+        el.style.setProperty('--wurf', vorne ? '2.1' : '0.5')
 
         /**
          * Der Dampf kommt erst spät.
@@ -403,13 +448,13 @@ export default function Kaeseschiff() {
             und ausgeschaltet. Der naheliegende Weg wäre, `src` umzusetzen —
             dann muss der Browser das gerissene Gebäck erst beim Schnitt
             dekodieren, also genau in dem Frame, in dem es auffällt. */}
-        {[GANZ, GERISSEN].map((klasse) => (
+        {[...STUFEN.map((x) => x.klasse), 'riss-3'].map((klasse) => (
           <img
             key={klasse}
             className={`schiff__stufe schiff__stufe--${klasse}`}
             src={`/bilder/riss/${klasse}.webp`}
-            width={M[GANZ]!.breite}
-            height={M[GANZ]!.hoehe}
+            width={M['stufe-4-gebacken']!.breite}
+            height={M['stufe-4-gebacken']!.hoehe}
             alt=""
             decoding="async"
           />

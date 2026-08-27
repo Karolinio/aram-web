@@ -90,10 +90,17 @@ const SCHRITTE = [
     titel: 'Erst dann belegt',
     text: 'Käse, Zaatar, Hackfleisch — was du bestellst.',
     art: 'freisteller' as const,
-    quelle: '/bilder/reise/stufe-3-belegt.webp',
-    alt: 'Ein belegtes, noch ungebackenes Käseschiffchen',
-    breite: 1200,
-    hoehe: 540,
+    /* ═══ Das Spiegelei ist raus ═══
+       Karol, zum zweiten Mal: „ohne Ei." In /bilder/reise/ lag die
+       adscharische Fassung — Ei und Butterflocke obenauf. Das ist ein anderes
+       Gericht als ihres, und es stand ausgerechnet in dem Schritt, der zeigen
+       soll, was sie belegen.
+       Die eilose Aufnahme lag schon in /bilder/riss/ — dieselbe Kamera,
+       derselbe Freisteller, nur ohne Ei. */
+    quelle: '/bilder/riss/stufe-3-belegt.webp',
+    alt: 'Ein mit Weisskäse belegtes, noch ungebackenes Käseschiffchen',
+    breite: 1500,
+    hoehe: 603,
     versatz: 2,
     tempo: -0.03,
   },

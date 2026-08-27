@@ -18,6 +18,20 @@
 
 .sektion {
   position: relative;
+  /**
+   * ═══ Hier steht bewusst KEINE Stapelzahl ═══
+   *
+   * Eine stand hier kurz, damit das Käseschiff hinter den Sektionen fliegen
+   * kann. Sie war falsch, und der Fehler ist lehrreich: eine Sektion mit
+   * `z-index` wird zu einem eigenen Stapelraum, und darin steckt dann ALLES —
+   * ihre Grundfläche und ihr Inhalt. „Dahinter" hiess damit hinter der
+   * undurchsichtigen Grundfläche, und das Schiff war schlicht unsichtbar.
+   *
+   * Ohne Zahl bleibt die Sektion durchlässig: ihre Grundfläche wird sehr früh
+   * gemalt (Hintergründe von Blöcken kommen vor allem Positionierten), ihr
+   * Inhalt trägt die 1 unten. Dazwischen passt die Bahn mit ihrer 0 — also
+   * über dem Grund und unter Bild und Text. Genau dort gehört sie hin.
+   */
   padding-block: var(--raum-sektion);
 }
 
@@ -30,6 +44,24 @@
  * Vier Gründe, und keiner davon war entschieden — jede Sektion hatte ihren
  * eigenen gewählt.
  */
+/**
+ * Inhalt über die Schiffbahn.
+ *
+ * Die Schale ist auf fast jeder Sektion der Kasten, in dem Text und Bild
+ * liegen. Sie hebt sich damit über das fliegende Gebäck, während die
+ * Grundfläche der Sektion darunter bleibt — Karol: „mach das Schiff teilweise
+ * transparent hinter dem eigentlichen Inhalt verborgen."
+ *
+ * Was ABSICHTLICH nicht mitkommt: dekorativer Grund wie die Collage in der
+ * Speisekarte. Der gehört unter das Schiff, nicht darüber.
+ */
+.schale {
+  position: relative;
+  /* 2, weil die Schiffbahn auf 1 liegt. Siehe dort — die Reihenfolge im Baum
+     entscheidet bei Gleichstand, und das Schiff steht vor allen Sektionen. */
+  z-index: 2;
+}
+
 .sektion--hell { background: var(--ton-hell); }
 .sektion--tief { background: var(--ton-tief); }
 
