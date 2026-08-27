@@ -3490,9 +3490,11 @@
   /* Den Wurf setzt Kaeseschiff.tsx je nach Takt: hinten kurz, vorn lang. Ein
      Schatten, der nicht zur Deckkraft passt, lässt eine Ebene aufgeklebt
      aussehen. Der Startwert gilt, bis das Werkzeug geladen ist. */
-  --wurf: 0.5;
-  filter: var(--schatten-speise);
-  will-change: transform, opacity;
+  --wurf: 0;
+  /* Weder Filter noch `will-change` stehen fest hier: beides setzt
+     Kaeseschiff.tsx je nach Takt. Ein dauerhaft befördertes Element hält
+     seine Ebene über die ganze Seite im Speicher, auch wenn es gar nicht
+     fliegt. */
 }
 
 /**

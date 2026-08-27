@@ -113,12 +113,20 @@ const BAHN: readonly Punkt[] = [
      — nicht weil das Schiff kleiner wurde, sondern weil sein Rahmen doppelt
      so gross ist (siehe .schiff im Stilblatt): dieselbe Zahl bedeutet jetzt
      das Doppelte. */
+  /* ═══ Es fällt sofort in die untere Bildhälfte ═══
+     Karol: „wenn man scrollt, soll das Schiff noch schneller nach unten
+     kommen, damit es nicht so stört."
+     Die Bahn schwang vorher um die Fenstermitte — also genau durch den
+     Streifen, in dem Überschriften und Fliesstext stehen. Jetzt fällt sie
+     zwischen 0,0 und 0,07 von oben ausserhalb des Bildes auf +0,10 und bleibt
+     dann im unteren Drittel (0,10 bis 0,38). Über der Leseebene liegt damit
+     nichts mehr; das Gebäck begleitet von unten. */
   { p: 0.0, x: -32, y: -0.94, dreh: -24, drehY: 44, drehX: 16, skala: 0.13, deck: 0 },
-  { p: 0.07, x: -33, y: -0.26, dreh: -18, drehY: 34, drehX: 11, skala: 0.17, deck: 0.46 },
-  { p: 0.19, x: -28, y: 0.26, dreh: -11, drehY: 24, drehX: 4, skala: 0.2, deck: 0.46 },
-  { p: 0.33, x: -33, y: -0.06, dreh: -3, drehY: 12, drehX: -2, skala: 0.24, deck: 0.46 },
-  { p: 0.44, x: 28, y: 0.2, dreh: 10, drehY: -19, drehX: -6, skala: 0.28, deck: 0.46 },
-  { p: 0.52, x: 34, y: -0.16, dreh: 18, drehY: -37, drehX: -11, skala: 0.32, deck: 0.46 },
+  { p: 0.07, x: -33, y: 0.1, dreh: -18, drehY: 34, drehX: 11, skala: 0.17, deck: 0.28 },
+  { p: 0.19, x: -28, y: 0.34, dreh: -11, drehY: 24, drehX: 4, skala: 0.2, deck: 0.28 },
+  { p: 0.33, x: -33, y: 0.22, dreh: -3, drehY: 12, drehX: -2, skala: 0.24, deck: 0.28 },
+  { p: 0.44, x: 28, y: 0.38, dreh: 10, drehY: -19, drehX: -6, skala: 0.28, deck: 0.28 },
+  { p: 0.52, x: 34, y: 0.16, dreh: 18, drehY: -37, drehX: -11, skala: 0.32, deck: 0.28 },
   /* ═══ Zweiter Takt: der Auftritt ═══
      Es kommt nach vorn — Deckkraft, Grösse und Stapelordnung wechseln
      gemeinsam. Karol: „teilweise transparent hinter dem eigentlichen Inhalt
@@ -126,7 +134,7 @@ const BAHN: readonly Punkt[] = [
      Bei 0,56 endet die Galerie gerade (Scrollstand 5827 gegen 5760): das
      Schiff tritt in dem Moment hervor, in dem die letzte Sektion, in der es
      nichts zu suchen hat, aus dem Bild geht. */
-  { p: 0.58, x: -14, y: 0.22, dreh: 6, drehY: -10, drehX: -3, skala: 0.46, deck: 0.8 },
+  { p: 0.58, x: -14, y: 0.24, dreh: 6, drehY: -10, drehX: -3, skala: 0.46, deck: 0.72 },
   { p: 0.62, x: -2, y: 0.1, dreh: 1, drehY: 2, drehX: 1, skala: 0.74, deck: 1 },
   /* ═══ Dritter Takt: der Höhepunkt ═══
      Von 0,66 bis 0,78 steht x auf NULL. Der Riss fällt mitten hinein, und die
@@ -197,8 +205,15 @@ const STUFEN: readonly { klasse: string; ab: number }[] = [
   { klasse: 'stufe-4-gebacken', ab: 0.4 },
 ]
 
-/** Wie lang ein Stufenwechsel dauert, in Anteilen des Verlaufs. */
-const WECHSEL = 0.05
+/**
+ * Wie lang ein Stufenwechsel dauert, in Anteilen des Verlaufs.
+ *
+ * 0,07 statt 0,05 — bei 4600 px Gesamtweg sind das 320 statt 230 px Scroll je
+ * Wechsel. Länger ist hier gefahrlos: es wird „darüber" geblendet, das Bild
+ * bleibt an jeder Stelle undurchsichtig. Was länger dauert, ist nur die
+ * Verwandlung selbst, und die soll man sehen.
+ */
+const WECHSEL = 0.07
 
 /**
  * Wo geschnitten wird.
@@ -370,11 +385,24 @@ export default function Kaeseschiff() {
         for (let k = 0; k < stufen.length; k++) {
           const el2 = stufen[k]
           if (!el2) continue
-          if (auf) el2.style.opacity = '0'
-          else if (k === i) el2.style.opacity = String(ein)
-          else if (k === i - 1) el2.style.opacity = String(ein < 1 ? 1 : 0)
-          else el2.style.opacity = k < i ? '0' : '0'
+          const d = auf ? 0 : k === i ? ein : k === i - 1 && ein < 1 ? 1 : 0
+          el2.style.opacity = String(d)
+          /**
+           * ═══ `visibility`, nicht nur `opacity` ═══
+           *
+           * Eine Aufnahme bei Deckkraft null ist unsichtbar, bleibt aber Teil
+           * der Ebene und wird mitgerastert. Das Schiff ändert jeden Frame
+           * seine Grösse, und bei jeder Änderung rastert der Browser die ganze
+           * Ebene neu — also fünf Fotos statt einem.
+           *
+           * Gemessen war das der teuerste Posten der Seite: mit
+           * ausgeblendetem Schiff fiel das 95. Perzentil im Hintergrundtakt
+           * von 29,9 auf 19,8 ms. `hidden` nimmt die Aufnahme aus dem
+           * Rasterlauf, `opacity: 0` nicht.
+           */
+          el2.style.visibility = d > 0.001 ? 'visible' : 'hidden'
         }
+        if (gerissen) gerissen.style.visibility = auf ? 'visible' : 'hidden'
 
         /**
          * Vorn oder hinten.
@@ -386,7 +414,20 @@ export default function Kaeseschiff() {
          */
         const vorne = p >= VORN_AB
         bahn.classList.toggle('schiffbahn--vorn', vorne)
-        el.style.setProperty('--wurf', vorne ? '2.1' : '0.5')
+        /**
+         * Im Hintergrundtakt GAR KEIN Schatten.
+         *
+         * Zwei Gründe, und beide zählen. Erstens: ein Gegenstand, der bei 28 %
+         * Deckkraft hinter Bild und Text liegt, wirft keinen Schatten nach
+         * vorn — ein Wurf dort lässt die Ebene aufgeklebt aussehen.
+         * Zweitens kostet er. `filter: drop-shadow` auf einem Bild, das sich
+         * jeden Frame skaliert, kann der Browser nicht zwischenspeichern;
+         * gemessen war der Hintergrundtakt der einzige Abschnitt der Seite mit
+         * ausgelassenen Bildern (p95 32 ms gegen 18 ms im Höhepunkt).
+         * `none` schaltet den ganzen Durchgang ab, nicht nur seine Stärke.
+         */
+        el.style.filter = vorne ? 'var(--schatten-speise)' : 'none'
+        el.style.setProperty('--wurf', vorne ? '2.1' : '0')
 
         /**
          * Der Dampf kommt erst spät.
@@ -488,8 +529,12 @@ export default function Kaeseschiff() {
             key={klasse}
             className={`schiff__stufe schiff__stufe--${klasse}`}
             src={`/bilder/riss/${klasse}.webp`}
-            width={M['stufe-4-gebacken']!.breite}
-            height={M['stufe-4-gebacken']!.hoehe}
+            /* Jede Stufe mit IHREN Massen: die drei Teigstufen liegen als
+               760 px breite Fassungen vor, weil sie nie grösser gezeigt
+               werden. Ein festes Mass für alle hiesse hier, dem Browser eine
+               falsche Grösse zu nennen. */
+            width={M[klasse]!.breite}
+            height={M[klasse]!.hoehe}
             alt=""
             decoding="async"
           />

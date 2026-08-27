@@ -1,15 +1,15 @@
 {
  "stufe-1-kugel": {
-  "breite": 1500,
-  "hoehe": 603
+  "breite": 760,
+  "hoehe": 306
  },
  "stufe-2-gewalzt": {
-  "breite": 1500,
-  "hoehe": 603
+  "breite": 760,
+  "hoehe": 306
  },
  "stufe-3-belegt": {
-  "breite": 1500,
-  "hoehe": 603
+  "breite": 760,
+  "hoehe": 306
  },
  "stufe-4-gebacken": {
   "breite": 1500,
