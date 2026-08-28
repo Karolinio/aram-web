@@ -81,7 +81,7 @@ export default function Galerie() {
   const { ref: bahn, stand, schieben } = useZiehband<HTMLDivElement>()
 
   return (
-    <Sektion id="galerie" grund="tief" klasse="galerie" beschriftetVon="galerie-titel">
+    <Sektion id="galerie" grund="nacht" klasse="galerie" beschriftetVon="galerie-titel">
       {/* ═══ Die Überschrift stand AUSSERHALB der Schale ═══
           Karol am 26.08.: „Überschrift muss weiter rechts formatiert."
           Sie klebte am Fensterrand — als einzige Überschrift der Seite. Jede

@@ -2353,6 +2353,23 @@
   background: color-mix(in oklch, var(--ton-hell) 92%, transparent);
 }
 
+/**
+ * ═══ Der Schleier muss den Grund der Sektion kennen ═══
+ *
+ * Über dem Texturfoto liegt ein Schleier, der es auf acht Prozent herunter-
+ * dimmt. Er hatte `--ton-hell` fest eingebaut — und damit deckte er den
+ * Glutgrund vollständig zu, als die Sektion auf Orange gestellt wurde.
+ * Sichtbar war das Ergebnis sofort: cremefarbene Schrift auf cremefarbenem
+ * Grund, also gar nichts. Der Hintergrund der Sektion lag darunter und kam nie
+ * zum Vorschein.
+ *
+ * Eine Fläche, die einen Grund verdeckt, muss denselben Grund führen wie die
+ * Sektion. Sonst ist sie keine Textur, sondern ein Deckel.
+ */
+.sektion--glut .bestellen__schleier {
+  background: color-mix(in oklch, var(--glut-grund) 92%, transparent);
+}
+
 .bestellen h2 { margin-bottom: 1rem; }
 .bestellen__oeffnung { margin-top: 1.5rem; }
 

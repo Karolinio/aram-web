@@ -92,6 +92,9 @@
 .sektion--glut {
   background: var(--glut-grund);
   color: var(--glut-schrift);
+  /* Dieselbe Umkehrung wie auf Schwarz, aus demselben Grund — siehe dort. */
+  --tinte: var(--creme);
+  --tinte-leise: var(--glut-leise);
   --linie: var(--glut-linie);
 }
 
@@ -118,7 +121,30 @@
 .sektion--nacht {
   background: var(--nacht);
   color: var(--creme);
+  /**
+   * ═══ Die Tinte dreht sich mit ═══
+   *
+   * `color` allein genügt nicht. Ein gutes Dutzend Regeln schreibt seine Farbe
+   * ausdrücklich hin — `var(--tinte)` für Namen und Preise, `var(--tinte-leise)`
+   * für Bildzeilen und Hinweise. Die erben nichts; sie holen sich einen Wert,
+   * der für hellen Grund gemacht ist, und werden auf Schwarz unsichtbar.
+   *
+   * Deshalb kippen hier die TOKEN, nicht die einzelnen Regeln. Wer später eine
+   * Sektion auf dunkel stellt, muss dann nicht jede Zeile darin nachziehen —
+   * genau das ist der Zweck eines Tokens.
+   */
+  --tinte: var(--creme);
+  --tinte-leise: oklch(80% 0.022 74);
   --linie: oklch(42% 0.03 55);
+  /**
+   * Auch das Signal dreht sich. `--akzent` ist ausdrücklich „DAS Signal auf
+   * HELLEM Grund" (tokens.css) — ein Terrakotta bei 48 % Helligkeit. Auf ihrem
+   * Schwarz bleibt davon fast nichts, und es traf ausgerechnet die
+   * Telefonnummer im Laden: die wichtigste Zeile der Seite, in der dunkelsten
+   * Farbe, die es hier gibt.
+   * Auf dunklem Grund übernimmt das Gold, das auch die Etiketten tragen.
+   */
+  --akzent: var(--glut-marke);
   /* DASSELBE Rezept, nur tiefer: ein Schatten in Clay-Braun ist auf ihrem
      Schwarz unsichtbar. Kein eigenes Rezept — nur der Ton. */
   --schatten-ton: oklch(6% 0.02 50 / 0.6);
@@ -130,6 +156,28 @@
 .sektion--nacht h3 { color: var(--creme); }
 .sektion--nacht .leise,
 .sektion--nacht .lead { color: oklch(86% 0.02 72); }
+
+/**
+ * ═══ Inseln aus Creme holen ihre Tinte zurück ═══
+ *
+ * Zwei Flächen auf dieser Seite sind creme, egal worauf sie liegen: der
+ * Rundbogen der Arkade und die Tafel im Vorhang. Auf einer dunklen Sektion
+ * würden sie durch die Umkehrung oben creme auf creme schreiben — also gar
+ * nichts. Sie sind kein Sonderfall der Regel, sondern ihr Gegenstück: ein
+ * heller Grund innerhalb eines dunklen.
+ */
+.sektion--nacht .bogen__rahmen,
+.sektion--nacht .kartenblatt,
+/* Auf Orange ist es dieselbe Lage: `.weg--glut` trägt eine helle Clay-Fläche
+   und stand darauf mit cremefarbener Schrift — „Nachricht schreiben" war nicht
+   zu lesen. Es ist die dritte Insel dieser Art auf der Seite; wenn eine vierte
+   dazukommt, gehört sie in diese Liste. */
+.sektion--glut .weg--glut {
+  --tinte: oklch(30% 0.055 55);
+  --tinte-leise: oklch(44% 0.050 52);
+  --linie: oklch(80% 0.038 68);
+  color: var(--tinte);
+}
 
 /* Alte Namen zeigen auf den Zweiklang. */
 .sektion--creme,

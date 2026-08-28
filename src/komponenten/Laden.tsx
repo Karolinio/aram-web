@@ -141,7 +141,7 @@ export default function Laden() {
   const wort = useAuftauchen<HTMLDivElement>(0.9)
 
   return (
-    <Sektion id="laden" grund="tief" kante klasse="laden" beschriftetVon="laden-titel">
+    <Sektion id="laden" grund="nacht" klasse="laden" beschriftetVon="laden-titel">
       <div className="schale laden__gitter">
         <div className="laden__stapel">
           {LADENBILDER.map((b, i) => (
