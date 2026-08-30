@@ -2446,7 +2446,80 @@
  *
  * `--glut` ist damit auf der ganzen Seite keine Fläche mehr.
  */
+/* ── Der QR im Ofenbogen ────────────────────────────────────────────────── */
+.scanschild {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 2.5vw, 1.6rem);
+  margin-top: 0.4rem;
+}
+
+/**
+ * Die Form ihres Ofenmauls, dieselbe wie in der Arkade und auf der Tafel im
+ * Vorhang: oben ein flacher Rundbogen, unten gerade. Der Code liegt flach
+ * darin — auf einer HELLEN Fläche, denn ein Scanner braucht harten Kontrast
+ * und eine ruhige Zone, und beides gibt ein farbiger Grund nicht her.
+ */
+.scanschild__bogen {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  inline-size: clamp(6.5rem, 13vw, 8.5rem);
+  aspect-ratio: 1 / 1.12;
+  padding: clamp(0.7rem, 1.6vw, 1rem);
+  padding-block-start: clamp(1.1rem, 2.4vw, 1.6rem);
+  background: var(--creme);
+  border: 1px solid color-mix(in oklch, var(--nacht) 22%, transparent);
+  border-radius: 50% 50% 3px 3px / 30% 30% 3px 3px;
+}
+
+.scanschild__code {
+  inline-size: 100%;
+  block-size: auto;
+  /* Dunkle Module auf Creme — 12,4 Kontrast. Ein QR in zwei bunten Toenen
+     sieht besser aus und scannt schlechter; das ist der eine Ort auf dieser
+     Seite, an dem Lesbarkeit vor Farbe geht. */
+  color: var(--nacht);
+}
+
+.scanschild__wort {
+  margin: 0;
+  max-width: 24ch;
+  font-size: var(--text-klein, 0.9rem);
+  color: var(--tinte-leise);
+}
+
+.scanschild__gross {
+  display: block;
+  font-family: var(--font-display);
+  font-variation-settings: var(--wonk-kopf);
+  font-weight: 700;
+  font-size: clamp(1.05rem, 0.9rem + 0.5vw, 1.3rem);
+  line-height: 1.15;
+  color: var(--tinte);
+  margin-bottom: 0.2rem;
+}
+
+@media (max-width: 480px) {
+  .scanschild { flex-direction: column; align-items: flex-start; }
+}
+
+/**
+ * ═══ Die dunkle Karte auf dem orangenen Grund ═══
+ *
+ * Sie hing in der Liste der Creme-Inseln und bekam dunkle Tinte. Solange
+ * `--ton-tief` ein helles Clay war, ging das auf; seit es ihr Schwarz ist,
+ * stand Schwarz auf Schwarz und „Nachricht schreiben" war nicht mehr zu lesen.
+ *
+ * Die Lösung steht auf ihrer eigenen Seite: dort sitzen auf dem orangenen
+ * Grund SCHWARZE Knöpfe mit heller Schrift und orangenem Zeichen. Genau das
+ * hier — damit ist die Karte kein Sonderfall mehr, sondern dieselbe Umkehrung
+ * wie überall auf dieser Seite.
+ */
 .weg--glut {
+  --tinte: var(--creme);
+  --tinte-leise: oklch(84% 0.024 74);
+  color: var(--creme);
   background: var(--ton-tief);
   border-color: var(--linie);
   box-shadow: var(--clay-ruhe);
@@ -2457,7 +2530,8 @@
 }
 .weg--glut:hover { border-color: var(--akzent); }
 
-.weg--glut .weg__art { color: var(--akzent); }
+/* Ihr Orange auf ihrem Schwarz — dasselbe Paar wie auf ihren eigenen Knöpfen. */
+.weg--glut .weg__art { color: var(--ton-hell); }
 
 .weg__wert {
   font-family: var(--font-display);

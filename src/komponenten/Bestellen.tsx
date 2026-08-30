@@ -1,4 +1,5 @@
 import { useAuftauchen } from '../bewegung.ts'
+import { pfad } from '../pfad.ts'
 import { ARAM } from '../aram.config.ts'
 import Oeffnung from './ui/Oeffnung.tsx'
 import { Etikett, Kopf, Sektion } from './ui/bausteine.tsx'
@@ -79,6 +80,41 @@ export default function Bestellen() {
               Gerichte in der Karte antippen — der Text schreibt sich selbst.
             </span>
           </a>
+
+          {/* ═══ Der QR im Ofenbogen ═══
+
+              Karol wollte ihn „cool eingebaut, vielleicht in einen Steinofen".
+              In ein OFENFOTO gelegt hätte er aufgehört zu funktionieren: ein
+              Scanner braucht harten Kontrast, eine ruhige Zone und keine
+              Perspektive. Ein Foto liefert keines davon.
+
+              Was trägt, ist die FORM ihres Ofens statt seines Bildes — der
+              gemauerte Rundbogen, den die Galerie und die Tafel im Vorhang
+              schon führen. Der Code liegt flach und sauber darin.
+
+              Bei DICE und Sana nachgesehen (Mobbin): ein QR wirkt durch Luft
+              und einen Satz, nicht durch Verzierung. Deshalb steht hier genau
+              eine Zeile daneben und sonst nichts.
+
+              Er zeigt auf UNSERE Karte, nicht auf den gedruckten Aufkleber am
+              Tresen: wer am Rechner sitzt, holt sich damit die Karte aufs
+              Handy. Erzeugt mit werkzeug/qrbauen.py — bei einem Domainwechsel
+              neu bauen, siehe dort. */}
+          <div className="scanschild">
+            <div className="scanschild__bogen">
+              <img
+                className="scanschild__code"
+                src={pfad('bilder/marke/qr-karte.svg')}
+                alt=""
+                width={200}
+                height={200}
+              />
+            </div>
+            <p className="scanschild__wort">
+              <span className="scanschild__gross">Karte aufs Handy</span>
+              Scannen, dann liest du sie am Tisch weiter.
+            </p>
+          </div>
         </div>
 
         <div className="dienste">

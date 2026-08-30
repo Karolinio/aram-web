@@ -116,9 +116,10 @@
  * ohne Grund-Bedingung: es gibt keinen Grund mehr, auf dem sie nicht nötig
  * wäre. Kommt eine vierte Insel dazu, gehört sie hierher.
  */
+/* `.weg--glut` stand hier und ist raus: sie ist keine Creme-Insel, sondern
+   eine SCHWARZE Karte auf dem orangenen Grund — siehe sektionen.css. */
 .bogen__rahmen,
-.kartenblatt,
-.weg--glut {
+.kartenblatt {
   --tinte: oklch(30% 0.055 55);
   --tinte-leise: oklch(44% 0.050 52);
   --linie: oklch(80% 0.038 68);
