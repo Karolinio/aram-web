@@ -178,7 +178,10 @@
   left: 0;
   right: 0;
   z-index: 40;
-  color: var(--tinte);
+  color: var(--creme);
+  /* Ihr Signal-Orange wäre auf der eigenen orangen Sektion unsichtbar; die
+     Kopfzeile schwebt über beiden Gründen und nimmt deshalb das Gold. */
+  --akzent: var(--glut-marke);
   /* Dichter als vorher, und der Grund ist gemessen: seit der Schleier weg ist,
      zieht unter der Kopfzeile das ungefilterte Video vorbei — mit hellen UND
      dunklen Stellen. Bei 34 % Deckung kam die Navigation über einer dunklen
@@ -188,12 +191,23 @@
      auf, was hinter ihr liegt, statt es zu überdecken. Deshalb bleibt sie
      durchsichtig — man sieht die Bewegung darunter weiter, sie ist nur
      aufgehellt. Eine deckende Fläche wäre lesbar und keine Scheibe mehr. */
-  background: color-mix(in oklch, var(--ton-hell) 52%, transparent);
-  -webkit-backdrop-filter: blur(18px) saturate(115%) brightness(1.35);
-  backdrop-filter: blur(18px) saturate(115%) brightness(1.35);
-  /* Ein heller Saum statt eines dunklen: er hebt die dunkle Schrift von einer
-     hellen Stelle im Video ab, ohne als Schatten zu lesen. */
-  text-shadow: 0 1px 2px color-mix(in oklch, var(--ton-hell) 70%, transparent);
+  /**
+   * ═══ Die Scheibe DUNKELT jetzt ab, sie hellt nicht mehr auf ═══
+   *
+   * Sie hellte auf und trug dunkle Schrift — richtig, solange die Seite auf
+   * hellem Clay lief. Seit es nur noch Schwarz und ihr Orange gibt, ist das
+   * genau falsch herum: über einer orangen Sektion wurde aus der Scheibe ein
+   * heller Fleck mit brauner Schrift darin.
+   *
+   * Sie bleibt eine SCHEIBE — Karol: „der Header soll die Logik behalten:
+   * transparent." Nur die Richtung dreht: sie dunkelt ab und trägt helle
+   * Schrift. Man liest weiterhin, was dahinter liegt, und über allen drei
+   * Gründen dieser Seite — Video, Schwarz, Orange — mit demselben Kontrast.
+   */
+  background: color-mix(in oklch, var(--ton-tief) 58%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(115%) brightness(0.62);
+  backdrop-filter: blur(18px) saturate(115%) brightness(0.62);
+  text-shadow: 0 1px 2px color-mix(in oklch, var(--ton-tief) 70%, transparent);
   box-shadow: inset 0 -1px 0 color-mix(in oklch, var(--linie) 60%, transparent);
   transition:
     background-color 260ms var(--ease-teig),
@@ -213,15 +227,16 @@
  * vertauscht.
  */
 .kopf[data-eng='ja'] {
-  color: var(--tinte);
+  color: var(--creme);
   text-shadow: none;
-  background-color: color-mix(in oklch, var(--ton-hell) 82%, transparent);
+  background-color: color-mix(in oklch, var(--ton-tief) 88%, transparent);
   -webkit-backdrop-filter: blur(18px) saturate(150%);
   backdrop-filter: blur(18px) saturate(150%);
+  /* Die Lichtkante sitzt oben, der Schatten unten — auf einer dunklen Scheibe
+     ist der Lichtsaum entsprechend schwächer, sonst liest er als Rahmen. */
   box-shadow:
-    inset 0 1px 0 color-mix(in oklch, var(--creme) 70%, transparent),
-    0 1px 0 color-mix(in oklch, var(--linie) 80%, transparent),
-    0 14px 34px -22px color-mix(in oklch, var(--tinte) 40%, transparent);
+    inset 0 1px 0 color-mix(in oklch, var(--creme) 16%, transparent),
+    0 14px 34px -22px oklch(0% 0 0 / 0.55);
 }
 
 .kopf__zeile {

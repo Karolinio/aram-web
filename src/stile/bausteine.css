@@ -66,6 +66,55 @@
 .sektion--tief { background: var(--ton-tief); }
 
 /**
+ * ═══ Jeder Grund ist jetzt dunkel — also kippt die Schrift überall ═══
+ *
+ * Solange die Seite auf zwei hellen Clay-Tönen lief, war die Umkehrung der
+ * Sonderfall: `.sektion--nacht` und `.sektion--glut` drehten sie, alle anderen
+ * blieben dunkel auf hell. Mit Karols Zweifarbwelt ist es umgekehrt — es gibt
+ * keinen hellen Grund mehr. Die Umkehrung ist die REGEL.
+ *
+ * `color` allein genügt dafür nicht: ein gutes Dutzend Regeln schreibt seine
+ * Farbe ausdrücklich hin (`var(--tinte)` für Namen und Preise,
+ * `var(--tinte-leise)` für Bildzeilen), und die erben nichts. Deshalb kippen
+ * die TOKEN, nicht die einzelnen Regeln.
+ */
+.sektion--hell,
+.sektion--tief,
+.sektion--nacht,
+.sektion--glut {
+  --tinte: var(--creme);
+  --tinte-leise: oklch(84% 0.024 74);
+  --linie: color-mix(in oklch, var(--creme) 30%, transparent);
+  color: var(--creme);
+}
+
+/* Auf Orange ist ihr Signal-Orange kein Signal mehr — Orange auf Orange. Dort
+   übernimmt das Gold, das auch die Etiketten tragen. */
+.sektion--hell,
+.sektion--glut { --akzent: var(--glut-marke); }
+
+/**
+ * ═══ Die hellen Inseln behalten ihre dunkle Tinte ═══
+ *
+ * Drei Flächen dieser Seite sind creme, egal worauf sie liegen: der Rundbogen
+ * der Arkade, die Tafel im Vorhang und die WhatsApp-Karte. Ohne diese Regel
+ * schrieben sie creme auf creme — also gar nichts.
+ *
+ * Sie hing vorher an `.sektion--nacht` und `.sektion--glut`. Jetzt gilt sie
+ * ohne Grund-Bedingung: es gibt keinen Grund mehr, auf dem sie nicht nötig
+ * wäre. Kommt eine vierte Insel dazu, gehört sie hierher.
+ */
+.bogen__rahmen,
+.kartenblatt,
+.weg--glut {
+  --tinte: oklch(30% 0.055 55);
+  --tinte-leise: oklch(44% 0.050 52);
+  --linie: oklch(80% 0.038 68);
+  --akzent: #cc3a00;
+  color: var(--tinte);
+}
+
+/**
  * ── Der Glutgrund: die eine Ausnahme ──────────────────────────────────────
  *
  * Ihr Orange als vollflächiger Grund, GENAU EINMAL auf der Seite. Er nimmt am
@@ -157,27 +206,6 @@
 .sektion--nacht .leise,
 .sektion--nacht .lead { color: oklch(86% 0.02 72); }
 
-/**
- * ═══ Inseln aus Creme holen ihre Tinte zurück ═══
- *
- * Zwei Flächen auf dieser Seite sind creme, egal worauf sie liegen: der
- * Rundbogen der Arkade und die Tafel im Vorhang. Auf einer dunklen Sektion
- * würden sie durch die Umkehrung oben creme auf creme schreiben — also gar
- * nichts. Sie sind kein Sonderfall der Regel, sondern ihr Gegenstück: ein
- * heller Grund innerhalb eines dunklen.
- */
-.sektion--nacht .bogen__rahmen,
-.sektion--nacht .kartenblatt,
-/* Auf Orange ist es dieselbe Lage: `.weg--glut` trägt eine helle Clay-Fläche
-   und stand darauf mit cremefarbener Schrift — „Nachricht schreiben" war nicht
-   zu lesen. Es ist die dritte Insel dieser Art auf der Seite; wenn eine vierte
-   dazukommt, gehört sie in diese Liste. */
-.sektion--glut .weg--glut {
-  --tinte: oklch(30% 0.055 55);
-  --tinte-leise: oklch(44% 0.050 52);
-  --linie: oklch(80% 0.038 68);
-  color: var(--tinte);
-}
 
 /* Alte Namen zeigen auf den Zweiklang. */
 .sektion--creme,
@@ -469,6 +497,19 @@
   transform: none;
 }
 
+/**
+ * ═══ KEIN Einfarbig-Filter — der Versuch ist gescheitert ═══
+ *
+ * `brightness(0) invert(1)` sollte das rote Logo auf ihrem Orange entmatschen.
+ * Es macht aus der Marke einen weissen Klumpen: die Buchstaben sind weiss und
+ * liegen IN rot, also leben ihre Formen vom Farbunterschied. Nimmt man die
+ * Farbe weg, verschwinden die Punzen und übrig bleibt die Silhouette des
+ * roten Blocks.
+ *
+ * Ein Wasserzeichen, das man nicht mehr als Wortmarke erkennt, ist keines.
+ * Die Marke bleibt bunt; dass Rot auf Orange eng beieinanderliegt, löst der
+ * Logo-Umbau, nicht ein Filter.
+ */
 .wasserzeichen img { width: 100%; height: auto; }
 
 /* Sobald etwas in der Bestellung liegt, klebt die Leiste am unteren Rand. Dann
