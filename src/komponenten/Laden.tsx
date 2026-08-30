@@ -208,8 +208,21 @@ export default function Laden() {
               )}
             </Datenzeile>
 
+            {/* Mobil zuerst: das ist die Nummer auf ihrem Flyer, und sie
+                nimmt WhatsApp. Das Festnetz steht darunter fuer alle, die
+                lieber anrufen. */}
             <Datenzeile was="Telefon">
               <a href={ARAM.kontakt.telefonHref}>{ARAM.kontakt.telefon}</a>
+              {ARAM.kontakt.festnetz && (
+                <>
+                  <br />
+                  <a href={ARAM.kontakt.festnetzHref}>{ARAM.kontakt.festnetz}</a>
+                </>
+              )}
+            </Datenzeile>
+
+            <Datenzeile was="E-Mail">
+              <a href={`mailto:${ARAM.kontakt.mail}`}>{ARAM.kontakt.mail}</a>
             </Datenzeile>
           </dl>
         </div>

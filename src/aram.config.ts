@@ -27,7 +27,23 @@ export const ARAM = {
     telefonHref: 'tel:+491774637662',
     /* Die Nummer ist eine Mobilnummer, WhatsApp ist im Fuss der alten Seite verlinkt. */
     whatsapp: 'https://wa.me/491774637662',
-    mail: null as string | Luecke,
+
+    /**
+     * Das Festnetz. Vom Inhaber am 30.08.2026 genannt und unabhaengig davon
+     * auf ihrem eigenen Eintrag bestaetigt (Das Oertliche, Restaurantguru).
+     * Zwei uebereinstimmende Quellen, also belegt.
+     *
+     * Es steht NEBEN der Mobilnummer, nicht an ihrer Stelle: die Mobilnummer
+     * traegt WhatsApp und ist die, die auf ihrem Flyer steht. Ein Gast, der
+     * lieber anruft als schreibt, bekommt trotzdem eine Festnetznummer — das
+     * liest sich fuer einen Laden mit 25 Jahren anders als eine Handynummer
+     * allein.
+     */
+    festnetz: '0228 18034488' as string | Luecke,
+    festnetzHref: 'tel:+4922818034488',
+
+    /* Vom Inhaber genannt und auf ihrem eigenen Eintrag bestaetigt. */
+    mail: 'arampizzeria@gmail.com' as string | Luecke,
   },
 
   ort: {
