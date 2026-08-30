@@ -42,12 +42,25 @@ import { Datenzeile, Etikett, Kopf, Sektion } from './ui/bausteine.tsx'
  *
  * ═══ Was noch fehlt ═══
  *
- * Eine Aufnahme der Ladenfront von der Strasse, bei Tageslicht, quer. Sie ist
- * das eine Bild, das ein Ortsfremder braucht, um den Laden wiederzuerkennen,
- * wenn er davorsteht — und genau das gibt es von Aram noch nicht. Sobald sie da
- * ist: eine Zeile hier, sonst nichts.
+ * ═══ Die Ladenfront ist am 30.08. gekommen ═══
+ *
+ * Hier stand über Wochen, dass genau ein Bild fehlt: die Ladenfront von der
+ * Strasse, bei Tageslicht, quer — das eine Bild, das ein Ortsfremder braucht,
+ * um den Laden wiederzuerkennen, wenn er davorsteht.
+ *
+ * Der Inhaber hat sie geschickt. Sie steht jetzt an ERSTER Stelle, denn genau
+ * das ist ihre Aufgabe: zuerst zeigen, wo man hin muss, dann wer dort steht.
  */
 const LADENBILDER = [
+  {
+    quelle: '/bilder/echt/ladenfront.webp',
+    alt: 'Die Ladenfront von der Strasse: orangene Markise, davor Tische, zwei Bäcker vor der Tür',
+    unterschrift: 'So sieht es aus, wenn du davorstehst',
+    breite: 1400,
+    hoehe: 934,
+    tempo: -0.04,
+    dreh: -1.4,
+  },
   {
     quelle: '/bilder/echt/team-laden.webp',
     alt: 'Fünf Männer vor der Ladenfront, einer hält ein Blech mit Fladen',
@@ -61,8 +74,8 @@ const LADENBILDER = [
     /* Negativ = bleibt gegen den Scroll zurück, positiv = eilt vor. Der
        Unterschied zwischen den beiden Werten IST der Effekt; gleiche Werte
        ergeben zwei Bilder, die sich gemeinsam verschieben, also gar nichts. */
-    tempo: -0.06,
-    dreh: -2.4,
+    tempo: 0.03,
+    dreh: 2.2,
   },
   {
     quelle: '/bilder/echt/brueder.webp',

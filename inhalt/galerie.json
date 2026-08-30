@@ -54,5 +54,19 @@
   "breite": 900,
   "hoehe": 675,
   "kb": 89
+ },
+ {
+  "nr": 40,
+  "titel": "Ein Blech Lahmacun, gerade aus dem Ofen",
+  "lage": "quer",
+  "breite": 900,
+  "hoehe": 572
+ },
+ {
+  "nr": 41,
+  "titel": "Zaatar, Reihe für Reihe auf dem Brett",
+  "lage": "hoch",
+  "breite": 900,
+  "hoehe": 1349
  }
 ]
