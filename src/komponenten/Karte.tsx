@@ -7,6 +7,7 @@ import { useBestellung } from '../useBestellung.ts'
 import Bildschau from './ui/Bildschau.tsx'
 import { Kopf, Sektion } from './ui/bausteine.tsx'
 import Collage from './ui/Collage.tsx'
+import Olivenzweig from './ui/Olivenzweig.tsx'
 
 /**
  * Die Speisekarte — ein Werkzeug, kein Aushang.
@@ -92,6 +93,21 @@ export default function Karte() {
       {/* Ihre Gerichte blass im Grund — damit die Fläche hinter der Karte etwas
           trägt, ohne dass man beim Lesen darüber stolpert. */}
       <Collage />
+
+      {/* ═══ Ihr Olivenzweig ═══
+
+          Zwei Stück, gegenläufig, an den gegenüberliegenden Ecken — genau die
+          Anordnung, die ihr eigenes Emblem auf dem QR-Aufkleber hat: links ein
+          Zweig, rechts einer, dazwischen die Sache selbst. Hier ist die Sache
+          dazwischen die Speisekarte.
+
+          Sie laufen ABSICHTLICH über die Kante hinaus. Ein Ornament, das
+          vollständig im Bild liegt, ist ein Aufkleber; eines, das
+          angeschnitten ist, ist ein Grund. */}
+      <div className="karte__zweige" aria-hidden="true">
+        <Olivenzweig klasse="karte__zweig karte__zweig--oben" />
+        <Olivenzweig klasse="karte__zweig karte__zweig--unten" />
+      </div>
       <div className="schale">
         {/* Überschrift links, Allergenfilter rechts. Vorher stand der Filter
             UNTER dem Kopf, und die rechte Hälfte des Bildschirms blieb über

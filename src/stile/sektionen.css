@@ -3174,6 +3174,47 @@
  * Reem Kufi bleibt. Die Serife ist die Stimme der SEITE, die Kufi die Stimme
  * des LADENS — und auf ihrer Karte spricht der Laden.
  */
+/* ── Ihr Olivenzweig in der Speisekarte ─────────────────────────────────── */
+.karte__zweige {
+  position: absolute;
+  inset: 0;
+  z-index: 0;          /* unter der Schale (2) und unter der Schiffbahn (1) */
+  overflow: clip;
+  pointer-events: none;
+  color: var(--tinte);
+}
+
+.karte__zweig {
+  position: absolute;
+  inline-size: clamp(14rem, 30vw, 30rem);
+  block-size: auto;
+  /* Schwach genug, um Text darüber lesen zu lassen, kräftig genug, um als
+     Form erkannt zu werden. Auf ihrem Orange trägt die schwarze Tinte, auf
+     Schwarz die Creme — der Zweig nimmt beides über `currentColor`. */
+  opacity: 0.13;
+}
+
+/* Oben links, mit dem Stiel aus dem Bild heraus. */
+.karte__zweig--oben {
+  inset-block-start: -6%;
+  inset-inline-start: -7%;
+  transform: rotate(-8deg);
+}
+
+/* Unten rechts, gespiegelt — die Gegenbewegung, wie im Emblem. */
+.karte__zweig--unten {
+  inset-block-end: -4%;
+  inset-inline-end: -8%;
+  transform: rotate(172deg);
+}
+
+@media (max-width: 719px) {
+  /* Am Handy nur EINER: zwei Zweige auf 393 px Breite sind kein Grund mehr,
+     sondern ein Muster, durch das man liest. */
+  .karte__zweig--unten { display: none; }
+  .karte__zweig--oben { inline-size: 18rem; opacity: 0.1; }
+}
+
 .kartenblatt {
   --wurf: 1.5;
   width: min(86vw, 29rem);

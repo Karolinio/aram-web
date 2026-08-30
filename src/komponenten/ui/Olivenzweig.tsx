@@ -1,0 +1,51 @@
+/**
+ * Ihr Olivenzweig.
+ *
+ * ═══ Woher er kommt ═══
+ *
+ * Auf dem QR-Aufkleber an ihrem Tresen sitzt unten rechts ein ZWEITES Zeichen,
+ * viel ruhiger als das rote Pizza-Logo: ein Ring mit „ARAM", einer Sonne, und
+ * zwei Zweigen — links ein dunkler Olivenzweig, rechts ein heller. Der Inhaber
+ * wünscht sich den dunklen in der Speisekarte.
+ *
+ * Aus dem Foto war er nicht zu holen: dort ist er etwa 140 px gross, hinter
+ * einer Plastikhülle mit Reflex. Er ist deshalb GERECHNET statt gepaust —
+ * werkzeug/olivenzweig.py legt die Blätter entlang der Tangente einer
+ * Bézierkurve ab, abwechselnd links und rechts, zur Spitze hin kleiner. Das
+ * ist die Bauweise eines echten Zweigs: Blätter stehen im Winkel zum STIEL,
+ * nicht zum Bildrand.
+ *
+ * Ein Blatt ist eine Mandel aus zwei Bögen — dieselbe Form wie das Fatayer und
+ * wie die Kufi-Schrift. Das ist kein Zufall, sondern der Grund, warum der
+ * Zweig neben dem Gebäck nicht wie ein Fremdkörper aussieht.
+ *
+ * `currentColor` statt eines festen Werts: derselbe Zweig trägt auf ihrem
+ * Schwarz wie auf ihrem Orange, ohne zweite Datei.
+ */
+export default function Olivenzweig({ klasse }: { klasse?: string }) {
+  return (
+    <svg
+      className={klasse}
+      viewBox="0 0 220 210"
+      fill="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path d="M18 186C52 120 128 96 196 26" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+      <path d="M24.6 174.6Q48.0 184.0 69.2 170.2Q45.7 160.7 24.6 174.6Z" fill="currentColor"/>
+      <path d="M36.0 158.8Q42.2 135.4 26.6 116.8Q20.3 140.3 36.0 158.8Z" fill="currentColor"/>
+      <path d="M49.0 144.5Q68.2 157.8 90.1 149.7Q70.9 136.4 49.0 144.5Z" fill="currentColor"/>
+      <path d="M63.6 131.2Q73.1 111.0 61.9 91.6Q52.4 111.9 63.6 131.2Z" fill="currentColor"/>
+      <path d="M79.4 118.5Q95.2 132.9 116.0 128.1Q100.2 113.8 79.4 118.5Z" fill="currentColor"/>
+      <path d="M96.2 106.1Q106.3 88.4 97.5 70.0Q87.4 87.7 96.2 106.1Z" fill="currentColor"/>
+      <path d="M113.8 93.6Q127.7 107.1 146.7 103.4Q132.8 89.8 113.8 93.6Z" fill="currentColor"/>
+      <path d="M131.9 80.5Q141.0 64.4 133.0 47.8Q123.9 63.9 131.9 80.5Z" fill="currentColor"/>
+      <path d="M150.5 66.5Q163.5 78.0 180.5 73.9Q167.4 62.4 150.5 66.5Z" fill="currentColor"/>
+      <path d="M169.2 51.2Q176.1 36.2 167.8 22.0Q160.9 36.9 169.2 51.2Z" fill="currentColor"/>
+      <path d="M187.8 34.2Q200.4 43.2 215.0 38.0Q202.4 29.0 187.8 34.2Z" fill="currentColor"/>
+      <ellipse cx="70.4" cy="142.5" rx="8.5" ry="10.5" fill="currentColor" opacity="0.85"/>
+      <ellipse cx="117.3" cy="107.0" rx="8.5" ry="10.5" fill="currentColor" opacity="0.85"/>
+      <ellipse cx="160.6" cy="75.0" rx="8.5" ry="10.5" fill="currentColor" opacity="0.85"/>
+    </svg>
+  )
+}
