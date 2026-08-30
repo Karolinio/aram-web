@@ -78,20 +78,32 @@
  * `var(--tinte-leise)` für Bildzeilen), und die erben nichts. Deshalb kippen
  * die TOKEN, nicht die einzelnen Regeln.
  */
-.sektion--hell,
+/* Auf ihrem Schwarz: helle Schrift. 16,0 — mehr als genug. */
 .sektion--tief,
-.sektion--nacht,
-.sektion--glut {
+.sektion--nacht {
   --tinte: var(--creme);
   --tinte-leise: oklch(84% 0.024 74);
   --linie: color-mix(in oklch, var(--creme) 30%, transparent);
+  --akzent: var(--glut-marke);
   color: var(--creme);
 }
 
-/* Auf Orange ist ihr Signal-Orange kein Signal mehr — Orange auf Orange. Dort
-   übernimmt das Gold, das auch die Etiketten tragen. */
+/**
+ * Auf ihrem Orange: IHRE Schrift ist schwarz.
+ *
+ * Gemessen trägt Creme darauf nur 2,74 und fällt damit durch; ihr Schwarz
+ * kommt auf 5,85. Das ist keine Notlösung — es ist das Prinzip einer echten
+ * Zweifarbmarke, und sie machen es auf ihrer eigenen Seite längst selbst:
+ * schwarze Knöpfe mit orangener Schrift auf orangenem Grund.
+ */
 .sektion--hell,
-.sektion--glut { --akzent: var(--glut-marke); }
+.sektion--glut {
+  --tinte: var(--nacht);
+  --tinte-leise: color-mix(in oklch, var(--nacht) 78%, var(--ton-hell));
+  --linie: color-mix(in oklch, var(--nacht) 34%, transparent);
+  --akzent: var(--nacht);
+  color: var(--nacht);
+}
 
 /**
  * ═══ Die hellen Inseln behalten ihre dunkle Tinte ═══
@@ -149,15 +161,18 @@
 
 /* Gold für das Etikett — 5,05 auf dem gebrannten Grund. Ihr Logo-Orange wäre
    hier unsichtbar (Orange auf Orange), Schwarz käme auf 2,68. */
-.sektion--glut .etikett { color: var(--glut-marke); }
+.sektion--glut .etikett { color: var(--nacht); }
+/* Kein eigener Wert mehr — Überschriften und Vorspann erben die Tinte, und
+   die ist auf diesem Grund ihr Schwarz. */
 .sektion--glut h1,
 .sektion--glut h2,
-.sektion--glut h3 { color: var(--glut-schrift); }
+.sektion--glut h3 { color: var(--tinte); }
 .sektion--glut .leise,
-.sektion--glut .lead { color: var(--glut-leise); }
+.sektion--glut .lead { color: var(--tinte-leise); }
 
 @media (hover: hover) {
-  .sektion--glut .lebt:hover { color: var(--glut-marke); }
+  /* Auf Orange ist Gold zu nah dran — das Schwarz ist hier das Signal. */
+  .sektion--glut .lebt:hover { color: var(--nacht); }
 }
 
 /**
