@@ -120,6 +120,33 @@ export type Gebaeck = {
 
 export const GEBAECKE: Gebaeck[] = [
   {
+    /* ═══ Das zweite ECHTE Gebäck, seit dem 30.08. ═══
+       Aus dem neuen Material des Inhabers, über Higgsfield freigestellt und
+       über die Alphakanal-Flächen automatisch vom Rest der Aufnahme getrennt
+       (werkzeug — siehe Freistellung). Bis dahin war `fatayer` das einzige
+       Stück im Schwarm, das wirklich von ihnen stammt; alle anderen sind
+       erzeugt. Jetzt sind es zwei, und das nächste ersetzt wieder eines. */
+    id: 'fatayer-gold',
+    name: 'Fata’er, goldbraun',
+    bilder: ['/bilder/echt/fatayer-gold-frei.webp'],
+    echt: true,
+    alt: 'Ein goldbraun gebackener Fata’er mit Sesam und Schwarzkümmel, frisch aus dem Ofen',
+    li: 74,
+    ob: 22,
+    gr: 19,
+    liM: 20,
+    grM: 34,
+    breite: 760,
+    hoehe: 717,
+    y: [0.42, -0.28],
+    x: [0.06, -0.05],
+    dreh: [22, -18],
+    drehY: [28, -24],
+    drehX: [-14, 11],
+    z: [-110, 120],
+    skala: [0.88, 1.12],
+  },
+  {
     id: 'fatayer',
     name: "Fata’er",
     bilder: ['/bilder/echt/fatayer-frei.webp'],

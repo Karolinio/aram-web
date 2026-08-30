@@ -2,6 +2,7 @@ import { useAuftauchen } from '../bewegung.ts'
 import { pfad } from '../pfad.ts'
 import { ARAM } from '../aram.config.ts'
 import Oeffnung from './ui/Oeffnung.tsx'
+import Olivenzweig from './ui/Olivenzweig.tsx'
 import { Etikett, Kopf, Sektion } from './ui/bausteine.tsx'
 
 const DIENSTE = [
@@ -81,40 +82,6 @@ export default function Bestellen() {
             </span>
           </a>
 
-          {/* ═══ Der QR im Ofenbogen ═══
-
-              Karol wollte ihn „cool eingebaut, vielleicht in einen Steinofen".
-              In ein OFENFOTO gelegt hätte er aufgehört zu funktionieren: ein
-              Scanner braucht harten Kontrast, eine ruhige Zone und keine
-              Perspektive. Ein Foto liefert keines davon.
-
-              Was trägt, ist die FORM ihres Ofens statt seines Bildes — der
-              gemauerte Rundbogen, den die Galerie und die Tafel im Vorhang
-              schon führen. Der Code liegt flach und sauber darin.
-
-              Bei DICE und Sana nachgesehen (Mobbin): ein QR wirkt durch Luft
-              und einen Satz, nicht durch Verzierung. Deshalb steht hier genau
-              eine Zeile daneben und sonst nichts.
-
-              Er zeigt auf UNSERE Karte, nicht auf den gedruckten Aufkleber am
-              Tresen: wer am Rechner sitzt, holt sich damit die Karte aufs
-              Handy. Erzeugt mit werkzeug/qrbauen.py — bei einem Domainwechsel
-              neu bauen, siehe dort. */}
-          <div className="scanschild">
-            <div className="scanschild__bogen">
-              <img
-                className="scanschild__code"
-                src={pfad('bilder/marke/qr-karte.svg')}
-                alt=""
-                width={200}
-                height={200}
-              />
-            </div>
-            <p className="scanschild__wort">
-              <span className="scanschild__gross">Karte aufs Handy</span>
-              Scannen, dann liest du sie am Tisch weiter.
-            </p>
-          </div>
         </div>
 
         <div className="dienste">
@@ -139,6 +106,48 @@ export default function Bestellen() {
             kein Link — ein Knopf, der ins Leere führt, ist schlimmer als keiner.
           </p>
         </div>
+        </div>
+
+        {/* ═══ Der QR — ein eigener Moment, kein Kärtchen in der Ecke ═══
+
+            Karol: „soll nicht billig aussehen, sondern kreativ eingearbeitet.
+            Dann soll der Olivenzweig platziert sein."
+
+            Bei Shop und Dub nachgesehen (Mobbin): ein QR trägt, wenn er MITTIG
+            steht, Luft bekommt und eine Zeile über sich hat — und wenn in
+            seiner Mitte ein Zeichen sitzt. Dub macht genau das. Möglich ist es
+            nur mit Fehlerkorrektur H, und genau damit ist unserer gebaut
+            (werkzeug/qrbauen.py): dreissig Prozent der Fläche dürfen fehlen.
+
+            Die zwei Olivenzweige links und rechts sind IHRE Anordnung — auf
+            dem Aufkleber am Tresen flankieren sie das Rund mit der Sonne. Hier
+            flankieren sie den Code. Das ist der Unterschied zwischen einem
+            Ornament, das man dazustellt, und einem, das schon zur Marke
+            gehörte. */}
+        <div className="scanschild">
+          <Olivenzweig klasse="scanschild__zweig scanschild__zweig--links" />
+
+          <div className="scanschild__mitte">
+            <p className="scanschild__gross">Karte aufs Handy</p>
+            <div className="scanschild__bogen">
+              <img
+                className="scanschild__code"
+                src={pfad('bilder/marke/qr-karte.svg')}
+                alt=""
+                width={220}
+                height={220}
+              />
+              {/* Sitzt IM Code, nicht daneben. Die Fehlerkorrektur trägt es. */}
+              <span className="scanschild__siegel" aria-hidden="true">
+                <span lang="ar" dir="rtl">أرام</span>
+              </span>
+            </div>
+            <p className="scanschild__wort">
+              Scannen, dann liest du die Karte am Tisch weiter.
+            </p>
+          </div>
+
+          <Olivenzweig klasse="scanschild__zweig scanschild__zweig--rechts" />
         </div>
       </div>
     </Sektion>

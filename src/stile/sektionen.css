@@ -2504,18 +2504,113 @@
   .scanschild { flex-direction: column; align-items: flex-start; }
 }
 
-/**
- * ═══ Die dunkle Karte auf dem orangenen Grund ═══
+/* ── Der QR: ihr Emblem, neu gebaut ──────────────────────────────────────
  *
- * Sie hing in der Liste der Creme-Inseln und bekam dunkle Tinte. Solange
- * `--ton-tief` ein helles Clay war, ging das auf; seit es ihr Schwarz ist,
- * stand Schwarz auf Schwarz und „Nachricht schreiben" war nicht mehr zu lesen.
- *
- * Die Lösung steht auf ihrer eigenen Seite: dort sitzen auf dem orangenen
- * Grund SCHWARZE Knöpfe mit heller Schrift und orangenem Zeichen. Genau das
- * hier — damit ist die Karte kein Sonderfall mehr, sondern dieselbe Umkehrung
- * wie überall auf dieser Seite.
+ * Auf ihrem Aufkleber flankieren zwei Zweige ein Rund. Genau diese Anordnung
+ * steht hier, nur mit dem Code in der Mitte statt der Sonne.
  */
+.scanschild {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  justify-items: center;
+  gap: clamp(1rem, 4vw, 3.5rem);
+  margin-top: clamp(2.5rem, 6vw, 4.5rem);
+}
+
+.scanschild__zweig {
+  inline-size: clamp(6rem, 14vw, 13rem);
+  block-size: auto;
+  color: var(--tinte);
+  opacity: 0.42;
+}
+/* Der linke zeigt nach innen, der rechte gespiegelt — sie neigen sich zum
+   Code hin, wie im Emblem zur Sonne. */
+.scanschild__zweig--links  { justify-self: end;   transform: rotate(4deg); }
+.scanschild__zweig--rechts { justify-self: start; transform: scaleX(-1) rotate(4deg); }
+
+.scanschild__mitte {
+  display: grid;
+  justify-items: center;
+  gap: 0.85rem;
+  text-align: center;
+}
+
+.scanschild__gross {
+  margin: 0;
+  font-family: var(--font-display);
+  font-variation-settings: var(--wonk-kopf);
+  font-weight: 700;
+  font-size: clamp(1.3rem, 1rem + 1.4vw, 2rem);
+  line-height: 1.1;
+  color: var(--tinte);
+}
+
+/**
+ * Die Form ihres Ofenmauls — dieselbe wie in der Arkade und auf der Tafel im
+ * Vorhang. Der Code liegt flach auf CREME darin: ein Scanner braucht harten
+ * Kontrast und eine ruhige Zone, und beides gibt ein farbiger Grund nicht her.
+ * Das ist die eine Stelle dieser Seite, an der Lesbarkeit vor Farbe geht.
+ */
+.scanschild__bogen {
+  position: relative;
+  display: grid;
+  place-items: center;
+  inline-size: clamp(9rem, 19vw, 13rem);
+  aspect-ratio: 1 / 1.14;
+  padding: clamp(1rem, 2.2vw, 1.5rem);
+  padding-block-start: clamp(1.8rem, 4vw, 2.8rem);
+  background: var(--creme);
+  border: 1px solid color-mix(in oklch, var(--nacht) 20%, transparent);
+  border-radius: 50% 50% 4px 4px / 30% 30% 4px 4px;
+  --wurf: 1.1;
+  filter: var(--schatten-speise);
+}
+
+.scanschild__code {
+  inline-size: 100%;
+  block-size: auto;
+  color: var(--nacht);   /* 12,4 auf Creme */
+}
+
+/**
+ * Ihr Name mitten im Code.
+ *
+ * Das geht nur, weil der Code mit Fehlerkorrektur H gebaut ist — bis zu
+ * dreissig Prozent seiner Fläche dürfen fehlen. Das Siegel deckt gut sechs
+ * Prozent ab; die Probe hat den Code danach weiterhin gelesen.
+ */
+.scanschild__siegel {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  inline-size: 27%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--creme);
+  box-shadow: 0 0 0 3px var(--creme);
+  font-family: var(--font-text);
+  font-size: clamp(0.6rem, 0.4rem + 0.7vw, 0.9rem);
+  font-weight: 600;
+  color: var(--glut-grund);
+  line-height: 1;
+}
+
+.scanschild__wort {
+  margin: 0;
+  max-width: 26ch;
+  font-size: var(--text-klein, 0.9rem);
+  color: var(--tinte-leise);
+}
+
+@media (max-width: 719px) {
+  /* Am Handy nur EIN Zweig: zwei plus Code auf 393 px sind ein Gedränge. */
+  .scanschild { grid-template-columns: auto 1fr; gap: 1rem; }
+  .scanschild__zweig--rechts { display: none; }
+  .scanschild__zweig--links { inline-size: 5rem; }
+  .scanschild__mitte { justify-self: start; text-align: left; justify-items: start; }
+}
+
 .weg--glut {
   --tinte: var(--creme);
   --tinte-leise: oklch(84% 0.024 74);

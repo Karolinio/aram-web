@@ -97,10 +97,18 @@ const SCHRITTE = [
        soll, was sie belegen.
        Die eilose Aufnahme lag schon in /bilder/riss/ — dieselbe Kamera,
        derselbe Freisteller, nur ohne Ei. */
-    quelle: '/bilder/riss/stufe-3-belegt.webp',
-    alt: 'Ein mit Weisskäse belegtes, noch ungebackenes Käseschiffchen',
-    breite: 1500,
-    hoehe: 603,
+    /* ═══ Seit dem 30.08. IHRE eigene Aufnahme ═══
+       Hier lag ein erzeugtes Käseschiffchen mit Weisskäse — richtig, aber
+       erfunden. Der Inhaber hat inzwischen Fotos geschickt, darunter zwei
+       rohe Manakisch mit Feta, Oliven, Paprika und Tomate. Das ist genau, was
+       der Text daneben behauptet („Käse, Zaatar, Hackfleisch — was du
+       bestellst"), und es ist ihr Teig, ihre Hand, ihr Belag.
+       Freigestellt über Higgsfield; die beiden Fladen berühren sich und
+       bleiben deshalb ein Stück — das Paar zeigt zwei Beläge auf einmal. */
+    quelle: '/bilder/echt/manakisch-belegt-frei.webp',
+    alt: 'Zwei rohe Manakisch, belegt mit Feta, Oliven, Paprika und Tomate',
+    breite: 760,
+    hoehe: 933,
     versatz: 2,
     tempo: -0.03,
   },
