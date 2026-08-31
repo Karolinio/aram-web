@@ -57,6 +57,7 @@ export default function Bestellen() {
           tragen Markise, Tische und Menschen die Fläche, ohne dass man ein
           zweites „Aram" liest. */}
       <Untergrund
+        muster="foto"
         bild="bilder/echt/ladenfront.webp"
         ton="glut"
         staerke={0.94}

@@ -156,7 +156,7 @@ export default function Laden() {
 
   return (
     <Sektion id="laden" grund="nacht" klasse="laden" beschriftetVon="laden-titel">
-      <Untergrund bild="bilder/textur/holz-makro.webp" ton="nacht" staerke={0.965} lage="40% 70%" breite={1500} hoehe={837} />
+      <Untergrund ton="nacht" />
 
       <div className="schale laden__gitter">
         <div className="laden__stapel">

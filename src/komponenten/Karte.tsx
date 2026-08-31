@@ -97,7 +97,7 @@ export default function Karte() {
 
       {/* Körner statt Mehl: hier wird gelesen, und eine ruhigere Struktur
           stört die zweiundzwanzig Zeilen weniger. */}
-      <Untergrund bild="bilder/textur/koerner.webp" ton="glut" staerke={0.94} lage="70% 30%" breite={900} hoehe={900} />
+      <Untergrund ton="glut" muster="bogen" />
 
       {/* ═══ Ihr Olivenzweig ═══
 

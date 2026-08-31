@@ -90,7 +90,7 @@ export default function Galerie() {
           auf die Arkade ist der Wrapper verlorengegangen. */}
       {/* Auf Schwarz braucht die Folie MEHR Deckung: eine helle Struktur
           auf dunklem Grund schlägt stärker durch als umgekehrt. */}
-      <Untergrund bild="bilder/textur/koerner.webp" ton="nacht" staerke={0.955} lage="20% 40%" breite={900} hoehe={900} />
+      <Untergrund ton="nacht" muster="bogen" />
 
       <div className="schale">
         <Kopf

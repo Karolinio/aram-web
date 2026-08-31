@@ -616,15 +616,13 @@ body:has(.leiste) .wasserzeichen {
 
 /* ── Der Grund einer Sektion ──────────────────────────────────────────────
  *
- * Ein Bild, darüber eine Folie in der Farbe der Sektion. Siehe
- * komponenten/ui/Untergrund.tsx — dort steht, warum die Deckkraft auf der
- * FOLIE liegt und nicht auf dem Bild.
+ * Ein Korn auf allen, darüber im Wechsel ihr Bogenmuster oder ein Foto.
+ * Warum so und nicht sechsmal verschieden: siehe ui/Untergrund.tsx.
  */
 .untergrund {
   position: absolute;
   inset: 0;
-  /* Unter allem: unter der Schiffbahn (1), unter der Schale (2). Ein Grund,
-     der über irgendetwas liegt, ist kein Grund. */
+  /* Unter allem: unter der Schiffbahn (1), unter der Schale (2). */
   z-index: 0;
   overflow: clip;
   pointer-events: none;
@@ -644,7 +642,50 @@ body:has(.leiste) .wasserzeichen {
 .untergrund__folie--glut  { background: var(--ton-hell); }
 .untergrund__folie--nacht { background: var(--ton-tief); }
 
-@media (prefers-reduced-motion: reduce) {
-  /* Nichts zu tun — der Grund bewegt sich nicht. Er steht hier nur, damit
-     niemand später eine Bewegung einbaut, ohne diese Zeile zu sehen. */
+/**
+ * ═══ Das Korn ═══
+ *
+ * Eine SVG-Turbulenz, keine Bilddatei: 338 Bytes statt 40 kB. Der erste
+ * Versuch war eine 160er PNG-Kachel, und die war so gross, weil PNG
+ * Wiederholungen komprimiert — Rauschen hat per Definition keine.
+ *
+ * `overlay` statt schlichter Deckkraft: die Mischart hellt auf, wo der Grund
+ * hell ist, und dunkelt ab, wo er dunkel ist. Dasselbe Korn trägt damit auf
+ * ihrem Orange wie auf ihrem Schwarz, ohne zwei Werte.
+ */
+.untergrund__korn {
+  position: absolute;
+  inset: 0;
+  background-image: url('/bilder/muster-grund/korn.svg');
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  mix-blend-mode: overlay;
+  opacity: 0.42;
 }
+
+/**
+ * ═══ Ihr Bogen als Muster ═══
+ *
+ * Über `mask-image` und nicht als `background-image`: die Datei zeichnet mit
+ * `currentColor`, und ein Hintergrundbild erbt keine Farbe. Als Maske über
+ * einer farbigen Fläche nimmt das Muster jeden Ton an — auf Schwarz die
+ * Creme, auf Orange ihr Schwarz.
+ */
+.untergrund__bogen {
+  position: absolute;
+  inset: -2px;
+  background: currentColor;
+  -webkit-mask-image: url('/bilder/muster-grund/bogen.svg');
+  mask-image: url('/bilder/muster-grund/bogen.svg');
+  -webkit-mask-repeat: repeat;
+  mask-repeat: repeat;
+  -webkit-mask-size: clamp(180px, 22vw, 300px) auto;
+  mask-size: clamp(180px, 22vw, 300px) auto;
+  /* Sehr leise. Bei 0,1 wurde daraus eine Tapete, durch die man liest. */
+  opacity: 0.055;
+}
+
+.sektion--tief .untergrund__bogen,
+.sektion--nacht .untergrund__bogen { color: var(--creme); }
+.sektion--hell .untergrund__bogen,
+.sektion--glut .untergrund__bogen { color: var(--nacht); opacity: 0.07; }
