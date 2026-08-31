@@ -20,8 +20,10 @@ import { pfad } from '../../pfad.ts'
  * ═══ Das System ═══
  *
  *   Korn    auf JEDER Sektion, identisch. Die Konstante, die verbindet.
- *   Bogen   ihr Ofenrundbogen als Reihe — dieselbe Form, die die Arkade, die
- *           Tafel im Vorhang und das QR-Schild schon führen.
+ *   Saat    Sesam und Schwarzkümmel — die Oberfläche jedes ihrer Gebäcke.
+ *           Hier stand ihr Rundbogen; er las sich als Tapete, weil ein
+ *           gleichmässig wiederholter Umriss auf festem Raster genau das ist.
+ *           Saat liegt nie auf einem Raster und kann es deshalb nicht.
  *   Foto    nur noch dort, wo es etwas BEDEUTET: Mehl in der Handarbeit,
  *           ihr Laden im Bestellen.
  *
@@ -36,7 +38,7 @@ type Props = {
    */
   ton: 'glut' | 'nacht'
   /** Was über dem Korn liegt. Ohne Angabe: nur Korn. */
-  muster?: 'bogen' | 'foto'
+  muster?: 'saat' | 'foto'
   /** Nur bei `muster="foto"`: Pfad unter `public/`, ohne führenden Schrägstrich. */
   bild?: string
   /**
@@ -90,7 +92,7 @@ export default function Untergrund({
         <div className={`untergrund__folie untergrund__folie--${ton}`} />
       )}
 
-      {muster === 'bogen' && <div className="untergrund__bogen" />}
+      {muster === 'saat' && <div className="untergrund__saat" />}
 
       {/* Das Korn liegt ganz oben und IMMER. Es ist das einzige, was alle
           sieben Sektionen teilen. */}

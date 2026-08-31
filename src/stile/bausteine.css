@@ -664,28 +664,34 @@ body:has(.leiste) .wasserzeichen {
 }
 
 /**
- * ═══ Ihr Bogen als Muster ═══
+ * ═══ Ihre Saat als Muster ═══
+ *
+ * Sesam und Schwarzkümmel — die Oberfläche jedes ihrer Gebäcke. Warum das und
+ * nicht der Rundbogen, der hier stand: siehe werkzeug/muster.py. Kurz: ein
+ * gleichmässig wiederholter Umriss auf festem Raster ist Tapete, und die Seite
+ * führt den Bogen ohnehin schon dreimal als Rahmen.
  *
  * Über `mask-image` und nicht als `background-image`: die Datei zeichnet mit
  * `currentColor`, und ein Hintergrundbild erbt keine Farbe. Als Maske über
- * einer farbigen Fläche nimmt das Muster jeden Ton an — auf Schwarz die
- * Creme, auf Orange ihr Schwarz.
+ * einer farbigen Fläche nimmt die Saat jeden Ton an — auf Schwarz die Creme,
+ * auf Orange ihr Schwarz.
  */
-.untergrund__bogen {
+.untergrund__saat {
   position: absolute;
   inset: -2px;
   background: currentColor;
-  -webkit-mask-image: url('/bilder/muster-grund/bogen.svg');
-  mask-image: url('/bilder/muster-grund/bogen.svg');
+  -webkit-mask-image: url('/bilder/muster-grund/saat.svg');
+  mask-image: url('/bilder/muster-grund/saat.svg');
   -webkit-mask-repeat: repeat;
   mask-repeat: repeat;
-  -webkit-mask-size: clamp(180px, 22vw, 300px) auto;
-  mask-size: clamp(180px, 22vw, 300px) auto;
-  /* Sehr leise. Bei 0,1 wurde daraus eine Tapete, durch die man liest. */
-  opacity: 0.055;
+  /* Gross genug, dass ein Korn ein Korn bleibt und nicht zu Rauschen wird —
+     bei 200 px war es vom Grundkorn nicht mehr zu unterscheiden. */
+  -webkit-mask-size: clamp(300px, 30vw, 460px) auto;
+  mask-size: clamp(300px, 30vw, 460px) auto;
+  opacity: 0.09;
 }
 
-.sektion--tief .untergrund__bogen,
-.sektion--nacht .untergrund__bogen { color: var(--creme); }
-.sektion--hell .untergrund__bogen,
-.sektion--glut .untergrund__bogen { color: var(--nacht); opacity: 0.07; }
+.sektion--tief .untergrund__saat,
+.sektion--nacht .untergrund__saat { color: var(--creme); opacity: 0.075; }
+.sektion--hell .untergrund__saat,
+.sektion--glut .untergrund__saat { color: var(--nacht); opacity: 0.1; }

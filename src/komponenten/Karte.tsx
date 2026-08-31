@@ -97,7 +97,7 @@ export default function Karte() {
 
       {/* Körner statt Mehl: hier wird gelesen, und eine ruhigere Struktur
           stört die zweiundzwanzig Zeilen weniger. */}
-      <Untergrund ton="glut" muster="bogen" />
+      <Untergrund ton="glut" muster="saat" />
 
       {/* ═══ Ihr Olivenzweig ═══
 

@@ -26,6 +26,7 @@ Ein Korn über eine 2000 px hohe Sektion als Bild wäre ein halbes Megabyte. Als
 Aufruf:  python3 werkzeug/muster.py
 """
 import pathlib
+import random
 
 ZIEL = pathlib.Path('public/bilder/muster-grund')
 
@@ -59,34 +60,75 @@ def korn() -> str:
     )
 
 
-def bogen(breite: int = 320, hoehe: int = 240) -> str:
-    """Eine Reihe ihrer Ofenrundbögen, kachelbar.
+def saat(breite: int = 360, hoehe: int = 360, saatgut: int = 3) -> str:
+    """Sesam und Schwarzkümmel — die Oberfläche ihrer Gebäcke als Muster.
 
-    Dieselbe Form, die die Arkade, die Tafel im Vorhang und das QR-Schild
-    tragen — nur klein, versetzt und als Umriss. Ein Muster aus der eigenen
-    Formensprache liest sich als Zugehörigkeit; eines aus einem Musterbuch als
-    Dekoration.
+    ═══ Warum nicht der Rundbogen ═══
+
+    Der stand hier und ist raus. Karol: „das mit den Bögen weiss ich nicht,
+    sieht mir zu einfach aus, kein cooles Design, was sich in den Style Guide
+    einbringt." Er hat in beidem recht:
+
+      1  Ein gleichmässig wiederholter Umriss auf festem Raster IST Tapete.
+         Gleiche Form, gleicher Abstand, gleiche Strichstärke — es gibt nichts
+         zu sehen, was man nicht nach dem ersten Bogen schon weiss.
+      2  Die Seite führt den Bogen bereits dreimal als RAHMEN: Arkade, Tafel im
+         Vorhang, QR-Schild. Ihn zusätzlich als Grund zu nehmen ist
+         Wiederholung, nicht System.
+
+    ═══ Warum Saat ═══
+
+    Auf jedem ihrer Gebäcke liegt Sesam und Schwarzkümmel — auf jedem Foto, das
+    sie geschickt haben, ist es zu sehen. Es ist keine Abstraktion ihrer Form,
+    sondern die tatsächliche OBERFLÄCHE dessen, was sie verkaufen.
+
+    Und es löst genau das Problem des Bogens: Saat liegt nie auf einem Raster.
+    Sie ist unregelmässig, verschieden gross, verschieden gedreht — sie kann
+    gar nicht als Tapete lesen.
+
+    ═══ Wie sie verteilt wird ═══
+
+    Nicht rein zufällig: echter Zufall ballt sich zu Klumpen und lässt Löcher.
+    Stattdessen ein grobes Raster, in dem jedes Korn innerhalb seiner Zelle
+    zufällig sitzt — das ergibt die gleichmässige Streuung, die eine bemehlte
+    Fläche hat, ohne Regelmässigkeit.
+
+    Die Ränder werden gespiegelt bestückt, damit die Kachel nahtlos schliesst.
     """
-    b, h = 80, 104          # ein Bogen
+    r = random.Random(saatgut)
+    zellen = 9
+    schritt = breite / zellen
     teile = []
-    for reihe in range(2):
-        versatz = (b // 2) if reihe else 0
-        y = reihe * (hoehe / 2)
-        for i in range(-1, breite // b + 2):
-            x = i * b + versatz
-            # Oben Halbrund, unten gerade — der gemauerte Bogen
-            teile.append(
-                f'M{x:.0f} {y + h:.0f}'
-                f'V{y + h * 0.46:.0f}'
-                f'A{b / 2:.0f} {h * 0.46:.0f} 0 0 1 {x + b:.0f} {y + h * 0.46:.0f}'
-                f'V{y + h:.0f}'
-            )
-    d = ''.join(teile)
+
+    for zy in range(zellen):
+        for zx in range(zellen):
+            # Nicht jede Zelle bekommt ein Korn — sonst ist es doch ein Raster.
+            if r.random() < 0.28:
+                continue
+            x = zx * schritt + r.uniform(0.1, 0.9) * schritt
+            y = zy * schritt + r.uniform(0.1, 0.9) * schritt
+            dreh = r.uniform(0, 180)
+
+            if r.random() < 0.62:
+                # Sesam: längliches Korn, spitz zulaufend
+                rx, ry = r.uniform(3.1, 4.4), r.uniform(1.5, 2.1)
+                teile.append(
+                    f'<ellipse cx="{x:.1f}" cy="{y:.1f}" rx="{rx:.1f}" ry="{ry:.1f}" '
+                    f'transform="rotate({dreh:.0f} {x:.1f} {y:.1f})"/>'
+                )
+            else:
+                # Schwarzkümmel: kleiner, kantiger, dunkler
+                g = r.uniform(1.9, 2.7)
+                teile.append(
+                    f'<path d="M{x - g:.1f} {y:.1f}L{x:.1f} {y - g * 0.8:.1f}'
+                    f'L{x + g:.1f} {y:.1f}L{x:.1f} {y + g * 0.8:.1f}Z" '
+                    f'transform="rotate({dreh:.0f} {x:.1f} {y:.1f})"/>'
+                )
+
     return (
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {breite} {hoehe}" '
-        f'width="{breite}" height="{hoehe}" fill="none">\n'
-        f'  <path d="{d}" stroke="currentColor" stroke-width="2" '
-        f'vector-effect="non-scaling-stroke"/>\n'
+        f'width="{breite}" height="{hoehe}">\n'
+        f'  <g fill="currentColor">{"".join(teile)}</g>\n'
         f'</svg>\n'
     )
 
@@ -94,6 +136,6 @@ def bogen(breite: int = 320, hoehe: int = 240) -> str:
 if __name__ == '__main__':
     ZIEL.mkdir(parents=True, exist_ok=True)
     (ZIEL / 'korn.svg').write_text(korn())
-    (ZIEL / 'bogen.svg').write_text(bogen())
+    (ZIEL / 'saat.svg').write_text(saat())
     print('korn.svg ', (ZIEL / 'korn.svg').stat().st_size, 'Bytes')
-    print('bogen.svg', (ZIEL / 'bogen.svg').stat().st_size, 'Bytes')
+    print('saat.svg ', (ZIEL / 'saat.svg').stat().st_size, 'Bytes')
