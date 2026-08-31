@@ -2,6 +2,7 @@ import galerieRoh from '../../inhalt/galerie.json'
 import { pfad } from '../pfad.ts'
 import { useZiehband } from '../ziehen.ts'
 import { Kopf, Sektion } from './ui/bausteine.tsx'
+import Untergrund from './ui/Untergrund.tsx'
 
 type Bild = { nr: number; titel: string; lage: 'hoch' | 'quer'; breite: number; hoehe: number }
 const BILDER = galerieRoh as Bild[]
@@ -87,6 +88,10 @@ export default function Galerie() {
           Sie klebte am Fensterrand — als einzige Überschrift der Seite. Jede
           andere Sektion legt ihren Kopf in `.schale`; beim Umbau der Galerie
           auf die Arkade ist der Wrapper verlorengegangen. */}
+      {/* Auf Schwarz braucht die Folie MEHR Deckung: eine helle Struktur
+          auf dunklem Grund schlägt stärker durch als umgekehrt. */}
+      <Untergrund bild="bilder/textur/koerner.webp" ton="nacht" staerke={0.955} lage="20% 40%" breite={900} hoehe={900} />
+
       <div className="schale">
         <Kopf
           id="galerie-titel"

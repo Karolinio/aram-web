@@ -2241,7 +2241,56 @@
    Balken. Auf Lesebreite gebracht stehen sie als Block. */
 .laden__wort .daten { max-width: 34rem; }
 
-.daten { margin-top: 2rem; }
+/**
+ * ═══ Der Laden liest sich nicht mehr als Datenblatt ═══
+ *
+ * Vorher: Vorspann, dann 150 px Leere, dann „Geöffnet", dann drei gepunktete
+ * Zeilen mit winzigen Etiketten links und Werten rechts. Das ist die Form
+ * einer Tabelle, und eine Tabelle ist genau das, was eine Adresse NICHT sein
+ * sollte — sie ist ein Ziel, kein Feldwert.
+ *
+ * Jetzt: eine Haarlinie trennt den Text vom Auskunftsblock, die Zeiten stehen
+ * als Erstes und gross, Anschrift und Erreichbarkeit folgen als Absätze. Die
+ * gepunkteten Linien fallen weg — zwischen Dingen, die ohnehin durch Abstand
+ * getrennt sind, ist eine Linie ein zweiter Schnitt an derselben Stelle.
+ */
+.laden__wort .daten {
+  margin-top: clamp(1.6rem, 3vw, 2.4rem);
+  padding-top: clamp(1.6rem, 3vw, 2.4rem);
+  border-top: 1px solid color-mix(in oklch, var(--creme) 18%, transparent);
+}
+
+/* Keine Punktlinie und kein Spaltenraster mehr — die Auskunft steht als Block. */
+.laden__wort .datenzeile {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.15rem;
+  padding-block: 0;
+  background-image: none;
+}
+
+.laden__wort .datenzeile + .datenzeile { margin-top: clamp(1.1rem, 2.2vw, 1.6rem); }
+
+/* Die Anschrift ist ein ZIEL, kein Feldwert — sie darf so gross sein wie eine
+   Zwischenüberschrift. */
+.laden__wort .datenzeile dd {
+  font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.28rem);
+  line-height: 1.4;
+}
+
+/**
+ * ═══ Die 108 px Leere zwischen Vorspann und Zeiten ═══
+ *
+ * Gemessen: der Kopfblock trägt 72 px Abstand nach unten, die Zeiten noch
+ * einmal 38 px nach oben. Zusammen 110 px Nichts, mitten in einer Spalte, die
+ * ohnehin dünn besetzt ist.
+ *
+ * Die 72 px sind der Seitenrhythmus für eine folgende TEXTSPALTE. Hier folgt
+ * keine, sondern ein Auskunftsblock, der seinen Abstand und seine Haarlinie
+ * selbst mitbringt. Derselbe Fall wie in der Galerie.
+ */
+.laden__wort .kopfblock { margin-bottom: 0; }
+.laden__zeiten { margin-top: clamp(1.4rem, 3vw, 2.2rem); }
+
 
 /**
  * ═══ Die Zeiten als Aussage ═══

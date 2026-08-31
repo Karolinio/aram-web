@@ -3,6 +3,7 @@ import { pfad } from '../pfad.ts'
 import { ARAM } from '../aram.config.ts'
 import Oeffnung from './ui/Oeffnung.tsx'
 import Olivenzweig from './ui/Olivenzweig.tsx'
+import Untergrund from './ui/Untergrund.tsx'
 import { Etikett, Kopf, Sektion } from './ui/bausteine.tsx'
 
 const DIENSTE = [
@@ -36,17 +37,33 @@ export default function Bestellen() {
           Cremeschleier. Sie schliesst den Kreis — die Seite beginnt und endet
           auf demselben Holz. Der Schleier ist hier dichter, weil hier gelesen
           und getippt wird, nicht geschaut. */}
-      <div className="bestellen__grund" aria-hidden="true">
-        <img
-          src="/bilder/textur/holz-makro.webp"
-          alt=""
-          width={1500}
-          height={837}
-          loading="lazy"
-          decoding="async"
-        />
-        <div className="bestellen__schleier" />
-      </div>
+      {/* ═══ Ihr Laden unter der Orangefolie ═══
+
+          Karol: „Kann man ein Bild vom Laden nehmen und transparent in den
+          Hintergrund legen auf einer orangenen Folie?"
+
+          Genau das, und es ist mehr als eine Textur: hier steht „Ruf an oder
+          schreib uns", und dahinter liegt der Ort, an dem abgehoben wird. Bei
+          92 % Deckung erkennt man das Motiv nicht mehr, aber die Markise, die
+          Tische und die Menschen geben der Fläche eine Tiefe, die kein
+          Holzmakro hat.
+
+          Hier lag holz-makro. Das war richtig, solange es die einzige Sektion
+          mit Grund war; jetzt haben fünf andere Texturen, und diese eine darf
+          etwas Eigenes sein.
+
+          0,94 statt 0,92 und tiefer angeschnitten: bei 0,92 las sich ihr
+          Schriftzug deutlich genug, um mit der Schlagzeile zu streiten. Jetzt
+          tragen Markise, Tische und Menschen die Fläche, ohne dass man ein
+          zweites „Aram" liest. */}
+      <Untergrund
+        bild="bilder/echt/ladenfront.webp"
+        ton="glut"
+        staerke={0.94}
+        lage="50% 68%"
+        breite={1400}
+        hoehe={934}
+      />
 
       <div className="schale">
         <Kopf

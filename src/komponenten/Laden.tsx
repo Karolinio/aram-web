@@ -2,6 +2,7 @@ import { ARAM } from '../aram.config.ts'
 import { tagName, wochenbloecke, ZEITEN } from '../oeffnung.ts'
 import { useAuftauchen, useVersatz } from '../bewegung.ts'
 import { Datenzeile, Etikett, Kopf, Sektion } from './ui/bausteine.tsx'
+import Untergrund from './ui/Untergrund.tsx'
 
 /**
  * Der Laden — Adresse, Zeiten, drei Brüder.
@@ -155,6 +156,8 @@ export default function Laden() {
 
   return (
     <Sektion id="laden" grund="nacht" klasse="laden" beschriftetVon="laden-titel">
+      <Untergrund bild="bilder/textur/holz-makro.webp" ton="nacht" staerke={0.965} lage="40% 70%" breite={1500} hoehe={837} />
+
       <div className="schale laden__gitter">
         <div className="laden__stapel">
           {LADENBILDER.map((b, i) => (

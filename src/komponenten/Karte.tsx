@@ -8,6 +8,7 @@ import Bildschau from './ui/Bildschau.tsx'
 import { Kopf, Sektion } from './ui/bausteine.tsx'
 import Collage from './ui/Collage.tsx'
 import Olivenzweig from './ui/Olivenzweig.tsx'
+import Untergrund from './ui/Untergrund.tsx'
 
 /**
  * Die Speisekarte — ein Werkzeug, kein Aushang.
@@ -93,6 +94,10 @@ export default function Karte() {
       {/* Ihre Gerichte blass im Grund — damit die Fläche hinter der Karte etwas
           trägt, ohne dass man beim Lesen darüber stolpert. */}
       <Collage />
+
+      {/* Körner statt Mehl: hier wird gelesen, und eine ruhigere Struktur
+          stört die zweiundzwanzig Zeilen weniger. */}
+      <Untergrund bild="bilder/textur/koerner.webp" ton="glut" staerke={0.94} lage="70% 30%" breite={900} hoehe={900} />
 
       {/* ═══ Ihr Olivenzweig ═══
 

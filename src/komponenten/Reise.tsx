@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useMedienabfrage, werkzeugHolen } from '../bewegung.ts'
 import Mehlwolke from './ui/Mehlwolke.tsx'
 import { Kopf, Sektion } from './ui/bausteine.tsx'
+import Untergrund from './ui/Untergrund.tsx'
 
 /**
  * Der Schluss der Reise — hier reisst das Käseschiff auf.
@@ -65,6 +66,7 @@ export default function Reise() {
 
   return (
     <Sektion id="reise" grund="tief" klasse="reise" beschriftetVon="reise-titel">
+      <Untergrund bild="bilder/textur/mehl-holz.webp" ton="nacht" staerke={0.96} lage="60% 20%" breite={1700} hoehe={949} />
       <div className="reise__buehne" ref={buehne}>
         {/* ═══ Die Funken sind RAUS ═══
 

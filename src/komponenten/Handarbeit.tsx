@@ -3,6 +3,7 @@ import type { CSSProperties } from 'react'
 import { useBildfolge, useFlug, useMedienabfrageBreit, useVersatz } from '../bewegung.ts'
 import { GEBAECKE, type Gebaeck } from '../gebaecke.ts'
 import { Etikett, Kopf, Sektion } from './ui/bausteine.tsx'
+import Untergrund from './ui/Untergrund.tsx'
 
 /**
  * Der Weg zum Fata’er — die Savor-Sequenz.
@@ -249,6 +250,8 @@ export default function Handarbeit() {
           Auftritt.tsx und Collage.tsx bleiben liegen; sie werden woanders
           gebraucht. */}
       <Sektion grund="hell" klasse="prozess" beschriftetVon="prozess-titel">
+        {/* Mehl auf Holz — dieselbe Fläche, von der Schritt 01 spricht. */}
+        <Untergrund bild="bilder/textur/mehl-holz.webp" ton="glut" staerke={0.91} lage="30% 60%" breite={1700} hoehe={949} />
         <div className="schale prozess__buehne">
           <Kopf
             id="prozess-titel"

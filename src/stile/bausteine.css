@@ -84,7 +84,21 @@
   --tinte: var(--creme);
   --tinte-leise: oklch(84% 0.024 74);
   --linie: color-mix(in oklch, var(--creme) 30%, transparent);
-  --akzent: var(--glut-marke);
+  /**
+   * ═══ Ihr Orange, nicht ein Gold ═══
+   *
+   * Hier stand `--glut-marke`, ein Gelbgold bei 92 % Helligkeit. Auf Schwarz
+   * kommt es auf 12,2 Kontrast und ist damit tadellos lesbar — und trotzdem
+   * falsch. Karol: „mit der Schriftart weiss und gelb bin ich auf schwarz
+   * nicht zufrieden, das sieht amateurhaft aus."
+   *
+   * Er hat recht, und der Grund ist nicht der Kontrast, sondern die Herkunft:
+   * Gold auf Schwarz ist der Standardakzent jeder Vorlage, die „hochwertig"
+   * aussehen will. Ihr Orange kommt auf 5,85 — genug für AA — und gehört
+   * IHNEN. Damit trägt die dunkle Sektion dieselbe Farbe wie die orangene,
+   * und die Seite kennt endgültig nur noch zwei.
+   */
+  --akzent: var(--ton-hell);
   color: var(--creme);
 }
 
@@ -215,7 +229,7 @@
   --schatten-ton: oklch(6% 0.02 50 / 0.6);
   --schatten-ton-nah: oklch(6% 0.02 50 / 0.42);
 }
-.sektion--nacht .etikett { color: var(--glut-marke); }
+.sektion--nacht .etikett { color: var(--ton-hell); }
 .sektion--nacht h1,
 .sektion--nacht h2,
 .sektion--nacht h3 { color: var(--creme); }
@@ -597,4 +611,40 @@ body:has(.leiste) .wasserzeichen {
   width: 100%;
   height: 100%;
   pointer-events: none;
+}
+
+
+/* ── Der Grund einer Sektion ──────────────────────────────────────────────
+ *
+ * Ein Bild, darüber eine Folie in der Farbe der Sektion. Siehe
+ * komponenten/ui/Untergrund.tsx — dort steht, warum die Deckkraft auf der
+ * FOLIE liegt und nicht auf dem Bild.
+ */
+.untergrund {
+  position: absolute;
+  inset: 0;
+  /* Unter allem: unter der Schiffbahn (1), unter der Schale (2). Ein Grund,
+     der über irgendetwas liegt, ist kein Grund. */
+  z-index: 0;
+  overflow: clip;
+  pointer-events: none;
+}
+
+.untergrund__bild {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.untergrund__folie {
+  position: absolute;
+  inset: 0;
+}
+
+.untergrund__folie--glut  { background: var(--ton-hell); }
+.untergrund__folie--nacht { background: var(--ton-tief); }
+
+@media (prefers-reduced-motion: reduce) {
+  /* Nichts zu tun — der Grund bewegt sich nicht. Er steht hier nur, damit
+     niemand später eine Bewegung einbaut, ohne diese Zeile zu sehen. */
 }
