@@ -99,6 +99,23 @@
   --ton-hell: #fa6100;                 /* Grund 1. IHR Orange */
   --ton-tief: #1d140e;                 /* Grund 2. IHR Schwarz */
 
+  /**
+   * ── Das Ofenmaul ────────────────────────────────────────────────────────
+   *
+   * Oben halbrund, unten gerade — die Form ihres Ofens. Sie stand bis zum
+   * 01.09. dreimal im Stilblatt (Arkade, QR-Schild, jetzt Karte und
+   * Bestellwege) und war dreimal von Hand hingeschrieben.
+   *
+   * Als PROZENTE, nicht als Pixel, und genau das ist der Punkt: derselbe Wert
+   * ergibt auf einem quadratischen Feld eine Kuppel, auf einem breiten eine
+   * flache Ofenöffnung. Karol: „harmonisch der jeweiligen Grösse". Die Form
+   * passt sich von allein an, ohne dass irgendwo eine zweite Zahl steht.
+   *
+   * 46 statt 50 % senkrecht: ein exakter Halbkreis sieht bei hohen Feldern aus
+   * wie ein Tunnel.
+   */
+  --maul: 50% 50% 3px 3px / 46% 46% 3px 3px;
+
   --tinte: oklch(30% 0.055 55);        /* Espresso — 11,2 auf hell, AAA */
   /* 44 statt 48 %: der wärmere Grund kostet Kontrast. Bei 48 % kam die
      gedämpfte Schrift auf dem tiefen Clay auf 4,44 und damit UNTER die Grenze
@@ -213,7 +230,17 @@
    * Familie und im selben Helligkeitsbereich wie das Clay.
    */
   --glut-grund: #fa6100;                 /* identisch mit --ton-hell: es gibt nur EIN Orange */
-  --glut-schrift: var(--creme);          /* 6,20 darauf */
+  /**
+   * ACHTUNG, gemessen am 01.09.: hier stand „6,20 darauf". Das stimmte, als
+   * --glut-grund noch ein dunkleres Gebranntes war. Seit --glut-grund auf ihr
+   * #FA6100 steht, ist es 2,84 — Creme auf ihrem Orange fällt durch, und zwar
+   * auch für grosse Schrift (Grenze 3,0). Reinweiss käme auf 3,10.
+   *
+   * Deshalb trägt Creme auf Orange nur noch DISPLAY-Schrift, und alles, was
+   * gelesen statt erfasst wird, steht auf einer dunklen Fläche — siehe die
+   * Ofenmäuler in sektionen.css.
+   */
+  --glut-schrift: var(--creme);
   --glut-leise: color-mix(in oklch, var(--creme) 82%, transparent);
   /* Gold für Etikett und Marken — 5,05 auf dem Grund. Ihr Logo-Orange wäre
      hier unsichtbar: Orange auf Orange. */

@@ -2117,13 +2117,83 @@
  * `inline-block` statt `float` oder Raster: die Zeile bleibt damit eine Zeile
  * und bricht mit dem Namen um, wenn es eng wird.
  */
+/**
+ * ═══ Die Nummer ist ein Ofenmaul ═══
+ *
+ * Karol am 01.09.: „die einzelnen Nummern bei Speisekarte maybe auch mit
+ * Steinofen umranden."
+ *
+ * Es ist die richtige Stelle dafür, und nicht nur wegen der Form. Diese Nummer
+ * ist das, was der Gast am Telefon SAGT — „einmal die sieben". Sie war bis
+ * heute gedämpfter Text neben dem Namen und damit das unauffälligste Element
+ * einer Zeile, obwohl sie das benutzteste ist. Als Marke gesetzt wird sie das,
+ * was man ansteuert.
+ *
+ * Dunkel gefüllt, und das ist die Antwort auf Karols zweite Frage: „bei der
+ * Speisekarte würde ich die Schrift auch weiss machen … guck aber wie das mit
+ * Schriftfarbe weiss auf Orange ist." Gemessen auf ihrem #FA6100:
+ *
+ *     Creme        2,84   fällt durch, auch für grosse Schrift
+ *     Reinweiss    3,10   nur grosse Schrift, und das knapp
+ *     ihr Schwarz  5,85   trägt überall
+ *
+ * Weisse Schrift DIREKT auf dem Orange geht also nicht. Auf einer dunklen
+ * Fläche geht sie mit 16,6 — und ein Ofenmaul IST dunkel. Die Form, die er
+ * wollte, liefert den Grund, auf dem die Schrift steht, die er wollte.
+ */
 .zeile__nr {
-  display: inline-block;
-  min-width: 1.6em;
-  margin-right: 0.15em;
-  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.85em;
+  height: 1.85em;
+  /* Etwas kleiner als der Name: die Nummer führt zur Zeile, sie ist nicht die
+     Zeile. Gleich gross gesetzt kippt das Gewicht auf die Ziffer. */
+  font-size: 0.72em;
+  /* Auf die Schriftlinie des Namens gesetzt, nicht auf seine Unterkante. */
+  vertical-align: 0.06em;
+  margin-right: 0.5em;
+  border-radius: var(--maul);
+  background: var(--nacht);
+  /* Der Rand ist im Ruhezustand die eigene Fläche — unsichtbar, aber
+     vorhanden. Ohne ihn müsste beim Überfahren eine Breite dazukommen, und
+     die Ziffer würde um einen Pixel springen. */
+  border: 1px solid var(--nacht);
+  color: var(--creme);
+  font-weight: 620;
   font-variant-numeric: tabular-nums;
-  color: var(--tinte-leise);
+  transition:
+    color var(--dauer-mikro) var(--ease-teig),
+    border-color var(--dauer-mikro) var(--ease-teig),
+    box-shadow var(--dauer-mikro) var(--ease-teig);
+}
+
+/**
+ * Beim Überfahren geht das Maul an.
+ *
+ * Karol: „wenn man auf etwas dort mit Maus zieht, dann animativ in andere
+ * Schriftfarbe ändern, schwarz oder so, gut lesbar hervorstechen."
+ *
+ * ═══ Erster Versuch, und warum er falsch war ═══
+ *
+ * Zuerst wurde die FLÄCHE orange und die Ziffer schwarz. Der Kontrast stimmte
+ * (5,85 in beide Richtungen), aber im Bild war zu sehen, was die Zahl nicht
+ * zeigt: eine orange Fläche auf orangem Grund verschwindet als FORM. Übrig
+ * blieb eine schwebende schwarze Ziffer — das Maul verschwand genau in dem
+ * Moment, in dem man darauf zeigt.
+ *
+ * Ein Ofenmaul bleibt dunkel. Das Feuer ist DRIN. Also bleibt die Fläche, und
+ * die Ziffer nimmt ihr Orange (5,85 auf ihrem Schwarz), dazu ein Glutrand und
+ * ein Schein von unten. Die Form überlebt den Zustandswechsel, und der
+ * Wechsel liest sich als Anfeuern statt als Ausblenden.
+ */
+@media (hover: hover) {
+  .zeile:hover .zeile__nr,
+  .zeile:focus-within .zeile__nr {
+    color: var(--ton-hell);
+    border-color: var(--ton-hell);
+    box-shadow: inset 0 -0.75em 0.9em -0.5em color-mix(in oklch, var(--ton-hell) 60%, transparent);
+  }
 }
 
 .zeile__beschreibung {
@@ -2533,20 +2603,69 @@
   gap: 1rem;
 }
 
+/**
+ * ═══ Die Bestellwege sind Ofenmäuler ═══
+ *
+ * Karol am 01.09.: „lieber aber die Components dort, anstatt in so viereckige
+ * Components, lieber harmonisch der jeweiligen Grösse mit schönem
+ * Steinofen-Umriss umrunden. Somit noch mehr Identität."
+ *
+ * ═══ Warum sie dabei DUNKEL werden mussten ═══
+ *
+ * Bis heute war der linke Weg ein Rechteck mit Haarlinie und cremefarbener
+ * Schrift direkt auf ihrem Orange. Gemessen sind das 2,84 — durchgefallen,
+ * und zwar nicht nur für den kleinen Zusatz, sondern für alles darin. Der
+ * rechte Weg lag mit derselben Schrift auf ihrem Schwarz bei 16,6 und war
+ * genau deshalb der lesbarere von beiden, obwohl beide gleich gebaut waren.
+ *
+ * Ein Ofenmaul ist innen dunkel. Beide Wege sind es jetzt, und damit stimmt
+ * dreierlei auf einmal: die Form, die er wollte; die helle Schrift, die er
+ * mag; und ein Kontrast, der trägt.
+ *
+ * Die Rangfolge liegt weiter im Akzentstrich und in der orangenen
+ * Überschrift des empfohlenen Wegs — nicht in der Farbe der Fläche. Zwei
+ * verschieden helle Flächen nebeneinander lesen sich als zwei Sorten Sache,
+ * nicht als zwei Wege zu derselben.
+ */
 .weg {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  /* Mittig, weil ein Bogen mittig ist. Linksbündiger Text unter einer Kuppel
+     läuft an der einen Seite gegen die Rundung und lässt die andere leer. */
+  text-align: center;
   gap: 0.35rem;
-  padding: clamp(1.2rem, 3vw, 1.75rem);
-  border: 1px solid var(--linie);
+  /* Oben mehr Platz: die Kuppel nimmt sich rund 40 % der Höhe, und eine
+     Überschrift, die darin beginnt, wird an den Schultern beschnitten. */
+  padding: clamp(2.6rem, 7vw, 4rem) clamp(1.4rem, 3.5vw, 2rem) clamp(1.4rem, 3vw, 1.9rem);
+  border-radius: var(--maul);
+  background: var(--ton-tief);
+  border: 1px solid var(--nacht-linie);
+  /* Die Insel dreht die Tinte um, wie jede dunkle Fläche in einer hellen
+     Sektion. Der Akzent MUSS mitdrehen: die Sektion setzt ihn auf ihr Schwarz
+     (auf Orange ist das richtig), und ohne diese Zeile stand „Anrufen" schwarz
+     auf Schwarz — gemessen unsichtbar, im ersten Bild nach dem Umbau sofort
+     aufgefallen. Der WhatsApp-Weg hatte seine eigene Ausnahme und war deshalb
+     als einziger zu sehen. */
+  --tinte: var(--creme);
+  --tinte-leise: var(--creme-ruhig);
+  --akzent: var(--ton-hell);
   text-decoration: none;
-  color: var(--tinte);
+  color: var(--creme);
   transition:
     transform var(--dauer-mikro) var(--ease-teig),
-    border-color var(--dauer-mikro) var(--ease-teig);
+    border-color var(--dauer-mikro) var(--ease-teig),
+    box-shadow var(--dauer-mikro) var(--ease-teig);
 }
 @media (hover: hover) {
-  .weg:hover { transform: translateY(-3px); border-color: var(--akzent); }
+  .weg:hover {
+    transform: translateY(-3px);
+    border-color: var(--akzent);
+    /* Ein Ofen, in den man hineinsieht, glüht. Der Schein liegt INNEN an der
+       Kante, nicht als Schatten aussen — aussen wäre es ein schwebender
+       Kasten, innen ist es Feuer. */
+    box-shadow: inset 0 -2.5rem 3rem -2rem color-mix(in oklch, var(--ton-hell) 55%, transparent);
+  }
 }
 
 /**
@@ -2731,22 +2850,43 @@
       .scanschild__mitte { justify-self: start; text-align: left; justify-items: start; }
 }
 
+/**
+ * Der empfohlene Weg.
+ *
+ * Der Akzentstrich sass bis zum 01.09. an der Startkante. Auf einem Rechteck
+ * war das richtig; auf einem Bogen gibt es keine gerade Startkante mehr — der
+ * Strich hätte an der Rundung entlanglaufen und sie zerschneiden müssen.
+ *
+ * Er liegt jetzt UNTEN, auf der einzigen Kante, die der Bogen gerade lässt:
+ * die Schwelle des Ofens. Dieselbe Aussage, an der Stelle, die die Form noch
+ * hergibt.
+ */
 .weg--glut {
-  --tinte: var(--creme);
   --tinte-leise: oklch(84% 0.024 74);
-  color: var(--creme);
-  background: var(--ton-tief);
-  border-color: var(--linie);
   box-shadow: var(--clay-ruhe);
-  /* Der Strich an der Startkante ist das einzige, was diesen Weg vom anderen
-     unterscheidet — und er spricht die Sprache der Etiketten, die überall auf
-     dieser Seite mit einem kurzen Strich beginnen. */
-  border-inline-start: 3px solid var(--akzent);
+  border-block-end: 3px solid var(--akzent);
 }
-.weg--glut:hover { border-color: var(--akzent); }
 
-/* Ihr Orange auf ihrem Schwarz — dasselbe Paar wie auf ihren eigenen Knöpfen. */
-.weg--glut .weg__art { color: var(--ton-hell); }
+/**
+ * Die Überschrift des Wegs in ihrem Orange.
+ *
+ * ═══ Warum das gedrehte --akzent allein nicht reicht ═══
+ *
+ * `.weg` setzt `--akzent` auf ihr Orange, und `.etikett` liest genau diese
+ * Variable. Trotzdem stand „Anrufen" schwarz auf Schwarz — gemessen: die
+ * Variable IST auf dem Element #fa6100, die Farbe kommt aber als
+ * rgb(29,20,14) heraus.
+ *
+ * Der Grund steht in bausteine.css: `.sektion--glut .etikett { color:
+ * var(--nacht) }` setzt die Farbe DIREKT, nicht über die Variable. Eine
+ * Variable umzudrehen hilft nichts gegen eine Regel, die das Ergebnis
+ * festschreibt — und mit zwei Klassen ist sie spezifischer als `.etikett`.
+ *
+ * Deshalb hier drei Klassen. Die dunkle Insel ist eine Ausnahme von der
+ * Sektionsregel und muss sie auf demselben Weg schlagen, auf dem sie gesetzt
+ * wurde.
+ */
+.sektion--glut .weg .etikett { color: var(--ton-hell); }
 
 .weg__wert {
   font-family: var(--font-display);
@@ -3279,7 +3419,7 @@
   padding: clamp(0.3rem, 0.7vw, 0.55rem);
   background: var(--creme);
   border: 1px solid var(--linie);
-  border-radius: 50% 50% 3px 3px / 46% 46% 3px 3px;
+  border-radius: var(--maul);
   --wurf: 0.7;
   filter: var(--schatten-speise);
 }

@@ -167,23 +167,66 @@
  */
 .sektion--glut {
   background: var(--glut-grund);
-  color: var(--glut-schrift);
-  /* Dieselbe Umkehrung wie auf Schwarz, aus demselben Grund — siehe dort. */
-  --tinte: var(--creme);
-  --tinte-leise: var(--glut-leise);
-  --linie: var(--glut-linie);
+  /**
+   * ═══ Gemessen am 01.09.: hier war alles Creme, und alles fiel durch ═══
+   *
+   * Karol: „bei der Speisekarte würde ich die Schrift auch weiss machen wie
+   * unten beim ersten Screen … guck aber, wie das mit Schriftfarbe weiss auf
+   * Orange ist." Nachgemessen, jede Zeile der Bestellsektion einzeln:
+   *
+   *     Ruf an oder schreib uns   64 px   2,84   durchgefallen (Grenze 3,0)
+   *     Beides geht sofort …      24 px   2,84   durchgefallen
+   *     noch nicht bestätigt      17 px   2,84   durchgefallen (Grenze 4,5)
+   *     Lieferando / Uber / Wolt  17 px   2,84   durchgefallen
+   *     Wir wissen noch nicht …   14 px   2,84   durchgefallen
+   *
+   * Die Umkehrung stammte aus der Zeit, als --glut-grund ein abgedunkeltes
+   * Gebranntes war; darauf trug Creme mit 6,20. Seit --glut-grund auf ihrem
+   * #FA6100 steht, trägt sie nirgends mehr. Der Vermerk „6,20" stand noch bis
+   * heute in tokens.css und war seit dem Farbwechsel falsch.
+   *
+   * ═══ Die Teilung statt der Rolle rückwärts ═══
+   *
+   * Alles auf Schwarz zu drehen wäre richtig gemessen und falsch entschieden:
+   * die helle Schrift auf Orange ist genau das, was Karol an dieser Sektion
+   * mag. Also wird geteilt, und die Grenze ist nicht Geschmack, sondern die
+   * WCAG-Grenze selbst:
+   *
+   *   DISPLAY-Schrift bleibt hell — aber REINWEISS statt Creme. Weiss kommt
+   *   auf 3,10 und hält damit die Grenze für grosse Schrift; Creme kommt auf
+   *   2,84 und reisst sie. Der Unterschied ist mit blossem Auge kaum zu
+   *   sehen und entscheidet trotzdem.
+   *
+   *   ALLES, WAS GELESEN WIRD, steht in ihrem Schwarz — 5,85, und damit über
+   *   der strengen Grenze von 4,5. Ein Hinweis in 14 px ist kein Schmuck; wer
+   *   ihn nicht lesen kann, verliert die Auskunft.
+   */
+  color: var(--nacht);
+  --tinte: var(--nacht);
+  /* 82 % statt 76 %: bei 76 % kommt der Nebentext auf 4,11 und damit UNTER
+     die Grenze. 82 % ergeben 4,57. Dieselbe Rechnung wie seinerzeit bei
+     --tinte-leise auf dem Clay, nur mit einem heisseren Grund. */
+  --tinte-leise: color-mix(in oklch, var(--nacht) 82%, var(--ton-hell));
+  --linie: color-mix(in oklch, var(--nacht) 32%, var(--ton-hell));
 }
 
-/* Gold für das Etikett — 5,05 auf dem gebrannten Grund. Ihr Logo-Orange wäre
-   hier unsichtbar (Orange auf Orange), Schwarz käme auf 2,68. */
+/* Ihr Schwarz auf ihrem Orange — 5,85, dasselbe Paar wie auf ihren eigenen
+   Knöpfen. Gold käme auf 1,9 und wäre hier fast unsichtbar. */
 .sektion--glut .etikett { color: var(--nacht); }
-/* Kein eigener Wert mehr — Überschriften und Vorspann erben die Tinte, und
-   die ist auf diesem Grund ihr Schwarz. */
+
+/**
+ * Die grosse Schrift bleibt hell, und zwar in Reinweiss.
+ *
+ * Nicht --creme: der Unterschied zwischen 2,84 und 3,10 ist genau der
+ * Unterschied zwischen durchgefallen und bestanden. Weiss ist auf dieser
+ * Seite sonst nirgends im Einsatz; hier ist es kein neuer Ton, sondern der
+ * gemessene Grenzwert.
+ */
 .sektion--glut h1,
 .sektion--glut h2,
-.sektion--glut h3 { color: var(--tinte); }
-.sektion--glut .leise,
-.sektion--glut .lead { color: var(--tinte-leise); }
+.sektion--glut h3,
+.sektion--glut .lead { color: #fff; }
+.sektion--glut .leise { color: var(--tinte-leise); }
 
 @media (hover: hover) {
   /* Auf Orange ist Gold zu nah dran — das Schwarz ist hier das Signal. */
