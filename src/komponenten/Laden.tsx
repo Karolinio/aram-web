@@ -192,7 +192,7 @@ export default function Laden() {
             titel="Mehr als 25 Jahre"
             lead={
               <>
-                <span className="luecke">Diesen Absatz schreibt der Inhaber selbst</span> — was
+                <span className="luecke">Diesen Absatz schreibt der Inhaber selbst</span>. Was
                 seinen Laden ausmacht, weiss er besser als wir.
               </>
             }

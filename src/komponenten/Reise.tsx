@@ -97,7 +97,7 @@ export default function Reise() {
                Vorhang, „von Hand gerollt" in der Handarbeit, „erst bei deiner
                Bestellung belegt" in beiden. Übrig bleibt der eine Satz, den
                nur diese Sektion sagen kann. */
-            lead="Das Käseschiffchen kommt als Letztes aus dem Ofen — und hält am längsten warm."
+            lead="Das Käseschiffchen kommt als Letztes aus dem Ofen und hält am längsten warm."
           />
         </div>
 

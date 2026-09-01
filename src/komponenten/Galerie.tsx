@@ -107,7 +107,7 @@ export default function Galerie() {
           und wer es nicht ausprobiert, sieht vier von sieben Bildern. Ein Satz
           und zwei Pfeile kosten eine Zeile und lösen genau das. */}
       <div className="schale galerie__leiste">
-        <p className="galerie__hinweis">Ziehen oder blättern — es sind {BILDER.length}.</p>
+        <p className="galerie__hinweis">Ziehen oder blättern. Es sind {BILDER.length}.</p>
         <div className="galerie__pfeile">
           <button
             type="button"

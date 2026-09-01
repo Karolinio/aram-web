@@ -346,9 +346,22 @@ section {
   border: 1px solid transparent;
   cursor: pointer;
   text-decoration: none;
-  /* Der eine gefüllte Knopf. */
-  background: var(--akzent);
-  color: var(--ton-hell);
+  /**
+   * ═══ Der eine gefüllte Knopf — creme, nicht orange ═══
+   *
+   * Hier stand `background: var(--akzent); color: var(--ton-hell)`. Das war
+   * richtig, solange der Akzent ein Terrakotta auf hellem Clay war. Seit die
+   * Seite nur noch Schwarz und ihr Orange kennt, sind BEIDE Werte dasselbe
+   * Orange — der Knopf schrieb orange auf orange. Karol hat es an „Zur Karte"
+   * gesehen: „das aktuelle Orange soll so ein hochwertiges Weiss sein."
+   *
+   * Creme mit ihrem Schwarz darauf trägt auf beiden Gründen: auf Schwarz als
+   * heller Block, auf Orange als der einzige helle Fleck. Und es ist der
+   * ruhigere Auftritt — ein gefüllter Knopf in der Grundfarbe der Sektion
+   * schreit, einer in Creme steht einfach da.
+   */
+  background: var(--creme);
+  color: var(--nacht);
   box-shadow: var(--clay-ruhe);
   transition:
     transform var(--dauer-mikro) var(--ease-teig),

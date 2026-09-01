@@ -96,7 +96,7 @@ export default function Bestellen() {
             <Etikett klasse="weg__art">WhatsApp</Etikett>
             <span className="weg__wert">Nachricht schreiben</span>
             <span className="weg__zusatz">
-              Gerichte in der Karte antippen — der Text schreibt sich selbst.
+              Gerichte in der Karte antippen, der Text schreibt sich selbst.
             </span>
           </a>
 
@@ -121,7 +121,7 @@ export default function Bestellen() {
           </ul>
           <p className="dienste__grund leise">
             Wir wissen noch nicht, ob Aram dort gelistet ist. Solange das offen ist, steht hier
-            kein Link — ein Knopf, der ins Leere führt, ist schlimmer als keiner.
+            kein Link. Ein Knopf, der ins Leere führt, ist schlimmer als keiner.
           </p>
         </div>
         </div>

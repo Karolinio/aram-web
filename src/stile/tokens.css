@@ -535,5 +535,8 @@
   /* Höhe der Kopfzeile. Steht hier, weil zwei Dinge davon abhängen: der Abstand
      der Sprungmarken (scroll-margin-top) und der Platz oben im Hero. Zwei
      Zahlen, die auseinanderlaufen, sind ein abgeschnittenes Gericht. */
-  --kopf-hoehe: 3.75rem;
+  /* 4,6 statt 3,75 rem. Karol: „Glasheader vielleicht etwas grösser, also
+     weiter nach unten." Eine Scheibe braucht Dicke, um als Scheibe zu lesen —
+     bei 60 px war sie eine Leiste mit Unschärfe dahinter. */
+  --kopf-hoehe: 4.6rem;
 }

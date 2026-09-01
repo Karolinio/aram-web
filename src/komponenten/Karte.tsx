@@ -148,7 +148,7 @@ export default function Karte() {
 
         <div className="filter">
           <p className="filter__titel" id="filter-titel">
-            Enthält etwas, das du nicht verträgst? Tipp es an — dann verschwindet es.
+            Enthält etwas, das du nicht verträgst? Tipp es an, dann verschwindet es.
           </p>
           <div className="filter__knoepfe" role="group" aria-labelledby="filter-titel">
             {allergene.map((a) => (

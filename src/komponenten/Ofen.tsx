@@ -53,7 +53,7 @@ export default function Ofen() {
           id="ofen-titel"
           etikett="Und dann"
           titel="In die Glut"
-          lead="Belegt wird erst bei der Bestellung, gebacken wird sofort danach. Deshalb dauert es ein paar Minuten — und deshalb kommt es heiss."
+          lead="Belegt wird erst bei der Bestellung, gebacken wird sofort danach. Deshalb dauert es ein paar Minuten, und deshalb kommt es heiss."
         />
       </div>
 

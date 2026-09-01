@@ -140,7 +140,7 @@ export default function Ladenschild() {
             <span className="schild__glanz" aria-hidden="true" />
         <img
           src="/bilder/echt/logo.webp"
-          alt="Aram — Pizzeria & Gastronomie"
+          alt="Aram Pizzeria & orientalisches Gebäck"
           width={1220}
           height={540}
           loading="eager"

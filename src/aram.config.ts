@@ -17,8 +17,8 @@ export type Luecke = null
 
 export const ARAM = {
   name: 'Aram',
-  langname: 'Aram — Orientalisches Gebäck & Pizza',
-  einzeiler: 'Frisch gebacken, mit Herz gemacht — orientalische Backkunst in Bonn.',
+  langname: 'Aram Pizzeria & orientalisches Gebäck',
+  einzeiler: 'Frisch gebacken, mit Herz gemacht. Orientalische Backkunst in Bonn.',
 
   kontakt: {
     /* Gemessen von der alten Seite. Dort steht sie in der Navigation OHNE fuehrende

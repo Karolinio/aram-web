@@ -89,7 +89,7 @@ const SCHRITTE = [
   {
     zahl: '03',
     titel: 'Erst dann belegt',
-    text: 'Käse, Zaatar, Hackfleisch — was du bestellst.',
+    text: 'Käse, Zaatar, Hackfleisch. Was du bestellst.',
     art: 'freisteller' as const,
     /* ═══ Das Spiegelei ist raus ═══
        Karol, zum zweiten Mal: „ohne Ei." In /bilder/reise/ lag die
