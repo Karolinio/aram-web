@@ -1058,48 +1058,108 @@
  * kein Knopf mit Javascript: er funktioniert auch, bevor irgendetwas geladen
  * ist, und er landet im Verlauf.
  */
-.backstube__weiter {
-  display: inline-flex;
+/**
+ * ═══ Die drei Steine unter der Überschrift ═══
+ *
+ * Hier stand ein einzelner Knopf in ihrem Orange, halbdurchsichtig über dem
+ * Video. Karol am 01.09.: „mach drei kleine Steine … genau auf derselben
+ * Höhe, wo jetzt gerade Zur Karte steht."
+ *
+ * Sie sind Ofenmäuler wie die Bestellwege und die Nummern der Speisekarte —
+ * dieselbe Form in drei Grössen, und weil der Radius in Prozent steht, wird
+ * daraus von allein eine flache Öffnung statt einer Kuppel.
+ *
+ * ═══ Warum sie dunkel sind und nicht orange ═══
+ *
+ * Sie liegen auf einem VIDEO, und ein Video hat keinen festen Grund: mal
+ * Kruste, mal Käse, mal Schatten. Der alte Knopf hat das mit einem
+ * Textschatten in beide Richtungen erschlagen, was ihn weich aussehen liess.
+ * Eine dunkle Fläche braucht das nicht: Creme darauf misst 16,6, egal was
+ * darunter durchläuft. Dieselbe Entscheidung wie bei den Bestellwegen, und
+ * aus demselben Grund.
+ */
+.backstube__steine {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(0.5rem, 1.4vw, 0.9rem);
+  margin-top: clamp(0.75rem, 2.4vw, 1.8rem);
+}
+
+.stein {
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.55rem;
-  margin-top: clamp(0.5rem, 2vw, 1.5rem);
-  padding: 0.6em 1.15em;
-  border: 1px solid var(--linie);
-  border-radius: 999px;
-  font-family: var(--font-display);
-  font-variation-settings: var(--wonk-klein);
-  font-size: var(--text-meta);
-  font-weight: 600;
-  color: var(--tinte);
-  text-decoration: none;
-  /* 88 statt 70 %: er steht mitten im Bild, wo das Video am unruhigsten ist.
-     Gemessen kam er am Handy auf 2,43. */
-  background: color-mix(in oklch, var(--ton-hell) 88%, transparent);
-  -webkit-backdrop-filter: blur(14px) saturate(120%) brightness(1.2);
-  backdrop-filter: blur(14px) saturate(120%) brightness(1.2);
+  justify-content: center;
+  gap: 0.1rem;
+  /* Oben mehr Platz als unten: die Kuppel nimmt sich die obere Hälfte. */
+  padding: clamp(1.35rem, 3.4vw, 2rem) clamp(1rem, 2.6vw, 1.6rem)
+           clamp(0.7rem, 1.6vw, 1rem);
+  min-width: clamp(7.5rem, 15vw, 10.5rem);
+  border-radius: var(--maul);
+  background: color-mix(in oklch, var(--ton-tief) 92%, transparent);
+  border: 1px solid var(--nacht-linie);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
-  transition: background var(--dauer-mikro) var(--ease-teig),
-              border-color var(--dauer-mikro) var(--ease-teig);
-  text-shadow:
-    0 1px 1px oklch(96% 0.02 78 / 0.95),
-    0 2px 10px oklch(96% 0.02 78 / 0.85);
+  color: var(--creme);
+  text-decoration: none;
+  font-family: var(--font-display);
+  font-variation-settings: var(--wonk-klein);
+  transition:
+    transform var(--dauer-mikro) var(--ease-teig),
+    border-color var(--dauer-mikro) var(--ease-teig),
+    box-shadow var(--dauer-mikro) var(--ease-teig);
 }
-.backstube__weiter svg { width: 1.05em; height: 1.05em; }
-/* Der Pfeil atmet, der Knopf nicht. Bewegung an der Umrandung würde die Zeile
-   darunter mitschieben; ein `transform` am Symbol kostet kein Layout. */
-.backstube__weiter svg { animation: sinken 2.4s var(--ease-teig) infinite; }
+
+.stein__wort {
+  font-size: var(--text-meta);
+  font-weight: 620;
+  line-height: 1.15;
+}
+
+.stein__zusatz {
+  font-family: var(--font-text);
+  font-size: var(--text-micro);
+  color: var(--creme-ruhig);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Der erste Weg ist der empfohlene, und er wird auf dieselbe Art markiert wie
+   der empfohlene Bestellweg: ein Strich auf der Schwelle des Ofens. Keine
+   zweite Farbe, keine zweite Grösse — dieselbe Sprache an beiden Stellen. */
+.stein--erst { border-block-end: 3px solid var(--ton-hell); }
+
+.stein svg { width: 1.05em; height: 1.05em; margin-top: 0.15rem; }
+/* Der Pfeil atmet, der Stein nicht. Bewegung an der Umrandung würde die Reihe
+   mitschieben; ein `transform` am Symbol kostet kein Layout. */
+.stein svg { animation: sinken 2.4s var(--ease-teig) infinite; }
 @keyframes sinken {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(3px); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .backstube__weiter svg { animation: none; }
+  .stein svg { animation: none; }
 }
+
 @media (hover: hover) {
-  .backstube__weiter:hover {
-    background: var(--ton-tief);
-    border-color: var(--tinte-leise);
+  .stein:hover {
+    transform: translateY(-3px);
+    border-color: var(--ton-hell);
+    /* Der Ofen glüht von innen, wie bei den Bestellwegen und den Nummern. */
+    box-shadow: inset 0 -1.6rem 2rem -1.4rem
+      color-mix(in oklch, var(--ton-hell) 60%, transparent);
+  }
+}
+
+/* Am Handy stehen drei Steine nebeneinander nicht mehr — sie brechen um, und
+   dann wären sie ungleich breit. Volle Breite geteilt durch zwei, der dritte
+   darunter mittig: das liest sich als Gruppe statt als Rest. */
+@media (max-width: 559px) {
+  .backstube__steine { gap: 0.5rem; }
+  .stein {
+    flex: 1 1 calc(50% - 0.25rem);
+    min-width: 0;
+    padding-inline: 0.6rem;
   }
 }
 

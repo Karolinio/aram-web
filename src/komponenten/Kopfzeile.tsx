@@ -127,11 +127,21 @@ export default function Kopfzeile() {
             Laden", und die Bestellleiste am Fuss kennt den Status weiterhin.
             Oeffnung.tsx bleibt deshalb im Bau. */}
 
-        <a className="knopf kopf__anruf" href={ARAM.kontakt.telefonHref}>
-          <span aria-hidden="true">☎</span>
-          <span className="kopf__anruf-text">{ARAM.kontakt.telefon}</span>
-          <span className="kopf__anruf-kurz">Anrufen</span>
-        </a>
+        {/* ═══ Und auch die Nummer ist aus dem Kopf heraus ═══
+
+            Karol am 01.09.: „lass den schweren Platz aus." Die Nummer sass in
+            einer gefüllten Pille oben rechts — dem lautesten Platz der ganzen
+            Seite, und dort stand sie auf JEDEM Bildschirmmeter, auch mitten
+            in der Speisekarte.
+
+            Sie ist nicht gestrichen, sie ist umgezogen: als einer der drei
+            Steine unter der Überschrift auf der Startseite, neben „Zur Karte"
+            und WhatsApp. Dort steht sie in der Reihe der Wege, statt über
+            allem zu schweben.
+
+            Was das kostet, ist gemessen und steht in der Commit-Meldung: vom
+            Verlassen der Startseite bis „Der Laden" ist keine Nummer mehr in
+            Reichweite. Wenn das zu weit wird, ist der Rückweg eine Zeile. */}
 
         {/* Der Knopf steht NACH der Nummer, nicht davor. Auf einer Gastro-Seite
             ist Anrufen die Handlung und das Menü der Umweg; die wichtigere

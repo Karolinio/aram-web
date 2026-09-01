@@ -25,7 +25,25 @@ export const ARAM = {
        Null — auf dem Handy ruft die niemanden an. Hier korrigiert. */
     telefon: '0177 4637662',
     telefonHref: 'tel:+491774637662',
-    /* Die Nummer ist eine Mobilnummer, WhatsApp ist im Fuss der alten Seite verlinkt. */
+    /**
+     * ═══ OFFEN: welche Nummer ist die WhatsApp-Nummer? ═══
+     *
+     * Beim Bau der Startseiten-Steine am 01.09. nachgesehen, und dabei einen
+     * Widerspruch gefunden, den ich nicht auflösen kann:
+     *
+     *   Flyer, Bild 13   WhatsApp-Symbol neben +49 177 4637662
+     *   Flyer, Bild 7    WhatsApp-Symbol neben 0152 090 921 00
+     *   ihre Google-Seite  „WhatsApp: 0152/090 921 00"
+     *
+     * Zwei Quellen nennen die 0152, eine die 0177 — aber die 0177 ist die, die
+     * hier schon verlinkt war, und beide tragen auf ihrem eigenen Druckstück
+     * das WhatsApp-Zeichen. Vermutlich ist eine davon älter.
+     *
+     * Bis der Inhaber es sagt, bleibt die 0177 stehen: sie ist die Nummer, die
+     * auch im Kopf und in den Steinen als Telefonnummer läuft, und eine
+     * falsche WhatsApp-Nummer schickt eine Bestellung an einen Fremden.
+     * Ändern ist eine Zeile.
+     */
     whatsapp: 'https://wa.me/491774637662',
 
     /**

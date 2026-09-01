@@ -153,13 +153,60 @@ export default function Backstube() {
           </p>
         </div>
 
-        <a className="backstube__weiter" href="#karte">
-          <span>Zur Karte</span>
-          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path d="M12 4v15m0 0-6-6m6 6 6-6" fill="none" stroke="currentColor"
-              strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </a>
+        {/**
+          * ═══ Drei Steine statt eines Knopfes ═══
+          *
+          * Karol am 01.09.: „Machst du drei kleine Steine: bei einem schreibst
+          * du zur Karte rein, bei dem anderen die Telefonnummer, bei dem
+          * dritten das Insta … iteriere, was am meisten Sinn macht und wie
+          * viele wir wirklich brauchen."
+          *
+          * DREI, und jeder steht für eine Absicht, die ein Gast wirklich hat:
+          * nachsehen, anrufen, schreiben. Mehr Knöpfe nebeneinander heissen
+          * nicht mehr Wege, sondern eine Wahl, die niemand treffen wollte.
+          *
+          * Der QR ist NICHT dabei, obwohl Karol ihn erwogen hat. Zwei Gründe,
+          * und beide sind hart: am Handy — wo die meisten Gäste sind — kann
+          * man den eigenen Schirm nicht scannen, der Stein wäre dort tot. Und
+          * am Rechner tut er dasselbe wie „Zur Karte", nur mit einem Gerät
+          * mehr dazwischen. Er hat seinen Platz schon, unten bei „Karte aufs
+          * Handy", wo die Zeile daneben erklärt, wofür er gut ist.
+          *
+          * Instagram fehlt, und zwar nicht aus Nachlässigkeit: in
+          * aram.config.ts steht dafür `null`, und weder auf ihren beiden
+          * Flyern noch auf ihrer eigenen Seite steht ein Handle. Der Stein ist
+          * gebaut und erscheint von selbst, sobald einer eingetragen ist —
+          * dieselbe Regel wie bei den Lieferdiensten: ein Knopf, der ins Leere
+          * führt, ist schlimmer als keiner.
+          */}
+        <nav className="backstube__steine" aria-label="Schnellwege">
+          <a className="stein stein--erst" href="#karte">
+            <span className="stein__wort">Zur Karte</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M12 4v15m0 0-6-6m6 6 6-6" fill="none" stroke="currentColor"
+                strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </a>
+
+          <a className="stein" href={ARAM.kontakt.telefonHref}>
+            <span className="stein__wort">Anrufen</span>
+            <span className="stein__zusatz">{ARAM.kontakt.telefon}</span>
+          </a>
+
+          <a className="stein" href={ARAM.kontakt.whatsapp} rel="noopener noreferrer"
+            target="_blank">
+            <span className="stein__wort">WhatsApp</span>
+            <span className="stein__zusatz">Schreib uns</span>
+          </a>
+
+          {ARAM.sozial.instagram && (
+            <a className="stein" href={ARAM.sozial.instagram} rel="noopener noreferrer"
+              target="_blank">
+              <span className="stein__wort">Instagram</span>
+              <span className="stein__zusatz">Was heute rauskommt</span>
+            </a>
+          )}
+        </nav>
       </div>
     </section>
   )
