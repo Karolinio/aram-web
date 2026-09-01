@@ -83,11 +83,20 @@ function useLueckenMelden() {
     )
     console.log('Preise fehlen:', preiseFehlen(), 'von',
       SLOTS.length > 0 ? 'allen Gerichten der Karte' : '—')
-    console.warn(
-      'ERZEUGTE Gerichtebilder auf dieser Seite:', erzeugteGerichte(),
-      '— sie zeigen NICHT ihr Essen. Siehe public/bilder/erzeugt/LIESMICH.md.',
-      'Sobald die echten Fotos da sind: Ordner löschen, nicht ergänzen.',
-    )
+    /* Seit dem 01.09. steht hier null: der fliegende Schwarm besteht
+       vollständig aus ihren eigenen Gebäcken, freigestellt aus den Fotos, die
+       der Inhaber geschickt hat. Die Meldung bleibt stehen — sie ist der
+       Wächter, der sich meldet, falls je wieder ein erzeugtes Bild
+       hereinrutscht. */
+    const erzeugt = erzeugteGerichte()
+    if (erzeugt > 0) {
+      console.warn(
+        'ERZEUGTE Gerichtebilder auf dieser Seite:', erzeugt,
+        'Sie zeigen NICHT ihr Essen. Siehe public/bilder/erzeugt/LIESMICH.md.',
+      )
+    } else {
+      console.log('Gerichtebilder: alle echt.')
+    }
     console.log('Vor dem Livegang:', lueckenVorLive().join(' · ') || 'nichts')
     console.groupEnd()
     /* eslint-enable no-console */
