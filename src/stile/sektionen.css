@@ -2270,6 +2270,25 @@
 
 .laden__wort .datenzeile + .datenzeile { margin-top: clamp(1.1rem, 2.2vw, 1.6rem); }
 
+/**
+ * ═══ Die Auskunft nutzt die Breite ═══
+ *
+ * Alles untereinander ergab eine sehr lange, sehr dünne Spalte — und daneben
+ * standen zwei hohe Fotos, sodass die Sektion links voll und rechts leer war.
+ *
+ * Ab 62 rem stehen Anschrift und Erreichbarkeit NEBENEINANDER. Das halbiert
+ * die Höhe der Spalte und bricht zugleich die Reihe gleicher Bausteine, die
+ * das Ganze wie ein Formular aussehen liess.
+ */
+@media (min-width: 62rem) {
+  .laden__wort .daten {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    column-gap: clamp(1.5rem, 3vw, 2.75rem);
+  }
+  .laden__wort .datenzeile + .datenzeile { margin-top: 0; }
+}
+
 /* Die Anschrift ist ein ZIEL, kein Feldwert — sie darf so gross sein wie eine
    Zwischenüberschrift. */
 .laden__wort .datenzeile dd {

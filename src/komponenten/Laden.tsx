@@ -224,10 +224,22 @@ export default function Laden() {
               )}
             </Datenzeile>
 
-            {/* Mobil zuerst: das ist die Nummer auf ihrem Flyer, und sie
-                nimmt WhatsApp. Das Festnetz steht darunter fuer alle, die
-                lieber anrufen. */}
-            <Datenzeile was="Telefon">
+            {/* ═══ Telefon und E-Mail sind EIN Block ═══
+
+                Vorher standen „Geöffnet", „Wo", „Telefon" und „E-Mail"
+                untereinander in einer schmalen Spalte — viermal dasselbe
+                Etikett mit Strich, viermal derselbe Aufbau. Karol: „sieht
+                amateurhaft aus." Das ist der Grund: nicht die Farbe, sondern
+                die Wiederholung. Vier gleiche Bausteine in einer Reihe lesen
+                sich als Formular, nicht als Auskunft.
+
+                Jetzt drei statt vier, und die beiden unteren stehen
+                NEBENEINANDER. Telefon und E-Mail gehören ohnehin zusammen: es
+                ist eine Frage („wie erreiche ich euch"), nicht zwei.
+
+                Mobil zuerst — das ist die Nummer auf ihrem Flyer, und sie
+                nimmt WhatsApp. */}
+            <Datenzeile was="Erreichbar">
               <a href={ARAM.kontakt.telefonHref}>{ARAM.kontakt.telefon}</a>
               {ARAM.kontakt.festnetz && (
                 <>
@@ -235,9 +247,7 @@ export default function Laden() {
                   <a href={ARAM.kontakt.festnetzHref}>{ARAM.kontakt.festnetz}</a>
                 </>
               )}
-            </Datenzeile>
-
-            <Datenzeile was="E-Mail">
+              <br />
               <a href={`mailto:${ARAM.kontakt.mail}`}>{ARAM.kontakt.mail}</a>
             </Datenzeile>
           </dl>
