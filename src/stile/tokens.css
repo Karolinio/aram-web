@@ -467,7 +467,22 @@
   --text-hero: clamp(3.5rem, 1rem + 12vw, 12rem);
   --text-band: clamp(1.9rem, 1rem + 3.8vw, 4.5rem);
   --text-sektion: clamp(2.1rem, 1.2rem + 3.2vw, 4rem);
-  --text-gericht: clamp(1.2rem, 1.05rem + 0.7vw, 1.55rem);
+  /**
+   * ═══ Der Boden liegt bei 24 px, und das ist keine Geschmacksfrage ═══
+   *
+   * Seit der Gerichtname auf Orange WEISS steht, hängt seine Lesbarkeit an der
+   * Grösse: Weiss auf ihrem #FA6100 misst 3,10, und dieser Wert reicht nur für
+   * GROSSE Schrift (Grenze 3,0). Für normale Schrift gilt 4,5, und die wären
+   * nicht zu erreichen.
+   *
+   * Gross heisst nach WCAG ab 24 px. Der Boden stand bei 1,2 rem — am Handy
+   * also 19,2 px, und dort wäre der weisse Name durchgefallen. Jetzt 1,5 rem.
+   *
+   * Kostet Höhe: 22 Zeilen mal rund 5 px. Gegen die 15,5 Bildschirmhöhen der
+   * Seite ist das nichts, und eine Karte, die man am Telefon liest, will
+   * ohnehin grosse Namen.
+   */
+  --text-gericht: clamp(1.5rem, 1.05rem + 0.7vw, 1.55rem);
   /**
    * ═══ Diese vier Grade sind wegen Reem Kufi gewachsen ═══
    *
@@ -481,7 +496,10 @@
    * Schrift selbst — sie läuft 10 % breiter und hat höhere Versalien, und
    * breite Formen bei kleiner x-Höhe lesen sich besser als schmale.
    */
-  --text-lead: clamp(1.25rem, 1.12rem + 0.45vw, 1.5rem);
+  /* Boden bei 1,5 rem: der Vorspann steht auf Orange in Weiss und braucht
+     dafür 24 px. Bei 1,25 rem waren es am Handy 20 — und ein Vorspann ist
+     ohnehin die Zeile, die gross sein darf. */
+  --text-lead: clamp(1.5rem, 1.12rem + 0.45vw, 1.5rem);
   --text-base: 1.15rem;
   --text-meta: 1rem;
   --text-micro: 0.875rem;
@@ -507,10 +525,26 @@
    * eine durchgezogene Linie überall gleich aussieht und deshalb nirgends
    * auffällt.
    */
+  /**
+   * ═══ Punkte, keine Striche ═══
+   *
+   * Karol am 01.09.: „auf der Speisekarte auch bitte diese Scheiss-Bindestriche
+   * weg, das sieht echt kacke aus."
+   *
+   * Er meinte die Führungslinie zwischen Gericht und Preis, und er hat den
+   * Namen richtig getroffen: sie hiess zwar „Punktlinie", war aber keine.
+   * 3 px an, 5 px aus — bei 3 px Länge ist ein Segment breiter als hoch, und
+   * damit ist es kein Punkt, sondern ein Strich. Zweiundzwanzig Zeilen mit je
+   * einer Reihe kleiner Bindestriche.
+   *
+   * Ein Punkt ist so breit wie hoch: 1 px an, 5 px aus. Die Linie bleibt (sie
+   * führt das Auge vom Gericht zum Preis, und genau dafür steht sie in jeder
+   * gedruckten Karte), aber sie liest sich jetzt als Punktreihe.
+   */
   --linie-punkt: repeating-linear-gradient(
     to right,
-    var(--linie) 0 3px,
-    transparent 3px 8px
+    var(--linie) 0 1px,
+    transparent 1px 6px
   );
 
   --breite-satz: 56ch;

@@ -1610,7 +1610,11 @@
   margin: 0;
   font-family: var(--font-display);
   font-variation-settings: var(--wonk-klein);
-  font-size: clamp(1.15rem, 1rem + 0.6vw, 1.45rem);
+  /* Dieselbe Rechnung wie bei --text-gericht: die Schrittüberschrift steht auf
+     Orange in Weiss, und Weiss trägt dort nur ab 24 px. Sie lag bei 23,2 —
+     zwei Zehntel unter der Grenze, und damit durchgefallen. Jetzt fest 1,5 rem
+     statt einer Spanne, die genau darunter endete. */
+  font-size: 1.5rem;
   font-weight: 600;
   line-height: 1.15;
   letter-spacing: -0.01em;
@@ -1889,7 +1893,10 @@
    Karte von 1995. Jetzt trägt die Schrift selbst den Ton: Fraunces, gross,
    normale Schreibweise, und eine Haarlinie statt eines Balkens. */
 .gruppe__titel {
-  font-size: clamp(1.4rem, 1.1rem + 1.1vw, 1.9rem);
+  /* Boden bei 1,5 rem statt 1,4: die Überschrift steht auf Orange in Weiss,
+     und Weiss trägt dort erst ab 24 px. Bei 1,4 rem waren es am Handy 22,4 —
+     dieselbe Rechnung wie bei --text-gericht. */
+  font-size: clamp(1.5rem, 1.1rem + 1.1vw, 1.9rem);
   font-weight: 600;
   font-variation-settings: var(--wonk-kopf);
   letter-spacing: -0.01em;
@@ -3812,7 +3819,20 @@
    * und Grund. Hier steht deshalb der gebrannte Ton, der auf hellem Grund
    * dieselbe Rolle spielt.
    */
-  color: var(--glut-grund);
+  /**
+   * ═══ Nachtrag vom 01.09.: der Grund stimmte, die Rechnung fehlte ═══
+   *
+   * Der Absatz darüber sagt richtig, dass ein Farbwert immer ein PAAR aus
+   * Farbe und Grund ist — und greift dann trotzdem zu ihrem vollen Orange.
+   * Auf der cremefarbenen Tafel misst das 2,84 und reisst damit sogar die
+   * milde Grenze für grosse Schrift (3,0).
+   *
+   * Ihr Orange, um ein Fünftel in ihr Schwarz gezogen: 4,00. Es ist noch
+   * dieselbe Farbe — dieselbe Familie, derselbe Ton, nur eine Stufe tiefer,
+   * so wie eine Farbe im Druck auf saugendem Papier tiefer wird. Und mit 4,00
+   * trägt sie auch dann, wenn die Zeile am Handy unter 24 px fällt.
+   */
+  color: color-mix(in oklch, var(--glut-grund) 80%, var(--nacht));
 }
 
 .kartenblatt__ort {

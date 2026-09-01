@@ -113,7 +113,10 @@
 .sektion--hell,
 .sektion--glut {
   --tinte: var(--nacht);
-  --tinte-leise: color-mix(in oklch, var(--nacht) 78%, var(--ton-hell));
+  /* 82 % und nicht 78 %: gemessen kam der Nebentext bei 78 % auf 4,39 und lag
+     damit UNTER der Grenze von 4,5. 82 % ergeben 4,57. Der Unterschied ist mit
+     blossem Auge nicht zu sehen und entscheidet trotzdem. */
+  --tinte-leise: color-mix(in oklch, var(--nacht) 82%, var(--ton-hell));
   --linie: color-mix(in oklch, var(--nacht) 34%, transparent);
   --akzent: var(--nacht);
   color: var(--nacht);
@@ -222,10 +225,44 @@
  * Seite sonst nirgends im Einsatz; hier ist es kein neuer Ton, sondern der
  * gemessene Grenzwert.
  */
+/**
+ * ═══ Dieselbe Teilung auf JEDEM orangen Grund ═══
+ *
+ * Karol am 01.09.: „ganz unten die letzte Seite mit dem Orange und den Körnern
+ * im Hintergrund mit weisser Schrift als Kombination sieht richtig cool aus.
+ * Mach das mal bitte auf der Speisekarte auch so."
+ *
+ * Die Regel stand bisher nur auf `--glut`, weil dort der Befund entstanden
+ * war. Sie gilt aber für den Grund, nicht für die Sektion: `--hell` und
+ * `--glut` sind BEIDE ihr #FA6100, und zwei orange Sektionen mit verschieden
+ * gefärbten Überschriften lesen sich als Fehler, nicht als Abwechslung.
+ *
+ * Gemessen auf ihrem Orange, und daran ändert die Sektion nichts:
+ *
+ *     Creme        2,84   fällt durch, auch für grosse Schrift
+ *     Reinweiss    3,10   hält die Grenze für grosse Schrift (3,0)
+ *     ihr Schwarz  5,85   trägt überall
+ *
+ * Also: was ERFASST wird, ist weiss; was GELESEN wird, steht in ihrem Schwarz.
+ * In der Speisekarte fällt darunter mehr als h1 bis h3 — Gerichtname und Preis
+ * sind Absätze, aber sie sind mit 24,8 px grosse Schrift und gehören zur
+ * gleichen Ebene wie eine Überschrift. Beschreibung und Allergene nicht: die
+ * liest man Wort für Wort, und 16 px Weiss auf Orange wären 3,10 gegen eine
+ * Grenze von 4,5.
+ */
+.sektion--hell h1,
+.sektion--hell h2,
+.sektion--hell h3,
+.sektion--hell .lead,
+.sektion--hell .zeile__name,
+.sektion--hell .preis,
 .sektion--glut h1,
 .sektion--glut h2,
 .sektion--glut h3,
-.sektion--glut .lead { color: #fff; }
+.sektion--glut .lead,
+.sektion--glut .zeile__name,
+.sektion--glut .preis { color: #fff; }
+.sektion--hell .leise,
 .sektion--glut .leise { color: var(--tinte-leise); }
 
 @media (hover: hover) {
