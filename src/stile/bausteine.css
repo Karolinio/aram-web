@@ -259,14 +259,22 @@
   --tinte-leise: oklch(80% 0.022 74);
   --linie: oklch(42% 0.03 55);
   /**
-   * Auch das Signal dreht sich. `--akzent` ist ausdrücklich „DAS Signal auf
-   * HELLEM Grund" (tokens.css) — ein Terrakotta bei 48 % Helligkeit. Auf ihrem
-   * Schwarz bleibt davon fast nichts, und es traf ausgerechnet die
-   * Telefonnummer im Laden: die wichtigste Zeile der Seite, in der dunkelsten
-   * Farbe, die es hier gibt.
-   * Auf dunklem Grund übernimmt das Gold, das auch die Etiketten tragen.
+   * ═══ Kein Gold mehr ═══
+   *
+   * Karol am 01.09.: „auf derselben Sektion die Schriftart bitte anpassen,
+   * kein Gelb mehr, nur Weiss, Orange."
+   *
+   * Hier stand `--glut-marke`, ein Gelbgold. Der Grund dafür ist verjährt: er
+   * stammt aus der Zeit, als `--akzent` ein Terrakotta bei 48 % Helligkeit
+   * war, das auf ihrem Schwarz fast verschwand. Seit die Seite nur noch ihr
+   * Orange und ihr Schwarz führt, ist `--akzent` ihr #FF6600, und das misst
+   * auf ihrem Schwarz 5,85 — es trägt.
+   *
+   * Damit ist das Gold nicht nur unerwünscht, sondern überflüssig: es war eine
+   * dritte Farbe, die nur existierte, weil die zweite an dieser Stelle nicht
+   * reichte. Jetzt reicht sie.
    */
-  --akzent: var(--glut-marke);
+  --akzent: var(--ton-hell);
   /* DASSELBE Rezept, nur tiefer: ein Schatten in Clay-Braun ist auf ihrem
      Schwarz unsichtbar. Kein eigenes Rezept — nur der Ton. */
   --schatten-ton: oklch(6% 0.02 50 / 0.6);
@@ -707,6 +715,49 @@ body:has(.leiste) .wasserzeichen {
 }
 
 /**
+ * ═══ Auf ihrem Schwarz ein anderes Korn ═══
+ *
+ * Karol am 01.09.: „die Körner beim schwarzen Untergrund vielleicht etwas
+ * prägnanter." Gemessen über textfreie Ausschnitte, Streuung der Helligkeit:
+ *
+ *     Bestellen (ihr Orange)    2,39
+ *     Galerie   (ihr Schwarz)   1,60
+ *     Reise     (ihr Schwarz)   0,80
+ *     Vorhang   (ihr Schwarz)   0,07
+ *
+ * Die Ursache steht oben in der eigenen Beschreibung: `overlay` „dunkelt ab,
+ * wo der Grund dunkel ist". Auf einem Grund von neun Prozent Helligkeit gibt
+ * es nach unten aber keinen Platz mehr — die Mischart rechnet dort
+ * 2 × Grund × Korn, und davon bleibt fast nichts.
+ *
+ * Mehr Deckkraft hilft nicht gegen fehlenden Platz. Was auf Schwarz sichtbar
+ * wird, ist das, was HELLER ist. Also `screen` und ein Rauschen, das
+ * grösstenteils schwarz ist und nur vereinzelt aufhellt — siehe
+ * werkzeug/muster.py, korn_hell(). Aus gleichmässigem Grau werden einzelne
+ * helle Körner, und genau so sieht Korn auf einer dunklen Fläche aus.
+ */
+.sektion--nacht .untergrund__korn,
+.sektion--tief .untergrund__korn {
+  background-image: url('/bilder/muster-grund/korn-hell.svg');
+  mix-blend-mode: screen;
+  /**
+   * Gemessen über einen textfreien Fleck im Laden, Grundhelligkeit und
+   * Streuung:
+   *
+   *     0,15   24,9  /  2,62      wie vorher, kaum da
+   *     0,25   24,9  /  2,93
+   *     0,40   26,3  /  3,55      ein wenig über den orangen Sektionen
+   *     0,50   27,6  /  4,05      fängt an, als Rauschen zu lesen
+   *
+   * Die orangen Sektionen liegen bei 2,37 bis 3,54. „Etwas prägnanter" heisst
+   * also knapp darüber, nicht doppelt so viel — und der Grund muss bei 24
+   * bleiben. Ein Korn, das ihr Schwarz auf 67 hebt, ist kein Korn mehr,
+   * sondern ein grauer Schleier; genau das war der erste Versuch.
+   */
+  opacity: 0.4;
+}
+
+/**
  * ═══ Ihre Saat als Muster ═══
  *
  * Sesam und Schwarzkümmel — die Oberfläche jedes ihrer Gebäcke. Warum das und
@@ -734,7 +785,11 @@ body:has(.leiste) .wasserzeichen {
   opacity: 0.09;
 }
 
+/* 0,075 war nicht wenig genug, um zu stören, und nicht viel genug, um da zu
+   sein — auf Orange lag dieselbe Saat bei 0,1 und war deutlich besser zu
+   sehen, weil ihr Schwarz weniger Spielraum lässt. Karol: „die Farbe der
+   Sesamkörner auf Schwarz dann in Weiss etwas mehr sichtbar." */
 .sektion--tief .untergrund__saat,
-.sektion--nacht .untergrund__saat { color: var(--creme); opacity: 0.075; }
+.sektion--nacht .untergrund__saat { color: var(--creme); opacity: 0.15; }
 .sektion--hell .untergrund__saat,
 .sektion--glut .untergrund__saat { color: var(--nacht); opacity: 0.1; }

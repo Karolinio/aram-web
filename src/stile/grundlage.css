@@ -255,11 +255,9 @@ h3 { font-size: var(--text-gericht); font-variation-settings: var(--wonk-klein);
   }
 }
 
-/* Auf dunklem Grund ist der Akzent zu dunkel — dort geht die Zeile ins Gold,
-   dieselbe Farbe wie die Etiketten. */
-@media (hover: hover) {
-  .sektion--nacht .lebt:hover { color: var(--glut-marke); }
-}
+/* Diese Ausnahme ist am 01.09. entfallen: `--akzent` ist auf dunklem Grund
+   jetzt selbst ihr Orange (siehe bausteine.css), und die Grundregel darüber
+   trifft damit schon das Richtige. Eine Regel weniger. */
 
 @media (prefers-reduced-motion: reduce) {
   .lebt { transition: color var(--dauer-mikro) var(--ease-teig); }

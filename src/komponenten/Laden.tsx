@@ -156,7 +156,7 @@ export default function Laden() {
 
   return (
     <Sektion id="laden" grund="nacht" klasse="laden" beschriftetVon="laden-titel">
-      <Untergrund ton="nacht" />
+      <Untergrund ton="nacht" muster="saat" />
 
       <div className="schale laden__gitter">
         <div className="laden__stapel">

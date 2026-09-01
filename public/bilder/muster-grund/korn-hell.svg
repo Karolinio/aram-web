@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200">
+  <filter id="k" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/>
+    <feColorMatrix type="matrix" values="0.33 0.33 0.33 0 0  0.33 0.33 0.33 0 0  0.33 0.33 0.33 0 0  0 0 0 0 1"/>
+    <feComponentTransfer>
+      <feFuncR type="gamma" exponent="4.5"/>
+      <feFuncG type="gamma" exponent="4.5"/>
+      <feFuncB type="gamma" exponent="4.5"/>
+    </feComponentTransfer>
+  </filter>
+  <rect width="200" height="200" filter="url(#k)"/>
+</svg>

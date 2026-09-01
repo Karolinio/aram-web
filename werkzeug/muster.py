@@ -60,6 +60,69 @@ def korn() -> str:
     )
 
 
+def korn_hell() -> str:
+    """Dasselbe Korn, aber für SCHWARZE Gründe — als helle Sprenkel.
+
+    ═══ Warum das gewöhnliche Korn auf Schwarz verschwindet ═══
+
+    Es liegt in `overlay`, und das ist die richtige Mischart für alles ab
+    mittlerer Helligkeit: sie hellt auf, wo der Grund hell ist, und dunkelt ab,
+    wo er dunkel ist. Für dunkle Gründe rechnet sie `2 × Grund × Korn` — und
+    bei einem Grund von neun Prozent Helligkeit bleibt von jeder Schwankung
+    fast nichts übrig.
+
+    Gemessen über einen textfreien Ausschnitt, Streuung der Helligkeit:
+
+        Bestellen  (ihr Orange)    2,39
+        Galerie    (ihr Schwarz)   1,60
+        Reise      (ihr Schwarz)   0,80
+        Vorhang    (ihr Schwarz)   0,07
+
+    Karol: „die Körner beim schwarzen Untergrund vielleicht etwas prägnanter."
+    Er sieht genau diese Zahlen.
+
+    ═══ Warum es nicht dasselbe Korn mit mehr Deckkraft ist ═══
+
+    Auf einem fast schwarzen Grund gibt es nach unten keinen Platz mehr. Korn,
+    das dunkler wird, hat nichts, worin es dunkler werden könnte — sichtbar
+    wird auf Schwarz nur, was HELLER ist. Deshalb hier `screen` statt `overlay`
+    und ein Rauschen, das grösstenteils schwarz ist und nur vereinzelt aufhellt.
+
+    Das macht `feComponentTransfer` mit `gamma`: die Turbulenz liegt um 0,5,
+    und 0,5 hoch 4,5 sind 0,044. Was darunter liegt, fällt praktisch auf null;
+    nur die oberen Ausschläge bleiben übrig. Aus gleichmässigem Grau wird ein
+    Feld einzelner heller Körner — und genau so sieht Korn auf einer dunklen
+    Fläche in Wirklichkeit aus.
+
+    Die Alpha-Achse wird auf 1 festgesetzt. `feTurbulence` rauscht auch dort,
+    und ein rauschendes Alpha unter `screen` ergäbe eine zweite, unabhängige
+    Schwankung über derselben Fläche.
+    """
+    return (
+        '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200">\n'
+    # `color-interpolation-filters="sRGB"` ist hier keine Feinheit, sondern der
+    # Unterschied zwischen dunkel und grau: SVG-Filter rechnen von Haus aus in
+    # LINEAREM RGB. Die Gamma-Kurve trifft dort ganz andere Werte, und beim
+    # Zurueckwandeln nach sRGB wird alles wieder aufgehellt. Gemessen: ohne
+    # diese Zeile hob das Korn ihren schwarzen Grund von 24 auf 67 Helligkeit —
+    # aus Schwarz wurde Grau.
+        '  <filter id="k" x="0" y="0" width="100%" height="100%" '
+        'color-interpolation-filters="sRGB">\n'
+        '    <feTurbulence type="fractalNoise" baseFrequency="0.8" '
+        'numOctaves="3" stitchTiles="stitch"/>\n'
+        '    <feColorMatrix type="matrix" values="'
+        '0.33 0.33 0.33 0 0  0.33 0.33 0.33 0 0  0.33 0.33 0.33 0 0  0 0 0 0 1"/>\n'
+        '    <feComponentTransfer>\n'
+        '      <feFuncR type="gamma" exponent="4.5"/>\n'
+        '      <feFuncG type="gamma" exponent="4.5"/>\n'
+        '      <feFuncB type="gamma" exponent="4.5"/>\n'
+        '    </feComponentTransfer>\n'
+        '  </filter>\n'
+        '  <rect width="200" height="200" filter="url(#k)"/>\n'
+        '</svg>\n'
+    )
+
+
 def saat(breite: int = 360, hoehe: int = 360, saatgut: int = 3) -> str:
     """Sesam und Schwarzkümmel — die Oberfläche ihrer Gebäcke als Muster.
 
@@ -136,6 +199,8 @@ def saat(breite: int = 360, hoehe: int = 360, saatgut: int = 3) -> str:
 if __name__ == '__main__':
     ZIEL.mkdir(parents=True, exist_ok=True)
     (ZIEL / 'korn.svg').write_text(korn())
+    (ZIEL / 'korn-hell.svg').write_text(korn_hell())
     (ZIEL / 'saat.svg').write_text(saat())
-    print('korn.svg ', (ZIEL / 'korn.svg').stat().st_size, 'Bytes')
+    print('korn.svg      ', (ZIEL / 'korn.svg').stat().st_size, 'Bytes')
+    print('korn-hell.svg ', (ZIEL / 'korn-hell.svg').stat().st_size, 'Bytes')
     print('saat.svg ', (ZIEL / 'saat.svg').stat().st_size, 'Bytes')

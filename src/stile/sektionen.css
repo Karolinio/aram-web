@@ -179,9 +179,30 @@
   right: 0;
   z-index: 40;
   color: var(--creme);
-  /* Ihr Signal-Orange wäre auf der eigenen orangen Sektion unsichtbar; die
-     Kopfzeile schwebt über beiden Gründen und nimmt deshalb das Gold. */
-  --akzent: var(--glut-marke);
+  /**
+   * ═══ Weiss statt Gold, und warum nicht ihr Orange ═══
+   *
+   * Karol am 01.09.: „kein Gelb mehr, nur Weiss, Orange." Auf den Sektionen
+   * ist das Gold ersatzlos entfallen — dort trägt ihr Orange. In der
+   * Kopfzeile geht das NICHT, und das ist gemessen.
+   *
+   * Die Leiste ist durchsichtig. Was hinter ihr liegt, ändert ihren Grund,
+   * und damit den Kontrast der Schrift darauf:
+   *
+   *                      Glasgrund        Orange   Gold   Weiss
+   *     über dem Video   rgb(107,86,58)     2,37   5,19    6,96
+   *     über Schwarz     rgb( 75,49,46)     4,02   8,81   11,81
+   *     über Orange      rgb(174,74,6)      1,89   4,14    5,55
+   *
+   * Ihr Orange fällt in allen drei Lagen durch — über der eigenen orangen
+   * Sektion mit 1,89 fast bis zur Unsichtbarkeit. Weiss trägt überall und
+   * schlägt dabei sogar das Gold, das es ersetzt.
+   *
+   * Der aktive Punkt unterscheidet sich damit nicht mehr über die FARBE von
+   * den anderen, sondern über den Strich darunter — und der stand schon immer
+   * da. Er war nur nie das Erkennungsmerkmal, weil die Farbe lauter war.
+   */
+  --akzent: #fff;
   /* Dichter als vorher, und der Grund ist gemessen: seit der Schleier weg ist,
      zieht unter der Kopfzeile das ungefilterte Video vorbei — mit hellen UND
      dunklen Stellen. Bei 34 % Deckung kam die Navigation über einer dunklen
@@ -3307,10 +3328,13 @@
     color var(--dauer-schnell) var(--ease-weich);
 }
 
+/* Ihr Orange statt des Golds — dieselbe Bereinigung wie beim Akzent. Creme
+   darauf misst 2,84 und fiele durch; auf einem gefüllten Knopf gehört ihr
+   Schwarz, und das sind 5,85. */
 .galerie__pfeil:hover:not(:disabled) {
-  background: var(--glut-marke);
-  border-color: var(--glut-marke);
-  color: var(--creme);
+  background: var(--ton-hell);
+  border-color: var(--ton-hell);
+  color: var(--nacht);
 }
 
 /* Nicht ausblenden, sondern abschwächen: ein Knopf, der verschwindet, sobald
@@ -3358,7 +3382,7 @@
 }
 
 .galerie__fahrt:focus-visible {
-  outline: 2px solid var(--glut-marke);
+  outline: 2px solid var(--ton-hell);
   outline-offset: 4px;
 }
 
@@ -3563,7 +3587,7 @@
   will-change: transform, opacity;
 }
 
-.vorhang__einladung .etikett { color: var(--glut-marke); }
+.vorhang__einladung .etikett { color: var(--ton-hell); }
 
 /**
  * ═══ Die Karte im Vorhang — eine Tafel im Bogen ═══

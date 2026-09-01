@@ -66,7 +66,7 @@ export default function Reise() {
 
   return (
     <Sektion id="reise" grund="tief" klasse="reise" beschriftetVon="reise-titel">
-      <Untergrund ton="nacht" />
+      <Untergrund ton="nacht" muster="saat" />
       <div className="reise__buehne" ref={buehne}>
         {/* ═══ Die Funken sind RAUS ═══
 
