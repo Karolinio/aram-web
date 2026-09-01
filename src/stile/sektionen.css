@@ -1855,7 +1855,6 @@
 .karte__leer {
   font-size: var(--text-lead);
   padding-block: 2rem;
-  border-top: 1px solid var(--linie);
 }
 
 /**
@@ -1900,8 +1899,11 @@
   font-weight: 600;
   font-variation-settings: var(--wonk-kopf);
   letter-spacing: -0.01em;
+  /* Der Strich darunter ist am 01.09. entfallen. Die Überschrift steht jetzt
+     in Weiss auf Orange und ist um 6 px grösser als die Gerichtnamen — sie
+     trennt schon durch ihr Gewicht, und ein Strich obendrauf ist die zweite
+     Ansage derselben Sache. */
   padding-bottom: 0.6rem;
-  border-bottom: 1px solid var(--tinte);
 }
 
 /* KEINE Kursive mehr. Reem Kufi hat keine — der Browser hätte sie geneigt,
@@ -1951,10 +1953,12 @@
 @media (min-width: 760px) {
   .gruppe__liste {
     columns: 2;
-    column-gap: clamp(2rem, 4vw, 4rem);
-    /* Eine Haarlinie zwischen den Spalten — dasselbe Mittel wie auf einer
-       gedruckten Karte, und es erspart die Frage, wo die eine aufhört. */
-    column-rule: 1px solid var(--linie);
+    /* Der Spalt trennt jetzt allein. Er ist dafür breiter geworden: die
+       Haarlinie dazwischen ist am 01.09. entfallen, und ohne sie braucht das
+       Auge mehr Weissraum, um die Kante zu finden. Von 2 bis 4 auf 3 bis 6
+       rem — gemessen bleiben bei 1440 px je Spalte über 300 px, und darin
+       stehen Name und Preis weiterhin auf einer Zeile. */
+    column-gap: clamp(3rem, 5.5vw, 6rem);
   }
   .gruppe__liste > .zeile { break-inside: avoid; }
 }
@@ -2143,6 +2147,26 @@
 }
 
 /**
+ * ═══ Am Handy hängt der Preis an der LETZTEN Zeile des Namens ═══
+ *
+ * Seit der Gerichtname auch am Handy 24 px misst (er steht in Weiss und
+ * braucht diese Grösse, siehe --text-gericht), brechen die längeren Namen auf
+ * zwei Zeilen um: „Hackfleisch & Gemüse", „Schaorma Roll", „Mexicano Roll".
+ *
+ * `align-items: baseline` richtet an der ERSTEN Grundlinie aus. Der Preis
+ * stand damit neben „Hackfleisch" und die zweite Zeile lief darunter ins
+ * Leere — es sah aus, als gehörte der Preis zum halben Namen.
+ *
+ * `last baseline` richtet an der letzten aus. Damit steht der Preis dort, wo
+ * der Name endet, so wie auf einem gedruckten Blatt. Browser, die es nicht
+ * kennen, fallen auf `baseline` zurück und sehen den alten Stand — kein
+ * Bruch, nur weniger schön.
+ */
+@media (max-width: 759px) {
+  .zeile__kopf { align-items: last baseline; }
+}
+
+/**
  * Die Führungslinie.
  *
  * Sie sitzt an der Grundlinie, nicht in der Mitte: `align-items: baseline`
@@ -2150,15 +2174,27 @@
  * keinen eigenen Text hat. Deshalb die Höhe von 0,5 em — sie schiebt die Linie
  * genau auf die Höhe, auf der sie in einer gedruckten Karte liegt.
  */
+/**
+ * ═══ Die Führungslinie ist weg, der Platz bleibt ═══
+ *
+ * Karol am 01.09.: „mach mal bei Speisekarte alle Linien weg."
+ *
+ * Vorgeschichte in zwei Schritten: erst hiess sie Punktlinie und war eine
+ * Strichlinie (3 px an, 5 px aus), dann wurde sie zu echten Punkten. Jetzt
+ * ist sie ganz raus — und mit ihr die Haarlinie unter der Gruppenüberschrift,
+ * die Trennlinie zwischen den Spalten und der Strich über der leeren Karte.
+ *
+ * Das ELEMENT bleibt trotzdem stehen, und das ist kein Versehen: es ist der
+ * dehnbare Zwischenraum, der den Preis an die rechte Kante drückt. Ohne ihn
+ * rutschte der Preis direkt an den Namen, und aus einer Karte würde eine
+ * Aufzählung. Sichtbar ist jetzt nur noch der Abstand — was die Linie sagen
+ * sollte, sagt der leere Raum ohnehin.
+ */
 .zeile__leiter {
   flex: 1 1 auto;
   min-width: 1.5rem;
   height: 0.5em;
   align-self: baseline;
-  background-image: var(--linie-punkt);
-  background-position: bottom;
-  background-size: 100% 1px;
-  background-repeat: no-repeat;
 }
 
 .preis {
