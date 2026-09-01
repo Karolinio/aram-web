@@ -378,6 +378,20 @@ type Flug = {
   buehne: string
   /** Ab welcher Fensterbreite überhaupt geflogen wird. */
   abBreite: number
+  /**
+   * Wohin die DREHUNGEN gehen, wenn nicht auf dasselbe Element.
+   *
+   * Ohne diesen Wähler liegt alles auf einem Knoten, und dann dreht sich mit
+   * dem Gebäck auch alles, was daneben hängt. Der Dampf über einem taumelnden
+   * Gebäck taumelt dann mit — und Dampf, der sich um 40 Grad legt, ist kein
+   * Dampf mehr, sondern eine Fahne.
+   *
+   * Ist er gesetzt, trägt das äussere Element nur noch Weg, Tiefe und Grösse;
+   * die drei Drehachsen wandern auf das benannte Kind. `preserve-3d` auf dem
+   * äusseren Element ist dafür Bedingung, sonst fällt `rotateY` in die Fläche
+   * zurück — die Perspektive liegt eine Ebene höher.
+   */
+  drehZiel?: string
 }
 
 /**
@@ -448,23 +462,29 @@ export function useFlug<T extends HTMLElement>(f: Flug) {
       if (tot || !werkzeug) return
       const { gsap } = werkzeug
 
+      /* Wenn ein Drehziel benannt ist, bleiben hier nur Weg, Tiefe und Grösse;
+         sonst liegt wie bisher alles auf einem Knoten. */
+      const dreher = f.drehZiel ? el.querySelector<HTMLElement>(f.drehZiel) : null
+      const drehVon = dreher
+        ? {}
+        : { rotate: f.dreh[0], rotateY: f.drehY[0], rotateX: f.drehX[0] }
+      const drehNach = dreher
+        ? {}
+        : { rotate: f.dreh[1], rotateY: f.drehY[1], rotateX: f.drehX[1] }
+
       const tween = gsap.fromTo(
         el,
         {
           y: () => f.y[0] * window.innerHeight,
           xPercent: f.x[0] * 100,
-          rotate: f.dreh[0],
-          rotateY: f.drehY[0],
-          rotateX: f.drehX[0],
+          ...drehVon,
           z: f.z[0],
           scale: f.skala[0],
         },
         {
           y: () => f.y[1] * window.innerHeight,
           xPercent: f.x[1] * 100,
-          rotate: f.dreh[1],
-          rotateY: f.drehY[1],
-          rotateX: f.drehX[1],
+          ...drehNach,
           z: f.z[1],
           scale: f.skala[1],
           /* Linear. Die Beschleunigung liefert der Daumen des Nutzers; eine
@@ -486,11 +506,38 @@ export function useFlug<T extends HTMLElement>(f: Flug) {
         },
       )
 
+      /* Die Drehung hängt am SELBEN Fortschritt — kein zweiter ScrollTrigger.
+         Zwei Trigger auf derselben Bühne laufen auseinander, sobald einer
+         nachgerechnet wird, und dann dreht sich das Gebäck neben seiner
+         eigenen Bahn. */
+      const drehung = dreher
+        ? gsap.fromTo(
+            dreher,
+            { rotate: f.dreh[0], rotateY: f.drehY[0], rotateX: f.drehX[0] },
+            {
+              rotate: f.dreh[1],
+              rotateY: f.drehY[1],
+              rotateX: f.drehX[1],
+              ease: 'none',
+              scrollTrigger: {
+                trigger: buehne,
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: SCRUB_KOERPER,
+                invalidateOnRefresh: true,
+              },
+            },
+          )
+        : null
+
       abraeumen = () => {
         tween.scrollTrigger?.kill()
         tween.kill()
+        drehung?.scrollTrigger?.kill()
+        drehung?.kill()
         el.style.willChange = ''
         el.style.transform = ''
+        if (dreher) dreher.style.transform = ''
       }
     })
 
@@ -498,7 +545,7 @@ export function useFlug<T extends HTMLElement>(f: Flug) {
       tot = true
       abraeumen?.()
     }
-  }, [breitGenug, f.buehne, f.y, f.x, f.dreh, f.drehY, f.drehX, f.z, f.skala])
+  }, [breitGenug, f.buehne, f.drehZiel, f.y, f.x, f.dreh, f.drehY, f.drehX, f.z, f.skala])
 
   return ref
 }

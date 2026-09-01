@@ -130,8 +130,12 @@ export const SLOTS: Slot[] = [
     fortschritt: [0.15, 0.55],
     freisteller: true,
     aufnahme:
-      'Flach von schraeg oben, Rand leicht gewellt sichtbar. Petersilie und Zitrone ' +
-      'drauf, wenn ihr es so serviert — das ist die Farbe, die im Bild sonst fehlt.',
+      /* Die Zitrone ist am 01.09. aus der Bestellung heraus — Karol: „vielleicht
+         die Zitrone runternehmen." Sie war ohnehin mein Vorschlag und nicht
+         ihre Art zu servieren. Die Petersilie bleibt: sie liegt auf ihrem
+         eigenen Foto drauf und ist die einzige Farbe neben dem Rot. */
+      'Flach von schraeg oben, Rand leicht gewellt sichtbar. Petersilie drauf, ' +
+      'wenn ihr es so serviert — das ist die Farbe, die im Bild sonst fehlt.',
   },
   {
     id: 'pizza',

@@ -87,6 +87,22 @@ export type Gebaeck = {
   bilder: string[]
   /** Zeigt es IHR Essen? */
   echt: boolean
+  /**
+   * Steigt Dampf davon auf?
+   *
+   * Karol am 01.09.: „ich will, dass die Produkte dampfen." Er hat recht, und
+   * es ist mehr als Schmuck — Dampf ist das einzige Zeichen dafür, dass etwas
+   * GERADE aus dem Ofen kommt. Ein Gebäck ohne ihn kann auch von gestern sein.
+   *
+   * Aber nicht über allen acht. Jede Schwadenleinwand ist ein eigener
+   * Zeichenlauf, und acht davon nebeneinander sind auf dem Handy genau die
+   * lange Aufgabe, die hier schon einmal gemessen wurde. Es tragen die drei
+   * GRÖSSTEN und vordersten — die, die man wirklich ansieht. Bei den kleinen
+   * hinten wäre der Dampf ohnehin ein Fleck von vierzig Pixeln.
+   *
+   * Und: nur über GEBACKENEM. Dampfender roher Teig wäre eine Behauptung.
+   */
+  dampft?: boolean
   alt: string
   /** Position in der linken Spur, in Prozent. */
   li: number
@@ -118,7 +134,31 @@ export type Gebaeck = {
   skala: [number, number]
 }
 
-/* ═══ Hier lag ein Zwilling ═══
+/* ═══ Roher Teig ist kein Gericht ═══
+
+       Karol am 01.09.: „die Elemente von Aram sind scheisse … das sieht aus wie
+       unappetitliche Steine."
+
+       Er hatte recht, und es liess sich nachrechnen. Über die undurchsichtigen
+       Pixel gemessen, Sättigung und Mikrokontrast:
+
+           schwarm-teig            19,3  /  1,8
+           schwarm-teig-paar       18,0  /  1,2
+           alle übrigen        63 bis 67  /  5,8 bis 11,3
+
+       Der Schnitt liegt sauber: die beiden rohen Teigschiffchen sind ein
+       Drittel so bunt und ein Fünftel so texturiert wie alles andere. Das ist
+       kein Fehler der Aufnahme — roher Teig hat weder Röstung noch Glanz, weil
+       er weder gebacken noch bestrichen ist. Ein blasser grauer Klumpen bleibt
+       einer, egal wie man ihn belichtet.
+
+       Beide sind deshalb raus und durch zwei FERTIGE Gebäcke ersetzt, neu aus
+       dem Materialstapel des Inhabers geschnitten: das gefüllte Gebäck vom Blech
+       im Fenster und der Käsefladen vom Holzbrett. Der Teig hat seinen Platz
+       weiter in der Prozessfolge — dort erzählt er etwas. Hier stand er als
+       Ergebnis, und als Ergebnis ist er falsch.
+
+   ═══ Hier lag ein Zwilling ═══
 
        Der Eintrag `fatayer-gold` ist am 01.09. entfernt worden. Er stammte aus
        demselben Foto wie `sesam` (a347f19c), und nach dem Lichtangleich waren
@@ -136,6 +176,7 @@ export type Gebaeck = {
 export const GEBAECKE: Gebaeck[] = [
   {
     id: 'fatayer',
+    dampft: true,
     name: "Fata’er",
     bilder: ['/bilder/echt/fatayer-frei.webp'],
     echt: true,
@@ -158,18 +199,19 @@ export const GEBAECKE: Gebaeck[] = [
     skala: [0.88, 1.06],
   },
   {
-    id: 'teig',
-    name: 'Teigschiffchen',
-    bilder: ['/bilder/echt/schwarm-teig.webp'],
+    id: 'rolle',
+    dampft: true,
+    name: 'Gefuelltes Gebaeck',
+    bilder: ['/bilder/echt/schwarm-rolle.webp'],
     echt: true,
-    alt: 'Ein rohes Teigschiffchen, von Hand geformt',
+    alt: 'Ein goldbraun gebackenes gefuelltes Gebaeck von Aram, die Fuellung tritt an den Einschnitten hervor',
     li: 24,
     ob: 20,
-    gr: 24,
+    gr: 26,
     liM: 72,
-    grM: 44,
-    breite: 446,
-    hoehe: 633,
+    grM: 48,
+    breite: 752,
+    hoehe: 396,
     y: [0.34, -0.48],
     x: [0.03, -0.06],
     dreh: [25, -36],
@@ -180,6 +222,7 @@ export const GEBAECKE: Gebaeck[] = [
   },
   {
     id: 'lahmacun',
+    dampft: true,
     name: 'Lahmacun',
     bilder: ['/bilder/echt/schwarm-lahmacun.webp'],
     echt: true,
@@ -284,18 +327,18 @@ export const GEBAECKE: Gebaeck[] = [
     skala: [0.6, 0.78],
   },
   {
-    id: 'teig-paar',
-    name: 'Teigschiffchen, roh',
-    bilder: ['/bilder/echt/schwarm-teig-paar.webp'],
+    id: 'kaese',
+    name: 'Fladen mit Kaese',
+    bilder: ['/bilder/echt/schwarm-kaese.webp'],
     echt: true,
-    alt: 'Zwei rohe Teigschiffchen auf dem Blech',
+    alt: 'Ein runder Fladen von Aram, dick mit geschmolzenem Kaese belegt',
     li: 12,
     ob: 92,
-    gr: 19,
+    gr: 22,
     liM: 56,
-    grM: 44,
-    breite: 447,
-    hoehe: 598,
+    grM: 48,
+    breite: 780,
+    hoehe: 490,
     y: [0.24, -0.44],
     x: [0.05, -0.05],
     dreh: [39, -22],

@@ -6,11 +6,15 @@ import Rechtsseite, { Fehlt } from './Rechtsseite.tsx'
  *
  * ═══ Was hier NICHT passiert ═══
  *
- * Kein Wert wird geraten. Auf ihrem Logo steht „Aram Pizzeria & gastronomie
- * GmbH" — das ist eine starke Spur auf die Rechtsform, aber ein Logo ist kein
- * Registereintrag, und ein falscher Firmenname im Impressum ist genau der
- * Fehler, den ein Impressum verhindern soll. Wer die Werte einträgt, muss
- * vorher ins Handelsregister gesehen haben.
+ * Kein Wert wird geraten. Die Angaben stammen am 01.09.2026 aus IHRER eigenen
+ * Erklärung auf sites.google.com/view/arampizzeria — Anbieter, Anschrift,
+ * Telefon, E-Mail.
+ *
+ * Nicht übernommen ist die GmbH, die unter derselben Anschrift im Register
+ * steht (Amtsgericht Bonn HRB 28626): sie wird dort mit einem Liquidator
+ * geführt, letzte Eintragung 25.03.2024, und ihr eigenes Impressum nennt sie
+ * nicht. Welche juristische Person den Laden heute betreibt, muss der Inhaber
+ * sagen — siehe aram.config.ts.
  *
  * ═══ Der Vorbehalt, den ich Karol schulde ═══
  *
@@ -49,8 +53,15 @@ export default function Impressum() {
         )}
       </p>
 
-      <h2>Umsatzsteuer-Identifikationsnummer</h2>
-      <p>{r.steuernummer ?? <Fehlt was="USt-IdNr. nach § 27a UStG" />}</p>
+      {/* Nur zeigen, wenn es eine gibt oder die Frage noch offen ist. Steht
+          fest, dass keine existiert, ist die Überschrift selbst schon falsch:
+          § 27a UStG verlangt die Nummer, WENN eine vergeben ist. */}
+      {r.steuernummer !== 'keine' && (
+        <>
+          <h2>Umsatzsteuer-Identifikationsnummer</h2>
+          <p>{r.steuernummer ?? <Fehlt was="USt-IdNr. nach § 27a UStG" />}</p>
+        </>
+      )}
 
       <h2>Verbraucherstreitbeilegung</h2>
       <p>

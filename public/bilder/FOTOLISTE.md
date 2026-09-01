@@ -36,7 +36,7 @@ Dateiname jeweils: `public/bilder/<kennung>.webp`
 - **Datei:** `lahmacun.webp`
 - **Art:** FREISTELLER — transparenter Hintergrund
 - **Seitenverhältnis:** 1 : 1 · Breite 24 vw
-- **So aufnehmen:** Flach von schraeg oben, Rand leicht gewellt sichtbar. Petersilie und Zitrone drauf, wenn ihr es so serviert — das ist die Farbe, die im Bild sonst fehlt.
+- **So aufnehmen:** Flach von schraeg oben, Rand leicht gewellt sichtbar. Petersilie drauf, wenn ihr es so serviert — das ist die Farbe, die im Bild sonst fehlt.
 
 ## Pizza
 

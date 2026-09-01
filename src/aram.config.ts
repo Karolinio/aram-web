@@ -83,17 +83,48 @@ export const ARAM = {
   },
 
   recht: {
-    /* Ohne diese vier geht die Seite nicht live. Absichtlich null.
-
-       SPUR, nicht Wahrheit: auf ihrem eigenen Logo steht „Aram Pizzeria &
-       gastronomie GmbH". Das ist ein starker Hinweis auf die Rechtsform, aber
-       ein Logo ist kein Registereintrag. Bevor das hier eingetragen wird, muss
-       jemand ins Handelsregister sehen — ein falscher Firmenname im Impressum
-       ist genau der Fehler, den ein Impressum verhindern soll. */
-    firma: null as string | Luecke,
-    inhaber: null as string | Luecke,
-    anschrift: null as string | Luecke,
-    steuernummer: null as string | Luecke,
+    /**
+     * ═══ Übernommen aus IHREM eigenen Impressum ═══
+     *
+     * Karol am 01.09.: „Impressum kann man ja wohl das meiste von der
+     * bestehenden Aram-Pizzeria-Seite ziehen, oder?" Ja — und ihre eigene
+     * Erklärung ist die beste Quelle, die es gibt: sie ist das, wofür der
+     * Betrieb selbst geradesteht.
+     *
+     * Auf sites.google.com/view/arampizzeria/kontakt steht als Anbieter
+     * „Arfan Omar", Bäckerei, Rochusstraße 246, 53123 Bonn. Keine Rechtsform,
+     * kein Register, keine USt-IdNr.
+     *
+     * ═══ Und die GmbH, die ich dabei gefunden habe ═══
+     *
+     * Es GIBT eine „Aram Pizzeria & orientalisches Gebäck GmbH" unter
+     * derselben Anschrift, Amtsgericht Bonn HRB 28626. Sie steht hier trotzdem
+     * nicht drin, und der Grund ist der wichtigste Fund dieser Recherche: das
+     * Register führt sie mit einem LIQUIDATOR, letzte Eintragung 25.03.2024.
+     * Eine Gesellschaft in Liquidation ist womöglich nicht mehr die, die den
+     * Laden heute betreibt — und ihr eigenes Impressum nennt sie ja auch
+     * nicht.
+     *
+     * Ein Impressum, das die falsche juristische Person nennt, ist genau der
+     * Fehler, den ein Impressum verhindern soll. Deshalb steht hier die
+     * natürliche Person aus ihrer eigenen Erklärung, und die Frage nach der
+     * Rechtsform geht an den Inhaber, bevor die Seite live geht. Sagt er
+     * „GmbH", kommen Firmenzusatz, Registergericht, HRB-Nummer und
+     * Geschäftsführer dazu.
+     */
+    firma: 'Arfan Omar' as string | Luecke,
+    inhaber: 'Arfan Omar' as string | Luecke,
+    anschrift: 'Rochusstraße 246, 53123 Bonn' as string | Luecke,
+    /**
+     * `keine` ist kein Platzhalter, sondern eine Aussage.
+     *
+     * § 5 DDG verlangt die USt-IdNr nur, WENN eine vorhanden ist. Ihr eigenes
+     * Impressum nennt keine, und ein Kleinbetrieb ohne innergemeinschaftliche
+     * Geschäfte hat oft keine. Eine sichtbare Lücke an dieser Stelle würde
+     * etwas als fehlend anmahnen, das gar nicht gefordert ist — deshalb der
+     * dritte Zustand neben Wert und Lücke.
+     */
+    steuernummer: null as string | 'keine' | Luecke,
     /* Wer die Seite ausliefert, ist datenschutzrechtlich Auftragsverarbeiter
        und muss in der Erklärung stehen — mit Namen und Sitz. Solange es keinen
        Server gibt, gibt es auch keinen Hoster; die Erklärung sagt das offen,

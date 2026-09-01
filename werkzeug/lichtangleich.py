@@ -42,9 +42,9 @@ Z = pathlib.Path('public/bilder/echt')
 
 # Zielwerte, gemessen als Median der GEBACKENEN Stücke — sie sind die Mehrheit
 # und das, wonach der Rest aussehen soll.
-ZIEL_GEBACKEN = {'hell': 112.0, 'kontrast': 60.0, 'stich': 100.0}
+ZIEL_GEBACKEN = {'hell': 112.0, 'kontrast': 60.0, 'stich': 100.0, 'gruen': 4.8}
 # Roher Teig hat sein eigenes Ziel: blass und kühl, weil er das IST.
-ZIEL_TEIG = {'hell': 158.0, 'kontrast': 32.0, 'stich': 30.0}
+ZIEL_TEIG = {'hell': 158.0, 'kontrast': 32.0, 'stich': 30.0, 'gruen': 4.8}
 
 ANTEIL = 0.7   # wie weit in Richtung Ziel korrigiert wird
 
@@ -52,7 +52,8 @@ ANTEIL = 0.7   # wie weit in Richtung Ziel korrigiert wird
 def messen(px):
     return {'hell': float(px.mean()),
             'kontrast': float(px.std()),
-            'stich': float(px[:, 0].mean() - px[:, 2].mean())}
+            'stich': float(px[:, 0].mean() - px[:, 2].mean()),
+            'gruen': float((px[:, 1] - (px[:, 0] + px[:, 2]) / 2).mean())}
 
 
 def angleichen(pfad: pathlib.Path, ziel: dict) -> tuple:
@@ -79,16 +80,36 @@ def angleichen(pfad: pathlib.Path, ziel: dict) -> tuple:
     neu[:, 0] += fehlt / 2
     neu[:, 2] -= fehlt / 2
 
+    # 4 Grünüberschuss — die vierte Achse, und bis zum 01.09. hat sie niemand
+    #   gemessen. Sie lag zwischen −5,7 und +23,1, eine Spanne von 29 Stufen.
+    #
+    #   Grünstichiges Gelb liest sich als ALT. Eine frische Kruste ist rot-gelb;
+    #   dieselbe Kruste mit zuviel Grün wirkt wie Brot von gestern, ganz ohne
+    #   dass Helligkeit oder Sättigung sich ändern. Die drei Stücke mit dem
+    #   höchsten Überschuss (Sesam +17, Gebacken +23, Käse +19) waren genau die,
+    #   die blass aussahen.
+    #
+    #   Schritt 3 lässt Grün bewusst in Ruhe, weil es die Helligkeit trägt.
+    #   Genau deshalb wird hier nachgeschoben, was Grün an Helligkeit
+    #   mitnimmt — sonst macht diese Korrektur Schritt 2 wieder kaputt.
+    ueber = neu[:, 1] - (neu[:, 0] + neu[:, 2]) / 2
+    weg = ANTEIL * (float(ueber.mean()) - ziel['gruen'])
+    neu[:, 1] -= weg
+    neu += weg * 0.7152
+
     a[maske, 0:3] = np.clip(neu, 0, 255)
     Image.fromarray(a.astype('uint8'), 'RGBA').save(
         pfad, 'WEBP', quality=86, method=6)
     return ist, messen(np.clip(neu, 0, 255))
 
 
-TEIG = {'schwarm-teig', 'schwarm-teig-paar'}
-ALLE = ['fatayer-frei', 'fatayer-gold-frei', 'schwarm-sesam', 'schwarm-gebacken',
-        'schwarm-teig', 'schwarm-teig-paar', 'schwarm-zaatar', 'schwarm-zaatar-2',
-        'schwarm-lahmacun']
+# Roher Teig steht seit dem 01.09. nicht mehr im Schwarm — siehe appetit.py.
+# Das eigene Ziel bleibt stehen: sobald wieder ein rohes Stück auftaucht, hat es
+# blass zu bleiben, statt sich goldbraun angleichen zu lassen.
+TEIG: set[str] = set()
+ALLE = ['fatayer-frei', 'schwarm-sesam', 'schwarm-gebacken', 'schwarm-zaatar',
+        'schwarm-zaatar-2', 'schwarm-lahmacun', 'manakisch-belegt-frei',
+        'schwarm-kaese', 'schwarm-rolle']
 
 if __name__ == '__main__':
     print(f'{"Gebaeck":22}{"vorher":>26}{"nachher":>26}')

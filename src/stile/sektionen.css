@@ -1566,6 +1566,42 @@
   transform-style: preserve-3d;
 }
 
+/**
+ * Der Dampf über einem fliegenden Gebäck.
+ *
+ * ═══ Warum er breiter ist als das Gebäck und höher als hoch ═══
+ *
+ * Dampf, der in der Breite des Gegenstands bleibt, sieht aus wie eine Säule.
+ * Echter Dampf zieht auseinander, während er steigt — deshalb 180 % der
+ * Breite, mittig, und links wie rechts über die Kante hinaus.
+ *
+ * `bottom: 55%` statt `100%`: die Quelle liegt IM Gebäck, nicht darüber. Ein
+ * Dampf, der erst über der Oberkante beginnt, hängt als Wolke in der Luft
+ * statt aus etwas aufzusteigen.
+ *
+ * ═══ Und warum die Leinwand FLACH ist ═══
+ *
+ * Erster Versuch: 210 % breit, 220 % hoch. Gemessen über dem Lahmacun sind das
+ * 385 px Steighöhe — die Schwaden waren am oberen Rand 300 px vom Gebäck
+ * entfernt und dort so weit auseinandergezogen, dass sie als heller Fleck in
+ * der Luft standen und nicht als Dampf über etwas.
+ *
+ * Dampf über einem flachen Fladen steigt keinen Meter. Er steht eine
+ * Handbreit darüber und ist dann weg. 130 % Höhe entsprechen dem.
+ *
+ * `z-index: -1` legt ihn hinter die Bilder. Davor wäre er Nebel auf dem Essen,
+ * und genau das war beim Käseschiff schon einmal der Fehler.
+ */
+.gebaeck__dampf {
+  position: absolute;
+  left: -30%;
+  width: 160%;
+  bottom: 55%;
+  height: 130%;
+  z-index: -1;
+  pointer-events: none;
+}
+
 /* Die Ansichten liegen exakt übereinander; geschaltet wird mit `opacity`.
    Ein Wechsel von `src` müsste mitten in der Bewegung dekodieren — genau dort
    kostet er den Frame, den man sieht. */

@@ -3,6 +3,7 @@ import type { CSSProperties } from 'react'
 import { useBildfolge, useFlug, useMedienabfrageBreit, useVersatz } from '../bewegung.ts'
 import { GEBAECKE, type Gebaeck } from '../gebaecke.ts'
 import { Etikett, Kopf, Sektion } from './ui/bausteine.tsx'
+import Dampf from './ui/Dampf.tsx'
 import Untergrund from './ui/Untergrund.tsx'
 
 /**
@@ -180,7 +181,15 @@ function Gebaeckstueck({ g }: { g: Gebaeck }) {
     /* 0 = überall. Der Flug ist am Handy derselbe, nur die Bahn liegt anders —
        siehe `liM`/`grM` in gebaecke.ts. */
     abBreite: 0,
+    /* Die Drehungen auf das Kind, nicht auf den Rahmen: sonst legt sich der
+       Dampf mit dem Gebäck um bis zu 45 Grad auf die Seite. Dampf steigt
+       senkrecht, auch über etwas, das sich dreht. */
+    drehZiel: '.gebaeck__folge',
   })
+  /* Nur am Schirm. Darunter kostet jede zusätzliche Leinwand messbar Frames —
+     hier sind schon einmal lange Aufgaben gemessen worden —, und ein Fladen
+     ist dort 180 px breit; der Dampf darüber wäre ein Fleck. */
+  const breit = useMedienabfrageBreit()
   /* Die Ansichten liegen übereinander; der Scroll schaltet durch. Erst dadurch
      dreht sich das Gericht wirklich, statt nur zu kippen. */
   const folge = useBildfolge<HTMLDivElement>(g.bilder.length, '.prozess')
@@ -201,6 +210,10 @@ function Gebaeckstueck({ g }: { g: Gebaeck }) {
         } as CSSProperties
       }
     >
+      {/* HINTER dem Gebäck, nicht davor: Dampf vor dem Essen ist Nebel auf
+          dem Teller. Die Leinwand ist breiter als das Gebäck und steht
+          darüber — Dampf breitet sich aus, während er steigt. */}
+      {g.dampft && breit ? <Dampf ton="ofen" klasse="gebaeck__dampf" dichte={10} /> : null}
       <div className="gebaeck__folge" ref={folge}>
         {g.bilder.map((quelle, i) => (
           <img

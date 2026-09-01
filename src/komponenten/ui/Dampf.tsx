@@ -64,13 +64,22 @@ type Props = {
   klasse?: string
   /** `hell` über Fotografie, `warm` über Creme. Siehe Kopf. */
   ton?: 'hell' | 'warm' | 'ofen'
+  /**
+   * Wie viele Schwaden. Ohne Angabe 20 am Schirm und 12 am Handy.
+   *
+   * Über EINEM Gebäck sind zwanzig Schwaden zu viel — nicht nur zu teuer,
+   * sondern falsch: ein Fladen von 300 px raucht nicht wie ein Ofen. Sechs
+   * Schwaden über einer schmalen Quelle lesen sich als Wärme, zwanzig als
+   * Brand.
+   */
+  dichte?: number
 }
 
 /** Kantenlänge des vorgemalten Wölkchens. Genug für weiche Ränder, wenig genug
  *  für den Speicher — es wird ohnehin nie grösser gezeichnet als die Leinwand. */
 const SPRITE = 96
 
-export default function Dampf({ klasse, ton = 'hell' }: Props) {
+export default function Dampf({ klasse, ton = 'hell', dichte: wunsch }: Props) {
   const ref = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
@@ -149,7 +158,8 @@ export default function Dampf({ klasse, ton = 'hell' }: Props) {
     let imBild = false
     let zuletzt = 0
 
-    const dichte = () => (window.innerWidth < 700 ? 12 : 20)
+    const dichte = () =>
+      wunsch ?? (window.innerWidth < 700 ? 12 : 20)
 
     /* `neu` bekommt `erstFuellung`: beim Start sollen die Schwaden über ihr
        ganzes Leben verteilt sein. Sonst startet der Dampf als eine einzige
@@ -277,7 +287,7 @@ export default function Dampf({ klasse, ton = 'hell' }: Props) {
       groesse.disconnect()
       document.removeEventListener('visibilitychange', sichtbarkeit)
     }
-  }, [ton])
+  }, [ton, wunsch])
 
   return <canvas ref={ref} className={`dampf${klasse ? ' ' + klasse : ''}`} aria-hidden="true" />
 }
