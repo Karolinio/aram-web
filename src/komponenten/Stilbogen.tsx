@@ -60,7 +60,7 @@ export default function Stilbogen() {
           <h1 className="lebt">Woraus Aram gebaut ist</h1>
           <p className="lead">
             Jeder Wert kommt aus <code>src/stile/tokens.css</code>, jedes Bauteil aus{' '}
-            <code>src/komponenten/ui/bausteine.tsx</code> — denselben Dateien, aus denen die
+            <code>src/komponenten/ui/bausteine.tsx</code>, denselben Dateien, aus denen die
             Seite besteht. Sieht hier etwas falsch aus, ist es auf der Seite auch falsch.
           </p>
         </header>
@@ -95,21 +95,21 @@ export default function Stilbogen() {
             </p>
           ))}
           <p className="stil__regel">
-            <strong>Wer welche Schrift trägt.</strong> <strong>Fraunces</strong> — die fette,
-            gerundete Form ihres Logos — trägt alles KURZE: Überschriften, Unterschriften,
+            <strong>Wer welche Schrift trägt.</strong> <strong>Fraunces</strong>, die fette,
+            gerundete Form ihres Logos, trägt alles KURZE: Überschriften, Unterschriften,
             Etiketten, Preise, Knöpfe, Navigation, Zahlen. <strong>Reem Kufi</strong> trägt nur
             laufenden Fliesstext: Vorspann, Absätze, Gerichtbeschreibungen.
           </p>
           <p className="stil__regel">
             <strong>Warum Reem Kufi.</strong> Sie ist die lateinische Begleitung einer arabischen
             Kufi-Schrift: flache Endungen, gerade Achsen, kaum Strichstärkenwechsel. Der
-            Einschlag steckt in den lateinischen Formen selbst und nicht in Dekoration — die
+            Einschlag steckt in den lateinischen Formen selbst und nicht in Dekoration. Die
             Seite bleibt deutsch und klingt trotzdem nach Herkunft.
           </p>
           <p className="stil__regel">
             Die Grenze ist nicht Grösse, sondern Funktion: eine Zeile, die man{' '}
             <em>überfliegt</em>, gehört der Marke; ein Satz, den man <em>liest</em>, gehört der
-            Lesbarkeit. Eine gerundete Serife über drei Zeilen Fliesstext wäre anstrengend —
+            Lesbarkeit. Eine gerundete Serife über drei Zeilen Fliesstext wäre anstrengend,
             über zwei Wörtern ist sie die Marke.
           </p>
         </section>
@@ -117,14 +117,14 @@ export default function Stilbogen() {
         <section className="stil__block">
           <h2 className="lebt">Die Bauteile</h2>
           <p className="leise stil__hinweis">
-            Alles hierunter ist derselbe Code wie auf der Seite — kein Nachbau.
+            Alles hierunter ist derselbe Code wie auf der Seite, kein Nachbau.
           </p>
 
           <Kopf
             id="stil-kopfbeispiel"
             etikett="So sieht ein Sektionskopf aus"
             titel="Überschrift mit Achsen-Hover"
-            lead="Und der Vorspann darunter. Etikett, Überschrift, Vorspann — immer in dieser Reihenfolge, immer mit denselben Abständen."
+            lead="Und der Vorspann darunter. Etikett, Überschrift, Vorspann, immer in dieser Reihenfolge, immer mit denselben Abständen."
           />
 
           <dl className="stil__daten">
@@ -136,7 +136,7 @@ export default function Stilbogen() {
 
           <div className="stil__punkte" />
           <p className="leise stil__hinweis">
-            Die gepunktete Linie trennt überall — Sektionskanten, Kartenzeilen, Adressdaten.
+            Die gepunktete Linie trennt überall: Sektionskanten, Kartenzeilen, Adressdaten.
           </p>
 
           <ul className="stil__radien">

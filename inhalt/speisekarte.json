@@ -1,6 +1,6 @@
 [
   {
-    "gruppe": "Orientalisches Gebäck — Fata'er",
+    "gruppe": "Orientalisches Gebäck, Fata'er",
     "hinweis": "Wir backen mit Weizenmehl. Jede Sorte mit Hirtenkäse aus Kuhmilch.",
     "gerichte": [
       { "nr": 1,  "name": "Zaatar", "beschreibung": "Sesam, Olivenöl, Würzmischung mit Thymian", "preis": 1.5, "allergene": ["Gluten", "Sesam"] },
@@ -21,7 +21,7 @@
       { "nr": 17, "name": "Sucuk mit Käse", "beschreibung": "Sucuk mit Käse", "preis": 3, "allergene": ["Gluten", "Milch"] },
       { "nr": 18, "name": "Toschka", "beschreibung": "Hackfleisch, Käse, Gemüse, Gewürze", "preis": 3, "allergene": ["Gluten", "Milch"] },
       { "nr": 19, "name": "Gemüse Käse", "beschreibung": "Gemüse, Käse", "preis": 3, "allergene": ["Gluten", "Milch"] },
-      { "nr": 20, "name": "Groß Käse — scharf", "beschreibung": "Hirtenkäse", "preis": 3, "allergene": ["Gluten", "Milch"] },
+      { "nr": 20, "name": "Groß Käse, scharf", "beschreibung": "Hirtenkäse", "preis": 3, "allergene": ["Gluten", "Milch"] },
       { "nr": 21, "name": "Groß Käse, Gemüse", "beschreibung": "Käse und Gemüse", "preis": 3, "allergene": ["Gluten", "Milch"] },
       { "nr": 22, "name": "Lahmacun", "beschreibung": "Gemüse und Hackfleisch", "preis": 2, "allergene": ["Gluten"] },
       { "nr": 22, "name": "Lahmacun mit Zwiebeln", "beschreibung": "Zwiebeln, Granatapfelreduktion", "preis": 2.5, "allergene": ["Gluten"] }

@@ -140,7 +140,7 @@ export default function Galerie() {
         ref={bahn}
         tabIndex={0}
         role="group"
-        aria-label={`Bilder aus dem Laden, ${BILDER.length} Stück — mit den Pfeiltasten bewegen`}
+        aria-label={`Bilder aus dem Laden, ${BILDER.length} Stück, mit den Pfeiltasten bewegen`}
       >
         {/* Eine echte Liste in Leserichtung. Für ein Vorleseprogramm ist der
             Unterschied, ob es „Liste mit sieben Einträgen" ansagt oder gar

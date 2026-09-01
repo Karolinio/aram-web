@@ -143,7 +143,7 @@ export default function Karte() {
           lead={
             ohnePreis > 0 ? (
               <>
-                <span className="luecke">Die Preise tragen wir nach</span> — sie liegen uns
+                <span className="luecke">Die Preise tragen wir nach</span>, sie liegen uns
                 noch nicht vor. Am Telefon nennen wir sie dir sofort.
               </>
             ) : (
@@ -199,7 +199,7 @@ export default function Karte() {
 
         {sichtbar === 0 ? (
           <p className="karte__leer">
-            Mit dieser Auswahl bleibt nichts übrig. Ruf uns an — wir finden trotzdem etwas.
+            Mit dieser Auswahl bleibt nichts übrig. Ruf uns an, wir finden trotzdem etwas.
           </p>
         ) : (
           <div className="karte__gruppen">
@@ -276,13 +276,17 @@ export default function Karte() {
                             {g.preis === null ? (
                               <>
                                 {/* Neunmal „Preis folgt" untereinander liest
-                                    sich als unfertige Seite. Der Gedankenstrich
-                                    ist die Konvention für „kein Wert", und den
-                                    Grund sagt der Vorspann über der Karte in
-                                    einem Satz — einmal statt neunmal. Für
-                                    Vorleseprogramme steht er trotzdem hier. */}
+                                    sich als unfertige Seite. Für „kein Wert"
+                                    stand hier ein Gedankenstrich; er ist am
+                                    01.09. durch drei Punkte ersetzt, weil
+                                    Karol keine Striche mehr auf der Seite
+                                    will. Sie sagen dasselbe und sehen weniger
+                                    nach Platzhalter aus. Den Grund nennt der
+                                    Vorspann über der Karte, einmal statt
+                                    neunmal; für Vorleseprogramme steht er
+                                    trotzdem hier. */}
                                 <span className="visuell-versteckt">Preis folgt</span>
-                                <span aria-hidden="true">—</span>
+                                <span aria-hidden="true">…</span>
                               </>
                             ) : (
                               g.preis.toFixed(2).replace('.', ',') + ' €'

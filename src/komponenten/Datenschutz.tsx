@@ -45,7 +45,7 @@ export default function Datenschutz() {
       <p className="lead">
         Kurz vorweg: diese Seite setzt keine Cookies, lädt nichts von fremden
         Servern und misst nicht, was du hier tust. Deshalb gibt es auch kein
-        Einwilligungsbanner — es gäbe nichts einzuwilligen.
+        Einwilligungsbanner. Es gäbe nichts einzuwilligen.
       </p>
 
       <h2>Verantwortlich</h2>
@@ -63,7 +63,7 @@ export default function Datenschutz() {
         Angaben an den Server, der sie ausliefert: IP-Adresse, Zeitpunkt,
         aufgerufene Datei, Browsertyp. Diese Angaben sind für die Auslieferung
         technisch notwendig; die Rechtsgrundlage ist Art. 6 Abs. 1 lit. f
-        DSGVO — unser berechtigtes Interesse daran, dass die Seite funktioniert
+        DSGVO, also unser berechtigtes Interesse daran, dass die Seite funktioniert
         und sicher bleibt.
       </p>
       <p>
@@ -75,7 +75,7 @@ export default function Datenschutz() {
 
       <h2>Was diese Seite NICHT tut</h2>
       <ul>
-        <li>Keine Cookies — auch keine „technisch notwendigen".</li>
+        <li>Keine Cookies, auch keine „technisch notwendigen".</li>
         <li>Keine Reichweitenmessung, keine Statistik, kein Tracking.</li>
         <li>
           Keine Inhalte von fremden Servern. Beide Schriften liegen auf unserem
@@ -104,7 +104,7 @@ export default function Datenschutz() {
       </p>
       <p>
         Wenn du uns schreibst, verarbeiten wir deine Nachricht und deine
-        Telefonnummer, um die Bestellung zu bearbeiten — Art. 6 Abs. 1 lit. b
+        Telefonnummer, um die Bestellung zu bearbeiten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b
         DSGVO. Wir löschen den Verlauf, sobald er für die Abwicklung nicht mehr
         gebraucht wird und keine Aufbewahrungsfrist entgegensteht.
       </p>
@@ -118,7 +118,7 @@ export default function Datenschutz() {
       <h2>Deine Rechte</h2>
       <p>
         Du hast das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung
-        der Verarbeitung, Datenübertragbarkeit und Widerspruch (Art. 15–21
+        der Verarbeitung, Datenübertragbarkeit und Widerspruch (Art. 15 bis 21
         DSGVO). Melde dich dafür unter den oben genannten Kontaktdaten.
         Ausserdem kannst du dich bei einer Datenschutz-Aufsichtsbehörde
         beschweren; zuständig ist die Landesbeauftragte für Datenschutz und
@@ -127,7 +127,7 @@ export default function Datenschutz() {
 
       <p className="rechtsseite__fuss leise">
         Stand: 17. August 2026. Diese Erklärung ist gegen den Quelltext dieser
-        Seite geprüft — sie beschreibt, was der Code tatsächlich tut, und nicht
+        Seite geprüft. Sie beschreibt, was der Code tatsächlich tut, und nicht
         das, was ein Textbaustein üblicherweise behauptet.
       </p>
     </Rechtsseite>

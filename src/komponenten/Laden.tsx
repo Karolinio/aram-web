@@ -133,8 +133,14 @@ function Zeiten() {
               ? tagName(b.vonTag)
               : `${tagName(b.vonTag)} bis ${tagName(b.bisTag)}`}
           </span>
+          {/* „bis" und kein Halbgeviertstrich. Karol am 01.09.: „keine billigen
+              Bindestriche mehr." In einer Zeitspanne ist der Strich zwar
+              korrekte Typografie, aber er steht hier neben „Dienstag bis
+              Sonntag" — und zwei Spannen nebeneinander, eine in Worten und
+              eine als Zeichen, lesen sich als zwei verschiedene Sachen.
+              Ausgesprochen wird beides gleich. */}
           <span className="zeitblock__uhr">
-            {b.von} – {b.bis}
+            {b.von} bis {b.bis}
           </span>
         </p>
       ))}

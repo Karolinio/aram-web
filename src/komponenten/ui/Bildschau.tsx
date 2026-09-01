@@ -116,7 +116,10 @@ export default function Bildschau({ gericht, schliessen }: Props) {
               {gericht.preis === null ? (
                 <>
                   <span className="visuell-versteckt">Preis folgt</span>
-                  <span aria-hidden="true">—</span>
+                  {/* Drei Punkte statt eines Gedankenstrichs, wie in der Karte
+                      selbst. Beide Stellen zeigen dasselbe „noch kein Wert"
+                      und muessen dasselbe Zeichen dafuer nehmen. */}
+                  <span aria-hidden="true">…</span>
                 </>
               ) : (
                 gericht.preis.toFixed(2).replace('.', ',') + ' €'
