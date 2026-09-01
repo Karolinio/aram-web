@@ -2,7 +2,6 @@ import { useAuftauchen } from '../bewegung.ts'
 import { pfad } from '../pfad.ts'
 import { ARAM } from '../aram.config.ts'
 import Oeffnung from './ui/Oeffnung.tsx'
-import Olivenzweig from './ui/Olivenzweig.tsx'
 import Untergrund from './ui/Untergrund.tsx'
 import { Etikett, Kopf, Sektion } from './ui/bausteine.tsx'
 
@@ -37,34 +36,17 @@ export default function Bestellen() {
           Cremeschleier. Sie schliesst den Kreis — die Seite beginnt und endet
           auf demselben Holz. Der Schleier ist hier dichter, weil hier gelesen
           und getippt wird, nicht geschaut. */}
-      {/* ═══ Ihr Laden unter der Orangefolie ═══
+      {/* ═══ Das Ladenfoto im Grund ist raus ═══
 
-          Karol: „Kann man ein Bild vom Laden nehmen und transparent in den
-          Hintergrund legen auf einer orangenen Folie?"
+          Karol: „diese Seite, wo dieses Aram-Bild im Hintergrund ist, das ist
+          es wirklich nicht."
 
-          Genau das, und es ist mehr als eine Textur: hier steht „Ruf an oder
-          schreib uns", und dahinter liegt der Ort, an dem abgehoben wird. Bei
-          92 % Deckung erkennt man das Motiv nicht mehr, aber die Markise, die
-          Tische und die Menschen geben der Fläche eine Tiefe, die kein
-          Holzmakro hat.
-
-          Hier lag holz-makro. Das war richtig, solange es die einzige Sektion
-          mit Grund war; jetzt haben fünf andere Texturen, und diese eine darf
-          etwas Eigenes sein.
-
-          0,94 statt 0,92 und tiefer angeschnitten: bei 0,92 las sich ihr
-          Schriftzug deutlich genug, um mit der Schlagzeile zu streiten. Jetzt
-          tragen Markise, Tische und Menschen die Fläche, ohne dass man ein
-          zweites „Aram" liest. */}
-      <Untergrund
-        muster="foto"
-        bild="bilder/echt/ladenfront.webp"
-        ton="glut"
-        staerke={0.94}
-        lage="50% 68%"
-        breite={1400}
-        hoehe={934}
-      />
+          Es war meine Idee, seine Anregung aufzunehmen, und sie war falsch:
+          ein Foto unter einer Folie bleibt ein Foto. Man erkennt Markise und
+          Schriftzug, und damit stand hinter „Ruf an oder schreib uns" ein
+          zweites Bild derselben Sache, die drei Sektionen höher schon zu sehen
+          war. Die Saat stellt nichts dar und stört deshalb nicht. */}
+      <Untergrund ton="glut" muster="saat" />
 
       <div className="schale">
         <Kopf
@@ -137,14 +119,13 @@ export default function Bestellen() {
             nur mit Fehlerkorrektur H, und genau damit ist unserer gebaut
             (werkzeug/qrbauen.py): dreissig Prozent der Fläche dürfen fehlen.
 
-            Die zwei Olivenzweige links und rechts sind IHRE Anordnung — auf
-            dem Aufkleber am Tresen flankieren sie das Rund mit der Sonne. Hier
-            flankieren sie den Code. Das ist der Unterschied zwischen einem
-            Ornament, das man dazustellt, und einem, das schon zur Marke
-            gehörte. */}
+            Hier standen zwei Olivenzweige links und rechts, die ich selbst
+            gezeichnet hatte. Sie fliegen raus, seit ihr echtes Emblem da ist:
+            das enthält die Zweige BEREITS, und ein gezeichneter Zweig neben
+            einem echten ist derselbe Gedanke zweimal — einmal erfunden, einmal
+            belegt. Was bleibt, ist ihr Zeichen mitten im Code und der Bogen
+            ihres Ofens darum. Beides ihres. */}
         <div className="scanschild">
-          <Olivenzweig klasse="scanschild__zweig scanschild__zweig--links" />
-
           <div className="scanschild__mitte">
             <p className="scanschild__gross">Karte aufs Handy</p>
             <div className="scanschild__bogen">
@@ -155,17 +136,23 @@ export default function Bestellen() {
                 width={220}
                 height={220}
               />
-              {/* Sitzt IM Code, nicht daneben. Die Fehlerkorrektur trägt es. */}
-              <span className="scanschild__siegel" aria-hidden="true">
-                <span lang="ar" dir="rtl">أرام</span>
-              </span>
+              {/* Ihr Emblem sitzt IM Code, nicht daneben. Möglich nur mit
+                  Fehlerkorrektur H — dreissig Prozent der Fläche dürfen
+                  fehlen, das Siegel deckt gut sechs. Hier stand bis eben ihr
+                  Name als Schriftzug; jetzt steht ihr Zeichen da. */}
+              <img
+                className="scanschild__siegel"
+                src={pfad('bilder/marke/emblem-klein.webp')}
+                alt=""
+                width={240}
+                height={240}
+                aria-hidden="true"
+              />
             </div>
             <p className="scanschild__wort">
               Scannen, dann liest du die Karte am Tisch weiter.
             </p>
           </div>
-
-          <Olivenzweig klasse="scanschild__zweig scanschild__zweig--rechts" />
         </div>
       </div>
     </Sektion>

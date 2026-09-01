@@ -2601,23 +2601,14 @@
  */
 .scanschild {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  justify-items: center;
-  gap: clamp(1rem, 4vw, 3.5rem);
+  /* Nur noch eine Spalte: die flankierenden Zweige sind raus, seit ihr
+     Emblem im Code sitzt. Es bringt seine eigenen mit. */
+  place-items: center;
   margin-top: clamp(2.5rem, 6vw, 4.5rem);
 }
 
-.scanschild__zweig {
-  inline-size: clamp(6rem, 14vw, 13rem);
-  block-size: auto;
-  color: var(--tinte);
-  opacity: 0.42;
-}
 /* Der linke zeigt nach innen, der rechte gespiegelt — sie neigen sich zum
    Code hin, wie im Emblem zur Sonne. */
-.scanschild__zweig--links  { justify-self: end;   transform: rotate(4deg); }
-.scanschild__zweig--rechts { justify-self: start; transform: scaleX(-1) rotate(4deg); }
 
 .scanschild__mitte {
   display: grid;
@@ -2672,18 +2663,23 @@
  */
 .scanschild__siegel {
   position: absolute;
-  display: grid;
-  place-items: center;
+  /**
+   * ═══ Hier stand `display: grid` ═══
+   *
+   * Die Regel stammt aus der Zeit, als das Siegel ein `<span>` mit einer
+   * arabischen Zeile darin war — dort war das Raster richtig. Seit ihr Emblem
+   * als `<img>` darin sitzt, ist es falsch: ein Bild als Rasterbehälter
+   * verliert seine Eigengrösse, und gemessen war das Siegel 56 x 240 px statt
+   * rund. Sichtbar als senkrechtes Band quer durch den Code.
+   */
   inline-size: 27%;
-  aspect-ratio: 1;
+  block-size: auto;
   border-radius: 50%;
   background: var(--creme);
-  box-shadow: 0 0 0 3px var(--creme);
-  font-family: var(--font-text);
-  font-size: clamp(0.6rem, 0.4rem + 0.7vw, 0.9rem);
-  font-weight: 600;
-  color: var(--glut-grund);
-  line-height: 1;
+  /* Ein Ring aus Creme ringsum, damit das Emblem nicht direkt an die
+     Codemodule stösst — ein Scanner braucht die ruhige Zone. */
+  box-shadow: 0 0 0 4px var(--creme);
+  padding: 4%;
 }
 
 .scanschild__wort {
@@ -2696,9 +2692,7 @@
 @media (max-width: 719px) {
   /* Am Handy nur EIN Zweig: zwei plus Code auf 393 px sind ein Gedränge. */
   .scanschild { grid-template-columns: auto 1fr; gap: 1rem; }
-  .scanschild__zweig--rechts { display: none; }
-  .scanschild__zweig--links { inline-size: 5rem; }
-  .scanschild__mitte { justify-self: start; text-align: left; justify-items: start; }
+      .scanschild__mitte { justify-self: start; text-align: left; justify-items: start; }
 }
 
 .weg--glut {
@@ -3433,7 +3427,24 @@
  * Reem Kufi bleibt. Die Serife ist die Stimme der SEITE, die Kufi die Stimme
  * des LADENS — und auf ihrer Karte spricht der Laden.
  */
-/* ── Ihr Olivenzweig in der Speisekarte ─────────────────────────────────── */
+/* ── Ihr Emblem in der Speisekarte ──────────────────────────────────────── */
+.karte__emblem {
+  position: absolute;
+  z-index: 0;            /* unter Schiffbahn (1) und Schale (2) */
+  inset-block-start: -8%;
+  inset-inline-start: -9%;
+  inline-size: clamp(16rem, 34vw, 34rem);
+  block-size: auto;
+  opacity: 0.13;
+  pointer-events: none;
+  transform: rotate(-6deg);
+}
+
+@media (max-width: 719px) {
+  .karte__emblem { inline-size: 17rem; opacity: 0.1; inset-inline-start: -14%; }
+}
+
+/* ── Alt: der gezeichnete Olivenzweig ───────────────────────────────────── */
 .karte__zweige {
   position: absolute;
   inset: 0;

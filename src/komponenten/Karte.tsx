@@ -1,13 +1,13 @@
 import { useMemo, useState } from 'react'
 
 import { inhalt, type Gericht } from '../inhalt.ts'
+import { pfad } from '../pfad.ts'
 import { anzahlVon, minus, plus } from '../bestellung.ts'
 import { useAuftauchen } from '../bewegung.ts'
 import { useBestellung } from '../useBestellung.ts'
 import Bildschau from './ui/Bildschau.tsx'
 import { Kopf, Sektion } from './ui/bausteine.tsx'
 import Collage from './ui/Collage.tsx'
-import Olivenzweig from './ui/Olivenzweig.tsx'
 import Untergrund from './ui/Untergrund.tsx'
 
 /**
@@ -99,20 +99,33 @@ export default function Karte() {
           stört die zweiundzwanzig Zeilen weniger. */}
       <Untergrund ton="glut" muster="saat" />
 
-      {/* ═══ Ihr Olivenzweig ═══
+      {/* ═══ Ihr echtes Emblem ═══
 
-          Zwei Stück, gegenläufig, an den gegenüberliegenden Ecken — genau die
-          Anordnung, die ihr eigenes Emblem auf dem QR-Aufkleber hat: links ein
-          Zweig, rechts einer, dazwischen die Sache selbst. Hier ist die Sache
-          dazwischen die Speisekarte.
+          Karol hat am 01.09. die Druckdatei geschickt: ein Ring mit „ARAM",
+          einer goldenen Sonne, einem dunkelgrünen Olivenzweig links und einem
+          Ährenzweig rechts. Das ist die Marke, die auf ihrem QR-Aufkleber am
+          Tresen sitzt — und die, deren Olivenzweig der Inhaber sich hier
+          gewünscht hatte.
 
-          Sie laufen ABSICHTLICH über die Kante hinaus. Ein Ornament, das
-          vollständig im Bild liegt, ist ein Aufkleber; eines, das
-          angeschnitten ist, ist ein Grund. */}
-      <div className="karte__zweige" aria-hidden="true">
-        <Olivenzweig klasse="karte__zweig karte__zweig--oben" />
-        <Olivenzweig klasse="karte__zweig karte__zweig--unten" />
-      </div>
+          Bis eben stand hier ein Zweig, den ich selbst gezeichnet hatte, weil
+          es die Datei nicht gab. Er war gut gebaut und trotzdem ein Ersatz.
+          Jetzt steht ihr eigenes Zeichen da, aus dem PDF als Vektor geholt
+          (PyMuPDF), freigestellt und auf Ornamentgüte gerechnet: bei 13 %
+          Deckkraft braucht niemand die volle Auflösung der Sonnenstrahlen.
+
+          Angeschnitten und nicht vollständig im Bild: ein Ornament, das ganz
+          zu sehen ist, ist ein Aufkleber; eines, das über die Kante läuft, ist
+          ein Grund. */}
+      <img
+        className="karte__emblem"
+        src={pfad('bilder/marke/emblem.webp')}
+        alt=""
+        width={620}
+        height={620}
+        aria-hidden="true"
+        loading="lazy"
+        decoding="async"
+      />
       <div className="schale">
         {/* Überschrift links, Allergenfilter rechts. Vorher stand der Filter
             UNTER dem Kopf, und die rechte Hälfte des Bildschirms blieb über
