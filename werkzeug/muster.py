@@ -123,66 +123,76 @@ def korn_hell() -> str:
     )
 
 
-def saat(breite: int = 360, hoehe: int = 360, saatgut: int = 3) -> str:
-    """Sesam und Schwarzkümmel — die Oberfläche ihrer Gebäcke als Muster.
+def saat(breite: int = 360, hoehe: int = 360, saatgut: int = 3,
+         sesam: str = '#f7efe2', kuemmel: str = '#241710') -> str:
+    """Sesam und Schwarzkuemmel — die Oberflaeche ihrer Gebaecke als Muster.
 
     ═══ Warum nicht der Rundbogen ═══
 
-    Der stand hier und ist raus. Karol: „das mit den Bögen weiss ich nicht,
-    sieht mir zu einfach aus, kein cooles Design, was sich in den Style Guide
-    einbringt." Er hat in beidem recht:
-
-      1  Ein gleichmässig wiederholter Umriss auf festem Raster IST Tapete.
-         Gleiche Form, gleicher Abstand, gleiche Strichstärke — es gibt nichts
-         zu sehen, was man nicht nach dem ersten Bogen schon weiss.
-      2  Die Seite führt den Bogen bereits dreimal als RAHMEN: Arkade, Tafel im
-         Vorhang, QR-Schild. Ihn zusätzlich als Grund zu nehmen ist
-         Wiederholung, nicht System.
+    Der stand hier und ist raus. Karol: „das mit den Boegen weiss ich nicht,
+    sieht mir zu einfach aus, kein cooles Design." Er hat in beidem recht: ein
+    gleichmaessig wiederholter Umriss auf festem Raster IST Tapete, und die
+    Seite fuehrt den Bogen ohnehin schon dreimal als Rahmen.
 
     ═══ Warum Saat ═══
 
-    Auf jedem ihrer Gebäcke liegt Sesam und Schwarzkümmel — auf jedem Foto, das
-    sie geschickt haben, ist es zu sehen. Es ist keine Abstraktion ihrer Form,
-    sondern die tatsächliche OBERFLÄCHE dessen, was sie verkaufen.
+    Auf jedem ihrer Gebaecke liegt Sesam und Schwarzkuemmel — auf jedem Foto,
+    das sie geschickt haben, ist es zu sehen. Es ist keine Abstraktion ihrer
+    Form, sondern die tatsaechliche OBERFLAECHE dessen, was sie verkaufen. Und
+    Saat liegt nie auf einem Raster: unregelmaessig, verschieden gross,
+    verschieden gedreht — sie kann gar nicht als Tapete lesen.
 
-    Und es löst genau das Problem des Bogens: Saat liegt nie auf einem Raster.
-    Sie ist unregelmässig, verschieden gross, verschieden gedreht — sie kann
-    gar nicht als Tapete lesen.
+    ═══ Zwei Farben statt einer, und warum das die Datei aendert ═══
 
-    ═══ Wie sie verteilt wird ═══
+    Karol am 02.09.: „du siehst diese groesseren Sesamkoerner in Weiss und
+    Schwarz. Ich glaube, es waere krasser, wenn die ganze Sektion von diesen
+    Koernern hinten ausgefuellt ist."
 
-    Nicht rein zufällig: echter Zufall ballt sich zu Klumpen und lässt Löcher.
-    Stattdessen ein grobes Raster, in dem jedes Korn innerhalb seiner Zelle
-    zufällig sitzt — das ergibt die gleichmässige Streuung, die eine bemehlte
-    Fläche hat, ohne Regelmässigkeit.
+    Bis heute lag die Saat als MASKE ueber einer einfarbigen Flaeche. Das war
+    sparsam — eine Datei fuer alle Gruende, die Farbe kam per `currentColor` —
+    aber es kann nur EINE Farbe. Sesam ist hell, Schwarzkuemmel ist dunkel;
+    das ist der ganze Reiz der Oberflaeche, und als Maske ging er verloren.
 
-    Die Ränder werden gespiegelt bestückt, damit die Kachel nahtlos schliesst.
+    Jetzt stehen beide Farben IN der Datei, und sie wird als Bild gelegt statt
+    als Maske. Der Preis ist eine Datei je Grund: auf ihrem Schwarz waere ein
+    schwarzes Korn unsichtbar, dort ist der Kuemmel ein warmes Grau.
+
+    ═══ Wie verteilt wird ═══
+
+    Nicht rein zufaellig: echter Zufall ballt sich zu Klumpen und laesst
+    Loecher. Stattdessen ein grobes Raster, in dem jedes Korn innerhalb seiner
+    Zelle zufaellig sitzt — die gleichmaessige Streuung einer bemehlten
+    Flaeche, ohne Regelmaessigkeit.
+
+    Dichter und groesser als vorher: 12 statt 9 Zellen je Kante, und nur noch
+    jede zwoelfte bleibt leer statt jeder vierten. Die Koerner selbst sind rund
+    anderthalbmal so gross.
     """
     r = random.Random(saatgut)
-    zellen = 9
+    zellen = 12
     schritt = breite / zellen
-    teile = []
+    hell, dunkel = [], []
 
     for zy in range(zellen):
         for zx in range(zellen):
             # Nicht jede Zelle bekommt ein Korn — sonst ist es doch ein Raster.
-            if r.random() < 0.28:
+            if r.random() < 0.08:
                 continue
-            x = zx * schritt + r.uniform(0.1, 0.9) * schritt
-            y = zy * schritt + r.uniform(0.1, 0.9) * schritt
+            x = zx * schritt + r.uniform(0.08, 0.92) * schritt
+            y = zy * schritt + r.uniform(0.08, 0.92) * schritt
             dreh = r.uniform(0, 180)
 
             if r.random() < 0.62:
-                # Sesam: längliches Korn, spitz zulaufend
-                rx, ry = r.uniform(3.1, 4.4), r.uniform(1.5, 2.1)
-                teile.append(
+                # Sesam: laengliches Korn, spitz zulaufend
+                rx, ry = r.uniform(4.6, 6.6), r.uniform(2.3, 3.2)
+                hell.append(
                     f'<ellipse cx="{x:.1f}" cy="{y:.1f}" rx="{rx:.1f}" ry="{ry:.1f}" '
                     f'transform="rotate({dreh:.0f} {x:.1f} {y:.1f})"/>'
                 )
             else:
-                # Schwarzkümmel: kleiner, kantiger, dunkler
-                g = r.uniform(1.9, 2.7)
-                teile.append(
+                # Schwarzkuemmel: kleiner, kantiger, dunkler
+                g = r.uniform(2.9, 4.1)
+                dunkel.append(
                     f'<path d="M{x - g:.1f} {y:.1f}L{x:.1f} {y - g * 0.8:.1f}'
                     f'L{x + g:.1f} {y:.1f}L{x:.1f} {y + g * 0.8:.1f}Z" '
                     f'transform="rotate({dreh:.0f} {x:.1f} {y:.1f})"/>'
@@ -191,7 +201,8 @@ def saat(breite: int = 360, hoehe: int = 360, saatgut: int = 3) -> str:
     return (
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {breite} {hoehe}" '
         f'width="{breite}" height="{hoehe}">\n'
-        f'  <g fill="currentColor">{"".join(teile)}</g>\n'
+        f'  <g fill="{sesam}">{"".join(hell)}</g>\n'
+        f'  <g fill="{kuemmel}">{"".join(dunkel)}</g>\n'
         f'</svg>\n'
     )
 
@@ -200,7 +211,12 @@ if __name__ == '__main__':
     ZIEL.mkdir(parents=True, exist_ok=True)
     (ZIEL / 'korn.svg').write_text(korn())
     (ZIEL / 'korn-hell.svg').write_text(korn_hell())
-    (ZIEL / 'saat.svg').write_text(saat())
+    # Zwei Faerbungen. Auf ihrem Orange darf der Kuemmel ihr Schwarz sein; auf
+    # ihrem Schwarz waere er unsichtbar und wird zu einem warmen Grau, das
+    # gerade so aus dem Grund heraustritt.
+    (ZIEL / 'saat-glut.svg').write_text(saat(kuemmel='#241710'))
+    (ZIEL / 'saat-nacht.svg').write_text(saat(kuemmel='#6d5b4b'))
     print('korn.svg      ', (ZIEL / 'korn.svg').stat().st_size, 'Bytes')
     print('korn-hell.svg ', (ZIEL / 'korn-hell.svg').stat().st_size, 'Bytes')
-    print('saat.svg ', (ZIEL / 'saat.svg').stat().st_size, 'Bytes')
+    for n in ('saat-glut.svg', 'saat-nacht.svg'):
+        print(f'{n:16}', (ZIEL / n).stat().st_size, 'Bytes')
