@@ -134,7 +134,43 @@ export type Gebaeck = {
   skala: [number, number]
 }
 
-/* ═══ Roher Teig ist kein Gericht ═══
+/* ═══ Die Aufnahmen sind belichtet, nicht ersetzt ═══
+
+       Karol am 02.09.: „mach die Produkte nun schöner, aber trotzdem so echt
+       es geht an den Produkten von Aram." Der Inhaber dazu: so nah wie möglich
+       am Original.
+
+       Alle acht sind am 02.09. über Higgsfield (seedream_v5_pro) durch einen
+       Durchgang gegangen — aber als BEARBEITUNG ihres eigenen Fotos, nicht als
+       Neuerzeugung. Der Schalter dafür heisst `is_inpaint`, und der
+       Unterschied ist nicht theoretisch: gemessen bleibt der Umriss bei sieben
+       von acht Stücken zu über 98 % derselbe.
+
+           Gebaeck        Mikrokontrast   Umriss
+           fatayer          15,5 -> 21,1   99,4 %
+           rolle             9,9 -> 14,0   83,8 %
+           lahmacun         18,3 -> 23,5   99,7 %
+           zaatar           21,2 -> 30,8   99,7 %
+           zaatar-2         18,0 -> 23,4   98,1 %
+           sesam             5,0 -> 14,0   99,8 %
+           gebacken         10,0 -> 14,3   99,1 %
+           kaese             8,8 -> 11,7   99,3 %
+
+       Der Sesam-Fladen war mit 5,0 das weichste Stück der ganzen Seite; jetzt
+       sind die einzelnen Körner wieder da. Die Rolle ist mit 83,8 % die
+       einzige, die merklich gewandert ist — sie ist etwas länger geworden.
+
+       Der erste Versuch war 34 Stufen ZU DUNKEL (Helligkeit 124 auf 90) und
+       sah oben rechts verbrannt aus. Erst der ausdrückliche Zusatz „gleiche
+       Helligkeit halten, nicht abdunkeln, nicht verbrannt aussehen lassen" hat
+       das gedreht: 112 statt 90, bei gleichzeitig mehr Textur.
+
+       `appetit.py` läuft auf diesen acht NICHT mehr. Der Generator hat Schärfe
+       und Glanz schon gemacht, und ein zweiter Durchgang macht aus Körnern
+       Kanten. Lichtangleich und Kantenglättung laufen weiter, damit die acht
+       dasselbe Licht und denselben Rand tragen wie der Rest der Seite.
+
+   ═══ Roher Teig ist kein Gericht ═══
 
        Karol am 01.09.: „die Elemente von Aram sind scheisse … das sieht aus wie
        unappetitliche Steine."
@@ -186,8 +222,8 @@ export const GEBAECKE: Gebaeck[] = [
     gr: 26,
     liM: 58,
     grM: 52,
-    breite: 1000,
-    hoehe: 799,
+    breite: 780,
+    hoehe: 554,
     /* Das echte fliegt am weitesten und am grössten — es ist das einzige, das
        zeigt, was der Gast bekommt. */
     y: [0.5, -0.34],
@@ -210,8 +246,8 @@ export const GEBAECKE: Gebaeck[] = [
     gr: 26,
     liM: 72,
     grM: 48,
-    breite: 752,
-    hoehe: 396,
+    breite: 780,
+    hoehe: 574,
     y: [0.34, -0.48],
     x: [0.03, -0.06],
     dreh: [25, -36],
@@ -232,8 +268,8 @@ export const GEBAECKE: Gebaeck[] = [
     gr: 21,
     liM: 54,
     grM: 48,
-    breite: 552,
-    hoehe: 445,
+    breite: 780,
+    hoehe: 745,
     y: [0.62, -0.28],
     x: [-0.05, 0.1],
     dreh: [-45, 22],
@@ -253,8 +289,8 @@ export const GEBAECKE: Gebaeck[] = [
     gr: 17,
     liM: 76,
     grM: 38,
-    breite: 630,
-    hoehe: 601,
+    breite: 780,
+    hoehe: 772,
     y: [0.28, -0.4],
     x: [0.06, -0.04],
     dreh: [36, -25],
@@ -274,8 +310,8 @@ export const GEBAECKE: Gebaeck[] = [
     gr: 14,
     liM: 74,
     grM: 36,
-    breite: 575,
-    hoehe: 420,
+    breite: 780,
+    hoehe: 691,
     y: [0.44, -0.22],
     x: [-0.03, 0.07],
     dreh: [-22, 45],
@@ -295,8 +331,8 @@ export const GEBAECKE: Gebaeck[] = [
     gr: 23,
     liM: 60,
     grM: 50,
-    breite: 774,
-    hoehe: 716,
+    breite: 780,
+    hoehe: 761,
     y: [0.4, -0.34],
     x: [0.04, -0.08],
     dreh: [31, -39],
@@ -316,8 +352,8 @@ export const GEBAECKE: Gebaeck[] = [
     gr: 15,
     liM: 78,
     grM: 34,
-    breite: 576,
-    hoehe: 367,
+    breite: 780,
+    hoehe: 684,
     y: [0.5, -0.2],
     x: [-0.06, 0.04],
     dreh: [-28, 34],
@@ -338,7 +374,7 @@ export const GEBAECKE: Gebaeck[] = [
     liM: 56,
     grM: 48,
     breite: 780,
-    hoehe: 490,
+    hoehe: 698,
     y: [0.24, -0.44],
     x: [0.05, -0.05],
     dreh: [39, -22],
