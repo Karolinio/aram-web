@@ -214,16 +214,16 @@ if __name__ == '__main__':
     # Zwei Faerbungen. Auf ihrem Orange darf der Kuemmel ihr Schwarz sein; auf
     # ihrem Schwarz waere er unsichtbar und wird zu einem warmen Grau, das
     # gerade so aus dem Grund heraustritt.
-    # Auf ihrem Orange darf der Kuemmel ihr Schwarz sein.
-    (ZIEL / 'saat-glut.svg').write_text(saat(kuemmel='#241710'))
-    # Auf ihrem Schwarz waere er unsichtbar. Karol am 02.09.: „mach dunkle und
-    # weisse Koerner auf Orange UND auf Schwarz" — dafuer muss der dunkle Ton
-    # dort HELLER sein als der Grund, sonst gibt es ihn nur auf dem Papier.
-    # #8a7663 statt #6d5b4b: gegen ihr #1d140e ist das ein sichtbarer Abstand,
-    # gegen den Sesam #f7efe2 immer noch ein deutlicher — erst dadurch sind es
-    # zwei Sorten Korn und nicht eine.
-    (ZIEL / 'saat-nacht.svg').write_text(saat(sesam='#f7efe2', kuemmel='#8a7663'))
+    # ═══ Die gezeichnete Saat wird nicht mehr ausgeliefert ═══
+    #
+    # Karol am 02.09.: „tausche diese zwei-D-Koerner gegen diese drei-D-Koerner."
+    # Seitdem legt werkzeug/saatfoto.py eine Kachel aus FOTOGRAFIERTEN Koernern,
+    # und die beiden SVG-Faerbungen sind raus.
+    #
+    # `saat()` bleibt trotzdem stehen: die Streulogik — grobes Raster, Korn
+    # zufaellig in seiner Zelle, gespiegelte Raender — ist dieselbe, die
+    # saatfoto.py benutzt, und der Kopf darueber erklaert, warum nicht der
+    # Rundbogen. Wer sie je wieder braucht, ruft sie hier auf.
     print('korn.svg      ', (ZIEL / 'korn.svg').stat().st_size, 'Bytes')
     print('korn-hell.svg ', (ZIEL / 'korn-hell.svg').stat().st_size, 'Bytes')
-    for n in ('saat-glut.svg', 'saat-nacht.svg'):
-        print(f'{n:16}', (ZIEL / n).stat().st_size, 'Bytes')
+    print('saat: siehe werkzeug/saatfoto.py')

@@ -817,22 +817,40 @@ body:has(.leiste) .wasserzeichen {
      wandert auf null. Weil sich das Muster kachelt, ist der Endzustand mit dem
      Anfang identisch — die Schleife hat keine Naht. Die Zusatzhoehe sorgt
      dafuer, dass unten nie eine Luecke entsteht. */
-  --kachel: clamp(300px, 24vw, 420px);
+  /* Kleiner als bei der gezeichneten Saat. Ein fotografiertes Korn misst in
+     der Kachel 26 bis 44 px; bei 420 px Kachelbreite kaeme es auf dem Schirm
+     auf 20 bis 33 px und waere damit doppelt so gross wie das gezeichnete
+     vorher. Bei 300 px sind es 14 bis 24 — dieselbe Groesse wie bisher. */
+  --kachel: clamp(210px, 17vw, 300px);
   height: calc(100% + var(--kachel));
   background-repeat: repeat;
   background-size: var(--kachel) var(--kachel);
   /**
-   * ═══ `background-image` statt `mask-image` ═══
+   * ═══ Fotografierte Körner statt gezeichneter ═══
    *
-   * Karol am 02.09.: „du siehst diese groesseren Sesamkoerner in Weiss und
-   * Schwarz. Es waere krasser, wenn die ganze Sektion von diesen Koernern
-   * hinten ausgefuellt ist und die vielleicht ein bisschen runterrieseln."
+   * Karol am 02.09.: „tausche diese komischen, komplett im Hintergrund
+   * schwebenden zwei-D-Körner gegen diese drei-D-Körner, die ein bisschen
+   * weiter vorne sind."
    *
-   * Als Maske ueber einer einfarbigen Flaeche konnte die Saat nur EINE Farbe
-   * annehmen — sparsam, aber es kostete genau das, was die Oberflaeche
-   * ausmacht: heller Sesam neben dunklem Schwarzkuemmel. Jetzt stehen beide
-   * Farben in der Datei, und der Preis ist eine Datei je Grund.
+   * Er hat zwei Systeme gefunden, die seit Wochen nebeneinander liefen:
+   * hier lagen gezeichnete Ellipsen und Rauten aus einer SVG-Datei — flach,
+   * zwei Farbwerte, kein Licht. In der Prozess-Sektion lagen daneben vierzehn
+   * Teilchen, die Ausschnitte aus einem FOTO zeigen, mit Schattierung und
+   * Glanzlicht. Das „Knäuel", das er unter Schritt 03 gefunden hat, ist eines
+   * davon.
+   *
+   * Jetzt tragen alle Sektionen die Fotografie. Die Kachel entsteht in
+   * werkzeug/saatfoto.py: die Einzelkörner werden aus dem Blatt geschnitten
+   * und nahtlos gestreut — was rechts hinausläuft, kommt links herein.
+   *
+   * ═══ Und deshalb genügt EINE Datei für beide Gründe ═══
+   *
+   * Die gezeichnete Saat brauchte zwei Färbungen, weil ihr Schwarzkümmel auf
+   * ihrem Schwarz unsichtbar war. Ein fotografiertes Korn hat ein Glanzlicht
+   * und bleibt auch auf dunklem Grund als Form lesbar. Zwei Dateien weniger,
+   * und die Farben sind die echten statt zweier gewählter Werte.
    */
+  background-image: url('/bilder/muster-grund/saat-foto.webp');
   animation: rieseln 52s linear infinite;
   /**
    * ═══ Und hier hängt die Interaktion ═══
@@ -871,20 +889,22 @@ body:has(.leiste) .wasserzeichen {
   .untergrund__saat { animation: none; }
 }
 
-/* Auf ihrem Schwarz waere ein schwarzes Korn unsichtbar — dort traegt der
-   Kuemmel ein warmes Grau. Siehe werkzeug/muster.py. */
+/* Nur noch die Deckkraft unterscheidet die Gründe — das Bild ist dasselbe. */
 .sektion--tief .untergrund__saat,
 .sektion--nacht .untergrund__saat {
-  background-image: url('/bilder/muster-grund/saat-nacht.svg');
   /* 0,5 -> 0,375 -> 0,30. Zweimal zurückgenommen, beide Male auf Zuruf.
      Der Grund liegt in der Sache: auf ihrem Schwarz stehen die hellen
      Sesamkörner mit vollem Abstand zum Grund, auf dem Orange nicht. Dieselbe
-     Deckkraft ergibt dort also mehr Kontrast — und damit mehr Unruhe. */
-  opacity: 0.3;
+     Deckkraft ergibt dort also mehr Kontrast — und damit mehr Unruhe.
+
+     0,30 -> 0,10 beim Wechsel auf die Fotografie, und das ist gemessen: mit
+     derselben Deckkraft sprang die Streuung von 3,6 auf 11,7 bis 14,5. Ein
+     fotografiertes Korn traegt Schattierung und Glanzlicht in sich und ist
+     damit dreimal so laut wie eine gezeichnete Ellipse. */
+  opacity: 0.062;
 }
 .sektion--hell .untergrund__saat,
 .sektion--glut .untergrund__saat {
-  background-image: url('/bilder/muster-grund/saat-glut.svg');
   /**
    * Schwaecher als auf Schwarz, und der Grund ist die TEXTDICHTE, nicht der
    * Kontrast. Auf ihrem Schwarz stehen ein paar Zeilen; auf dem Orange stehen
@@ -903,6 +923,9 @@ body:has(.leiste) .wasserzeichen {
    * ist Karols „bei Orange 30 % weniger" vom 02.09. Hier ist die Karte, und
    * unter zweiundzwanzig Gerichten mit Beschreibung und Allergenen zählt jedes
    * Korn doppelt.
+   *
+   * Beim Wechsel auf die Fotografie noch einmal auf 0,11: gemessen stieg die
+   * Streuung bei gleicher Deckkraft von 2,3 auf 5,0.
    */
-  opacity: 0.18;
+  opacity: 0.11;
 }
