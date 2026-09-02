@@ -1236,13 +1236,20 @@
 /* Der erste Weg ist der empfohlene. Der Strich auf der Schwelle bleibt das
    Merkmal — dieselbe Sprache wie beim empfohlenen Bestellweg —, er liegt jetzt
    nur auf einer Scheibe statt auf einer schwarzen Fläche. */
-.stein--erst {
-  /* Ihr Orange, um ein Fünftel in ihr Schwarz gezogen — dieselbe Stufe wie
-     die arabische Zeile auf der Cremetafel. Auf einer fast weissen Scheibe
-     verliert das volle Orange zu viel; eine Stufe tiefer bleibt es dieselbe
-     Farbe und ist als Markierung eindeutig zu sehen. */
-  border-block-end: 3px solid color-mix(in oklch, var(--ton-hell) 80%, var(--nacht));
-}
+/* ═══ Der Strich auf der Schwelle ist weg ═══
+
+   Karol am 02.09.: „bei der Startseite diese Zur-Karte unten links, diesen
+   orangenen Balken bitte wegmachen. Da ist so ein mini dünner orangener
+   Balken. Einfach weg, kein grosser Fix."
+
+   Er markierte den empfohlenen Weg — dieselbe Sprache wie beim empfohlenen
+   Bestellweg. Auf einer durchsichtigen Scheibe war das aber der einzige
+   satte Farbwert im ganzen Hero, und drei Scheiben nebeneinander brauchen
+   keine Rangfolge: „Zur Karte" steht ohnehin links und zuerst.
+
+   Die Klasse `stein--erst` bleibt am Element. Sie kostet nichts und benennt,
+   welcher Weg der gemeinte ist — falls je wieder eine Markierung gebraucht
+   wird, ist die Stelle schon da. */
 
 .stein svg { width: 1.05em; height: 1.05em; margin-top: 0.15rem; }
 /* Der Pfeil atmet, der Stein nicht. Bewegung an der Umrandung würde die Reihe
@@ -1259,7 +1266,7 @@
 @media (hover: hover) {
   .stein:hover {
     transform: translateY(-3px);
-    border-color: color-mix(in oklch, var(--ton-hell) 80%, var(--nacht));
+    border-color: color-mix(in oklch, white 95%, transparent);
     background: color-mix(in oklch, white 14%, transparent);
     /* Die Lichtkante bleibt, und von unten kommt die Glut dazu — wie bei den
        Bestellwegen und den Nummern der Karte. Auf einer hellen Scheibe reicht
@@ -1662,12 +1669,11 @@
   margin: clamp(2.5rem, 6vw, 5rem) 0 0;
   padding: 0;
   display: grid;
-  gap: clamp(1.5rem, 3vw, 3rem);
-  /* `stretch` und nicht `start`: vier Karten mit ungleich langen Sätzen wären
-     sonst ungleich hoch, und eine Reihe, deren Unterkanten nicht fluchten,
-     liest sich als verrutscht. Der Textkasten wird dafür unten angeschlagen
-     (siehe .schritt__wort), damit die Bilder auf einer Linie bleiben. */
-  align-items: stretch;
+  /* Eng. Bei Savor stehen die Streifen fast Kante an Kante, und darin liegt
+     die Wirkung: vier Bilder mit Handbreit Abstand sind vier Bilder, vier
+     Bilder mit Fingerbreit Abstand sind ein Filmstreifen. */
+  gap: clamp(0.4rem, 1vw, 0.75rem);
+  align-items: start;
 }
 
 /**
@@ -1688,66 +1694,57 @@
 }
 
 /**
- * ═══ Jeder Schritt ist ein Ofenmaul ═══
+ * ═══ Vier Streifen, kein Kasten ═══
  *
- * Karol am 02.09.: „das dritte Bild ist abgeschnitten und passt gar nicht
- * rein … generell finde ich die Bilder altbacken. Das ist die einzige Seite,
- * die schlechter geworden ist. Die weisse Schrift dann anstatt schwarz."
+ * Karol am 02.09.: „die Öfen finde ich nicht gut … 03 das Bild geht gar
+ * nicht. Iterier generell, wie als fremder User diese Sektion auf dich
+ * wirkt."
  *
- * Drei Beschwerden mit einer gemeinsamen Ursache: die Schritte hatten keinen
- * eigenen Grund. Ein Foto, ein Freisteller und zwei verschiedene
- * Seitenverhältnisse lagen frei auf dem Orange, jedes mit anderem Zuschnitt,
- * dazu eine Treppe, die sie gegeneinander versetzte. Vier lose Teile ergeben
- * keine Folge.
+ * ═══ Was ein Fremder sieht ═══
  *
- * ═══ Was Mobbin dazu zeigt ═══
+ * Die Überschrift verspricht, dass alles vor den Augen des Gastes entsteht.
+ * Darunter standen vier Bilder, die nichts miteinander zu tun hatten: ein
+ * leeres bemehltes Brett ohne Menschen, eine Werkstattaufnahme mit zwei
+ * Männern, ein Freisteller auf Schwarz und ein dunkles Ofeninneres. Vier
+ * Karten nebeneinander VERSPRECHEN eine Folge; diese lasen sich als vier
+ * Fundstücke. Das war der Mangel — nicht die Form der Karte.
  *
- * Bei Kalstore trägt JEDER Schritt eine eigene getönte Karte — Ziffer oben,
- * Titel und Satz unten, alle gleich gebaut. Escape Cafe macht dasselbe
- * flacher, mit einer Linie über jeder Spalte. Beide lösen dieselbe Sache: die
- * Karte gibt dem Schritt eine Kante, und erst dadurch liest man vier Karten
- * als eine Reihe statt als vier Bilder.
+ * Die Karte hat ihn sogar betont: ein Rahmen um vier ungleiche Bilder macht
+ * die Ungleichheit sichtbarer, nicht kleiner.
  *
- * Hier ist die Karte ein Ofenmaul — dieselbe Form wie die Bestellwege, die
- * Nummern der Speisekarte und die Scheiben auf der Startseite. Das Bild sitzt
- * IN der Kuppel; man sieht in den Ofen hinein.
+ * ═══ Was Savor zeigt ═══
  *
- * ═══ Und damit ist die weisse Schrift möglich ═══
+ * Bei Savor (Mobbin) laufen sechs SCHMALE HOHE Streifen Kante an Kante, ohne
+ * Rahmen und ohne Kasten. Alle sechs stammen aus derselben Werkstatt, und
+ * genau daraus entsteht der Eindruck einer Folge: nicht aus dem Rahmen,
+ * sondern aus dem gemeinsamen Ort.
  *
- * Auf dem Orange trug Weiss nur ab 24 px (gemessen 3,10 gegen eine Grenze von
- * 4,5 für normale Schrift). Der Satz unter jedem Schritt ist 18 px und musste
- * deshalb schwarz bleiben. Auf ihrem Schwarz misst Creme 16,6 — auf der Karte
- * darf alles hell sein, Ziffer, Titel und Satz.
+ * Ein hoher Ausschnitt zwingt jedes Bild ausserdem auf EIN Motiv und schneidet
+ * weg, was drumherum nicht zusammenpasst.
  *
- * Die Treppe ist raus. Sie war der Savor-Rhythmus aus der Zeit ohne Karten;
- * versetzte Karten lesen sich als verrutscht, nicht als gestaffelt.
+ * ═══ Und dazu die Bilder selbst ═══
+ *
+ * Der Freisteller in Schritt 03 ist durch eine echte Aufnahme ersetzt (siehe
+ * Handarbeit.tsx). Damit stammen drei der vier Bilder vom selben Ofen. In
+ * ihrem Materialstapel liegen über zwanzig Aufnahmen an dieser einen Stelle —
+ * ihr Ofen IST das wiederkehrende Motiv ihrer eigenen Fotografie, und er hat
+ * dieselbe Bogenform wie die halbe Seite.
  */
 .schritt {
   position: relative;
   display: flex;
   flex-direction: column;
-  overflow: clip;
-  border-radius: var(--maul);
-  background: var(--ton-tief);
-  box-shadow: var(--clay-ruhe);
-  /* Die Insel dreht die Tinte um, wie jede dunkle Fläche in einer hellen
-     Sektion — sonst stünde der Satz in ihrem Schwarz auf ihrem Schwarz. */
-  --tinte: var(--creme);
-  --tinte-leise: var(--creme-ruhig);
-  --akzent: var(--ton-hell);
-  color: var(--creme);
 }
 
 .schritt__bild {
   margin: 0;
-  /* `aspect-ratio` reserviert die Höhe schon VOR dem Laden — ohne sie springt
-     die Reihe, sobald das erste Bild ankommt.
-     `flex: 1 0 auto` lässt sie danach über dieses Mass hinauswachsen: die
-     Karten sind alle so hoch wie die höchste, und ohne diese Zeile blieb
-     zwischen Bild und Text ein schwarzes Loch von 160 px — im ersten Bild nach
-     dem Umbau sofort zu sehen. Jetzt füllt das Bild den Rest. */
-  aspect-ratio: 4 / 3;
-  flex: 1 0 auto;
+  /* Hochformat statt 4:3. Ein hoher Ausschnitt hat Platz für genau einen
+     Gegenstand — die Ofenöffnung, das Brett, die Hände — und laesst den Rest
+     der Kueche draussen. Genau damit werden vier Aufnahmen aus verschiedenen
+     Momenten zu einer Reihe. */
+  aspect-ratio: 3 / 4;
+  overflow: clip;
+  border-radius: 2px;
 }
 
 .schritt__bild img {
@@ -1755,38 +1752,22 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* Oben mittig statt zentriert: die Kuppel schneidet die obere Hälfte, und
-     bei Speisen liegt das Motiv fast immer in der Mitte des Bildes. */
   object-position: 50% 45%;
+  /* Ein Hauch Zoom beim Ueberfahren. Die Streifen sind das Motiv der Sektion;
+     dass sie auf den Zeiger reagieren, macht aus vier Bildern vier Dinge. */
+  transition: transform 600ms var(--ease-teig);
 }
-
-/* Ein Freisteller hat keine Kante, die man beschneiden könnte — er steht IM
-   Maul statt es zu füllen, mit Luft ringsum und seinem Eigenschatten. */
-.schritt[data-art='freisteller'] .schritt__bild {
-  display: grid;
-  place-items: center;
-  padding: 12% 10% 4%;
-}
-.schritt[data-art='freisteller'] .schritt__bild img {
-  width: 100%;
-  height: auto;
-  max-height: 100%;
-  object-fit: contain;
-  --wurf: 0.85;
-  filter: var(--schatten-speise);
+@media (hover: hover) {
+  .schritt:hover .schritt__bild img { transform: scale(1.04); }
 }
 
 .schritt__wort {
-  /* Nach unten angeschlagen: der Textkasten ist so hoch wie sein Inhalt, das
-     Bild darüber nimmt den Rest. Damit fluchten Ober- UND Unterkante. */
-  margin-top: auto;
-  padding: clamp(0.9rem, 2vw, 1.35rem) clamp(0.9rem, 2vw, 1.35rem)
-           clamp(1.1rem, 2.4vw, 1.6rem);
+  padding: clamp(0.75rem, 1.6vw, 1.05rem) 0 0;
 }
 
 .schritt__zahl {
   display: block;
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.3rem;
   color: var(--akzent);
   font-variant-numeric: tabular-nums;
 }

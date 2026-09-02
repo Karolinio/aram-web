@@ -91,26 +91,30 @@ const SCHRITTE = [
     zahl: '03',
     titel: 'Erst dann belegt',
     text: 'Käse, Zaatar, Hackfleisch. Was du bestellst.',
-    art: 'freisteller' as const,
-    /* ═══ Das Spiegelei ist raus ═══
-       Karol, zum zweiten Mal: „ohne Ei." In /bilder/reise/ lag die
-       adscharische Fassung — Ei und Butterflocke obenauf. Das ist ein anderes
-       Gericht als ihres, und es stand ausgerechnet in dem Schritt, der zeigen
-       soll, was sie belegen.
-       Die eilose Aufnahme lag schon in /bilder/riss/ — dieselbe Kamera,
-       derselbe Freisteller, nur ohne Ei. */
-    /* ═══ Seit dem 30.08. IHRE eigene Aufnahme ═══
-       Hier lag ein erzeugtes Käseschiffchen mit Weisskäse — richtig, aber
-       erfunden. Der Inhaber hat inzwischen Fotos geschickt, darunter zwei
-       rohe Manakisch mit Feta, Oliven, Paprika und Tomate. Das ist genau, was
-       der Text daneben behauptet („Käse, Zaatar, Hackfleisch — was du
-       bestellst"), und es ist ihr Teig, ihre Hand, ihr Belag.
-       Freigestellt über Higgsfield; die beiden Fladen berühren sich und
-       bleiben deshalb ein Stück — das Paar zeigt zwei Beläge auf einmal. */
-    quelle: '/bilder/echt/manakisch-belegt-frei.webp',
-    alt: 'Zwei rohe Manakisch, belegt mit Feta, Oliven, Paprika und Tomate',
-    breite: 760,
-    hoehe: 933,
+    art: 'foto' as const,
+    /* ═══ Der Freisteller ist raus ═══
+
+       Karol am 02.09.: „03, das Bild geht gar nicht."
+
+       Er hat recht, und der Fehler war meiner: hier lagen zwei freigestellte
+       Manakisch auf der schwarzen Karte, während die drei anderen Schritte
+       ganzflächige Fotos zeigten. Ein Freisteller neben drei Fotos ist keine
+       Variation, sondern ein Bruch — er schwebte, wo die anderen den Rahmen
+       füllten.
+
+       Der Ersatz ist Bild 32 aus ihrem eigenen Stapel und war bisher unbenutzt:
+       ein langes Brett mit DREI Belägen nebeneinander — weiss, Zaatar, rot —
+       das in die Flamme fährt. Es zeigt buchstäblich, was der Satz daneben
+       behauptet („Käse, Zaatar, Hackfleisch"), und es ist an derselben Stelle
+       aufgenommen wie Schritt 04.
+
+       Damit stammen alle vier Bilder aus ihrem Laden und drei davon vom selben
+       Ofen. Genau das war der eigentliche Mangel: vier Aufnahmen, die nichts
+       miteinander zu tun hatten. */
+    quelle: '/bilder/echt/belegt-blech.webp',
+    alt: 'Ein langes Brett mit drei belegten Fladen fährt in den brennenden Steinofen',
+    breite: 900,
+    hoehe: 1200,
     versatz: 2,
     tempo: -0.03,
   },
