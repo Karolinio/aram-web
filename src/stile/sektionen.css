@@ -1082,32 +1082,96 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: clamp(0.5rem, 1.4vw, 0.9rem);
+  /* Grösserer Abstand bei kleineren Steinen — Karol: „vielleicht minimal
+     kleiner, damit die Abstände ein bisschen grösser sind." Beides zusammen,
+     sonst verschiebt sich nur die Kante und die Reihe bleibt gleich dicht. */
+  gap: clamp(0.75rem, 2.2vw, 1.5rem);
   margin-top: clamp(0.75rem, 2.4vw, 1.8rem);
 }
 
+/**
+ * ═══ Aus schwarzen Steinen werden Scheiben ═══
+ *
+ * Karol am 02.09.: „die müssen irgendwie transparent weiss sein — entweder nur
+ * weiss umrandet und der Rest freigelegt, oder so weiss-silber schimmernd,
+ * aber nicht zu viel, damit die Startseite nicht kaputtgemacht wird."
+ *
+ * ═══ Der erste Versuch war dunkel, und das war falsch herum ═══
+ *
+ * Zuerst ein dünner weisser Film über einem `brightness(0.58)`: hell umrandet,
+ * innen abgedunkelt, weisse Schrift. Die Idee war, dass das Video sichtbar
+ * bleibt und trotzdem einen ruhigen Grund liefert. Gemessen über vier
+ * Videobilder ergab das 2,90 bis 5,70 — auf hellen Stellen fiel es durch, und
+ * im Bild sahen die Scheiben grau und stumpf aus, nicht silbern.
+ *
+ * Der Fehler war die Kombination: eine HELLE Scheibe mit HELLER Schrift geht
+ * nicht. Wenn die Fläche weiss sein soll, muss die Schrift dunkel sein.
+ *
+ * ═══ Also andersherum ═══
+ *
+ * Weisser Film, `brightness` ÜBER 1, und ihr Schwarz als Schrift. Über
+ * denselben vier Videobildern gemessen: 7,04 bis 7,78 — und der Wert bleibt
+ * stabil, weil Film und Aufhellung den Grund bestimmen, nicht das Bild.
+ *
+ * ═══ Woraus das Schimmern kommt ═══
+ *
+ * Vier Dinge, und keins davon ist eine Farbe:
+ *
+ *   ein weisser Film            48 %, hell genug für dunkle Schrift und
+ *                               durchsichtig genug, dass das Gebäck darunter
+ *                               noch zu ahnen ist
+ *   `saturate` UNTER 100 %      nimmt die Farbe heraus, die durchscheint.
+ *                               Genau das macht aus warmem Milchglas Silber —
+ *                               bei voller Sättigung schimmerte die Scheibe
+ *                               golden, nicht weiss
+ *   ein schräger Lichtverlauf   von der oberen linken Ecke, der nach der
+ *                               Hälfte ausläuft. Eine Scheibe fängt Licht
+ *                               ungleich, eine Fläche gleichmässig
+ *   eine helle Haarlinie oben   dort, wo das Licht auf die Kante trifft
+ *
+ * Der Rahmen ist weiss und nach unten hin schwächer: eine Scheibe fängt oben
+ * Licht und steht unten im Schatten.
+ */
 .stein {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 0.1rem;
-  /* Oben mehr Platz als unten: die Kuppel nimmt sich die obere Hälfte. */
-  padding: clamp(1.35rem, 3.4vw, 2rem) clamp(1rem, 2.6vw, 1.6rem)
-           clamp(0.7rem, 1.6vw, 1rem);
-  min-width: clamp(7.5rem, 15vw, 10.5rem);
+  /* Rund ein Sechstel kleiner als vorher, oben wie unten. Die Kuppel nimmt
+     sich weiter die obere Hälfte, deshalb bleibt oben mehr Platz. */
+  padding: clamp(1.1rem, 2.8vw, 1.65rem) clamp(0.85rem, 2.1vw, 1.3rem)
+           clamp(0.6rem, 1.3vw, 0.85rem);
+  min-width: clamp(6.5rem, 12.5vw, 9rem);
   border-radius: var(--maul);
-  background: color-mix(in oklch, var(--ton-tief) 92%, transparent);
-  border: 1px solid var(--nacht-linie);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  color: var(--creme);
+  background:
+    linear-gradient(148deg,
+      color-mix(in oklch, white 34%, transparent) 0%,
+      transparent 52%),
+    color-mix(in oklch, white 48%, transparent);
+  border: 1px solid color-mix(in oklch, white 75%, transparent);
+  border-block-end-color: color-mix(in oklch, white 38%, transparent);
+  /* 18 % und nicht 40: bei 40 kam die Scheibe als rgb(253,249,237) heraus —
+     das ist Creme, nicht Silber. Das Warme stammt vom Gebäck dahinter, und je
+     weniger Sättigung durchkommt, desto neutraler wird die Fläche. */
+  -webkit-backdrop-filter: blur(20px) saturate(18%) brightness(1.55);
+  backdrop-filter: blur(20px) saturate(18%) brightness(1.55);
+  /* Die Lichtkante oben und ein weicher Schatten darunter — daran erkennt man
+     eine Scheibe, nicht an ihrer Füllung. */
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklch, white 85%, transparent),
+    /* Etwas kräftiger als vorher: eine helle Scheibe auf einem hellen
+       Videobild hat keine Kante mehr, die sie vom Grund trennt. Der Schatten
+       ist das Einzige, was sie abheben kann. */
+    0 10px 30px -10px oklch(12% 0.02 50 / 0.55);
+  color: var(--nacht);
   text-decoration: none;
   font-family: var(--font-display);
   font-variation-settings: var(--wonk-klein);
   transition:
     transform var(--dauer-mikro) var(--ease-teig),
     border-color var(--dauer-mikro) var(--ease-teig),
+    background var(--dauer-mikro) var(--ease-teig),
     box-shadow var(--dauer-mikro) var(--ease-teig);
 }
 
@@ -1120,14 +1184,26 @@
 .stein__zusatz {
   font-family: var(--font-text);
   font-size: var(--text-micro);
-  color: var(--creme-ruhig);
+  /* Seit die Scheibe hell ist, ist auch der Nebentext dunkel. 82 % ihres
+     Schwarz statt voll: dieselbe Abstufung wie --tinte-leise auf Orange, und
+     dieselbe Rechnung — bei weniger fiele er unter 4,5. */
+  color: color-mix(in oklch, var(--nacht) 82%, transparent);
   font-variant-numeric: tabular-nums;
 }
 
 /* Der erste Weg ist der empfohlene, und er wird auf dieselbe Art markiert wie
    der empfohlene Bestellweg: ein Strich auf der Schwelle des Ofens. Keine
    zweite Farbe, keine zweite Grösse — dieselbe Sprache an beiden Stellen. */
-.stein--erst { border-block-end: 3px solid var(--ton-hell); }
+/* Der erste Weg ist der empfohlene. Der Strich auf der Schwelle bleibt das
+   Merkmal — dieselbe Sprache wie beim empfohlenen Bestellweg —, er liegt jetzt
+   nur auf einer Scheibe statt auf einer schwarzen Fläche. */
+.stein--erst {
+  /* Ihr Orange, um ein Fünftel in ihr Schwarz gezogen — dieselbe Stufe wie
+     die arabische Zeile auf der Cremetafel. Auf einer fast weissen Scheibe
+     verliert das volle Orange zu viel; eine Stufe tiefer bleibt es dieselbe
+     Farbe und ist als Markierung eindeutig zu sehen. */
+  border-block-end: 3px solid color-mix(in oklch, var(--ton-hell) 80%, var(--nacht));
+}
 
 .stein svg { width: 1.05em; height: 1.05em; margin-top: 0.15rem; }
 /* Der Pfeil atmet, der Stein nicht. Bewegung an der Umrandung würde die Reihe
@@ -1144,10 +1220,19 @@
 @media (hover: hover) {
   .stein:hover {
     transform: translateY(-3px);
-    border-color: var(--ton-hell);
-    /* Der Ofen glüht von innen, wie bei den Bestellwegen und den Nummern. */
-    box-shadow: inset 0 -1.6rem 2rem -1.4rem
-      color-mix(in oklch, var(--ton-hell) 60%, transparent);
+    border-color: color-mix(in oklch, var(--ton-hell) 80%, var(--nacht));
+    background:
+      linear-gradient(148deg,
+        color-mix(in oklch, white 46%, transparent) 0%,
+        transparent 52%),
+      color-mix(in oklch, white 60%, transparent);
+    /* Die Lichtkante bleibt, und von unten kommt die Glut dazu — wie bei den
+       Bestellwegen und den Nummern der Karte. Auf einer hellen Scheibe reicht
+       dafür ein Drittel der Stärke; mehr sähe aus wie ein Farbfleck. */
+    box-shadow:
+      inset 0 1px 0 color-mix(in oklch, white 95%, transparent),
+      inset 0 -1.4rem 1.8rem -1.3rem color-mix(in oklch, var(--ton-hell) 32%, transparent),
+      0 10px 28px -12px oklch(12% 0.02 50 / 0.8);
   }
 }
 
