@@ -1663,7 +1663,11 @@
   padding: 0;
   display: grid;
   gap: clamp(1.5rem, 3vw, 3rem);
-  align-items: start;
+  /* `stretch` und nicht `start`: vier Karten mit ungleich langen Sätzen wären
+     sonst ungleich hoch, und eine Reihe, deren Unterkanten nicht fluchten,
+     liest sich als verrutscht. Der Textkasten wird dafür unten angeschlagen
+     (siehe .schritt__wort), damit die Bilder auf einer Linie bleiben. */
+  align-items: stretch;
 }
 
 /**
@@ -1681,42 +1685,103 @@
 
 @media (min-width: 860px) {
   .prozess__schritte { grid-template-columns: repeat(4, 1fr); }
-  /* 0, 1, 2 mal die Stufenhöhe. Auf einer Spalte fällt sie weg — dort ist die
-     Reihenfolge schon durch das Untereinander eindeutig. */
-  .schritt { margin-top: calc(var(--stufe) * clamp(1.4rem, 3vw, 3.2rem)); }
 }
 
-.schritt { position: relative; }
+/**
+ * ═══ Jeder Schritt ist ein Ofenmaul ═══
+ *
+ * Karol am 02.09.: „das dritte Bild ist abgeschnitten und passt gar nicht
+ * rein … generell finde ich die Bilder altbacken. Das ist die einzige Seite,
+ * die schlechter geworden ist. Die weisse Schrift dann anstatt schwarz."
+ *
+ * Drei Beschwerden mit einer gemeinsamen Ursache: die Schritte hatten keinen
+ * eigenen Grund. Ein Foto, ein Freisteller und zwei verschiedene
+ * Seitenverhältnisse lagen frei auf dem Orange, jedes mit anderem Zuschnitt,
+ * dazu eine Treppe, die sie gegeneinander versetzte. Vier lose Teile ergeben
+ * keine Folge.
+ *
+ * ═══ Was Mobbin dazu zeigt ═══
+ *
+ * Bei Kalstore trägt JEDER Schritt eine eigene getönte Karte — Ziffer oben,
+ * Titel und Satz unten, alle gleich gebaut. Escape Cafe macht dasselbe
+ * flacher, mit einer Linie über jeder Spalte. Beide lösen dieselbe Sache: die
+ * Karte gibt dem Schritt eine Kante, und erst dadurch liest man vier Karten
+ * als eine Reihe statt als vier Bilder.
+ *
+ * Hier ist die Karte ein Ofenmaul — dieselbe Form wie die Bestellwege, die
+ * Nummern der Speisekarte und die Scheiben auf der Startseite. Das Bild sitzt
+ * IN der Kuppel; man sieht in den Ofen hinein.
+ *
+ * ═══ Und damit ist die weisse Schrift möglich ═══
+ *
+ * Auf dem Orange trug Weiss nur ab 24 px (gemessen 3,10 gegen eine Grenze von
+ * 4,5 für normale Schrift). Der Satz unter jedem Schritt ist 18 px und musste
+ * deshalb schwarz bleiben. Auf ihrem Schwarz misst Creme 16,6 — auf der Karte
+ * darf alles hell sein, Ziffer, Titel und Satz.
+ *
+ * Die Treppe ist raus. Sie war der Savor-Rhythmus aus der Zeit ohne Karten;
+ * versetzte Karten lesen sich als verrutscht, nicht als gestaffelt.
+ */
+.schritt {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: clip;
+  border-radius: var(--maul);
+  background: var(--ton-tief);
+  box-shadow: var(--clay-ruhe);
+  /* Die Insel dreht die Tinte um, wie jede dunkle Fläche in einer hellen
+     Sektion — sonst stünde der Satz in ihrem Schwarz auf ihrem Schwarz. */
+  --tinte: var(--creme);
+  --tinte-leise: var(--creme-ruhig);
+  --akzent: var(--ton-hell);
+  color: var(--creme);
+}
 
 .schritt__bild {
-  margin-bottom: clamp(0.9rem, 2vw, 1.4rem);
+  margin: 0;
+  /* `aspect-ratio` reserviert die Höhe schon VOR dem Laden — ohne sie springt
+     die Reihe, sobald das erste Bild ankommt.
+     `flex: 1 0 auto` lässt sie danach über dieses Mass hinauswachsen: die
+     Karten sind alle so hoch wie die höchste, und ohne diese Zeile blieb
+     zwischen Bild und Text ein schwarzes Loch von 160 px — im ersten Bild nach
+     dem Umbau sofort zu sehen. Jetzt füllt das Bild den Rest. */
+  aspect-ratio: 4 / 3;
+  flex: 1 0 auto;
 }
 
 .schritt__bild img {
   display: block;
   width: 100%;
-  height: auto;
-}
-
-/* Ein FOTO hat eine Kante und bekommt einen Radius; ein Freisteller hat keine
-   und bekäme davon einen Schnitt. Dieselbe Regel wie beim Schwarm. */
-.schritt[data-art='foto'] .schritt__bild img {
-  border-radius: var(--rund-klein, 0.5rem);
-  aspect-ratio: 4 / 3;
+  height: 100%;
   object-fit: cover;
+  /* Oben mittig statt zentriert: die Kuppel schneidet die obere Hälfte, und
+     bei Speisen liegt das Motiv fast immer in der Mitte des Bildes. */
+  object-position: 50% 45%;
 }
 
+/* Ein Freisteller hat keine Kante, die man beschneiden könnte — er steht IM
+   Maul statt es zu füllen, mit Luft ringsum und seinem Eigenschatten. */
 .schritt[data-art='freisteller'] .schritt__bild {
-  /* Auf dieselbe Höhe gebracht wie die beiden Fotos, damit die Zahlen darunter
-     auf einer Linie stehen. Ohne das läge die 03 höher als die 01. */
-  aspect-ratio: 4 / 3;
   display: grid;
   place-items: center;
+  padding: 12% 10% 4%;
 }
 .schritt[data-art='freisteller'] .schritt__bild img {
-  width: 96%;
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+  object-fit: contain;
   --wurf: 0.85;
   filter: var(--schatten-speise);
+}
+
+.schritt__wort {
+  /* Nach unten angeschlagen: der Textkasten ist so hoch wie sein Inhalt, das
+     Bild darüber nimmt den Rest. Damit fluchten Ober- UND Unterkante. */
+  margin-top: auto;
+  padding: clamp(0.9rem, 2vw, 1.35rem) clamp(0.9rem, 2vw, 1.35rem)
+           clamp(1.1rem, 2.4vw, 1.6rem);
 }
 
 .schritt__zahl {

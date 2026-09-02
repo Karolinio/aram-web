@@ -138,10 +138,26 @@ const SCHRITTE = [
 
 
 function Schritt({ s }: { s: (typeof SCHRITTE)[number] }) {
-  const ref = useVersatz<HTMLLIElement>(s.tempo)
+  /**
+   * ═══ Alle vier im GLEICHEN Tempo ═══
+   *
+   * Bis zum 02.09. hatte jeder Schritt seinen eigenen Wert (0,04 / −0,03 /
+   * 0,05 …). Das war der Savor-Rhythmus aus der Zeit, als die Schritte lose
+   * auf dem Grund lagen — dort ergibt ungleiches Tempo Tiefe.
+   *
+   * Seit sie KARTEN sind, ergibt es Unordnung: vier Rechtecke, die beim
+   * Scrollen gegeneinander wandern, sehen nicht gestaffelt aus, sondern
+   * verrutscht. Genau das hat Karol gemeldet („passt gar nicht rein").
+   *
+   * Ein gemeinsamer, kleiner Wert bewegt die Reihe als Ganzes — die Sektion
+   * atmet, die Reihe bleibt eine Reihe. Das Feld `tempo` in SCHRITTE ist
+   * damit unbenutzt und bleibt nur stehen, falls die Staffelung je
+   * zurückkommt.
+   */
+  const ref = useVersatz<HTMLLIElement>(0.03)
 
   return (
-    <li className="schritt" data-art={s.art} style={{ '--stufe': s.versatz } as CSSProperties} ref={ref}>
+    <li className="schritt" data-art={s.art} ref={ref}>
       <div className="schritt__bild">
         <img
           src={s.quelle}
@@ -152,9 +168,15 @@ function Schritt({ s }: { s: (typeof SCHRITTE)[number] }) {
           decoding="async"
         />
       </div>
-      <Etikett klasse="schritt__zahl">{s.zahl}</Etikett>
-      <h3 className="schritt__titel lebt">{s.titel}</h3>
-      <p className="schritt__text">{s.text}</p>
+      {/* Ziffer, Titel und Satz stehen zusammen in EINEM Kasten. Vorher lagen
+          sie als drei Geschwister direkt in der Karte, und die Polsterung
+          hätte dann dreimal einzeln gesetzt werden müssen — oder das Bild
+          hätte sie mitbekommen und wäre nicht mehr bis an die Kante gegangen. */}
+      <div className="schritt__wort">
+        <Etikett klasse="schritt__zahl">{s.zahl}</Etikett>
+        <h3 className="schritt__titel lebt">{s.titel}</h3>
+        <p className="schritt__text">{s.text}</p>
+      </div>
     </li>
   )
 }
@@ -263,9 +285,20 @@ export default function Handarbeit() {
           Auftritt.tsx und Collage.tsx bleiben liegen; sie werden woanders
           gebraucht. */}
       <Sektion grund="hell" klasse="prozess" beschriftetVon="prozess-titel">
-        {/* Mehl auf Holz — dieselbe Fläche, von der Schritt 01 spricht. */}
-        <Untergrund ton="glut" muster="foto" bild="bilder/textur/mehl-holz.webp"
-          staerke={0.91} lage="30% 60%" breite={1700} hoehe={949} />
+        {/* ═══ Das Mehlfoto ist raus ═══
+
+            Karol am 02.09.: „mach da bitte auch die Körner, also kein
+            Mehl-Hintergrund, nur noch Körner."
+
+            Es war ein Foto unter einer Folie, und dieselbe Regel gilt hier wie
+            damals beim Ladenfoto im Bestellen: ein Foto unter einer Folie
+            bleibt ein Foto. Es zeigte dieselbe Mehlfläche, von der Schritt 01
+            im Text spricht — die Sache also zweimal, einmal als Bild und
+            einmal als Satz.
+
+            Die Saat stellt nichts dar und stört deshalb nicht. Damit trägt
+            jede orange Sektion der Seite denselben Grund. */}
+        <Untergrund ton="glut" muster="saat" />
         <div className="schale prozess__buehne">
           <Kopf
             id="prozess-titel"
