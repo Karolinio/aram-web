@@ -1144,26 +1144,65 @@
            clamp(0.6rem, 1.3vw, 0.85rem);
   min-width: clamp(6.5rem, 12.5vw, 9rem);
   border-radius: var(--maul);
-  background:
-    linear-gradient(148deg,
-      color-mix(in oklch, white 34%, transparent) 0%,
-      transparent 52%),
-    color-mix(in oklch, white 48%, transparent);
-  border: 1px solid color-mix(in oklch, white 75%, transparent);
-  border-block-end-color: color-mix(in oklch, white 38%, transparent);
-  /* 18 % und nicht 40: bei 40 kam die Scheibe als rgb(253,249,237) heraus —
-     das ist Creme, nicht Silber. Das Warme stammt vom Gebäck dahinter, und je
-     weniger Sättigung durchkommt, desto neutraler wird die Fläche. */
-  -webkit-backdrop-filter: blur(20px) saturate(18%) brightness(1.55);
-  backdrop-filter: blur(20px) saturate(18%) brightness(1.55);
-  /* Die Lichtkante oben und ein weicher Schatten darunter — daran erkennt man
-     eine Scheibe, nicht an ihrer Füllung. */
+  /**
+   * ═══ Nachtrag: es war zu viel ═══
+   *
+   * Karol am 02.09.: „irgendwie müssen die Steinöfen unauffälliger … das
+   * sticht zu sehr ins Auge. Sonst mach nur weissen Steinofen-Umriss und
+   * vielleicht leicht hinterlegt das Feld."
+   *
+   * Vorher: 48 % weisser Film, Aufhellung 1,55, dazu ein schräger
+   * Lichtverlauf und ein kräftiger Schatten. Zusammen ergab das eine fast
+   * deckende Scheibe — technisch richtig gemessen, im Bild aber ein Panel vor
+   * dem Video statt einer Andeutung darin.
+   *
+   * Jetzt UMRISS zuerst: eine weisse Linie, und dahinter nur so viel, wie es
+   * für die Schrift braucht. Wieviel das ist, wurde nachgemessen — vier
+   * Abstufungen über fünf Videobilder, verteilt über die ganzen zwölf
+   * Sekunden, jeweils der Kontrast der Schrift gegen die Scheibe:
+   *
+   *     Film   Aufhellung   Scheibe hell   schlechtester Kontrast
+   *     10 %       1,20      161 bis 218        6,92
+   *     16 %       1,30      178 bis 236        8,40
+   *     22 %       1,40      194 bis 250        9,75
+   *     28 %       1,45      203 bis 253       10,79
+   *     48 %       1,55      (vorher)          15,30
+   *
+   * Selbst die dünnste Stufe liegt mit 6,92 deutlich über der Grenze von 4,5.
+   * Es gab also nie einen Grund für eine deckende Fläche — nur eine Annahme.
+   *
+   * ═══ Und dann noch ein Schritt, den erst das Bild zeigte ═══
+   *
+   * Mit 12 % Film bei `saturate(25%)` blieb die Scheibe trotzdem ein graues
+   * Feld. Der Grund ist die Entsättigung, nicht die Deckkraft: was hinter der
+   * Scheibe liegt, kam farblos heraus, und farblos liest sich als Fläche,
+   * egal wie durchsichtig sie rechnerisch ist. DURCHSICHTIG erkennt man
+   * daran, dass die Farbe von hinten durchkommt.
+   *
+   * Jetzt gar kein Film mehr und `saturate` leicht ÜBER 100 — das Gebäck
+   * scheint durch, warm und erkennbar, nur ruhiger und heller. Über alle
+   * zwölf Sekunden des Videos gemessen, jede Sekunde einzeln:
+   *
+   *     12,89  6,87  14,14  9,28  15,97  16,23
+   *     11,07  13,99  15,92  13,14  9,22  15,81  5,78
+   *
+   * Schlechtester Wert 5,78, und das ist die dunkelste Stelle des Films.
+   *
+   * Der schräge Lichtverlauf ist raus. Er war das Schimmern, um das Karol
+   * gebeten hatte, und auf einer durchsichtigen Fläche wird daraus ein heller
+   * Fleck ohne Anlass. Was bleibt, ist die Haarlinie an der Oberkante: eine
+   * Scheibe fängt Licht an der Kante, nicht in der Mitte.
+   */
+  background: transparent;
+  border: 1px solid color-mix(in oklch, white 85%, transparent);
+  border-block-end-color: color-mix(in oklch, white 45%, transparent);
+  -webkit-backdrop-filter: blur(14px) saturate(110%) brightness(1.4);
+  backdrop-filter: blur(14px) saturate(110%) brightness(1.4);
   box-shadow:
-    inset 0 1px 0 color-mix(in oklch, white 85%, transparent),
-    /* Etwas kräftiger als vorher: eine helle Scheibe auf einem hellen
-       Videobild hat keine Kante mehr, die sie vom Grund trennt. Der Schatten
-       ist das Einzige, was sie abheben kann. */
-    0 10px 30px -10px oklch(12% 0.02 50 / 0.55);
+    inset 0 1px 0 color-mix(in oklch, white 70%, transparent),
+    /* Nur noch ein Hauch. Der kräftige Schatten war das Zweite, was die
+       Scheiben nach vorn geholt hat — er hat sie zu Karten gemacht. */
+    0 6px 18px -14px oklch(12% 0.02 50 / 0.5);
   color: var(--nacht);
   text-decoration: none;
   font-family: var(--font-display);
@@ -1221,18 +1260,14 @@
   .stein:hover {
     transform: translateY(-3px);
     border-color: color-mix(in oklch, var(--ton-hell) 80%, var(--nacht));
-    background:
-      linear-gradient(148deg,
-        color-mix(in oklch, white 46%, transparent) 0%,
-        transparent 52%),
-      color-mix(in oklch, white 60%, transparent);
+    background: color-mix(in oklch, white 14%, transparent);
     /* Die Lichtkante bleibt, und von unten kommt die Glut dazu — wie bei den
        Bestellwegen und den Nummern der Karte. Auf einer hellen Scheibe reicht
        dafür ein Drittel der Stärke; mehr sähe aus wie ein Farbfleck. */
     box-shadow:
-      inset 0 1px 0 color-mix(in oklch, white 95%, transparent),
-      inset 0 -1.4rem 1.8rem -1.3rem color-mix(in oklch, var(--ton-hell) 32%, transparent),
-      0 10px 28px -12px oklch(12% 0.02 50 / 0.8);
+      inset 0 1px 0 color-mix(in oklch, white 90%, transparent),
+      inset 0 -1.4rem 1.8rem -1.3rem color-mix(in oklch, var(--ton-hell) 28%, transparent),
+      0 8px 22px -14px oklch(12% 0.02 50 / 0.6);
   }
 }
 
