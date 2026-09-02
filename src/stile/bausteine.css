@@ -834,6 +834,20 @@ body:has(.leiste) .wasserzeichen {
    * Farben in der Datei, und der Preis ist eine Datei je Grund.
    */
   animation: rieseln 52s linear infinite;
+  /**
+   * ═══ Und hier hängt die Interaktion ═══
+   *
+   * `translate` und NICHT `transform`: das Rieseln ist eine Keyframe-Animation
+   * auf `transform`, und würde die Interaktion dieselbe Eigenschaft anfassen,
+   * überschriebe eine die andere — still, ohne Fehlermeldung. `translate` ist
+   * eine eigene Eigenschaft, wird VOR `transform` angewandt, und beide gelten
+   * nebeneinander.
+   *
+   * Die beiden Werte schreibt src/saat.ts an das Wurzelelement, EINMAL je
+   * Bild für alle sieben Sektionen. Die Ausweichwerte stehen hier, damit die
+   * Seite auch ohne das Skript vollständig aussieht.
+   */
+  translate: var(--saat-seite, 0) var(--saat-schub, 0);
 }
 
 /**
@@ -862,12 +876,11 @@ body:has(.leiste) .wasserzeichen {
 .sektion--tief .untergrund__saat,
 .sektion--nacht .untergrund__saat {
   background-image: url('/bilder/muster-grund/saat-nacht.svg');
-  /* Von 0,5 auf 0,375 — ein Viertel zurück. Karol am 02.09.: „auf Schwarz ist
-     es mir ein bisschen zu prägnant … beim Schwarzen vielleicht 25 %."
+  /* 0,5 -> 0,375 -> 0,30. Zweimal zurückgenommen, beide Male auf Zuruf.
      Der Grund liegt in der Sache: auf ihrem Schwarz stehen die hellen
      Sesamkörner mit vollem Abstand zum Grund, auf dem Orange nicht. Dieselbe
      Deckkraft ergibt dort also mehr Kontrast — und damit mehr Unruhe. */
-  opacity: 0.375;
+  opacity: 0.3;
 }
 .sektion--hell .untergrund__saat,
 .sektion--glut .untergrund__saat {
@@ -885,9 +898,11 @@ body:has(.leiste) .wasserzeichen {
    * mitmisst; ueber die Farbwerte gerechnet steht die Beschreibung bei 4,57.
    *
    * 0,28 ist damit eine Entscheidung ueber Ruhe, keine ueber Lesbarkeit.
-   * Karol am 02.09.: „auf Orange sieht das echt gut aus, auch wie sie
-   * runterlaufen … vielleicht auch da leicht die Transparenz runter, aber
-   * wirklich 5 bis 10 %." Also 0,26 statt 0,28.
+   *
+   * Dreimal zurückgenommen: 0,42 -> 0,28 -> 0,26 -> 0,18. Der letzte Schritt
+   * ist Karols „bei Orange 30 % weniger" vom 02.09. Hier ist die Karte, und
+   * unter zweiundzwanzig Gerichten mit Beschreibung und Allergenen zählt jedes
+   * Korn doppelt.
    */
-  opacity: 0.26;
+  opacity: 0.18;
 }

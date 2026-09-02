@@ -33,6 +33,7 @@ import { SLOTS } from './gerichte.ts'
 import { erzeugteGerichte } from './gebaecke.ts'
 import { lueckenVorLive } from './aram.config.ts'
 import { preiseFehlen } from './inhalt.ts'
+import { saatBeleben } from './saat.ts'
 
 /**
  * Weiches Scrollen — aber NUR, wenn der Nutzer Bewegung will.
@@ -199,3 +200,13 @@ createRoot(document.getElementById('wurzel')!).render(
     <Seite />
   </StrictMode>,
 )
+
+/**
+ * Die Saat reagiert auf Scrollen und Zeiger — siehe src/saat.ts.
+ *
+ * Bewusst NEBEN React und nicht in einem Effekt: sie gehört keiner Sektion,
+ * sondern allen sieben, und ein Effekt in einer Komponente würde unter
+ * `StrictMode` beim Start zweimal laufen. Ein Hörer für die ganze Seite hat
+ * hier seinen Platz, und die Seite lebt genauso lang wie er.
+ */
+saatBeleben()
