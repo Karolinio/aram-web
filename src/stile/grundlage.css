@@ -160,21 +160,60 @@ body::before {
  * Ersatzlos. Nicht auskommentiert.
  */
 
-/* Fokus ist sichtbar, immer, in der Signalfarbe. Ein unsichtbarer Fokus ist
-   hier kein Stilfehler — er macht die Seite mit der Tastatur unbenutzbar. */
+/**
+ * ═══ Der Fokusring ist ZWEIFARBIG, und das ist der ganze Punkt ═══
+ *
+ * Er stand hier einfarbig in `--akzent`. Das klingt richtig und war es nicht:
+ * `--akzent` dreht sich je Sektion, und auf einer Seite mit zwei Gründen
+ * heisst das, dass der Ring irgendwann die Farbe dessen annimmt, worauf er
+ * liegt.
+ *
+ * Mit der Tastatur durchgegangen und je Station gemessen, Ring gegen seinen
+ * Grund — vier von sechsundzwanzig fielen durch:
+ *
+ *     .sprung                      1,00   Ring und Knopf beide #FF6600
+ *     .stein (drei Scheiben)       1,06   Orange auf fast weissem Glas
+ *
+ * Ein Ring, der die Farbe seines Untergrunds hat, ist kein Ring.
+ *
+ * Zweifarbig löst das ohne Fallunterscheidung: ein schwarzer Strich mit einem
+ * cremefarbenen Saum aussenherum. Auf hellem Grund trägt der Strich, auf
+ * dunklem der Saum — es gibt keinen Grund auf dieser Seite, auf dem beide
+ * gleichzeitig verschwinden. Dieselbe Lösung wie bei den Systemringen von
+ * macOS und Windows, und aus demselben Grund.
+ *
+ * Ein unsichtbarer Fokus ist hier kein Stilfehler — er macht die Seite mit der
+ * Tastatur unbenutzbar.
+ */
 :focus-visible {
-  outline: 2px solid var(--akzent);
-  outline-offset: 3px;
+  outline: 2px solid var(--nacht);
+  outline-offset: 2px;
   border-radius: 2px;
+  box-shadow: 0 0 0 4px var(--creme);
 }
 
+/**
+ * ═══ Der Sprunglink stand orange auf orange ═══
+ *
+ * `background: var(--akzent)` ist #FF6600, `color: var(--ton-hell)` ist
+ * #FA6100 — ein Unterschied von anderthalb Prozent Helligkeit. Der Link war
+ * also unlesbar, sobald er auftauchte, und er ist die ERSTE Station der
+ * Tastaturbedienung: das Erste, was jemand sieht, der die Seite ohne Maus
+ * benutzt.
+ *
+ * Gefunden erst, als der Fokusring gemessen wurde. Aufgefallen ist er nie,
+ * weil er nur bei Tastaturbedienung erscheint — und geprüft wurde bis dahin
+ * mit der Maus.
+ *
+ * Jetzt ihr Schwarz mit Creme darauf: 16,6 statt 1,02.
+ */
 .sprung {
   position: absolute;
   left: var(--rinne);
   top: -100vh;
   z-index: 60;
-  background: var(--akzent);
-  color: var(--ton-hell);
+  background: var(--nacht);
+  color: var(--creme);
   padding: 0.7em 1.2em;
   border-radius: var(--radius-knopf);
   font-family: var(--font-display);
@@ -263,7 +302,9 @@ h3 { font-size: var(--text-gericht); font-variation-settings: var(--wonk-klein);
   .lebt { transition: color var(--dauer-mikro) var(--ease-teig); }
 }
 
-p { max-width: var(--breite-satz); }
+/* `pretty` gegen Schusterjungen: eine einzelne Silbe auf der letzten Zeile
+   liest sich als Fehler. Kostet nichts und wirkt auf 122 Absätze. */
+p { max-width: var(--breite-satz); text-wrap: pretty; }
 
 a { color: var(--akzent); text-underline-offset: 0.2em; }
 
@@ -384,6 +425,44 @@ section {
   box-shadow: none;
 }
 
+/**
+ * ═══ Ein Knopf, der aussieht wie einer, muss auch einer sein ═══
+ *
+ * Die drei Lieferdienste stehen als Vorschau da, solange nicht feststeht, ob
+ * Aram dort gelistet ist — mit `aria-disabled="true"`. Gemessen am 03.09.:
+ * Deckkraft 1, Zeiger `default`. Ein Vorleseprogramm erfuhr also, dass der
+ * Knopf nicht benutzbar ist, das AUGE erfuhr es nicht.
+ *
+ * Das ist die schlechtere Hälfte von beidem: wer sieht, klickt ins Leere; wer
+ * hört, wird gewarnt. Jetzt sagen es beide.
+ *
+ * 0,55 und nicht 0,3: bei dreissig Prozent liest sich ein Knopf als kaputt
+ * statt als noch nicht verfügbar, und die Schrift fällt unter jede Grenze.
+ * Der gestrichelte Rand ist das zweite Zeichen — eine unterbrochene Linie ist
+ * überall auf dieser Seite das, was noch nicht feststeht.
+ */
+.knopf[aria-disabled='true'] {
+  background: transparent;
+  border-color: var(--linie);
+  border-style: dashed;
+  color: var(--tinte-leise);
+  box-shadow: none;
+  opacity: 0.55;
+  /* KEIN `pointer-events: none`. Es stand hier und war der Grund, warum der
+     Zeiger nichts anzeigte: ohne Zeigerereignisse kommt der Cursor vom
+     Elternelement, und `not-allowed` läuft ins Leere. Zu klicken gibt es
+     ohnehin nichts — die Knöpfe sind `span`, kein Link. */
+  cursor: not-allowed;
+}
+@media (hover: hover) {
+  /* Der Hover muss ausbleiben, sonst hebt sich etwas an, das nichts tut. */
+  .knopf[aria-disabled='true']:hover {
+    transform: none;
+    border-color: var(--linie);
+    color: var(--tinte);
+  }
+}
+
 @media (hover: hover) {
   .knopf--leise:hover,
   .knopf--glut:hover {
@@ -396,14 +475,16 @@ section {
 
 /* Ein Knopf, der noch nichts tut, sieht auch so aus und ist nicht anklickbar.
    Ein toter Bestellknopf kostet eine Bestellung, nicht einen Klick. */
-.knopf[aria-disabled='true'] {
-  background: transparent;
-  border-color: var(--linie);
-  color: var(--tinte-leise);
-  box-shadow: none;
-  cursor: default;
-  pointer-events: none;
-}
+/* ═══ Hier stand eine Dublette ═══
+
+   `.knopf[aria-disabled='true']` war ZWEIMAL gesetzt, beide Male in dieser
+   Datei. Der spätere Block hat `cursor: not-allowed` wieder auf `default`
+   gedreht — bei gleicher Spezifität gewinnt der spätere. Gemessen: Deckkraft
+   0,55 kam an, der Zeiger nicht.
+
+   Das ist die dritte Dublette an einem Tag (davor `.schritt__zahl` und ein
+   zweiter `.schritt`-Regelsatz). Alles zu diesem Zustand steht jetzt an EINER
+   Stelle, oben. */
 
 /* ── Lücken sichtbar machen ───────────────────────────────────────────────── */
 

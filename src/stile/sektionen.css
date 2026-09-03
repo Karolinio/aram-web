@@ -3695,9 +3695,19 @@
 /* Nicht ausblenden, sondern abschwächen: ein Knopf, der verschwindet, sobald
    man am Ende ist, lässt die Zeile springen — und man verliert den Anhalt
    dafür, wo man ist. */
+/**
+ * ═══ Nicht ausblenden, sondern abschwächen ═══
+ *
+ * 0,3 stand hier und war zu wenig: bei dreissig Prozent liest sich ein Knopf
+ * als kaputt, nicht als gerade nicht benutzbar. Und `cursor: default` sagt
+ * gar nichts — der Zeiger ist das Einzige, was VOR dem Klick verrät, dass
+ * einer nichts bewirkt.
+ *
+ * 0,55 und `not-allowed`: sichtbar da, sichtbar aus.
+ */
 .galerie__pfeil:disabled {
-  opacity: 0.3;
-  cursor: default;
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
 .galerie__fahrt {
