@@ -1698,7 +1698,21 @@
  */
 .prozess__ofen {
   position: sticky;
-  top: calc(var(--kopf-hoehe) + clamp(1rem, 3vh, 2.5rem));
+  /**
+   * ═══ Mittig, sobald Platz da ist ═══
+   *
+   * Fest unter der Kopfzeile geklebt sass das Maul auf hohen Fenstern zu weit
+   * oben: bei 1100 px blieben unter ihm 257 px ungenutzt, waehrend oben nur
+   * 107 standen. Das las sich als nach oben gerutscht, nicht als gesetzt.
+   *
+   * `max` von beidem: unter der Kopfzeile ist die Untergrenze, die optische
+   * Mitte das Ziel. Auf niedrigen Fenstern gewinnt die Kopfzeile — dort gibt
+   * es keine Mitte zu verteilen —, auf hohen die Mitte.
+   */
+  top: max(
+    calc(var(--kopf-hoehe) + clamp(1rem, 3vh, 2.5rem)),
+    calc((100svh - 46rem) / 2)
+  );
   align-self: start;
   /* Das Maul ist der VORDERGRUND. Ohne diese Zeile schoben sich am Handy die
      Sätze darüber, während sie nach oben liefen — gemessen stand „Jede
@@ -1725,6 +1739,33 @@
 .prozess__maul {
   position: relative;
   aspect-ratio: 3 / 3.4;
+  /**
+   * ═══ Die Hoehe fuehrt, nicht die Breite ═══
+   *
+   * Karol am 03.09.: „wir muessen die Tore noch besser mittig und harmonisch
+   * einbauen, das ist zu unformatiert und durcheinander."
+   *
+   * Der Grund war die Rechenrichtung. Das Maul nahm die volle Spaltenbreite
+   * und leitete daraus seine Hoehe ab — gemessen 655 breit, 742 hoch, plus
+   * 101 px Abstand unter der Kopfzeile. Das ergibt 843, und sobald ein
+   * Fenster kuerzer ist, laeuft der Bogen unten aus dem Bild. Auf Karols
+   * Schirm war genau das zu sehen: die Kuppel halb hinter der Kopfzeile, der
+   * Fuss abgeschnitten.
+   *
+   * Ein Ausschnitt, der klebt, muss ins Fenster passen — das ist keine
+   * Feinheit, das ist die Bedingung dafuer, dass Kleben ueberhaupt etwas
+   * nuetzt. Also wird die HOEHE gesetzt und die Breite folgt dem Verhaeltnis.
+   *
+   * `svh` und nicht `vh`: am Handy schrumpft die Adressleiste beim Scrollen,
+   * und `vh` rechnet mit dem grossen Zustand. Mit `svh` passt es auch, solange
+   * die Leiste noch da ist.
+   */
+  height: min(46rem, calc(100svh - var(--kopf-hoehe) - 7rem));
+  width: auto;
+  max-width: 100%;
+  /* Mittig in seiner Spalte. Sobald die Hoehe fuehrt, ist das Maul schmaler
+     als die Spalte — links buendig saehe es aus, als waere es verrutscht. */
+  margin-inline: auto;
   border-radius: var(--maul);
   overflow: clip;
   background: var(--ton-tief);
@@ -1801,7 +1842,13 @@
      Drittel des Bildes, und für den Satz darunter blieb ein Streifen. Bei
      3 / 2.5 bleibt die Kuppel erhalten und die untere Hälfte gehört dem
      Text. */
-  .prozess__maul { aspect-ratio: 3 / 2.5; }
+  /* Am Handy flacher, und die Hoehe deckelt auf die halbe Fensterhoehe: das
+     Maul soll oben stehen, nicht die Seite fuellen. Der Satz darunter braucht
+     die andere Haelfte. */
+  .prozess__maul {
+    aspect-ratio: 3 / 2.5;
+    height: min(24rem, calc(52svh - var(--kopf-hoehe)));
+  }
   .schritt { min-height: 56vh; }
   .prozess__schritte .schritt:first-child { min-height: 40vh; }
   .prozess__schritte .schritt:last-child { min-height: 34vh; }
