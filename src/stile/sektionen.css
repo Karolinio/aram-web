@@ -1664,112 +1664,199 @@
  * Vorher standen sie in zwei Spalten — eine klebende links mit Schritt 03, eine
  * Liste rechts mit 01 und 02. Von links nach rechts gelesen war das 3 → 1 → 2.
  */
-.prozess__schritte {
-  list-style: none;
-  margin: clamp(2.5rem, 6vw, 5rem) 0 0;
-  padding: 0;
+/**
+ * ═══ Die Laufstrecke ═══
+ *
+ * Links das Maul, rechts die vier Sätze. Das Maul klebt, die Sätze laufen
+ * daran vorbei — und mit jedem Satz wechselt das Bild darin.
+ *
+ * Die Höhe der Strecke ist die eigentliche Einstellung: sie bestimmt, wie
+ * lange jeder Schritt zu sehen ist. Vier mal 68 vh, also gut zweieinhalb
+ * Bildschirme. Weniger, und man liest den letzten Satz nicht zu Ende, bevor
+ * das Bild springt; mehr, und die Sektion wird zum Tunnel — der Prüfer meldet
+ * den Scrollweg am Handy ohnehin schon.
+ */
+.prozess__lauf {
+  margin-top: clamp(2rem, 5vw, 3.5rem);
   display: grid;
-  /* Eng. Bei Savor stehen die Streifen fast Kante an Kante, und darin liegt
-     die Wirkung: vier Bilder mit Handbreit Abstand sind vier Bilder, vier
-     Bilder mit Fingerbreit Abstand sind ein Filmstreifen. */
-  gap: clamp(0.4rem, 1vw, 0.75rem);
-  align-items: start;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
 }
-
-/**
- * Am Handy zwei Spalten, nicht vier und nicht eine.
- *
- * Vier Schritte untereinander sind auf 393 px gemessen 2,8 Bildschirmhöhen —
- * der längste Abschnitt der Seite nach der Speisekarte. Zwei mal zwei nimmt
- * davon die Hälfte, und die Lesereihenfolge bleibt: erst die obere Zeile,
- * dann die untere. Zusammengelegt, nicht weggelassen.
- */
-@media (max-width: 859px) {
-  .prozess__schritte { grid-template-columns: 1fr 1fr; }
-  .schritt__text { font-size: var(--text-meta); }
-}
-
 @media (min-width: 860px) {
-  .prozess__schritte { grid-template-columns: repeat(4, 1fr); }
+  .prozess__lauf { grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); }
 }
 
 /**
- * ═══ Vier Streifen, kein Kasten ═══
+ * ═══ Das Maul klebt ═══
  *
- * Karol am 02.09.: „die Öfen finde ich nicht gut … 03 das Bild geht gar
- * nicht. Iterier generell, wie als fremder User diese Sektion auf dich
- * wirkt."
+ * `position: sticky` und nicht GSAP-Pinning: ein gepinnter Bereich rechnet bei
+ * jedem Neuvermessen seine Höhe neu und schiebt alles darunter. Sticky kostet
+ * nichts und kennt keinen Sprung beim Anheften.
  *
- * ═══ Was ein Fremder sieht ═══
- *
- * Die Überschrift verspricht, dass alles vor den Augen des Gastes entsteht.
- * Darunter standen vier Bilder, die nichts miteinander zu tun hatten: ein
- * leeres bemehltes Brett ohne Menschen, eine Werkstattaufnahme mit zwei
- * Männern, ein Freisteller auf Schwarz und ein dunkles Ofeninneres. Vier
- * Karten nebeneinander VERSPRECHEN eine Folge; diese lasen sich als vier
- * Fundstücke. Das war der Mangel — nicht die Form der Karte.
- *
- * Die Karte hat ihn sogar betont: ein Rahmen um vier ungleiche Bilder macht
- * die Ungleichheit sichtbarer, nicht kleiner.
- *
- * ═══ Was Savor zeigt ═══
- *
- * Bei Savor (Mobbin) laufen sechs SCHMALE HOHE Streifen Kante an Kante, ohne
- * Rahmen und ohne Kasten. Alle sechs stammen aus derselben Werkstatt, und
- * genau daraus entsteht der Eindruck einer Folge: nicht aus dem Rahmen,
- * sondern aus dem gemeinsamen Ort.
- *
- * Ein hoher Ausschnitt zwingt jedes Bild ausserdem auf EIN Motiv und schneidet
- * weg, was drumherum nicht zusammenpasst.
- *
- * ═══ Und dazu die Bilder selbst ═══
- *
- * Der Freisteller in Schritt 03 ist durch eine echte Aufnahme ersetzt (siehe
- * Handarbeit.tsx). Damit stammen drei der vier Bilder vom selben Ofen. In
- * ihrem Materialstapel liegen über zwanzig Aufnahmen an dieser einen Stelle —
- * ihr Ofen IST das wiederkehrende Motiv ihrer eigenen Fotografie, und er hat
- * dieselbe Bogenform wie die halbe Seite.
+ * ACHTUNG für später: sticky stirbt still, sobald ein Vorfahr `overflow` auf
+ * etwas anderes als `visible` setzt. `.sektion` und `.schale` dürfen das
+ * deshalb nicht bekommen.
  */
-.schritt {
+.prozess__ofen {
+  position: sticky;
+  top: calc(var(--kopf-hoehe) + clamp(1rem, 3vh, 2.5rem));
+  align-self: start;
+  /* Das Maul ist der VORDERGRUND. Ohne diese Zeile schoben sich am Handy die
+     Sätze darüber, während sie nach oben liefen — gemessen stand „Jede
+     Scheibe einzeln, nicht aus der Kiste" quer über dem Ofenbild. Sie laufen
+     jetzt dahinter durch und verschwinden, wie hinter einem Gegenstand.
+
+     Kein `overflow` hier: der Dampf ragt hinaus. Das Beschneiden auf die
+     Bogenform steht eine Ebene tiefer am Maul selbst. */
+  z-index: 2;
+}
+.prozess__schritte { position: relative; z-index: 1; }
+
+/**
+ * ═══ Das Ofenmaul ═══
+ *
+ * Zum ersten Mal auf dieser Seite ist der Bogen nicht Rahmen, sondern die
+ * Sache selbst: man sieht nicht vier Bilder nebeneinander, man sieht IN den
+ * Ofen, und darin passiert nacheinander alles vier.
+ *
+ * `3 / 3.4` statt eines Hochformats: ein zu hohes Maul liest sich als Tunnel,
+ * ein zu flaches verliert die Kuppel. Dieses Verhältnis lässt oben die
+ * Rundung stehen und unten genug Fläche für das Motiv.
+ */
+.prozess__maul {
   position: relative;
-  display: flex;
-  flex-direction: column;
-}
-
-.schritt__bild {
-  margin: 0;
-  /* Hochformat statt 4:3. Ein hoher Ausschnitt hat Platz für genau einen
-     Gegenstand — die Ofenöffnung, das Brett, die Hände — und laesst den Rest
-     der Kueche draussen. Genau damit werden vier Aufnahmen aus verschiedenen
-     Momenten zu einer Reihe. */
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 3 / 3.4;
+  border-radius: var(--maul);
   overflow: clip;
-  border-radius: 2px;
+  background: var(--ton-tief);
+  box-shadow: var(--clay-ruhe);
 }
 
-.schritt__bild img {
-  display: block;
+.prozess__maul img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: 50% 45%;
-  /* Ein Hauch Zoom beim Ueberfahren. Die Streifen sind das Motiv der Sektion;
-     dass sie auf den Zeiger reagieren, macht aus vier Bildern vier Dinge. */
-  transition: transform 600ms var(--ease-teig);
+  /* Der Wechsel ist ein Überblenden, kein Schnitt. Möglich nur, weil hinter
+     den Bildern eine deckende Fläche liegt — beim Käseschiff hat genau das
+     gefehlt, und zwei halbdurchsichtige Aufnahmen liessen den Grund durch. */
+  transition: opacity 520ms var(--ease-teig);
 }
-@media (hover: hover) {
-  .schritt:hover .schritt__bild img { transform: scale(1.04); }
+/* Ohne das Skript steht das erste Bild. `useBildfolge` setzt danach alles
+   ausser dem laufenden auf null. */
+.prozess__maul img + img { opacity: 0; }
+
+/* Der Dampf steigt aus dem Maul und bleibt stehen, während die Aufnahmen
+   durchlaufen. Über der Kuppel, nicht darin: er gehört zum Ofen. */
+/**
+ * Der Dampf über dem Ofen.
+ *
+ * Er steht ausserhalb des Mauls — dieses beschneidet auf die Bogenform, und
+ * das ist sein Zweck. Ein Dampf darin wäre an der Kuppel abgeschnitten; im
+ * ersten Bau war er dadurch schlicht unsichtbar.
+ *
+ * Und er bleibt STEHEN, während die vier Aufnahmen durchlaufen: der Ofen ist
+ * die Konstante dieser Sektion, nicht das Bild darin.
+ */
+.prozess__ofen { position: sticky; }
+.prozess__dampf {
+  position: absolute;
+  left: -14%;
+  right: -14%;
+  top: -22%;
+  height: 62%;
+  pointer-events: none;
 }
 
-.schritt__wort {
-  padding: clamp(0.75rem, 1.6vw, 1.05rem) 0 0;
+/**
+ * ═══ Die vier Sätze ═══
+ *
+ * Jeder nimmt so viel Höhe, wie sein Bild im Maul stehen soll. Sie sind der
+ * Taktgeber, nicht das Maul.
+ */
+.prozess__schritte {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
+.schritt {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 68vh;
+  padding-block: clamp(1rem, 3vh, 2rem);
+}
+/* Der erste beginnt oben bündig mit dem Maul, der letzte hört auf, wo die
+   Strecke endet — sonst klebt das Maul über leerem Raum. */
+.prozess__schritte .schritt:first-child { min-height: 52vh; justify-content: flex-start; }
+.prozess__schritte .schritt:last-child { min-height: 46vh; }
+
+@media (max-width: 859px) {
+  /* Am Handy steht das Maul oben und klebt dort; die Sätze laufen darunter
+     durch. Dieselbe Mechanik, nur gestapelt.
+
+     Flacher als am Schirm: bei 3 / 3.4 nahm das Maul auf 800 px Höhe zwei
+     Drittel des Bildes, und für den Satz darunter blieb ein Streifen. Bei
+     3 / 2.5 bleibt die Kuppel erhalten und die untere Hälfte gehört dem
+     Text. */
+  .prozess__maul { aspect-ratio: 3 / 2.5; }
+  .schritt { min-height: 56vh; }
+  .prozess__schritte .schritt:first-child { min-height: 40vh; }
+  .prozess__schritte .schritt:last-child { min-height: 34vh; }
+}
+
+/**
+ * ═══ Die Ziffer traegt die rechte Spalte ═══
+ *
+ * Im ersten Bau stand neben dem Ofenmaul ein Etikett von 16 px, eine
+ * Ueberschrift und ein Satz — auf einer halben Bildschirmbreite. Das Maul war
+ * 740 px hoch, der Text daneben 90. Die Sektion sah aus, als fehlte rechts
+ * etwas.
+ *
+ * Jetzt fuehrt die Ziffer: gross, in ihrem Orange, mit der Displayschrift.
+ * Sie ist ohnehin das, was die Folge traegt — 01 bis 04 —, und als
+ * Anfangsbuchstabe eines Absatzes hat sie in gesetzten Seiten eine lange
+ * Geschichte.
+ */
 .schritt__zahl {
   display: block;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.5rem;
   color: var(--akzent);
   font-variant-numeric: tabular-nums;
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 1.4rem + 3.6vw, 4.6rem);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+}
+/* Das Etikett bringt sonst einen Strich mit; vor einer Ziffer in dieser
+   Groesse laese er sich als Minus. */
+.schritt__zahl::before { display: none; }
+
+.schritt__text { max-width: 30ch; }
+
+/**
+ * ═══ Nur der laufende Schritt ist hell ═══
+ *
+ * Bei 68 vh je Schritt stehen auf einem Schirm von 950 px immer anderthalb im
+ * Bild — gemessen waren „02 Von Hand gerollt" und „03 Erst dann belegt"
+ * gleichzeitig zu lesen, beide gleich kräftig. Damit konkurrieren zwei Sätze
+ * um dasselbe Bild, und die Zuordnung, um die es hier geht, geht verloren.
+ *
+ * Die übrigen treten deshalb zurück. Nicht verschwinden: man soll sehen, dass
+ * noch etwas kommt und etwas war — nur eben leiser. Der laufende wird über
+ * `data-lauf` gesetzt, aus demselben Fortschritt, der auch das Bild schaltet.
+ */
+.schritt {
+  opacity: 0.34;
+  transition: opacity 420ms var(--ease-teig);
+}
+.schritt[data-lauf='ja'] { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .schritt { opacity: 1; transition: none; }
 }
 
 .schritt__titel {
@@ -3481,18 +3568,17 @@
    musste — die gibt es seit dem Umbau auf die Schritt-Treppe nicht mehr. */
 .prozess__kopf { max-width: 38rem; }
 
-/* Die Schrittzahl ist ein Etikett — aber ohne Strich, weil sie in einer
-   nummerierten Folge steht und der Strich dort wie ein Minus läse. */
-.schritt__zahl::before,
-.weg__art::before { display: none; }
+/* ═══ Hier stand eine Dublette ═══
 
-/* Die Zahl ist ein Etikett in Displayschrift — grösser als ein gewöhnliches
-   Etikett, weil sie in einer Folge steht und man ihr folgen können muss. */
-.schritt__zahl {
-  font-family: var(--font-display);
-  font-size: 1.2rem;
-  font-variation-settings: var(--wonk-klein);
-}
+   `.schritt__zahl` war ZWEIMAL gesetzt: einmal oben bei den Schritten und
+   einmal hier, 1700 Zeilen später mit `font-size: 1.2rem`. Bei gleicher
+   Spezifität gewinnt die spätere — die Ziffer blieb also klein, egal was oben
+   stand. Aufgefallen ist es erst im Bild, nachdem sie gross werden sollte.
+
+   Dieselbe Falle wie beim zweiten `.schritt`-Regelsatz, der ein paar Zeilen
+   weiter unten dokumentiert ist. Alles zu `.schritt__zahl` steht jetzt an
+   EINER Stelle, oben bei der Laufstrecke. */
+.weg__art::before { display: none; }
 
 .weg__art { margin-bottom: 0.15rem; }
 

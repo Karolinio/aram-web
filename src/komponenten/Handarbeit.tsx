@@ -142,49 +142,84 @@ const SCHRITTE = [
 
 
 function Schritt({ s }: { s: (typeof SCHRITTE)[number] }) {
-  /**
-   * ═══ Alle vier im GLEICHEN Tempo ═══
-   *
-   * Bis zum 02.09. hatte jeder Schritt seinen eigenen Wert (0,04 / −0,03 /
-   * 0,05 …). Das war der Savor-Rhythmus aus der Zeit, als die Schritte lose
-   * auf dem Grund lagen — dort ergibt ungleiches Tempo Tiefe.
-   *
-   * Seit sie KARTEN sind, ergibt es Unordnung: vier Rechtecke, die beim
-   * Scrollen gegeneinander wandern, sehen nicht gestaffelt aus, sondern
-   * verrutscht. Genau das hat Karol gemeldet („passt gar nicht rein").
-   *
-   * Ein gemeinsamer, kleiner Wert bewegt die Reihe als Ganzes — die Sektion
-   * atmet, die Reihe bleibt eine Reihe. Das Feld `tempo` in SCHRITTE ist
-   * damit unbenutzt und bleibt nur stehen, falls die Staffelung je
-   * zurückkommt.
-   */
-  const ref = useVersatz<HTMLLIElement>(0.03)
-
   return (
-    <li className="schritt" data-art={s.art} ref={ref}>
-      <div className="schritt__bild">
-        <img
-          src={s.quelle}
-          alt={s.alt}
-          width={s.breite}
-          height={s.hoehe}
-          loading="lazy"
-          decoding="async"
-        />
-      </div>
-      {/* Ziffer, Titel und Satz stehen zusammen in EINEM Kasten. Vorher lagen
-          sie als drei Geschwister direkt in der Karte, und die Polsterung
-          hätte dann dreimal einzeln gesetzt werden müssen — oder das Bild
-          hätte sie mitbekommen und wäre nicht mehr bis an die Kante gegangen. */}
-      <div className="schritt__wort">
-        <Etikett klasse="schritt__zahl">{s.zahl}</Etikett>
-        <h3 className="schritt__titel lebt">{s.titel}</h3>
-        <p className="schritt__text">{s.text}</p>
-      </div>
+    <li className="schritt">
+      <Etikett klasse="schritt__zahl">{s.zahl}</Etikett>
+      <h3 className="schritt__titel lebt">{s.titel}</h3>
+      <p className="schritt__text">{s.text}</p>
     </li>
   )
 }
 
+/**
+ * ═══ Der Ofen, durch den alle vier laufen ═══
+ *
+ * Karol am 03.09., nach sieben durchgerechneten Entwürfen: „ja mach 03."
+ *
+ * ═══ Warum EIN Maul und nicht vier ═══
+ *
+ * Sein eigener Vorschlag war ein grosses Ofenmaul mit vier kleineren darin.
+ * Nachgerechnet geht das nicht auf: bei einem Maul von 1200 × 620 misst die
+ * Kuppel 600 × 285, und damit müssten die beiden ÄUSSEREN Bögen 183 px tiefer
+ * beginnen als die inneren. Daraus wird entweder ein symmetrischer Bogen —
+ * 01 tief, 02 und 03 hoch, 04 tief — der keine Reihenfolge erzählen kann, weil
+ * das Auge eine Krone sieht und keinen Ablauf. Oder alle vier stehen auf einer
+ * Linie, und darüber liegt ein totes schwarzes Band über ein Drittel der Höhe.
+ *
+ * Der Ausweg ist derselbe Gedanke, eine Stufe weiter: die vier laufen nicht
+ * NEBENEINANDER durch das Maul, sondern NACHEINANDER. Die Reihenfolge passiert
+ * in der Zeit statt im Raum, und damit gibt es keinen Widerspruch mehr
+ * zwischen Symmetrie und Abfolge.
+ *
+ * ═══ Warum `sticky` und nicht GSAP-Pinning ═══
+ *
+ * Ein gepinnter Bereich rechnet bei jedem Neuvermessen seine Höhe neu und
+ * schiebt alles darunter. `position: sticky` kostet nichts, kennt keinen
+ * Sprung beim Anheften und funktioniert am Handy genauso — dort steht das Maul
+ * oben und die vier Sätze laufen darunter durch.
+ *
+ * Der Bildwechsel hängt an `useBildfolge`, demselben Haken, mit dem sich die
+ * Gebäcke im Schwarm drehen. Er schaltet nach Scrollfortschritt über eine
+ * Bühne; die Bühne ist hier die Laufstrecke, nicht die ganze Sektion — sonst
+ * wäre das letzte Bild schon erreicht, bevor der erste Satz gelesen ist.
+ */
+function Ofenlauf() {
+  /* `top top` → `bottom bottom`: gezählt wird die Strecke, auf der das Maul
+     KLEBT, nicht die, auf der die Sektion durchs Bild wandert. Siehe den Kopf
+     von useBildfolge — mit dem Standard stand hier schon Bild drei, bevor der
+     erste Satz gelesen war. */
+  const folge = useBildfolge<HTMLDivElement>(
+    SCHRITTE.length,
+    '.prozess__lauf',
+    'top top',
+    'bottom bottom',
+    '.schritt',
+  )
+
+  return (
+    <div className="prozess__ofen">
+      <div className="prozess__maul" ref={folge}>
+        {SCHRITTE.map((s, i) => (
+          <img
+            key={s.zahl}
+            data-ansicht={i}
+            src={s.quelle}
+            alt={s.alt}
+            width={s.breite}
+            height={s.hoehe}
+            loading="lazy"
+            decoding="async"
+          />
+        ))}
+      </div>
+      {/* NEBEN dem Maul, nicht darin: `.prozess__maul` beschneidet auf die
+          Bogenform (das ist der ganze Sinn), und ein Dampf darin wäre an der
+          Kuppel abgeschnitten. Im ersten Bau war er dadurch unsichtbar.
+          Er gehört ohnehin über den Ofen, nicht hinein. */}
+      <Dampf ton="ofen" klasse="prozess__dampf" dichte={9} />
+    </div>
+  )
+}
 
 /**
  * Ein Gebäck auf seiner Bahn.
@@ -311,11 +346,14 @@ export default function Handarbeit() {
             klasse="prozess__kopf"
           />
 
-          <ol className="prozess__schritte">
-            {SCHRITTE.map((x) => (
-              <Schritt key={x.zahl} s={x} />
-            ))}
-          </ol>
+          <div className="prozess__lauf">
+            <Ofenlauf />
+            <ol className="prozess__schritte">
+              {SCHRITTE.map((x) => (
+                <Schritt key={x.zahl} s={x} />
+              ))}
+            </ol>
+          </div>
         </div>
 
         {/* Der Schwarm liegt jetzt auf SEKTIONSEBENE, nicht mehr in der linken

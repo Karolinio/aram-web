@@ -310,7 +310,31 @@ export function useAbgang<T extends HTMLElement>(buehneWahl: string) {
  * Komponente sechzigmal pro Sekunde neu rendern. Hier wird direkt am Knoten
  * geschrieben — React sieht davon nichts, und das ist der Sinn.
  */
-export function useBildfolge<T extends HTMLElement>(anzahl: number, buehneWahl: string) {
+export function useBildfolge<T extends HTMLElement>(
+  anzahl: number,
+  buehneWahl: string,
+  /**
+   * Von wo bis wo gezählt wird.
+   *
+   * Der Standard `top bottom` → `bottom top` ist für Dinge gedacht, die durch
+   * das Bild FLIEGEN: dort soll der Fortschritt schon laufen, während die
+   * Bühne noch von unten hereinkommt.
+   *
+   * Für einen KLEBENDEN Ausschnitt ist das falsch. Gemessen am 03.09.: beim
+   * Ofenmaul stand schon das dritte von vier Bildern, als der erste Satz
+   * daneben zu lesen begann, und das vierte war erreicht, bevor das Maul
+   * überhaupt losklebte. Der Grund ist einfach — die Strecke „von unten
+   * hereingekommen bis oben hinausgegangen" ist rund eine Bildschirmhöhe
+   * länger als die Strecke, auf der geklebt wird.
+   *
+   * Wer klebt, zählt `top top` → `bottom bottom`: von dem Moment, in dem die
+   * Bühne oben anschlägt, bis zu dem, in dem ihr Fuss dort ankommt.
+   */
+  von = 'top bottom',
+  bis = 'bottom top',
+  /** Wähler für Elemente, die denselben Takt bekommen. Siehe unten. */
+  mitWahl?: string,
+) {
   const ref = useRef<T>(null)
 
   useEffect(() => {
@@ -325,11 +349,27 @@ export function useBildfolge<T extends HTMLElement>(anzahl: number, buehneWahl: 
     let abraeumen: (() => void) | undefined
     let zuletzt = -1
 
+    /**
+     * Wer die Bildfolge schaltet, darf auch die Beschriftung schalten.
+     *
+     * `mit` benennt Elemente AUSSERHALB des Bildstapels, die denselben Takt
+     * bekommen — beim Ofenmaul sind das die vier Sätze daneben. Ohne das
+     * müsste ein zweiter ScrollTrigger auf derselben Bühne laufen, und zwei
+     * Trigger auf derselben Strecke laufen auseinander, sobald einer
+     * nachgerechnet wird.
+     */
+    const begleiter = mitWahl
+      ? [...buehne.querySelectorAll<HTMLElement>(mitWahl)]
+      : []
+
     const zeigen = (i: number) => {
       if (i === zuletzt) return
       zuletzt = i
       bilder.forEach((b, k) => {
         b.style.opacity = k === i ? '1' : '0'
+      })
+      begleiter.forEach((b, k) => {
+        b.dataset.lauf = k === i ? 'ja' : 'nein'
       })
     }
 
@@ -339,8 +379,8 @@ export function useBildfolge<T extends HTMLElement>(anzahl: number, buehneWahl: 
       if (tot || !werkzeug) return
       const st = werkzeug.ScrollTrigger.create({
         trigger: buehne,
-        start: 'top bottom',
-        end: 'bottom top',
+        start: von,
+        end: bis,
         onUpdate: ({ progress }) => {
           /* Der letzte Index darf nur bei genau 1 erreicht werden, sonst
              flackert die letzte Ansicht am Rand ein einzelnes Bild lang auf. */
@@ -354,7 +394,7 @@ export function useBildfolge<T extends HTMLElement>(anzahl: number, buehneWahl: 
       tot = true
       abraeumen?.()
     }
-  }, [anzahl, buehneWahl])
+  }, [anzahl, buehneWahl, von, bis, mitWahl])
 
   return ref
 }
