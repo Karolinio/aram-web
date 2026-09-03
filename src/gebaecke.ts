@@ -94,13 +94,24 @@ export type Gebaeck = {
    * es ist mehr als Schmuck — Dampf ist das einzige Zeichen dafür, dass etwas
    * GERADE aus dem Ofen kommt. Ein Gebäck ohne ihn kann auch von gestern sein.
    *
-   * Aber nicht über allen acht. Jede Schwadenleinwand ist ein eigener
-   * Zeichenlauf, und acht davon nebeneinander sind auf dem Handy genau die
-   * lange Aufgabe, die hier schon einmal gemessen wurde. Es tragen die drei
-   * GRÖSSTEN und vordersten — die, die man wirklich ansieht. Bei den kleinen
-   * hinten wäre der Dampf ohnehin ein Fleck von vierzig Pixeln.
+   * ═══ Erst drei, jetzt alle acht ═══
    *
-   * Und: nur über GEBACKENEM. Dampfender roher Teig wäre eine Behauptung.
+   * Es trugen zunächst nur die drei grössten und vordersten — aus Sorge um die
+   * Rechenzeit: jede Schwadenleinwand ist ein eigener Zeichenlauf.
+   *
+   * Karol am 03.09.: „lass die aber dampfen." Nachgemessen war die Klage
+   * berechtigt, und der Grund ein anderer als gedacht: die drei dampfenden
+   * standen an den Stellen `ob: 6`, `20` und `36`, also ganz oben in der
+   * Sektion. Wer bei den Schritten 01 und 02 steht, hat sie längst nach oben
+   * aus dem Bild geschoben — gemessen waren dort fünf Stücke sichtbar, und
+   * keines davon dampfte.
+   *
+   * Jetzt alle acht, dafür sieben Schwaden je Leinwand statt zehn. In Summe
+   * 56 statt 30 — anderthalbmal so viel Zeichenarbeit für achtmal so viele
+   * Stellen, an denen es zu sehen ist. Weiterhin nur am Schirm.
+   *
+   * Und weiterhin nur über GEBACKENEM. Dampfender roher Teig wäre eine
+   * Behauptung — seit dem 01.09. ist ohnehin keiner mehr im Schwarm.
    */
   dampft?: boolean
   alt: string
@@ -280,6 +291,7 @@ export const GEBAECKE: Gebaeck[] = [
   },
   {
     id: 'zaatar',
+    dampft: true,
     name: 'Manakisch mit Zaatar',
     bilder: ['/bilder/echt/schwarm-zaatar.webp'],
     echt: true,
@@ -301,6 +313,7 @@ export const GEBAECKE: Gebaeck[] = [
   },
   {
     id: 'zaatar-2',
+    dampft: true,
     name: "Fata’er mit Spinat",
     bilder: ['/bilder/echt/schwarm-zaatar-2.webp'],
     echt: true,
@@ -322,6 +335,7 @@ export const GEBAECKE: Gebaeck[] = [
   },
   {
     id: 'sesam',
+    dampft: true,
     name: 'Fata’er mit Sesam',
     bilder: ['/bilder/echt/schwarm-sesam.webp'],
     echt: true,
@@ -343,6 +357,7 @@ export const GEBAECKE: Gebaeck[] = [
   },
   {
     id: 'gebacken',
+    dampft: true,
     name: "Fata’er mit Hackfleisch",
     bilder: ['/bilder/echt/schwarm-gebacken.webp'],
     echt: true,
@@ -364,6 +379,7 @@ export const GEBAECKE: Gebaeck[] = [
   },
   {
     id: 'kaese',
+    dampft: true,
     name: 'Fladen mit Kaese',
     bilder: ['/bilder/echt/schwarm-kaese.webp'],
     echt: true,

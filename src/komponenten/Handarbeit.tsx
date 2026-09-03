@@ -239,7 +239,7 @@ function Gebaeckstueck({ g }: { g: Gebaeck }) {
       {/* HINTER dem Gebäck, nicht davor: Dampf vor dem Essen ist Nebel auf
           dem Teller. Die Leinwand ist breiter als das Gebäck und steht
           darüber — Dampf breitet sich aus, während er steigt. */}
-      {g.dampft && breit ? <Dampf ton="ofen" klasse="gebaeck__dampf" dichte={10} /> : null}
+      {g.dampft && breit ? <Dampf ton="ofen" klasse="gebaeck__dampf" dichte={7} /> : null}
       <div className="gebaeck__folge" ref={folge}>
         {g.bilder.map((quelle, i) => (
           <img
