@@ -1,6 +1,6 @@
-import type { CSSProperties } from 'react'
+import type { CSSProperties, ReactNode } from 'react'
 
-import { useBildfolge, useFlug, useMedienabfrageBreit, useVersatz } from '../bewegung.ts'
+import { useBildfolge, useFlug, useMedienabfrageBreit, useOfenlauf, useVersatz } from '../bewegung.ts'
 import { GEBAECKE, type Gebaeck } from '../gebaecke.ts'
 import { Etikett, Kopf, Sektion } from './ui/bausteine.tsx'
 import Dampf from './ui/Dampf.tsx'
@@ -183,40 +183,57 @@ function Schritt({ s }: { s: (typeof SCHRITTE)[number] }) {
  * Bühne; die Bühne ist hier die Laufstrecke, nicht die ganze Sektion — sonst
  * wäre das letzte Bild schon erreicht, bevor der erste Satz gelesen ist.
  */
-function Ofenlauf() {
-  /* `top top` → `bottom bottom`: gezählt wird die Strecke, auf der das Maul
-     KLEBT, nicht die, auf der die Sektion durchs Bild wandert. Siehe den Kopf
-     von useBildfolge — mit dem Standard stand hier schon Bild drei, bevor der
-     erste Satz gelesen war. */
-  const folge = useBildfolge<HTMLDivElement>(
-    SCHRITTE.length,
-    '.prozess__lauf',
-    'top top',
-    'bottom bottom',
-    '.schritt',
-  )
+function Ofenlauf({ kinder }: { kinder: ReactNode }) {
+  /* Ein Wert, ein Schreiber. Bild und Schrift kommen beide aus dem `laufwert`
+     und koennen deshalb nicht auseinanderlaufen — die Begruendung mit den
+     gemessenen Zahlen steht am Haken in bewegung.ts. */
+  const lauf = useOfenlauf<HTMLDivElement>({
+    maulWahl: '.prozess__maul',
+    ofenWahl: '.prozess__ofen',
+    schrittWahl: '.schritt',
+    glutWahl: '.prozess__glut',
+  })
 
   return (
-    <div className="prozess__ofen">
-      <div className="prozess__maul" ref={folge}>
-        {SCHRITTE.map((s, i) => (
-          <img
-            key={s.zahl}
-            data-ansicht={i}
-            src={s.quelle}
-            alt={s.alt}
-            width={s.breite}
-            height={s.hoehe}
-            loading="lazy"
-            decoding="async"
-          />
-        ))}
+    <div className="prozess__lauf" ref={lauf}>
+      <div className="prozess__ofen">
+        <div className="prozess__maul">
+          {SCHRITTE.map((s, i) => (
+            <img
+              key={s.zahl}
+              data-ansicht={i}
+              src={s.quelle}
+              alt={s.alt}
+              width={s.breite}
+              height={s.hoehe}
+              /* `lazy` bleibt: die vier wiegen zusammen 376 kB und stehen
+                 unter der Faltung — eifrig geladen nehmen sie dem Hero auf
+                 einer gedrosselten Leitung fast zwei Sekunden Bandbreite weg.
+                 Gegen den Ruckler beim Einfahren hilft nicht frueheres LADEN,
+                 sondern frueheres DEKODIEREN; das erledigt `useOfenlauf` eine
+                 Bildschirmhoehe im Voraus. */
+              loading="lazy"
+              decoding="async"
+            />
+          ))}
+          {/* Die Flamme am Maulboden. Schlaegt hoch, waehrend etwas einfaehrt,
+              und legt sich, wenn die Aufnahme steht — die Deckkraft kommt aus
+              demselben Wert wie alles andere. */}
+          <span className="prozess__glut" aria-hidden="true" />
+        </div>
+        {/* NEBEN dem Maul, nicht darin: `.prozess__maul` beschneidet auf die
+            Bogenform (das ist der ganze Sinn), und ein Dampf darin waere an
+            der Kuppel abgeschnitten.
+
+            Karol am 05.09.: „das dampft, und das stoert halt auch." Gemessen
+            war die Leinwand 655 × 443 und begann 57 px UEBER dem Fensterrand
+            — also zur Haelfte hinter der Kopfzeile, und in der Breite 130 %
+            des Bogens. Das war kein Dampf ueber einem Ofen, das war Nebel
+            ueber der halben Spalte. Jetzt sitzt sie auf der Kuppel, schmaler
+            als das Maul, mit halber Dichte. */}
+        <Dampf ton="ofen" klasse="prozess__dampf" dichte={5} />
       </div>
-      {/* NEBEN dem Maul, nicht darin: `.prozess__maul` beschneidet auf die
-          Bogenform (das ist der ganze Sinn), und ein Dampf darin wäre an der
-          Kuppel abgeschnitten. Im ersten Bau war er dadurch unsichtbar.
-          Er gehört ohnehin über den Ofen, nicht hinein. */}
-      <Dampf ton="ofen" klasse="prozess__dampf" dichte={9} />
+      {kinder}
     </div>
   )
 }
@@ -274,7 +291,7 @@ function Gebaeckstueck({ g }: { g: Gebaeck }) {
       {/* HINTER dem Gebäck, nicht davor: Dampf vor dem Essen ist Nebel auf
           dem Teller. Die Leinwand ist breiter als das Gebäck und steht
           darüber — Dampf breitet sich aus, während er steigt. */}
-      {g.dampft && breit ? <Dampf ton="ofen" klasse="gebaeck__dampf" dichte={7} /> : null}
+      {g.dampft && breit ? <Dampf ton="ofen" klasse="gebaeck__dampf" dichte={4} /> : null}
       <div className="gebaeck__folge" ref={folge}>
         {g.bilder.map((quelle, i) => (
           <img
@@ -346,14 +363,15 @@ export default function Handarbeit() {
             klasse="prozess__kopf"
           />
 
-          <div className="prozess__lauf">
-            <Ofenlauf />
-            <ol className="prozess__schritte">
-              {SCHRITTE.map((x) => (
-                <Schritt key={x.zahl} s={x} />
-              ))}
-            </ol>
-          </div>
+          <Ofenlauf
+            kinder={
+              <ol className="prozess__schritte">
+                {SCHRITTE.map((x) => (
+                  <Schritt key={x.zahl} s={x} />
+                ))}
+              </ol>
+            }
+          />
         </div>
 
         {/* Der Schwarm liegt jetzt auf SEKTIONSEBENE, nicht mehr in der linken

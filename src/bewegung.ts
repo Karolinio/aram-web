@@ -399,6 +399,283 @@ export function useBildfolge<T extends HTMLElement>(
   return ref
 }
 
+/** Wie deckend ein Schritt ist, der gerade nicht laeuft. */
+const SCHRITT_RUHE = 0.34
+
+const klemmen = (x: number, min: number, max: number) =>
+  x < min ? min : x > max ? max : x
+
+/**
+ * Der Ofenlauf — vier Aufnahmen fahren nacheinander durch dasselbe Maul.
+ *
+ * ═══ Warum dieser Haken existiert und `useBildfolge` hier nicht reicht ═══
+ *
+ * Karol am 05.09.: „Der Uebergang ist einfach nicht konsistent genug … es ist
+ * noch nicht fliessend genug."
+ *
+ * Gemessen am 06.09. bei 1440 × 900 war das keine Geschmacksfrage, sondern
+ * Arithmetik. Zwei Uhren liefen, verschieden geteilt:
+ *
+ *   Das Bild schaltete nach GLEICHEN Vierteln der Strecke — 302 px je Bild.
+ *   Die vier Saetze daneben waren UNGLEICH hoch: 468, 612, 612, 414 px.
+ *
+ * Gleiche Schnitte auf einem ungleichen Lineal koennen nicht zusammenfallen.
+ * Der Versatz betrug +256 px beim ersten Uebergang, −19 beim zweiten und
+ * −280 beim dritten — fast eine ganze Bildlaenge, und das Vorzeichen kippte.
+ * Genau deshalb las es sich als „mal zu spaet, mal zu frueh" statt als
+ * gleichmaessige Verzoegerung, die niemand bemerkt haette.
+ *
+ * ═══ Die Loesung ist kein besserer Teiler, sondern ein einziger Wert ═══
+ *
+ * Es gibt hier genau EINEN Schreiber und EINE Zahl: den `laufwert`. Er wird
+ * nicht aus einem Fortschritt geschaetzt, sondern aus der tatsaechlichen Lage
+ * der Saetze im Fenster GEMESSEN — die Summe dessen, wie weit jeder Satz die
+ * Uebergabelinie im Maul schon ueberschritten hat.
+ *
+ *   laufwert 0,0   Aufnahme 01 steht, Satz 01 ist hell
+ *   laufwert 1,5   Aufnahme 02 faehrt heraus, 03 herein, beide Saetze halbhell
+ *   laufwert 3,0   Aufnahme 04 steht, Satz 04 ist hell
+ *
+ * Weil Bild UND Schrift aus derselben Zahl gezeichnet werden, kann ein Versatz
+ * nicht entstehen. Nicht „ist korrigiert" — er hat keinen Ort mehr, an dem er
+ * entstehen koennte. Das war Weg 02.
+ *
+ * ═══ Warum es keinen Schaltmoment mehr gibt ═══
+ *
+ * Der `laufwert` ist stetig, nicht ganzzahlig. Die neue Aufnahme faehrt von
+ * unten ins Maul ein und schiebt die vorige weiter hinein, wo sie dunkler wird
+ * und im Ofen verschwindet — die Bewegung, die Schritt 04 zeigt. Es gibt keinen
+ * Zeitpunkt, der falsch liegen koennte, weil es keinen Zeitpunkt gibt. Das war
+ * Weg 03.
+ *
+ * ═══ Die Geometrie, die dazugehoert ═══
+ *
+ * Die Uebergabelinie liegt bei `LINIE` der Maulhoehe unter dessen Oberkante.
+ * Damit der letzte Satz den Bogen noch erreicht, muss die Laufstrecke unten um
+ * `(1 − LINIE) × Maulhoehe` laenger sein als die Summe der Saetze — sonst
+ * loest sich der Bogen, bevor der letzte Satz an ihm angekommen ist. Genau
+ * das war der zweite gemessene Fehler: Satz 04 haette den Bogen erst 150 px
+ * NACH dessen Abloesung erreicht. Der Zuschlag steht in `sektionen.css` als
+ * `padding-bottom` an `.prozess__lauf`; wer eine der beiden Stellen aendert,
+ * muss die andere mitaendern.
+ */
+export function useOfenlauf<T extends HTMLElement>(o: {
+  /** Der Bogen selbst — er gibt Hoehe und Klebeposition vor. */
+  maulWahl: string
+  /** Der klebende Rahmen um den Bogen. Aus seinem `top` kommt die Klebehoehe. */
+  ofenWahl: string
+  /** Die Saetze. Ihre Zahl muss der Zahl der Aufnahmen entsprechen. */
+  schrittWahl: string
+  /** Das Aufglimmen am Maulboden, wenn etwas einfaehrt. Darf fehlen. */
+  glutWahl?: string
+  /** Wie tief im Maul die Uebergabe liegt, als Anteil seiner Hoehe. */
+  linie?: number
+  /** Wie lang ein Uebergang dauert, als Anteil der Maulhoehe. */
+  weite?: number
+}) {
+  const ref = useRef<T>(null)
+  const { maulWahl, ofenWahl, schrittWahl, glutWahl, linie = 0.5, weite = 0.3 } = o
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+
+    const maul = el.querySelector<HTMLElement>(maulWahl)
+    const ofen = el.querySelector<HTMLElement>(ofenWahl)
+    const glut = glutWahl ? el.querySelector<HTMLElement>(glutWahl) : null
+    const bilder = [...el.querySelectorAll<HTMLElement>('[data-ansicht]')]
+    const schritte = [...el.querySelectorAll<HTMLElement>(schrittWahl)]
+    if (!maul || !ofen || bilder.length < 2 || schritte.length !== bilder.length) return
+
+    const sanft = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    /**
+     * Die Uebergabelinie in Fensterkoordinaten.
+     *
+     * Nicht aus `getBoundingClientRect`: der Bogen klebt, und beim Neuvermessen
+     * steht die Seite womoeglich ganz woanders — dann waere der gemessene Wert
+     * die Lage im Anflug statt die im geklebten Zustand. Das aufgeloeste `top`
+     * aus dem Stilblatt gilt dagegen immer, und `offsetHeight` haengt nicht am
+     * Scroll.
+     */
+    const linieY = () =>
+      (parseFloat(getComputedStyle(ofen).top) || 0) + maul.offsetHeight * linie
+    const weiteY = () => Math.max(80, maul.offsetHeight * weite)
+
+    /**
+     * Wie weit die Folge steht — gemessen, nicht geschaetzt.
+     *
+     * Jeder Satz ab dem zweiten steuert zwischen 0 und 1 bei, je nachdem, wie
+     * weit seine Oberkante die Uebergabelinie schon passiert hat. Die Summe
+     * ist stetig, waechst monoton mit dem Scroll und kann nie mehr als
+     * `bilder.length − 1` werden.
+     */
+    const laufwert = () => {
+      const mitte = linieY()
+      const w = weiteY()
+      let t = 0
+      for (let k = 1; k < schritte.length; k++) {
+        const oben = schritte[k].getBoundingClientRect().top
+        t += klemmen((mitte + w / 2 - oben) / w, 0, 1)
+      }
+      return t
+    }
+
+    /**
+     * Alles aus einer Zahl.
+     *
+     * `d = t − i` ist die Lage der Aufnahme i in der Folge:
+     *   d ≤ −1   wartet unterhalb des Mauls, unsichtbar hinter dem Beschnitt
+     *   −1 < d < 0   faehrt gerade ein
+     *   0 ≤ d < 1    steht und wird von der naechsten hineingeschoben
+     *   d ≥ 1    ist im Ofen verschwunden
+     */
+    const zeichnen = () => {
+      const t = laufwert()
+
+      if (sanft) {
+        const r = Math.round(t)
+        bilder.forEach((b, i) => {
+          b.style.transform = 'none'
+          b.style.opacity = i === r ? '1' : '0'
+        })
+        return
+      }
+
+      bilder.forEach((b, i) => {
+        const d = t - i
+        let y: number
+        let s: number
+        let deck: number
+        if (d <= -1) {
+          y = 100
+          s = 1.05
+          deck = 1
+        } else if (d < 0) {
+          const p = d + 1
+          y = 100 - p * 100
+          s = 1.05 - p * 0.05
+          deck = 1
+        } else if (d < 1) {
+          y = -16 * d
+          s = 1 + 0.06 * d
+          /* Die weichende Aufnahme wird nicht weggeblendet, sondern DUNKEL:
+             hinter ihr liegt der tiefe Grund des Mauls, und was dort
+             verschwindet, verschwindet im Ofen.
+
+             Die Wurzelkurve statt einer Geraden: linear war die vorige
+             Aufnahme auf halbem Weg noch bei 0,59 und sah damit aus wie ein
+             zweites, gleichwertiges Foto — im Screenshot lagen zwei helle
+             Bilder uebereinander. Mit `d ** 0.7` steht dort 0,45, und das
+             Auge liest ein Vorne und ein Hinten statt einer Teilung. */
+          deck = 1 - 0.9 * d ** 0.7
+        } else {
+          y = -16
+          s = 1.06
+          deck = 0.1
+        }
+        b.style.transform = `translate3d(0, ${y}%, 0) scale(${s})`
+        b.style.opacity = String(deck)
+      })
+
+      /* Der Satz traegt dasselbe Gewicht wie seine Aufnahme. Bei t = 1,5 sind
+         zwei Saetze halbhell — genau dann, wenn zwei Aufnahmen im Maul sind. */
+      schritte.forEach((sch, i) => {
+        const naehe = Math.max(0, 1 - Math.abs(t - i))
+        sch.style.opacity = String(SCHRITT_RUHE + (1 - SCHRITT_RUHE) * naehe)
+      })
+
+      /**
+       * ═══ Die Glut sitzt AUF DER NAHT, nicht am Boden ═══
+       *
+       * Im ersten Bau lag sie unten im Maul. Der Screenshot bei halbem
+       * Uebergang zeigte daraufhin genau das Problem, das sie loesen sollte:
+       * eine rasiermesserscharfe waagerechte Kante quer durch den Bogen — zwei
+       * gestapelte Fotos, kein Ofen.
+       *
+       * Jetzt laeuft sie mit der Kante mit. Die einfahrende Aufnahme steht bei
+       * `(1 − Bruch)` ihrer Hoehe, dort liegt die Naht, und dort schlaegt die
+       * Hitze hoch. Damit ist die Kante nicht mehr versteckt, sondern der
+       * Grund, warum sich etwas bewegt: es kommt aus dem Feuer.
+       */
+      if (glut) {
+        const bruch = t - Math.floor(t)
+        if (bruch < 0.001 || t >= bilder.length - 1) {
+          glut.style.opacity = '0'
+        } else {
+          const naht = maul.offsetHeight * (1 - bruch)
+          glut.style.transform = `translate3d(0, ${naht - glut.offsetHeight / 2}px, 0)`
+          glut.style.opacity = String(Math.sin(Math.PI * bruch) * 0.85)
+        }
+      }
+    }
+
+    zeichnen()
+
+    let tot = false
+    let abraeumen: (() => void) | undefined
+
+    void werkzeugHolen().then((werkzeug) => {
+      if (tot || !werkzeug) return
+
+      /**
+       * ═══ Eine Bildschirmhoehe im Voraus dekodieren ═══
+       *
+       * Die vier Aufnahmen liegen gestapelt und wiegen zusammen 376 kB. Eifrig
+       * geladen naehmen sie dem Hero auf einer gedrosselten Leitung fast zwei
+       * Sekunden Bandbreite weg — sie bleiben also `lazy`.
+       *
+       * Der Ruckler, den man beim Einfahren saehe, kommt aber nicht vom Laden,
+       * sondern vom DEKODIEREN: es passiert im ersten Bild, in dem die Aufnahme
+       * gebraucht wird, und genau dort kostet es den Frame, den man sieht. In
+       * diesem Projekt ist das schon einmal gemessen worden.
+       *
+       * `decode()` zieht beides eine Bildschirmhoehe vor die Sektion — dort ist
+       * der Hero laengst gezeichnet, und wenn das Maul anklebt, liegen alle
+       * vier fertig im Speicher.
+       */
+      const warm = werkzeug.ScrollTrigger.create({
+        trigger: el,
+        start: 'top bottom+=100%',
+        once: true,
+        onEnter: () => {
+          bilder.forEach((b) => {
+            if (b instanceof HTMLImageElement) void b.decode().catch(() => {})
+          })
+        },
+      })
+
+      const st = werkzeug.ScrollTrigger.create({
+        trigger: el,
+        start: 'top bottom',
+        end: 'bottom top',
+        invalidateOnRefresh: true,
+        onUpdate: zeichnen,
+        onRefresh: zeichnen,
+        onToggle: ({ isActive }) => {
+          bilder.forEach((b) => {
+            b.style.willChange = isActive && !sanft ? 'transform, opacity' : ''
+          })
+        },
+      })
+      abraeumen = () => {
+        warm.kill()
+        st.kill()
+      }
+    })
+
+    return () => {
+      tot = true
+      abraeumen?.()
+      bilder.forEach((b) => {
+        b.style.willChange = ''
+      })
+    }
+  }, [maulWahl, ofenWahl, schrittWahl, glutWahl, linie, weite])
+
+  return ref
+}
+
 type Flug = {
   /** Von wo nach wo, in Anteilen der Fensterhöhe. Negativ = weiter oben. */
   y: [von: number, bis: number]
