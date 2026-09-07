@@ -132,6 +132,50 @@ export type Gebaeck = {
   /** Breite in Prozent der Sektion. */
   gr: number
   /**
+   * ═══ Wie weit hinten das Stueck fliegt: 0 vorn, 1 ganz hinten ═══
+   *
+   * Karol am 07.09.: „wieso die Ausschnitte?"
+   *
+   * Die Frage ist berechtigt, und Mobbin beantwortet sie: ein freigestellter
+   * Gegenstand ueber Flachfarbe ist eine Illustrationstechnik. Bei Savor und
+   * Eat Real Food steht immer nur das VORDERSTE Stueck frei, alles dahinter
+   * ist kleiner, unschaerfer oder gerahmt. Ohne Tiefenzeichen liest sich ein
+   * Foto-Freisteller als Aufkleber, egal wie gut das Produkt ist.
+   *
+   * `tiefe` ist deshalb kein Schmuck, sondern die Achse, aus der vier Dinge
+   * abgeleitet werden: Groesse, Unschaerfe, Deckung (Luftperspektive — was
+   * weiter weg ist, geht in den orangenen Grund ueber) und die Weichheit des
+   * Schattens.
+   *
+   * ═══ Und woher der Wert kommt ═══
+   *
+   * Nicht aus dem Gefuehl, sondern aus der GEMESSENEN Schaerfe des Fotos.
+   * Am 07.09. gemessen (Laplace-Varianz im deckenden Bereich):
+   *
+   *     zaatar-2 2122 · zaatar 2111 · lahmacun 1795 · fatayer 1599
+   *     rolle 1512 · gebacken 1156 · bleche 987 · sesam 816
+   *     stapel 644 · kaese 503
+   *
+   * Karol dazu: „bei zum Beispiel Lahmacun und Fatayer, kann man doch bestimmt
+   * gut auch mehr machen." Genau die stehen oben in der Liste.
+   *
+   * Aus der Messung wird die Ordnung: das schaerfste Foto fliegt vorn und
+   * gross, das weichste hinten, klein und absichtlich unscharf. Damit hoert
+   * die Weichheit der schwachen Aufnahmen auf, ein Mangel zu sein — sie wird
+   * zu dem, was sie in einer Tiefenschaerfe ohnehin waere.
+   */
+  tiefe: number
+  /**
+   * Nur am breiten Schirm zeigen.
+   *
+   * Die hinteren Wiederholungen verdichten das Bild, ohne dass die Wiederholung
+   * auffiele — sie sind klein, unscharf und halbdurchsichtig. Am Handy sind sie
+   * trotzdem je ein eigener ScrollTrigger und eine eigene Ebene, und dort ist
+   * schon einmal eine lange Aufgabe gemessen worden. Dieselbe Regel wie bei den
+   * Koernern: Atmosphaere darf schmaler werden, bevor der Gegenstand es tut.
+   */
+  nurBreit?: boolean
+  /**
    * Dieselbe Bahn am Handy — eigene Werte, gleiche Mechanik.
    *
    * Karol: „ich wollte eig von anfang an das mobil genauso 1:1 mitgebaut
@@ -241,7 +285,8 @@ export const GEBAECKE: Gebaeck[] = [
     alt: 'Ein Fata’er von Aram, gewölbt und glänzend, dicht mit Sesam und Schwarzkümmel bestreut',
     li: 3,
     ob: 6,
-    gr: 24,
+    gr: 23,
+    tiefe: 0.32,
     liM: 58,
     grM: 52,
     breite: 780,
@@ -266,6 +311,7 @@ export const GEBAECKE: Gebaeck[] = [
     li: 70,
     ob: 20,
     gr: 22,
+    tiefe: 0.38,
     liM: 72,
     grM: 48,
     breite: 780,
@@ -287,7 +333,8 @@ export const GEBAECKE: Gebaeck[] = [
     alt: 'Ein Lahmacun mit Hackfleisch, Petersilie und Paprika',
     li: 16,
     ob: 36,
-    gr: 26,
+    gr: 24,
+    tiefe: 0.2,
     liM: 54,
     grM: 48,
     breite: 780,
@@ -309,7 +356,8 @@ export const GEBAECKE: Gebaeck[] = [
     alt: 'Ein Manakisch mit Zaatar, frisch aus dem Ofen',
     li: 78,
     ob: 48,
-    gr: 18,
+    gr: 27,
+    tiefe: 0.01,
     liM: 76,
     grM: 38,
     breite: 780,
@@ -331,7 +379,8 @@ export const GEBAECKE: Gebaeck[] = [
     alt: 'Ein zweites Manakisch mit Zaatar',
     li: 4,
     ob: 62,
-    gr: 16,
+    gr: 27,
+    tiefe: 0.0,
     liM: 74,
     grM: 36,
     breite: 780,
@@ -353,7 +402,8 @@ export const GEBAECKE: Gebaeck[] = [
     alt: 'Ein goldbraun gebackener Fata’er, dicht mit Sesam und Schwarzkümmel',
     li: 62,
     ob: 74,
-    gr: 21,
+    gr: 16,
+    tiefe: 0.81,
     liM: 60,
     grM: 50,
     breite: 780,
@@ -375,7 +425,8 @@ export const GEBAECKE: Gebaeck[] = [
     alt: 'Ein flacher, goldbraun gebackener Fata’er mit Sesam',
     li: 34,
     ob: 84,
-    gr: 17,
+    gr: 19,
+    tiefe: 0.6,
     liM: 78,
     grM: 34,
     breite: 780,
@@ -397,7 +448,8 @@ export const GEBAECKE: Gebaeck[] = [
     alt: 'Ein runder Fladen von Aram, dick mit geschmolzenem Kaese belegt',
     li: 84,
     ob: 92,
-    gr: 20,
+    gr: 14,
+    tiefe: 1.0,
     liM: 56,
     grM: 48,
     breite: 780,
@@ -409,6 +461,169 @@ export const GEBAECKE: Gebaeck[] = [
     drehX: [-14, 11],
     z: [-460, -180],
     skala: [0.56, 0.72],
+  },
+  {
+    /* ═══ Zwei Stuecke mehr, und warum es nicht mehr wurden ═══
+
+       Karol am 07.09.: „wie wir da die ganzen einzelnen Produkte im
+       Hintergrund dazumachen." Ich habe alle 54 Freisteller aus ihrem
+       Material durchgemessen. Von den zwoelf schaerfsten sind die meisten
+       Ofeninnenraeume, Menschen oder misslungene Schnitte — brauchbar und neu
+       waren genau diese zwei. Die acht davor sind im Wesentlichen schon das
+       Beste, was Aram geliefert hat.
+
+       Mehr Dichte kommt deshalb nicht aus mehr Dateien, sondern aus der
+       Tiefe: was hinten fliegt, ist klein und unscharf, und dort faellt
+       weder eine schwache Aufnahme noch eine Wiederholung auf. */
+    id: 'bleche',
+    dampft: false,
+    name: 'Zwei Bleche',
+    bilder: ['/bilder/echt/schwarm-bleche.webp'],
+    echt: true,
+    alt: 'Zwei runde Bleche mit frisch gebackenem Gebäck aus dem Laden',
+    li: 46,
+    ob: 30,
+    gr: 18,
+    tiefe: 0.7,
+    liM: 64,
+    grM: 40,
+    breite: 780,
+    hoehe: 438,
+    y: [0.46, -0.3],
+    x: [0.05, -0.06],
+    dreh: [18, -14],
+    drehY: [24, -20],
+    drehX: [-9, 7],
+    z: [-190, 60],
+    skala: [0.9, 1.02],
+  },
+  {
+    id: 'stapel',
+    dampft: false,
+    name: 'Fladenstapel',
+    bilder: ['/bilder/echt/schwarm-stapel.webp'],
+    echt: true,
+    alt: 'Ein hoher Stapel gebackener Fladen aus der Backstube',
+    li: 24,
+    ob: 68,
+    gr: 15,
+    tiefe: 0.91,
+    liM: 30,
+    grM: 34,
+    breite: 438,
+    hoehe: 780,
+    y: [0.42, -0.28],
+    x: [-0.05, 0.05],
+    dreh: [-12, 16],
+    drehY: [-18, 22],
+    drehX: [7, -6],
+    z: [-210, 30],
+    skala: [0.92, 1.02],
+  },
+  /* ═══ Vier Wiederholungen ganz hinten ═══
+
+     Karol am 07.09.: „wie wir da die ganzen einzelnen Produkte im Hintergrund
+     dazumachen." Neues Material gibt es nicht mehr — von 54 Freistellern waren
+     genau zwei brauchbar und neu. Dichte kommt deshalb aus der Tiefe: bei
+     `tiefe` ueber 0,75 ist ein Stueck 13 bis 15 Prozent breit, gut 2 px
+     unscharf und zu drei Vierteln deckend. Dass es dasselbe Gebaeck ist wie
+     eines vorne, sieht man dort nicht — in einer Backstube liegt ohnehin von
+     jedem mehr als eins. */
+  {
+    id: 'lahmacun-fern',
+    dampft: false,
+    name: 'Lahmacun',
+    bilder: ['/bilder/echt/schwarm-lahmacun.webp'],
+    echt: true,
+    alt: '',
+    li: 58,
+    ob: 12,
+    gr: 14,
+    tiefe: 0.86,
+    nurBreit: true,
+    liM: 40,
+    grM: 30,
+    breite: 780,
+    hoehe: 745,
+    y: [0.44, -0.29],
+    x: [0.04, -0.05],
+    dreh: [18, -14],
+    drehY: [24, -20],
+    drehX: [-8, 6],
+    z: [-234, 13],
+    skala: [0.94, 1.02],
+  },
+  {
+    id: 'zaatar-fern',
+    dampft: false,
+    name: 'Manakisch Zaatar',
+    bilder: ['/bilder/echt/schwarm-zaatar.webp'],
+    echt: true,
+    alt: '',
+    li: 14,
+    ob: 26,
+    gr: 15,
+    tiefe: 0.79,
+    nurBreit: true,
+    liM: 20,
+    grM: 32,
+    breite: 780,
+    hoehe: 772,
+    y: [0.44, -0.29],
+    x: [-0.04, 0.05],
+    dreh: [-18, 14],
+    drehY: [-24, 20],
+    drehX: [8, -6],
+    z: [-231, 15],
+    skala: [0.94, 1.02],
+  },
+  {
+    id: 'fatayer-fern',
+    dampft: false,
+    name: 'Fata’er',
+    bilder: ['/bilder/echt/fatayer-frei.webp'],
+    echt: true,
+    alt: '',
+    li: 72,
+    ob: 56,
+    gr: 13,
+    tiefe: 0.94,
+    nurBreit: true,
+    liM: 68,
+    grM: 28,
+    breite: 780,
+    hoehe: 554,
+    y: [0.44, -0.29],
+    x: [0.04, -0.05],
+    dreh: [18, -14],
+    drehY: [24, -20],
+    drehX: [-8, 6],
+    z: [-237, 12],
+    skala: [0.94, 1.02],
+  },
+  {
+    id: 'rolle-fern',
+    dampft: false,
+    name: 'Gefuelltes Gebaeck',
+    bilder: ['/bilder/echt/schwarm-rolle.webp'],
+    echt: true,
+    alt: '',
+    li: 40,
+    ob: 80,
+    gr: 14,
+    tiefe: 0.88,
+    nurBreit: true,
+    liM: 50,
+    grM: 30,
+    breite: 780,
+    hoehe: 574,
+    y: [0.44, -0.29],
+    x: [-0.04, 0.05],
+    dreh: [-18, 14],
+    drehY: [-24, 20],
+    drehX: [8, -6],
+    z: [-235, 13],
+    skala: [0.94, 1.02],
   },
 ]
 /** Wie viele der ausgelieferten Gerichtebilder sind erzeugt? */

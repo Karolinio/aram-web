@@ -2034,9 +2034,46 @@
 /* Die Ansichten liegen exakt übereinander; geschaltet wird mit `opacity`.
    Ein Wechsel von `src` müsste mitten in der Bewegung dekodieren — genau dort
    kostet er den Frame, den man sieht. */
+/**
+ * ═══ Tiefe statt Aufkleber ═══
+ *
+ * Karol am 07.09.: „wieso die Ausschnitte?"
+ *
+ * Die Antwort steht bei Mobbin: ein Foto-Freisteller ueber Flachfarbe ist
+ * eine Illustrationstechnik. Savor und Eat Real Food stellen immer nur das
+ * VORDERSTE Stueck frei — alles dahinter ist kleiner, unschaerfer oder
+ * gerahmt. Ohne Tiefenzeichen liest sich ein Freisteller als Aufkleber, egal
+ * wie gut das Produkt ist.
+ *
+ * `--tiefe` kommt aus gebaecke.ts und ist aus der GEMESSENEN Schaerfe des
+ * jeweiligen Fotos abgeleitet. Aus ihr kommen hier drei Dinge:
+ *
+ *   UNSCHAERFE   erst ab 0,3, damit die vorderen Stuecke gestochen bleiben.
+ *                Bis 2,8 px hinten. Sie ist der Grund, warum die schwachen
+ *                Aufnahmen aufhoeren, ein Mangel zu sein: was hinten liegt,
+ *                waere in jeder echten Tiefenschaerfe ebenfalls weich.
+ *   DECKUNG      bis 0,72 hinten. Der Grund ist orange, also geht ein
+ *                Stueck mit sinkender Deckung ins Orange ueber — genau das
+ *                macht Luft ueber Entfernung. Der Untergrund liegt bei 0,11
+ *                Koernung und scheint dabei nicht stoerend durch.
+ *   SCHATTEN     vorn eng und dunkel, hinten weit und schwach.
+ */
 .gebaeck__folge {
   position: relative;
-  filter: var(--schatten-speise);
+  filter:
+    blur(calc(max(0px, var(--tiefe, 0) - 0.3) / 0.7 * 2.8px))
+    drop-shadow(
+      0 calc(0.5rem + var(--tiefe, 0) * 0.9rem)
+      calc(0.9rem + var(--tiefe, 0) * 1.6rem)
+      oklch(18% 0.03 50 / calc(0.34 - var(--tiefe, 0) * 0.2))
+    );
+  opacity: calc(1 - var(--tiefe, 0) * 0.28);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* In der ruhenden Auslage stehen sie nebeneinander statt hintereinander —
+     eine Tiefenschaerfe ohne Bewegung waere dort nur ein unscharfes Bild. */
+  .gebaeck__folge { filter: var(--schatten-speise); opacity: 1; }
 }
 
 /* Freigestellte Gerichte bekommen KEINEN Radius: sie haben keine Kante, an der

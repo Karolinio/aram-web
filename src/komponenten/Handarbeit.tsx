@@ -189,6 +189,27 @@ function Ofenwand() {
  * überlappen, steckt in den Zahlen in gebaecke.ts — nicht in einer Kollisions-
  * rechnung, die auf jedem Bildschirm etwas anderes ergäbe.
  */
+/**
+ * Wer fliegt — und wie viele.
+ *
+ * Die hinteren Wiederholungen (`nurBreit`) verdichten das Bild am Schirm. Am
+ * Handy bleiben sie weg: jedes Stueck ist ein eigener ScrollTrigger und eine
+ * eigene Ebene, und dort ist schon einmal eine lange Aufgabe gemessen worden.
+ * Dieselbe Regel wie bei den Koernern — Atmosphaere darf schmaler werden,
+ * bevor der Gegenstand es tut.
+ */
+function Schwarm() {
+  const breit = useMedienabfrageBreit()
+  const sichtbar = breit ? GEBAECKE : GEBAECKE.filter((g) => !g.nurBreit)
+  return (
+    <>
+      {sichtbar.map((g) => (
+        <Gebaeckstueck key={g.id} g={g} />
+      ))}
+    </>
+  )
+}
+
 function Gebaeckstueck({ g }: { g: Gebaeck }) {
   const flug = useFlug<HTMLDivElement>({
     y: g.y,
@@ -228,13 +249,18 @@ function Gebaeckstueck({ g }: { g: Gebaeck }) {
           '--gr': `${g.gr}%`,
           '--li-m': `${g.liM}%`,
           '--gr-m': `${g.grM}%`,
+          /* Aus dieser einen Zahl leiten sich Unschaerfe, Deckung und
+             Schattenweite ab — siehe `tiefe` in gebaecke.ts. */
+          '--tiefe': g.tiefe,
         } as CSSProperties
       }
     >
       {/* HINTER dem Gebäck, nicht davor: Dampf vor dem Essen ist Nebel auf
           dem Teller. Die Leinwand ist breiter als das Gebäck und steht
           darüber — Dampf breitet sich aus, während er steigt. */}
-      {g.dampft && breit ? <Dampf ton="ofen" klasse="gebaeck__dampf" dichte={4} /> : null}
+      {g.dampft && breit && g.tiefe < 0.45 ? (
+        <Dampf ton="ofen" klasse="gebaeck__dampf" dichte={4} />
+      ) : null}
       <div className="gebaeck__folge" ref={folge}>
         {g.bilder.map((quelle, i) => (
           <img
@@ -315,9 +341,7 @@ export default function Handarbeit() {
             fliegen die Gerichte über die ganze Sektion, von unten nach oben,
             und ziehen hinter dem Text vorbei. */}
         <div className="schwarm">
-          {GEBAECKE.map((g) => (
-            <Gebaeckstueck key={g.id} g={g} />
-          ))}
+          <Schwarm />
         </div>
 
         {/* Vierzehn freigestellte Sesam- und Schwarzkümmelkörner, jedes mit
