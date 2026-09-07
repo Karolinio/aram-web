@@ -1774,7 +1774,12 @@
   /* Das leere Maul ist dunkel. `--fuellung` kommt aus useOfenwand und nimmt
      die Tiefe zurueck, sobald die Aufnahme drin steht. */
   background: var(--ton-tief);
-  box-shadow: var(--clay-ruhe);
+  /* Der zweite Wurf ist der KONTAKTSCHATTEN: eng, dunkel, direkt unter dem
+     Fuss. Er ist das eine Zeichen, das „steht auf etwas" sagt — Mobbin zeigt
+     an FREITAG, dass ohne ihn auch ein perfekt gesetzter Gegenstand schwebt. */
+  box-shadow:
+    var(--clay-ruhe),
+    0 7px 11px -5px oklch(18% 0.03 50 / 0.55);
   margin-bottom: clamp(0.9rem, 2vw, 1.4rem);
 }
 
@@ -1832,64 +1837,88 @@
 }
 
 /**
- * ═══ Die Bank unter den Maeulern ═══
+ * ═══ Die Theke ═══
  *
- * Seit die Gerichte über die volle Breite fliegen (statt nur links), ziehen
- * sie auch hinter den Beschriftungen durch. Gemessen an sechs Punkten der
- * Klebestrecke fiel der Kontrast dabei auf bis zu 1,09 — gefordert sind 4,5
- * für den Fliesstext und 3,0 für die Ueberschrift.
+ * Karol am 07.09.: „kann man die untere Leiste noch schoener machen, sodass
+ * das aussieht wie eine richtige Theke — ein konsistenter Balken, der unten im
+ * Ofen sitzt, und wo die Bilder dann so eingespielt kommen?"
  *
- * Der erste Versuch waren VIER Gruende, je einer hinter einer Beschriftung.
- * Sie verschmolzen in der Mitte und ergaben ein Rechteck mit harten Kanten —
- * also genau die Kartenwirkung, die diese Sektion vermeiden soll.
+ * Hier stand vorher eine BANK, und sie war absichtlich unsichtbar: oben weich
+ * auslaufend, in der Sektionsfarbe, mit derselben Koernung. Sie hatte eine
+ * andere Aufgabe — den Kontrast der Beschriftung retten, ohne dass man sie
+ * bemerkt. Karol will das Gegenteil: er will sie sehen.
  *
- * Jetzt ist es EIN Element und eine Absicht: die steinerne Bank, auf der die
- * Maeuler stehen. Sie laeuft ueber die Wand hinaus (keine Seitenkanten), oben
- * weich ein (keine Oberkante) und traegt dieselbe Saat wie der Untergrund —
- * ohne die hoerte die Koernung schlicht auf, und das FEHLEN der Textur war
- * sichtbarer als jede Farbe.
+ * Mobbin gibt die Form. Waka Waka setzt genau das: ein vollflaechiges Band mit
+ * HARTER Oberkante, der Inhalt steht darauf, der Ton unterscheidet sich vom
+ * Grund darueber. Kein Verlauf, kein Auslaufen — eine Kante ist der ganze
+ * Unterschied zwischen Dunst und Gegenstand.
  *
- * `z-index: -1`: hinter der Schrift der Wand, aber vor dem Schwarm, der eine
- * Ebene tiefer in der Sektion haengt.
+ * Drei Teile, und jeder hat eine Aufgabe:
+ *
+ *   LIPPE     zwei Pixel heller als der Koerper, ganz oben. Das ist die
+ *             Vorderkante einer Platte, die Licht faengt. Ohne sie ist der
+ *             Balken eine Flaeche; mit ihr ist er ein Moebel.
+ *   KOERPER   sieben Prozent dunkler als der Grund. Genug, dass man die
+ *             Trennung sieht, wenig genug, dass es dieselbe Farbe bleibt.
+ *   SCHATTEN  innen unter der Lippe: die Platte hat Dicke.
+ *
+ * Und die Oberkante liegt ZWOELF PIXEL UEBER den Bogenfuessen (gemessen: alle
+ * vier stehen auf −151 px zur Wandunterkante). Deshalb stehen die Maeuler IN
+ * der Theke statt darauf — das ist der Unterschied zwischen eingesetzt und
+ * abgestellt.
+ *
+ * ═══ Warum sie an den Toren haengt und nicht an der Wand ═══
+ *
+ * Weil es am Handy ZWEI Reihen gibt. Ein Balken an der Wand haette nur unter
+ * der zweiten gelegen, und die erste Reihe haette in der Luft gestanden. Je
+ * Tor ein Stueck, das links und rechts ueber die Luecke hinausragt: benachbarte
+ * Stuecke ueberlappen und ergeben eine durchgehende Platte, je Reihe eine.
+ * Die aeusseren laufen bis ueber den Rand.
+ *
+ * ═══ Und warum die Koernung darauf fehlt ═══
+ *
+ * Weil sie dort nicht hingehoert. Solange der Balken Dunst war, war fehlende
+ * Textur ein Loch; jetzt ist er ein Gegenstand aus anderem Material als die
+ * Wand, und ein Moebel traegt nicht die Koernung der Wand dahinter.
  */
-.prozess__wand::after {
+.tor { position: relative; }
+
+.tor::before {
   content: '';
   position: absolute;
-  left: -8vw;
-  right: -8vw;
-  bottom: -1.6rem;
-  height: 12.5rem;
+  left: -1rem;
+  right: -1rem;
+  bottom: -1.8rem;
+  height: 12rem;
   z-index: -1;
-  /* Eine Spur dunkler als der Untergrund. Die Saat hellt das Orange leicht
-     auf, und die Ueberschrift steht dort in Weiss: gemessen fiel sie dadurch
-     von 3,10 auf 2,98, zwei Hundertstel unter die Grenze fuer grosse Schrift.
-     Fuenf Prozent Nacht heben sie auf 3,23 — und lesen sich als der Schatten,
-     den die Wand auf ihre Bank wirft. */
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    color-mix(in oklch, var(--glut-grund) 95%, var(--nacht)) 9%,
-    color-mix(in oklch, var(--glut-grund) 95%, var(--nacht)) 100%
-  );
+  /**
+   * Vier Schichten, alle SENKRECHT — und das ist der Grund.
+   *
+   * Erster Bau: ein Innenschatten fuer die Dicke der Platte. Der schlaegt aber
+   * auch an den SEITEN an, und weil die Theke aus je einem Stueck pro Tor
+   * besteht, standen im Bild drei senkrechte Naehte quer durch den Balken.
+   *
+   * Ein Verlauf hat keine Seiten. Von oben nach unten: die helle Lippe, der
+   * Schatten darunter (die Platte hat Dicke), die dunkle Unterkante (sie hat
+   * eine Unterseite), und darunter der Koerper. Vier Angaben, kein Rand.
+   */
+  background-color: color-mix(in oklch, var(--glut-grund) 93%, var(--nacht));
+  background-image:
+    linear-gradient(to bottom, color-mix(in oklch, var(--glut-grund) 78%, #fff) 0 2px, transparent 2px),
+    linear-gradient(to bottom, transparent 2px, oklch(0% 0 0 / 0.26) 3px, transparent 15px),
+    linear-gradient(to top, oklch(0% 0 0 / 0.22) 0 2px, transparent 13px);
 }
 
-/* Die Saat als EIGENE Ebene, sonst laege sie bei voller Deckkraft statt bei
-   den 0,11 des Untergrunds. Dass die Kachel hier anders anschliesst, faellt
-   nicht auf: ein Phasensprung in einem zufaelligen Muster ist unsichtbar, ein
-   Loch darin nicht. */
-.prozess__wand::before {
-  content: '';
-  position: absolute;
-  left: -8vw;
-  right: -8vw;
-  bottom: -1.6rem;
-  height: 12.5rem;
-  z-index: -1;
-  opacity: 0.055;
-  background-image: url('/bilder/muster-grund/saat-foto.webp');
-  background-size: clamp(210px, 17vw, 300px);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 9%);
-  mask-image: linear-gradient(to bottom, transparent 0%, #000 9%);
+/* Die aeusseren laufen ueber den Rand hinaus — eine Theke hoert nicht am Text
+   auf. Am Handy stehen zwei nebeneinander, dort ist die Reihenkante eine
+   andere. */
+.tor:first-child::before { left: -50vw; }
+.tor:last-child::before { right: -50vw; }
+
+@media (max-width: 859px) {
+  .tor::before { bottom: -1.4rem; height: 8.6rem; }
+  .tor:nth-child(odd)::before { left: -50vw; right: -0.8rem; }
+  .tor:nth-child(even)::before { left: -0.8rem; right: -50vw; }
 }
 
 .tor__zahl {
