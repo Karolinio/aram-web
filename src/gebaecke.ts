@@ -150,11 +150,17 @@ export type Gebaeck = {
    * ═══ Und woher der Wert kommt ═══
    *
    * Nicht aus dem Gefuehl, sondern aus der GEMESSENEN Schaerfe des Fotos.
-   * Am 07.09. gemessen (Laplace-Varianz im deckenden Bereich):
+   * Stand nach der Ueberarbeitung mit seedream am 07.09. (Laplace-Varianz im
+   * deckenden Bereich, bei gleicher Darstellgroesse):
    *
-   *     zaatar-2 2122 · zaatar 2111 · lahmacun 1795 · fatayer 1599
-   *     rolle 1512 · gebacken 1156 · bleche 987 · sesam 816
-   *     stapel 644 · kaese 503
+   *     lahmacun 4551 · zaatar 3893 · zaatar-2 2676 · bleche 2168
+   *     fatayer 1858 · stapel 1732 · rolle 1676 · gebacken 1302
+   *     kaese 1143 · sesam 861
+   *
+   * Verteilt wird nach RANG, nicht nach Rohwert. Die vier ueberarbeiteten
+   * Stuecke haben ihre Schaerfe verdoppelt bis vervierfacht; nach Rohwert
+   * besetzten sie die ganze Spitze und sechs von zehn landeten hinten. Der
+   * Rang haelt die Staffelung gleichmaessig und die Ordnung trotzdem ehrlich.
    *
    * Karol dazu: „bei zum Beispiel Lahmacun und Fatayer, kann man doch bestimmt
    * gut auch mehr machen." Genau die stehen oben in der Liste.
@@ -285,12 +291,12 @@ export const GEBAECKE: Gebaeck[] = [
     alt: 'Ein Fata’er von Aram, gewölbt und glänzend, dicht mit Sesam und Schwarzkümmel bestreut',
     li: 3,
     ob: 6,
-    gr: 23,
-    tiefe: 0.32,
+    gr: 21,
+    tiefe: 0.44,
     liM: 58,
     grM: 52,
-    breite: 780,
-    hoehe: 554,
+    breite: 900,
+    hoehe: 709,
     /* Das echte fliegt am weitesten und am grössten — es ist das einzige, das
        zeigt, was der Gast bekommt. */
     y: [0.5, -0.34],
@@ -310,8 +316,8 @@ export const GEBAECKE: Gebaeck[] = [
     alt: 'Ein goldbraun gebackenes gefuelltes Gebaeck von Aram, die Fuellung tritt an den Einschnitten hervor',
     li: 70,
     ob: 20,
-    gr: 22,
-    tiefe: 0.38,
+    gr: 18,
+    tiefe: 0.67,
     liM: 72,
     grM: 48,
     breite: 780,
@@ -333,12 +339,12 @@ export const GEBAECKE: Gebaeck[] = [
     alt: 'Ein Lahmacun mit Hackfleisch, Petersilie und Paprika',
     li: 16,
     ob: 36,
-    gr: 24,
-    tiefe: 0.2,
+    gr: 27,
+    tiefe: 0.0,
     liM: 54,
     grM: 48,
-    breite: 780,
-    hoehe: 745,
+    breite: 900,
+    hoehe: 796,
     y: [0.62, -0.28],
     x: [-0.05, 0.1],
     dreh: [-45, 22],
@@ -356,12 +362,12 @@ export const GEBAECKE: Gebaeck[] = [
     alt: 'Ein Manakisch mit Zaatar, frisch aus dem Ofen',
     li: 78,
     ob: 48,
-    gr: 27,
-    tiefe: 0.01,
+    gr: 26,
+    tiefe: 0.11,
     liM: 76,
     grM: 38,
-    breite: 780,
-    hoehe: 772,
+    breite: 900,
+    hoehe: 826,
     y: [0.28, -0.4],
     x: [0.06, -0.04],
     dreh: [36, -25],
@@ -379,8 +385,8 @@ export const GEBAECKE: Gebaeck[] = [
     alt: 'Ein zweites Manakisch mit Zaatar',
     li: 4,
     ob: 62,
-    gr: 27,
-    tiefe: 0.0,
+    gr: 24,
+    tiefe: 0.22,
     liM: 74,
     grM: 36,
     breite: 780,
@@ -402,8 +408,8 @@ export const GEBAECKE: Gebaeck[] = [
     alt: 'Ein goldbraun gebackener Fata’er, dicht mit Sesam und Schwarzkümmel',
     li: 62,
     ob: 74,
-    gr: 16,
-    tiefe: 0.81,
+    gr: 14,
+    tiefe: 1.0,
     liM: 60,
     grM: 50,
     breite: 780,
@@ -425,8 +431,8 @@ export const GEBAECKE: Gebaeck[] = [
     alt: 'Ein flacher, goldbraun gebackener Fata’er mit Sesam',
     li: 34,
     ob: 84,
-    gr: 19,
-    tiefe: 0.6,
+    gr: 17,
+    tiefe: 0.78,
     liM: 78,
     grM: 34,
     breite: 780,
@@ -448,12 +454,12 @@ export const GEBAECKE: Gebaeck[] = [
     alt: 'Ein runder Fladen von Aram, dick mit geschmolzenem Kaese belegt',
     li: 84,
     ob: 92,
-    gr: 14,
-    tiefe: 1.0,
+    gr: 15,
+    tiefe: 0.89,
     liM: 56,
     grM: 48,
-    breite: 780,
-    hoehe: 698,
+    breite: 875,
+    hoehe: 900,
     y: [0.24, -0.44],
     x: [0.05, -0.05],
     dreh: [39, -22],
@@ -483,8 +489,8 @@ export const GEBAECKE: Gebaeck[] = [
     alt: 'Zwei runde Bleche mit frisch gebackenem Gebäck aus dem Laden',
     li: 46,
     ob: 30,
-    gr: 18,
-    tiefe: 0.7,
+    gr: 23,
+    tiefe: 0.33,
     liM: 64,
     grM: 40,
     breite: 780,
@@ -506,8 +512,8 @@ export const GEBAECKE: Gebaeck[] = [
     alt: 'Ein hoher Stapel gebackener Fladen aus der Backstube',
     li: 24,
     ob: 68,
-    gr: 15,
-    tiefe: 0.91,
+    gr: 20,
+    tiefe: 0.56,
     liM: 30,
     grM: 34,
     breite: 438,
@@ -543,8 +549,8 @@ export const GEBAECKE: Gebaeck[] = [
     nurBreit: true,
     liM: 40,
     grM: 30,
-    breite: 780,
-    hoehe: 745,
+    breite: 900,
+    hoehe: 796,
     y: [0.44, -0.29],
     x: [0.04, -0.05],
     dreh: [18, -14],
@@ -567,8 +573,8 @@ export const GEBAECKE: Gebaeck[] = [
     nurBreit: true,
     liM: 20,
     grM: 32,
-    breite: 780,
-    hoehe: 772,
+    breite: 900,
+    hoehe: 826,
     y: [0.44, -0.29],
     x: [-0.04, 0.05],
     dreh: [-18, 14],
@@ -591,8 +597,8 @@ export const GEBAECKE: Gebaeck[] = [
     nurBreit: true,
     liM: 68,
     grM: 28,
-    breite: 780,
-    hoehe: 554,
+    breite: 900,
+    hoehe: 709,
     y: [0.44, -0.29],
     x: [0.04, -0.05],
     dreh: [18, -14],
