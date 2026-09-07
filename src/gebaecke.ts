@@ -11,10 +11,21 @@
  * einzelne Gegenstände, die zufällig gleichzeitig unterwegs sind. Ein Strom
  * entsteht erst, wenn sie DIESELBE Bahn nehmen und sich darin überholen.
  *
- * Also liegen alle `li` jetzt zwischen 0 und 30 % — eine Spur am linken Rand,
- * halb über die Kante hinaus. Die rechte Seite gehört dem Text und den beiden
- * Prozessbildern; dort war vorher die Hälfte des Schwarms und musste ihnen
- * ausweichen.
+ * Bis zum 07.09. lagen alle `li` zwischen 0 und 30 % — eine Spur am linken
+ * Rand. Das war richtig, solange rechts der Text und links EIN grosser Bogen
+ * standen: der Schwarm musste ihnen ausweichen.
+ *
+ * Seit dem Umbau auf die Ofenwand stimmt die Voraussetzung nicht mehr. Die
+ * Wand ist flach und liegt waagerecht in der Mitte; darüber und darunter ist
+ * die ganze Breite frei. Karol am 07.09.: „man sieht dadurch auch nicht die
+ * ganzen Produkte, die im Hintergrund runterfliegen … weil die Bilder so gross
+ * sind und genau vor den Produkten sind."
+ *
+ * Die `li` sind deshalb über die volle Breite verteilt (3 bis 84 %). Sie
+ * fliegen weiterhin HINTER der Wand vorbei und tauchen darüber und darunter
+ * auf — das ist kein Verdecken mehr, sondern Tiefe: Mobbin zeigt an
+ * Yellowbird und bella, dass ein Freisteller über Flachfarbe eine Überlappung
+ * oder einen echten Schatten braucht, sonst liest er sich als Aufkleber.
  *
  * Die Lagen sind Prozent der SEKTION, nicht der Spalte. Bis zum 16.08. lag der
  * Schwarm in der linken Gitterspalte und war damit auf deren Breite beschränkt
@@ -228,9 +239,9 @@ export const GEBAECKE: Gebaeck[] = [
     bilder: ['/bilder/echt/fatayer-frei.webp'],
     echt: true,
     alt: 'Ein Fata’er von Aram, gewölbt und glänzend, dicht mit Sesam und Schwarzkümmel bestreut',
-    li: 2,
+    li: 3,
     ob: 6,
-    gr: 26,
+    gr: 24,
     liM: 58,
     grM: 52,
     breite: 780,
@@ -252,9 +263,9 @@ export const GEBAECKE: Gebaeck[] = [
     bilder: ['/bilder/echt/schwarm-rolle.webp'],
     echt: true,
     alt: 'Ein goldbraun gebackenes gefuelltes Gebaeck von Aram, die Fuellung tritt an den Einschnitten hervor',
-    li: 24,
+    li: 70,
     ob: 20,
-    gr: 26,
+    gr: 22,
     liM: 72,
     grM: 48,
     breite: 780,
@@ -274,9 +285,9 @@ export const GEBAECKE: Gebaeck[] = [
     bilder: ['/bilder/echt/schwarm-lahmacun.webp'],
     echt: true,
     alt: 'Ein Lahmacun mit Hackfleisch, Petersilie und Paprika',
-    li: 6,
+    li: 16,
     ob: 36,
-    gr: 21,
+    gr: 26,
     liM: 54,
     grM: 48,
     breite: 780,
@@ -296,9 +307,9 @@ export const GEBAECKE: Gebaeck[] = [
     bilder: ['/bilder/echt/schwarm-zaatar.webp'],
     echt: true,
     alt: 'Ein Manakisch mit Zaatar, frisch aus dem Ofen',
-    li: 28,
+    li: 78,
     ob: 48,
-    gr: 17,
+    gr: 18,
     liM: 76,
     grM: 38,
     breite: 780,
@@ -318,9 +329,9 @@ export const GEBAECKE: Gebaeck[] = [
     bilder: ['/bilder/echt/schwarm-zaatar-2.webp'],
     echt: true,
     alt: 'Ein zweites Manakisch mit Zaatar',
-    li: 10,
+    li: 4,
     ob: 62,
-    gr: 14,
+    gr: 16,
     liM: 74,
     grM: 36,
     breite: 780,
@@ -340,9 +351,9 @@ export const GEBAECKE: Gebaeck[] = [
     bilder: ['/bilder/echt/schwarm-sesam.webp'],
     echt: true,
     alt: 'Ein goldbraun gebackener Fata’er, dicht mit Sesam und Schwarzkümmel',
-    li: 0,
+    li: 62,
     ob: 74,
-    gr: 23,
+    gr: 21,
     liM: 60,
     grM: 50,
     breite: 780,
@@ -362,9 +373,9 @@ export const GEBAECKE: Gebaeck[] = [
     bilder: ['/bilder/echt/schwarm-gebacken.webp'],
     echt: true,
     alt: 'Ein flacher, goldbraun gebackener Fata’er mit Sesam',
-    li: 30,
+    li: 34,
     ob: 84,
-    gr: 15,
+    gr: 17,
     liM: 78,
     grM: 34,
     breite: 780,
@@ -384,9 +395,9 @@ export const GEBAECKE: Gebaeck[] = [
     bilder: ['/bilder/echt/schwarm-kaese.webp'],
     echt: true,
     alt: 'Ein runder Fladen von Aram, dick mit geschmolzenem Kaese belegt',
-    li: 12,
+    li: 84,
     ob: 92,
-    gr: 22,
+    gr: 20,
     liM: 56,
     grM: 48,
     breite: 780,

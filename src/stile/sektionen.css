@@ -1676,430 +1676,298 @@
  * das Bild springt; mehr, und die Sektion wird zum Tunnel — der Prüfer meldet
  * den Scrollweg am Handy ohnehin schon.
  */
-.prozess__lauf {
-  /**
-   * ═══ Die Maulhoehe steht EINMAL, und zwei Dinge lesen sie ═══
-   *
-   * Das Maul selbst nimmt sie als Hoehe, die Laufstrecke als Zuschlag unten.
-   * Stuenden sie zweimal da, liefen sie beim naechsten Umbau auseinander —
-   * und dann waere genau der Fehler zurueck, der hier behoben wurde.
-   */
-  --maul-hoehe: min(46rem, calc(100svh - var(--kopf-hoehe) - 7rem));
-  /** Wie tief im Maul die Uebergabe liegt. Muss zu `linie` in useOfenlauf passen. */
-  --maul-linie: 0.5;
-
-  margin-top: clamp(2rem, 5vw, 3.5rem);
-  display: grid;
-  gap: clamp(1.5rem, 4vw, 3.5rem);
-
-  /**
-   * ═══ Der Zuschlag, damit der letzte Satz den Bogen erreicht ═══
-   *
-   * Gemessen am 06.09.: der Bogen loeste sich bei Scrollposition 4908, Satz 04
-   * waere erst ab 5058 neben ihm gestanden — 150 px zu spaet. „In die Glut"
-   * spielte, waehrend der Ofen schon nach oben verschwand. Genau das war in
-   * Karols viertem Screen zu sehen.
-   *
-   * Die Rechnung dahinter ist kurz. Der Bogen klebt ueber `Strecke − Maulhoehe`.
-   * Der letzte Satz braucht bis `Summe der Saetze − Uebergabetiefe`. Gleich
-   * gesetzt ergibt sich der Zuschlag zwingend als
-   *
-   *     Maulhoehe × (1 − Uebergabeanteil)
-   *
-   * Bei Uebergabe in der Maulmitte also die halbe Maulhoehe. Er kostet rund
-   * 0,3 Bildschirme und ist der Grund, warum die letzte Aufnahme jetzt steht,
-   * statt mit dem Bogen davonzufahren.
-   *
-   * ═══ Und er gehoert an die SPALTE, nicht an den Behaelter ═══
-   *
-   * Hier stand er zuerst als `padding-bottom` am Raster selbst. Gemessen loeste
-   * sich der Bogen daraufhin trotzdem bei 4820 statt bei 5175 — der Zuschlag
-   * verlaengerte den Scrollweg, aber nicht die Klebestrecke.
-   *
-   * Der Grund ist eine Feinheit von `sticky` im Raster: der Haftbereich eines
-   * Rasterelements ist seine RASTERZELLE, und die ist so hoch wie die hoechste
-   * Spalte der Zeile. Innenabstand des Behaelters liegt ausserhalb aller Zellen
-   * und zaehlt darum nicht mit. Der Zuschlag steht deshalb an der Satzspalte:
-   * sie ist die hoehere der beiden und bestimmt die Zeilenhoehe.
-   */
-}
-@media (min-width: 860px) {
-  .prozess__lauf { grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); }
-}
-
 /**
- * ═══ Das Maul klebt ═══
+ * ═══ Die Ofenwand ═══
  *
- * `position: sticky` und nicht GSAP-Pinning: ein gepinnter Bereich rechnet bei
- * jedem Neuvermessen seine Höhe neu und schiebt alles darunter. Sticky kostet
- * nichts und kennt keinen Sprung beim Anheften.
+ * Vier Maeuler nebeneinander, gleiche Breite, VERSCHIEDENE Hoehen, ein
+ * gemeinsamer Boden. Warum aus dem einen grossen Bogen vier kleine wurden,
+ * steht am Haken `useOfenwand` in bewegung.ts — kurz: der grosse rechnete zwei
+ * der vier Aufnahmen hoch (500 px nativ auf 1286 Geraetepixeln) und stand
+ * ausserdem mit `z-index: 2` genau auf der Flugbahn des Schwarms.
  *
- * ACHTUNG für später: sticky stirbt still, sobald ein Vorfahr `overflow` auf
- * etwas anderes als `visible` setzt. `.sektion` und `.schale` dürfen das
- * deshalb nicht bekommen.
+ * Die Strecke gibt den Scrollweg, die Wand klebt darin. Kein GSAP-Pinning:
+ * ein gepinnter Bereich rechnet bei jedem Neuvermessen seine Hoehe neu und
+ * schiebt alles darunter.
  */
-.prozess__ofen {
-  position: sticky;
+.prozess__strecke {
+  margin-top: clamp(2rem, 5vw, 3.5rem);
   /**
-   * ═══ Mittig, sobald Platz da ist ═══
+   * ═══ Der Scrollweg gehoert in die HOEHE, nicht in den Innenabstand ═══
    *
-   * Fest unter der Kopfzeile geklebt sass das Maul auf hohen Fenstern zu weit
-   * oben: bei 1100 px blieben unter ihm 257 px ungenutzt, waehrend oben nur
-   * 107 standen. Das las sich als nach oben gerutscht, nicht als gesetzt.
+   * Hier stand zuerst `padding-bottom: 128vh`. Gemessen klebte die Wand
+   * daraufhin ueberhaupt nicht — ihre Oberkante lief von 17 glatt auf −1749
+   * durch. Der Grund ist derselbe wie beim Vorgaenger, nur in anderer Gestalt:
+   * der Haftbereich eines klebenden Elements endet am INHALTSKASTEN seines
+   * Behaelters, und Innenabstand liegt ausserhalb davon. 128 vh Abstand geben
+   * also Scrollweg, aber keine Klebestrecke.
    *
-   * `max` von beidem: unter der Kopfzeile ist die Untergrenze, die optische
-   * Mitte das Ziel. Auf niedrigen Fenstern gewinnt die Kopfzeile — dort gibt
-   * es keine Mitte zu verteilen —, auf hohen die Mitte.
+   * Mit `min-height` waechst der Inhaltskasten selbst, und die Wand hat Raum
+   * zu haften. Die Klebestrecke ist dann Hoehe minus Wandhoehe — vier
+   * Fuellvorgaenge mit Ueberlappung plus ein halber Halt am Ende. Weniger, und
+   * die Welle rast; mehr, und die Sektion wird zum Tunnel.
    */
+  min-height: calc(var(--wand-hoehe, 34rem) + 128vh);
+}
+
+.prozess__wand {
+  position: sticky;
+  /* Unter der Kopfzeile ist die Untergrenze, die optische Mitte das Ziel. Die
+     Wand ist flach, deshalb bleibt auf den meisten Fenstern Mitte uebrig. */
   top: max(
     calc(var(--kopf-hoehe) + clamp(1rem, 3vh, 2.5rem)),
-    calc((100svh - 46rem) / 2)
+    calc((100svh - var(--wand-hoehe, 34rem)) / 2)
   );
-  align-self: start;
-  /* Das Maul ist der VORDERGRUND. Ohne diese Zeile schoben sich am Handy die
-     Sätze darüber, während sie nach oben liefen — gemessen stand „Jede
-     Scheibe einzeln, nicht aus der Kiste" quer über dem Ofenbild. Sie laufen
-     jetzt dahinter durch und verschwinden, wie hinter einem Gegenstand.
-
-     Kein `overflow` hier: der Dampf ragt hinaus. Das Beschneiden auf die
-     Bogenform steht eine Ebene tiefer am Maul selbst. */
+  /* Kein `overflow`: der Dampf ragt ueber die Kuppeln hinaus. Der Beschnitt
+     auf die Bogenform sitzt eine Ebene tiefer am Maul selbst. */
   z-index: 2;
 }
-.prozess__schritte { position: relative; z-index: 1; }
 
-/**
- * ═══ Das Ofenmaul ═══
- *
- * Zum ersten Mal auf dieser Seite ist der Bogen nicht Rahmen, sondern die
- * Sache selbst: man sieht nicht vier Bilder nebeneinander, man sieht IN den
- * Ofen, und darin passiert nacheinander alles vier.
- *
- * `3 / 3.4` statt eines Hochformats: ein zu hohes Maul liest sich als Tunnel,
- * ein zu flaches verliert die Kuppel. Dieses Verhältnis lässt oben die
- * Rundung stehen und unten genug Fläche für das Motiv.
- */
-.prozess__maul {
-  position: relative;
-  aspect-ratio: 3 / 3.4;
-  /**
-   * ═══ Die Hoehe fuehrt, nicht die Breite ═══
-   *
-   * Karol am 03.09.: „wir muessen die Tore noch besser mittig und harmonisch
-   * einbauen, das ist zu unformatiert und durcheinander."
-   *
-   * Der Grund war die Rechenrichtung. Das Maul nahm die volle Spaltenbreite
-   * und leitete daraus seine Hoehe ab — gemessen 655 breit, 742 hoch, plus
-   * 101 px Abstand unter der Kopfzeile. Das ergibt 843, und sobald ein
-   * Fenster kuerzer ist, laeuft der Bogen unten aus dem Bild. Auf Karols
-   * Schirm war genau das zu sehen: die Kuppel halb hinter der Kopfzeile, der
-   * Fuss abgeschnitten.
-   *
-   * Ein Ausschnitt, der klebt, muss ins Fenster passen — das ist keine
-   * Feinheit, das ist die Bedingung dafuer, dass Kleben ueberhaupt etwas
-   * nuetzt. Also wird die HOEHE gesetzt und die Breite folgt dem Verhaeltnis.
-   *
-   * `svh` und nicht `vh`: am Handy schrumpft die Adressleiste beim Scrollen,
-   * und `vh` rechnet mit dem grossen Zustand. Mit `svh` passt es auch, solange
-   * die Leiste noch da ist.
-   */
-  height: var(--maul-hoehe);
-  width: auto;
-  max-width: 100%;
-  /* Mittig in seiner Spalte. Sobald die Hoehe fuehrt, ist das Maul schmaler
-     als die Spalte — links buendig saehe es aus, als waere es verrutscht. */
-  margin-inline: auto;
-  border-radius: var(--maul);
-  overflow: clip;
-  background: var(--ton-tief);
-  box-shadow: var(--clay-ruhe);
+.prozess__tore {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(0.75rem, 2vw, 1.75rem);
+  /* EIN Boden fuer alle vier. Das ist der Unterschied zwischen einer Ofenwand
+     und einer Kartenreihe: Karten haengen an einer Oberkante, Maeuler stehen
+     auf einem Fussboden. */
+  align-items: end;
 }
 
+.tor {
+  display: flex;
+  flex-direction: column;
+  /**
+   * ═══ Gedimmt wird die SCHRIFT, nicht das Tor ═══
+   *
+   * Hier stand `opacity: 0.3` am Tor selbst. Damit wurde auch der
+   * Beschriftungsgrund durchsichtig, und die Gerichte schienen wieder
+   * hindurch — gemessen fiel der Kontrast am Anfang der Strecke auf 1,65
+   * zurueck, obwohl der Grund schon da war.
+   *
+   * `--wach` kommt aus useOfenwand und faellt nur auf die Schrift. Der Grund
+   * bleibt deckend, das leere Maul bleibt dunkel. KEIN `transition` daneben:
+   * das waere eine zweite, langsamere Uhr, und genau daran ist die
+   * Vorgaengerfassung gescheitert.
+   */
+  --wach: 0.3;
+}
+.tor__zahl,
+.tor__titel,
+.tor__text { opacity: var(--wach); }
+
 /**
- * ═══ Die vier Aufnahmen sind Ebenen, keine Blenden ═══
+ * ═══ Das Maul ═══
  *
- * Hier stand eine Kreuzblende von 520 ms. Gemessen sind das bei normalem
- * Radtempo rund 624 px Scrollweg — mehr als zwei ganze Bildabschnitte. Es
- * waren also fast immer zwei Aufnahmen gleichzeitig zu sehen, und genau das
- * war in Karols zweitem Screen zu sehen: Mehlfoto im Bogen, waehrend rechts
- * schon „02" stand.
- *
- * Jetzt faehrt die naechste Aufnahme von unten ein und schiebt die vorige
- * weiter ins Maul hinein. Der Stapel liegt in Dokumentreihenfolge, also deckt
- * die spaetere immer die fruehere — dafuer braucht es keine z-Angabe.
- *
- * Ohne Skript steht die erste Aufnahme und die drei anderen warten unterhalb
- * des Beschnitts. Das ist der Zustand, den jemand ohne GSAP sieht, und er ist
- * vollstaendig lesbar.
+ * `--anteil` kommt aus SCHRITTE und macht die Hoehen ungleich: das Blech ist
+ * hoch, der Schieber breit. Eine Reihe aus vier gleich hohen Kaesten steht auf
+ * der eigenen Verbotsliste („Default card grids with uniform spacing"), und
+ * Mobbin bestaetigt es — Superpower, Blue Apron und Oyster machen genau das,
+ * und genau die sehen austauschbar aus.
  */
-.prozess__maul img {
+.tor__maul {
+  position: relative;
+  height: calc(var(--wand-hoehe, 34rem) * 0.74 * var(--anteil, 1));
+  border-radius: var(--maul);
+  overflow: clip;
+  /* Das leere Maul ist dunkel. `--fuellung` kommt aus useOfenwand und nimmt
+     die Tiefe zurueck, sobald die Aufnahme drin steht. */
+  background: var(--ton-tief);
+  box-shadow: var(--clay-ruhe);
+  margin-bottom: clamp(0.9rem, 2vw, 1.4rem);
+}
+
+.tor__maul img {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 50% 45%;
-  transform: translate3d(0, 100%, 0) scale(1.05);
-  /* Kein `transition`: geschrieben wird pro Bild aus dem `laufwert`, und eine
-     Uebergangszeit daneben waere eine zweite, langsamere Uhr — dieselbe Falle
-     wie vorher, nur kleiner. */
-
-  /**
-   * ═══ Die Oberkante ist weich, nicht geschnitten ═══
-   *
-   * Ohne diese Maske faehrt die neue Aufnahme mit einer rasiermesserscharfen
-   * waagerechten Kante ein — im Screenshot bei halbem Uebergang lasen sich
-   * zwei gestapelte Fotos statt einer Bewegung.
-   *
-   * Die Maske sitzt fest, nicht nur waehrend der Fahrt: steht die Aufnahme,
-   * liegen diese elf Prozent oben im gewoelbten Teil des Mauls, wo der
-   * Beschnitt ohnehin fast alles wegnimmt. Dort liest sich die weiche Kante
-   * als Tiefe der Kuppel — sie kostet also nichts und gibt zweimal etwas.
-   */
+  transform: translate3d(0, 100%, 0) scale(1.04);
+  /* Weiche Oberkante. Ohne sie faehrt die Aufnahme mit einem Rasiermesser-
+     schnitt ein; steht sie, liegen diese elf Prozent im gewoelbten Teil des
+     Mauls, wo der Beschnitt ohnehin fast alles wegnimmt — dort liest sich die
+     weiche Kante als Tiefe der Kuppel. */
   -webkit-mask-image: linear-gradient(to bottom, transparent 0%, oklch(0% 0 0 / 0.45) 3.5%, #000 11%);
   mask-image: linear-gradient(to bottom, transparent 0%, oklch(0% 0 0 / 0.45) 3.5%, #000 11%);
 }
-.prozess__maul img:first-of-type { transform: none; }
 
-/**
- * ═══ Die Flamme am Maulboden ═══
- *
- * Sie schlaegt hoch, waehrend etwas einfaehrt, und legt sich, wenn die
- * Aufnahme steht. Die Deckkraft kommt aus demselben `laufwert` wie Bild und
- * Schrift; hier steht nur, wie sie aussieht.
- *
- * `screen` und nicht `overlay`: der Grund unter ihr ist der tiefe Ton des
- * Mauls, und `overlay` faellt auf dunklem Grund in sich zusammen — dieselbe
- * Rechnung wie beim Korn auf Schwarz.
- */
-.prozess__glut {
-  position: absolute;
-  left: -8%;
-  right: -8%;
-  top: 0;
-  height: 22%;
-  opacity: 0;
-  pointer-events: none;
-  /* `screen` und nicht `overlay`: der Grund darunter ist mal eine helle
-     Aufnahme, mal der tiefe Ton des Mauls, und `overlay` faellt auf dunklem
-     Grund in sich zusammen — dieselbe Rechnung wie beim Korn auf Schwarz. */
-  mix-blend-mode: screen;
-  background:
-    radial-gradient(
-      58% 50% at 50% 50%,
-      oklch(88% 0.16 68 / 0.95) 0%,
-      oklch(70% 0.21 44 / 0.5) 42%,
-      transparent 72%
-    ),
-    linear-gradient(
-      to bottom,
-      transparent 0%,
-      oklch(62% 0.2 42 / 0.3) 44%,
-      oklch(62% 0.2 42 / 0.3) 56%,
-      transparent 100%
-    );
-}
-
-/* Die Tiefe des Ofens. Ohne sie ist der Bogen ein Rahmen um ein Foto; mit ihr
-   schaut man in eine Oeffnung. Nur an der Kuppel und am Fuss, nicht ringsum —
-   eine Vignette rundherum wuerde die Aufnahmen an den Seiten beschneiden. */
-.prozess__maul::after {
+/* Die Tiefe der Oeffnung. Nur an Kuppel und Fuss, nicht ringsum — eine
+   Vignette rundherum wuerde die Aufnahme an den Seiten beschneiden. */
+.tor__maul::after {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: inherit;
   pointer-events: none;
   box-shadow:
-    inset 0 3rem 4.5rem -2.25rem oklch(18% 0.03 50 / 0.72),
-    inset 0 -2rem 4rem -2.5rem oklch(18% 0.03 50 / 0.5);
+    inset 0 2rem 3rem -1.5rem oklch(18% 0.03 50 / 0.7),
+    inset 0 -1.5rem 2.5rem -1.75rem oklch(18% 0.03 50 / 0.45);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  /* Ohne Bewegung wird geschaltet statt geschoben — der Haken setzt dann nur
-     noch die Deckkraft, und die Verschiebung muss aus dem Weg. */
-  .prozess__maul img { transform: none; opacity: 0; }
-  .prozess__maul img:first-of-type { opacity: 1; }
-  .prozess__glut { display: none; }
-}
-
-/* Der Dampf steigt aus dem Maul und bleibt stehen, während die Aufnahmen
-   durchlaufen. Über der Kuppel, nicht darin: er gehört zum Ofen. */
 /**
- * Der Dampf über dem Ofen.
+ * Die Hitze auf der Kante der einfahrenden Aufnahme.
  *
- * Er steht ausserhalb des Mauls — dieses beschneidet auf die Bogenform, und
- * das ist sein Zweck. Ein Dampf darin wäre an der Kuppel abgeschnitten; im
- * ersten Bau war er dadurch schlicht unsichtbar.
- *
- * Und er bleibt STEHEN, während die vier Aufnahmen durchlaufen: der Ofen ist
- * die Konstante dieser Sektion, nicht das Bild darin.
+ * `screen` und nicht `overlay`: darunter liegt mal eine helle Aufnahme, mal
+ * der tiefe Ton des leeren Mauls, und `overlay` faellt auf dunklem Grund in
+ * sich zusammen — dieselbe Rechnung wie beim Korn auf Schwarz.
  */
-.prozess__ofen { position: sticky; }
-/**
- * Karol am 05.09.: „das dampft, und das stoert halt auch."
- *
- * Gemessen war die Leinwand 655 × 443 und begann 57 px UEBER dem Fensterrand:
- * ihre obere Haelfte lag hinter der Kopfzeile, ihre Breite betrug 130 % des
- * Bogens. Damit lag Nebel ueber der halben Spalte — auch ueber den Gerichten,
- * die dort vorbeifliegen und die man sehen soll.
- *
- * Ueber dem Bogen ist ohnehin kein Platz: er klebt 101 px unter der Oberkante,
- * die Kopfzeile ist 74 hoch. Der Dampf sitzt deshalb AUF der Kuppel, schmaler
- * als das Maul, und steigt aus der Oeffnung statt ueber ihr zu haengen.
- */
-.prozess__dampf {
+.tor__glut {
   position: absolute;
-  left: 6%;
-  right: 6%;
-  top: -2%;
-  height: 28%;
+  left: -12%;
+  right: -12%;
+  top: 0;
+  height: 26%;
+  opacity: 0;
   pointer-events: none;
+  mix-blend-mode: screen;
+  background:
+    radial-gradient(58% 50% at 50% 50%,
+      oklch(88% 0.16 68 / 0.95) 0%,
+      oklch(70% 0.21 44 / 0.5) 42%,
+      transparent 72%),
+    linear-gradient(to bottom, transparent 0%,
+      oklch(62% 0.2 42 / 0.28) 44%, oklch(62% 0.2 42 / 0.28) 56%, transparent 100%);
 }
 
 /**
- * ═══ Die vier Sätze ═══
+ * ═══ Die Bank unter den Maeulern ═══
  *
- * Jeder nimmt so viel Höhe, wie sein Bild im Maul stehen soll. Sie sind der
- * Taktgeber, nicht das Maul.
+ * Seit die Gerichte über die volle Breite fliegen (statt nur links), ziehen
+ * sie auch hinter den Beschriftungen durch. Gemessen an sechs Punkten der
+ * Klebestrecke fiel der Kontrast dabei auf bis zu 1,09 — gefordert sind 4,5
+ * für den Fliesstext und 3,0 für die Ueberschrift.
+ *
+ * Der erste Versuch waren VIER Gruende, je einer hinter einer Beschriftung.
+ * Sie verschmolzen in der Mitte und ergaben ein Rechteck mit harten Kanten —
+ * also genau die Kartenwirkung, die diese Sektion vermeiden soll.
+ *
+ * Jetzt ist es EIN Element und eine Absicht: die steinerne Bank, auf der die
+ * Maeuler stehen. Sie laeuft ueber die Wand hinaus (keine Seitenkanten), oben
+ * weich ein (keine Oberkante) und traegt dieselbe Saat wie der Untergrund —
+ * ohne die hoerte die Koernung schlicht auf, und das FEHLEN der Textur war
+ * sichtbarer als jede Farbe.
+ *
+ * `z-index: -1`: hinter der Schrift der Wand, aber vor dem Schwarm, der eine
+ * Ebene tiefer in der Sektion haengt.
  */
-.prozess__schritte {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  /* Der Zuschlag, der den Bogen kleben laesst, bis der letzte Satz an ihm
-     angekommen ist. Die Herleitung steht oben an `.prozess__lauf`; er sitzt
-     hier, weil die Zeilenhoehe des Rasters aus dieser Spalte kommt. */
-  padding-bottom: calc(var(--maul-hoehe) * (1 - var(--maul-linie)));
+.prozess__wand::after {
+  content: '';
+  position: absolute;
+  left: -8vw;
+  right: -8vw;
+  bottom: -1.6rem;
+  height: 12.5rem;
+  z-index: -1;
+  /* Eine Spur dunkler als der Untergrund. Die Saat hellt das Orange leicht
+     auf, und die Ueberschrift steht dort in Weiss: gemessen fiel sie dadurch
+     von 3,10 auf 2,98, zwei Hundertstel unter die Grenze fuer grosse Schrift.
+     Fuenf Prozent Nacht heben sie auf 3,23 — und lesen sich als der Schatten,
+     den die Wand auf ihre Bank wirft. */
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    color-mix(in oklch, var(--glut-grund) 95%, var(--nacht)) 9%,
+    color-mix(in oklch, var(--glut-grund) 95%, var(--nacht)) 100%
+  );
 }
 
-/**
- * ═══ Drei gleiche Saetze, und ein laengerer erster ═══
- *
- * Vorher standen hier 52 / 68 / 68 / 46 vh — vier verschiedene Hoehen, waehrend
- * das Bild nach gleichen Vierteln schaltete. Gleiche Schnitte auf einem
- * ungleichen Lineal koennen nicht zusammenfallen; gemessen betrug der Versatz
- * +256, −19 und −280 px.
- *
- * Der Versatz kann heute nicht mehr entstehen — der Satz sagt selbst, wann er
- * dran ist. Gleiche Hoehen sind trotzdem richtig, weil vier Schritte eines
- * Vorgangs gleich lange dauern sollen. Nur der erste ist laenger, und dafuer
- * gibt es eine Rechnung:
- *
- *   Der Bogen klebt an, sobald seine Oberkante 101 px unter dem Fensterrand
- *   steht — das ist RUND EINE HALBE MAULHOEHE, bevor die Strecke selbst oben
- *   ankommt. Waere der erste Satz so lang wie die uebrigen, faende die erste
- *   Uebergabe 83 px nach dem Ankleben statt nach einem vollen Abschnitt statt.
- *   Aufnahme 01 waere im geklebten Zustand praktisch nicht zu sehen.
- *
- *   80 vh − halbe Maulhoehe ≈ 363 px: so lange steht sie, nachdem der Bogen
- *   sitzt, und die ganze Anfahrt davor kommt obendrauf.
- */
-.schritt {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  min-height: 48vh;
-  padding-block: clamp(1rem, 3vh, 2rem);
-}
-.prozess__schritte .schritt:first-child { min-height: 80vh; }
-
-@media (max-width: 859px) {
-  /* Am Handy steht das Maul oben und klebt dort; die Sätze laufen darunter
-     durch. Dieselbe Mechanik, nur gestapelt.
-
-     Flacher als am Schirm: bei 3 / 3.4 nahm das Maul auf 800 px Höhe zwei
-     Drittel des Bildes, und für den Satz darunter blieb ein Streifen. Bei
-     3 / 2.5 bleibt die Kuppel erhalten und die untere Hälfte gehört dem
-     Text. */
-  /* Am Handy flacher, und die Hoehe deckelt auf die halbe Fensterhoehe: das
-     Maul soll oben stehen, nicht die Seite fuellen. Der Satz darunter braucht
-     die andere Haelfte. */
-  .prozess__maul {
-    aspect-ratio: 3 / 2.5;
-    height: min(24rem, calc(52svh - var(--kopf-hoehe)));
-  }
-  /* Dieselbe Rechnung, kleineres Maul: der Zuschlag am ersten Satz ist die
-     halbe Maulhoehe, und die betraegt hier hoechstens 12 rem statt 23. */
-  .schritt { min-height: 40vh; }
-  .prozess__schritte .schritt:first-child { min-height: 61vh; }
+/* Die Saat als EIGENE Ebene, sonst laege sie bei voller Deckkraft statt bei
+   den 0,11 des Untergrunds. Dass die Kachel hier anders anschliesst, faellt
+   nicht auf: ein Phasensprung in einem zufaelligen Muster ist unsichtbar, ein
+   Loch darin nicht. */
+.prozess__wand::before {
+  content: '';
+  position: absolute;
+  left: -8vw;
+  right: -8vw;
+  bottom: -1.6rem;
+  height: 12.5rem;
+  z-index: -1;
+  opacity: 0.055;
+  background-image: url('/bilder/muster-grund/saat-foto.webp');
+  background-size: clamp(210px, 17vw, 300px);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 9%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 9%);
 }
 
-/**
- * ═══ Die Ziffer traegt die rechte Spalte ═══
- *
- * Im ersten Bau stand neben dem Ofenmaul ein Etikett von 16 px, eine
- * Ueberschrift und ein Satz — auf einer halben Bildschirmbreite. Das Maul war
- * 740 px hoch, der Text daneben 90. Die Sektion sah aus, als fehlte rechts
- * etwas.
- *
- * Jetzt fuehrt die Ziffer: gross, in ihrem Orange, mit der Displayschrift.
- * Sie ist ohnehin das, was die Folge traegt — 01 bis 04 —, und als
- * Anfangsbuchstabe eines Absatzes hat sie in gesetzten Seiten eine lange
- * Geschichte.
- */
-.schritt__zahl {
+.tor__zahl {
   display: block;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.3rem;
   color: var(--akzent);
   font-variant-numeric: tabular-nums;
   font-family: var(--font-display);
-  font-size: clamp(2.6rem, 1.4rem + 3.6vw, 4.6rem);
+  font-size: clamp(1.9rem, 1rem + 2.4vw, 3.2rem);
   font-weight: 700;
   line-height: 0.9;
   letter-spacing: -0.02em;
 }
-/* Das Etikett bringt sonst einen Strich mit; vor einer Ziffer in dieser
-   Groesse laese er sich als Minus. */
-.schritt__zahl::before { display: none; }
+/* Das Etikett bringt sonst einen Strich mit; vor einer Ziffer laese er sich
+   als Minus. */
+.tor__zahl::before { display: none; }
 
-.schritt__text { max-width: 30ch; }
-
-/**
- * ═══ Nur der laufende Schritt ist hell ═══
- *
- * Bei 68 vh je Schritt stehen auf einem Schirm von 950 px immer anderthalb im
- * Bild — gemessen waren „02 Von Hand gerollt" und „03 Erst dann belegt"
- * gleichzeitig zu lesen, beide gleich kräftig. Damit konkurrieren zwei Sätze
- * um dasselbe Bild, und die Zuordnung, um die es hier geht, geht verloren.
- *
- * Die übrigen treten deshalb zurück. Nicht verschwinden: man soll sehen, dass
- * noch etwas kommt und etwas war — nur eben leiser. Der laufende wird über
- * `data-lauf` gesetzt, aus demselben Fortschritt, der auch das Bild schaltet.
- */
-.schritt {
-  opacity: 0.34;
-  /* KEIN `transition`. Die Deckkraft wird jetzt in jedem Bild aus dem
-     `laufwert` geschrieben, aus dem auch die Aufnahme kommt — genau das ist
-     die Garantie, dass Schrift und Bild nicht auseinanderlaufen koennen. Eine
-     Uebergangszeit daneben waere eine zweite, langsamere Uhr und haette den
-     Fehler in kleiner Form zurueckgebracht.
-
-     `data-lauf` ist damit weg: es war ein Zustand mit zwei Stufen, wo jetzt
-     ein stetiger Wert steht. Bei einer Uebergabe sind zwei Saetze halbhell,
-     weil zwei Aufnahmen im Maul sind. */
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .schritt { opacity: 1; }
-}
-
-.schritt__titel {
+.tor__titel {
   margin: 0;
   font-family: var(--font-display);
   font-variation-settings: var(--wonk-klein);
-  /* Dieselbe Rechnung wie bei --text-gericht: die Schrittüberschrift steht auf
-     Orange in Weiss, und Weiss trägt dort nur ab 24 px. Sie lag bei 23,2 —
-     zwei Zehntel unter der Grenze, und damit durchgefallen. Jetzt fest 1,5 rem
-     statt einer Spanne, die genau darunter endete. */
+  /* Weiss auf Orange traegt erst ab 24 px. 1,5 rem statt einer Spanne, die
+     genau darunter endete. */
   font-size: 1.5rem;
   font-weight: 600;
   line-height: 1.15;
   letter-spacing: -0.01em;
 }
 
-.schritt__text {
-  margin: 0.45rem 0 0;
+.tor__text {
+  margin: 0.35rem 0 0;
   color: var(--tinte-leise);
-  max-width: 28ch;
+  max-width: 26ch;
+  font-size: 0.95rem;
+}
+
+/* Der Dampf gehoert ueber die WAND, nicht in ein Maul: ein Ofen dampft, nicht
+   ein Bild. Schmal und flach auf den Kuppeln — die Vorgaengerleinwand mass
+   655 x 443 und begann 57 px UEBER dem Fensterrand, lag also zur Haelfte
+   hinter der Kopfzeile und als Nebel ueber der halben Spalte. */
+.prozess__dampf {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: -6%;
+  height: 26%;
+  pointer-events: none;
+}
+
+@media (min-width: 860px) {
+  .prozess__strecke { --wand-hoehe: min(34rem, calc(100svh - var(--kopf-hoehe) - 13rem)); }
+}
+
+@media (max-width: 859px) {
+  /* Am Handy zwei mal zwei: vier Maeuler nebeneinander waeren je 80 px breit,
+     und das ist kein Ofen, das ist ein Symbol. Der gemeinsame Boden gilt dann
+     je Zeile. */
+  .prozess__strecke { min-height: calc(var(--wand-hoehe, 30rem) + 96vh); }
+  .prozess__strecke { --wand-hoehe: min(30rem, calc(92svh - var(--kopf-hoehe) - 4rem)); }
+  .prozess__tore {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(0.9rem, 3vw, 1.5rem) clamp(0.75rem, 3vw, 1.25rem);
+  }
+  .tor__maul { height: calc(var(--wand-hoehe, 30rem) * 0.34 * var(--anteil, 1)); }
+  .tor__zahl { font-size: clamp(1.5rem, 1rem + 2.6vw, 2.2rem); }
+  .tor__titel { font-size: 1.15rem; }
+  .tor__text { font-size: 0.9rem; }
+  .prozess__dampf { top: -4%; height: 16%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tor { --wach: 1; }
+  /* Ohne Bewegung steht die Wand fertig gefuellt da — ersetzt, nicht
+     gestrichen. Ohne Kleben, sonst haengt sie ueber leerem Raum. */
+  .prozess__strecke { min-height: 0; }
+  .prozess__wand { position: static; }
+  .tor__maul img { transform: none; }
+  .tor__glut { display: none; }
 }
 
 .schwarm {
@@ -2244,7 +2112,10 @@
 }
 
 /**
- * ═══ Hier stand ein ZWEITER Satz `.schritt`-Regeln ═══
+ * ═══ Hier stand ein ZWEITER Satz Regeln fuer die Prozessschritte ═══
+ *
+ * (Die Klassen heissen seit dem Umbau auf die Ofenwand `.tor*`; die Lehre
+ * darunter gilt unveraendert.)
  *
  * Das alte Savor-Rezept: `display: flex`, `width: 62 %`, negative Aussenabstände
  * und `margin-inline-start: 38 %`. Es stand WEITER UNTEN in derselben Datei als
@@ -3793,14 +3664,14 @@
 
 /* ═══ Hier stand eine Dublette ═══
 
-   `.schritt__zahl` war ZWEIMAL gesetzt: einmal oben bei den Schritten und
+   Die Schrittziffer war ZWEIMAL gesetzt: einmal oben bei den Schritten und
    einmal hier, 1700 Zeilen später mit `font-size: 1.2rem`. Bei gleicher
    Spezifität gewinnt die spätere — die Ziffer blieb also klein, egal was oben
    stand. Aufgefallen ist es erst im Bild, nachdem sie gross werden sollte.
 
-   Dieselbe Falle wie beim zweiten `.schritt`-Regelsatz, der ein paar Zeilen
-   weiter unten dokumentiert ist. Alles zu `.schritt__zahl` steht jetzt an
-   EINER Stelle, oben bei der Laufstrecke. */
+   Dieselbe Falle wie beim doppelten Schritt-Regelsatz weiter oben. Alles zur
+   Ziffer steht an EINER Stelle; seit dem Umbau auf die Ofenwand heisst sie
+   `.tor__zahl` und steht oben bei der Wand. */
 .weg__art::before { display: none; }
 
 .weg__art { margin-bottom: 0.15rem; }

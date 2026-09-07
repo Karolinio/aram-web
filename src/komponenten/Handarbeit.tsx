@@ -1,6 +1,6 @@
-import type { CSSProperties, ReactNode } from 'react'
+import type { CSSProperties } from 'react'
 
-import { useBildfolge, useFlug, useMedienabfrageBreit, useOfenlauf, useVersatz } from '../bewegung.ts'
+import { useBildfolge, useFlug, useMedienabfrageBreit, useOfenwand, useVersatz } from '../bewegung.ts'
 import { GEBAECKE, type Gebaeck } from '../gebaecke.ts'
 import { Etikett, Kopf, Sektion } from './ui/bausteine.tsx'
 import Dampf from './ui/Dampf.tsx'
@@ -65,175 +65,118 @@ const SCHRITTE = [
     zahl: '01',
     titel: 'Mehl auf die Fläche',
     text: 'Morgens um sieben, bevor der erste Gast kommt.',
-    art: 'foto' as const,
-    quelle: '/bilder/textur/mehl-holz.webp',
+    quelle: '/bilder/ofenwand/01-mehl.webp',
     alt: 'Bemehlte Holzarbeitsfläche mit Spuren vom Ausrollen',
-    breite: 1700,
-    hoehe: 949,
-    /* Der Versatz ist die Treppe: jeder Schritt liegt etwas tiefer als der
-       davor. Daraus entsteht die Leserichtung, ohne dass ein Pfeil nötig wäre. */
-    versatz: 0,
-    tempo: -0.05,
+    breite: 800,
+    hoehe: 948,
+    /* Die Hoehe folgt dem Motiv, nicht einem Raster — siehe useOfenwand. */
+    anteil: 0.86,
   },
   {
     zahl: '02',
     titel: 'Von Hand gerollt',
     text: 'Jede Scheibe einzeln, nicht aus der Kiste.',
-    art: 'foto' as const,
-    quelle: '/bilder/echt/handarbeit.webp',
-    alt: 'Zwei Bäcker drücken Teigscheiben auf der bemehlten Arbeitsfläche, daneben ein Stapel fertiger Fladen',
-    breite: 500,
-    hoehe: 600,
-    versatz: 1,
-    tempo: 0.04,
+    /* ═══ Neu zugeschnitten, und warum ═══
+
+       Karol am 07.09.: „die Bilder sehen irgendwie nicht qualitativ hochwertig
+       aus." Bei diesem hier war es messbar: 500 px nativ, dargestellt auf
+       1286 Geraetepixeln — eine 2,6-fache Hochrechnung.
+
+       Die alte Fassung zeigte ausserdem zwei Gesichter und ein eingebranntes
+       Aram-Wasserzeichen unten rechts. Ein Wasserzeichen auf der eigenen Seite
+       ist ein Amateur-Signal, und ein Skalierer haette die beiden Gesichter
+       neu gezeichnet — was bei echten Menschen nicht in Frage kommt.
+
+       Der Zuschnitt auf Haende und Teigstapel loest alles drei auf einmal: er
+       zeigt genau, was die Zeile daneben behauptet, das Wasserzeichen ist weg,
+       und die Gesichter sind es auch. Hochgerechnet wurde die VOLLE Aufnahme
+       (mehr Kontext = besseres Ergebnis), beschnitten danach. */
+    quelle: '/bilder/ofenwand/02-haende.webp',
+    alt: 'Zwei Paar Hände drücken Teigscheiben auf einem Stapel fertiger Fladen',
+    breite: 900,
+    hoehe: 1240,
+    anteil: 1,
   },
   {
     zahl: '03',
     titel: 'Erst dann belegt',
     text: 'Käse, Zaatar, Hackfleisch. Was du bestellst.',
-    art: 'foto' as const,
-    /* ═══ Der Freisteller ist raus ═══
-
-       Karol am 02.09.: „03, das Bild geht gar nicht."
-
-       Er hat recht, und der Fehler war meiner: hier lagen zwei freigestellte
-       Manakisch auf der schwarzen Karte, während die drei anderen Schritte
-       ganzflächige Fotos zeigten. Ein Freisteller neben drei Fotos ist keine
-       Variation, sondern ein Bruch — er schwebte, wo die anderen den Rahmen
-       füllten.
-
-       Der Ersatz ist Bild 32 aus ihrem eigenen Stapel und war bisher unbenutzt:
-       ein langes Brett mit DREI Belägen nebeneinander — weiss, Zaatar, rot —
-       das in die Flamme fährt. Es zeigt buchstäblich, was der Satz daneben
-       behauptet („Käse, Zaatar, Hackfleisch"), und es ist an derselben Stelle
-       aufgenommen wie Schritt 04.
-
-       Damit stammen alle vier Bilder aus ihrem Laden und drei davon vom selben
-       Ofen. Genau das war der eigentliche Mangel: vier Aufnahmen, die nichts
-       miteinander zu tun hatten. */
-    quelle: '/bilder/echt/belegt-blech.webp',
+    quelle: '/bilder/ofenwand/03-belegt.webp',
     alt: 'Ein langes Brett mit drei belegten Fladen fährt in den brennenden Steinofen',
     breite: 900,
-    hoehe: 1200,
-    versatz: 2,
-    tempo: -0.03,
+    hoehe: 1364,
+    anteil: 1.1,
   },
   {
-    /* ═══ Der vierte Schritt war nur ein Satz ═══
-       Karol am 26.08.: „Kann man das noch weiterführen mit irgendwelchen
-       Bildern, die der Chef mir gegeben hat, oder sind wir da fertig?"
-
-       Wir waren nicht fertig. Das Etikett der Sektion verspricht „Rollen,
-       belegen, in den heissen Ofen" — den Ofen gab es nur als Nebensatz unter
-       Schritt 03. In rohbilder/eingang liegt dafür genau eine Aufnahme:
-       Bild 23, der Schieber fährt ins Feuer. Sie war unbenutzt. */
     zahl: '04',
     titel: 'In die Glut',
     text: 'Sechs Minuten auf dem Stein, bei offener Flamme.',
-    art: 'foto' as const,
-    quelle: '/bilder/echt/ofenschieber.webp',
+    quelle: '/bilder/ofenwand/04-ofen.webp',
     alt: 'Ein Holzschieber schiebt belegte Fladen in den brennenden Steinofen',
     breite: 900,
-    hoehe: 675,
-    versatz: 3,
-    tempo: 0.05,
+    hoehe: 1141,
+    anteil: 0.92,
   },
 ] as const
 
 
-function Schritt({ s }: { s: (typeof SCHRITTE)[number] }) {
+function Tor({ s }: { s: (typeof SCHRITTE)[number] }) {
   return (
-    <li className="schritt">
-      <Etikett klasse="schritt__zahl">{s.zahl}</Etikett>
-      <h3 className="schritt__titel lebt">{s.titel}</h3>
-      <p className="schritt__text">{s.text}</p>
+    <li className="tor" style={{ '--anteil': s.anteil } as CSSProperties}>
+      <div className="tor__maul" data-maul>
+        <img
+          data-fuellung
+          src={s.quelle}
+          srcSet={`${s.quelle.replace('.webp', '-450.webp')} 450w, ${s.quelle} 900w`}
+          sizes="(max-width: 859px) 44vw, 23vw"
+          alt={s.alt}
+          width={s.breite}
+          height={s.hoehe}
+          loading="lazy"
+          decoding="async"
+        />
+        {/* Die Hitze auf der Kante der einfahrenden Aufnahme. Sie wandert mit
+            ihr hoch — die Lage kommt aus demselben Wert wie die Fuellung. */}
+        <span className="tor__glut" data-glut aria-hidden="true" />
+      </div>
+      {/* Die Beschriftung steht auf der Bank, die `.prozess__wand::after`
+          ueber die ganze Breite zieht — die Begruendung mit den gemessenen
+          Kontrastwerten steht dort im Stilblatt. */}
+      <Etikett klasse="tor__zahl">{s.zahl}</Etikett>
+      <h3 className="tor__titel lebt">{s.titel}</h3>
+      <p className="tor__text">{s.text}</p>
     </li>
   )
 }
 
 /**
- * ═══ Der Ofen, durch den alle vier laufen ═══
+ * Vier Maeuler, ein Boden, eine Welle von links nach rechts.
  *
- * Karol am 03.09., nach sieben durchgerechneten Entwürfen: „ja mach 03."
- *
- * ═══ Warum EIN Maul und nicht vier ═══
- *
- * Sein eigener Vorschlag war ein grosses Ofenmaul mit vier kleineren darin.
- * Nachgerechnet geht das nicht auf: bei einem Maul von 1200 × 620 misst die
- * Kuppel 600 × 285, und damit müssten die beiden ÄUSSEREN Bögen 183 px tiefer
- * beginnen als die inneren. Daraus wird entweder ein symmetrischer Bogen —
- * 01 tief, 02 und 03 hoch, 04 tief — der keine Reihenfolge erzählen kann, weil
- * das Auge eine Krone sieht und keinen Ablauf. Oder alle vier stehen auf einer
- * Linie, und darüber liegt ein totes schwarzes Band über ein Drittel der Höhe.
- *
- * Der Ausweg ist derselbe Gedanke, eine Stufe weiter: die vier laufen nicht
- * NEBENEINANDER durch das Maul, sondern NACHEINANDER. Die Reihenfolge passiert
- * in der Zeit statt im Raum, und damit gibt es keinen Widerspruch mehr
- * zwischen Symmetrie und Abfolge.
- *
- * ═══ Warum `sticky` und nicht GSAP-Pinning ═══
- *
- * Ein gepinnter Bereich rechnet bei jedem Neuvermessen seine Höhe neu und
- * schiebt alles darunter. `position: sticky` kostet nichts, kennt keinen
- * Sprung beim Anheften und funktioniert am Handy genauso — dort steht das Maul
- * oben und die vier Sätze laufen darunter durch.
- *
- * Der Bildwechsel hängt an `useBildfolge`, demselben Haken, mit dem sich die
- * Gebäcke im Schwarm drehen. Er schaltet nach Scrollfortschritt über eine
- * Bühne; die Bühne ist hier die Laufstrecke, nicht die ganze Sektion — sonst
- * wäre das letzte Bild schon erreicht, bevor der erste Satz gelesen ist.
+ * Die Begruendung fuer den Umbau vom EINEN grossen Bogen auf VIER kleine steht
+ * am Haken `useOfenwand` in bewegung.ts — kurz: der grosse Bogen rechnete zwei
+ * der vier Aufnahmen hoch und stand ausserdem genau auf der Flugbahn des
+ * Schwarms.
  */
-function Ofenlauf({ kinder }: { kinder: ReactNode }) {
-  /* Ein Wert, ein Schreiber. Bild und Schrift kommen beide aus dem `laufwert`
-     und koennen deshalb nicht auseinanderlaufen — die Begruendung mit den
-     gemessenen Zahlen steht am Haken in bewegung.ts. */
-  const lauf = useOfenlauf<HTMLDivElement>({
-    maulWahl: '.prozess__maul',
-    ofenWahl: '.prozess__ofen',
-    schrittWahl: '.schritt',
-    glutWahl: '.prozess__glut',
+function Ofenwand() {
+  const strecke = useOfenwand<HTMLDivElement>({
+    wandWahl: '.prozess__wand',
+    torWahl: '.tor',
   })
 
   return (
-    <div className="prozess__lauf" ref={lauf}>
-      <div className="prozess__ofen">
-        <div className="prozess__maul">
-          {SCHRITTE.map((s, i) => (
-            <img
-              key={s.zahl}
-              data-ansicht={i}
-              src={s.quelle}
-              alt={s.alt}
-              width={s.breite}
-              height={s.hoehe}
-              /* `lazy` bleibt: die vier wiegen zusammen 376 kB und stehen
-                 unter der Faltung — eifrig geladen nehmen sie dem Hero auf
-                 einer gedrosselten Leitung fast zwei Sekunden Bandbreite weg.
-                 Gegen den Ruckler beim Einfahren hilft nicht frueheres LADEN,
-                 sondern frueheres DEKODIEREN; das erledigt `useOfenlauf` eine
-                 Bildschirmhoehe im Voraus. */
-              loading="lazy"
-              decoding="async"
-            />
+    <div className="prozess__strecke" ref={strecke}>
+      <div className="prozess__wand">
+        <ol className="prozess__tore">
+          {SCHRITTE.map((x) => (
+            <Tor key={x.zahl} s={x} />
           ))}
-          {/* Die Flamme am Maulboden. Schlaegt hoch, waehrend etwas einfaehrt,
-              und legt sich, wenn die Aufnahme steht — die Deckkraft kommt aus
-              demselben Wert wie alles andere. */}
-          <span className="prozess__glut" aria-hidden="true" />
-        </div>
-        {/* NEBEN dem Maul, nicht darin: `.prozess__maul` beschneidet auf die
-            Bogenform (das ist der ganze Sinn), und ein Dampf darin waere an
-            der Kuppel abgeschnitten.
-
-            Karol am 05.09.: „das dampft, und das stoert halt auch." Gemessen
-            war die Leinwand 655 × 443 und begann 57 px UEBER dem Fensterrand
-            — also zur Haelfte hinter der Kopfzeile, und in der Breite 130 %
-            des Bogens. Das war kein Dampf ueber einem Ofen, das war Nebel
-            ueber der halben Spalte. Jetzt sitzt sie auf der Kuppel, schmaler
-            als das Maul, mit halber Dichte. */}
+        </ol>
+        {/* Der Dampf gehoert ueber die WAND, nicht in ein einzelnes Maul: ein
+            Ofen dampft, nicht ein Bild. Schmal und flach — die vorige Leinwand
+            mass 655 x 443 und begann 57 px ueber dem Fensterrand, lag also zur
+            Haelfte hinter der Kopfzeile und als Nebel ueber allem anderen. */}
         <Dampf ton="ofen" klasse="prozess__dampf" dichte={5} />
       </div>
-      {kinder}
     </div>
   )
 }
@@ -363,15 +306,7 @@ export default function Handarbeit() {
             klasse="prozess__kopf"
           />
 
-          <Ofenlauf
-            kinder={
-              <ol className="prozess__schritte">
-                {SCHRITTE.map((x) => (
-                  <Schritt key={x.zahl} s={x} />
-                ))}
-              </ol>
-            }
-          />
+          <Ofenwand />
         </div>
 
         {/* Der Schwarm liegt jetzt auf SEKTIONSEBENE, nicht mehr in der linken
