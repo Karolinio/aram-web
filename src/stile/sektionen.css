@@ -3897,6 +3897,12 @@
   user-select: none;
 }
 
+/* Solange das Band von allein laeuft, darf nichts einrasten: `proximity`
+   zieht sonst gegen jeden gesetzten Scrollwert zurueck, und die Fahrt zuckt.
+   Beim Ziehen und Blaettern kommt das Einrasten von selbst wieder, weil die
+   Klasse dann nicht mehr gesetzt ist. */
+.galerie__fahrt.schwebt { scroll-snap-type: none; }
+
 .galerie__arkade {
   display: flex;
   /* Auf EINER Mittelachse. Unten bündig ergab bei verschieden hohen Bögen eine

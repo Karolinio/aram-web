@@ -1,5 +1,6 @@
 import galerieRoh from '../../inhalt/galerie.json'
 import { pfad } from '../pfad.ts'
+import { BILDER_JE_SATZ } from '../galeriemass.ts'
 import { useZiehband } from '../ziehen.ts'
 import { Kopf, Sektion } from './ui/bausteine.tsx'
 import Untergrund from './ui/Untergrund.tsx'
@@ -52,10 +53,12 @@ const BILDER = galerieRoh as Bild[]
  * Seite weiter.
  */
 
-function Bogen({ bild, i }: { bild: Bild; i: number }) {
+function Bogen({ bild, i, echo }: { bild: Bild; i: number; echo?: boolean }) {
   const nr = String(bild.nr).padStart(2, '0')
   return (
-    <li className="bogen">
+    /* Die zweite Fassung ist nur da, damit das Band umlaufen kann. Fuer ein
+       Vorleseprogramm waeren vierzehn Bilder statt sieben schlicht falsch. */
+    <li className="bogen" aria-hidden={echo || undefined}>
       <div className="bogen__rahmen">
         <img
           /* Über `pfad` und nicht als blosse Zeichenkette — siehe src/pfad.ts.
@@ -66,7 +69,7 @@ function Bogen({ bild, i }: { bild: Bild; i: number }) {
           alt={bild.titel}
           width={bild.breite}
           height={bild.hoehe}
-          loading={i < 3 ? 'eager' : 'lazy'}
+          loading={!echo && i < 3 ? 'eager' : 'lazy'}
           decoding="async"
         />
       </div>
@@ -79,7 +82,7 @@ function Bogen({ bild, i }: { bild: Bild; i: number }) {
 }
 
 export default function Galerie() {
-  const { ref: bahn, stand, schieben } = useZiehband<HTMLDivElement>()
+  const { ref: bahn, stand, schieben } = useZiehband<HTMLDivElement>(true)
 
   return (
     <Sektion id="galerie" grund="nacht" klasse="galerie" beschriftetVon="galerie-titel">
@@ -107,7 +110,7 @@ export default function Galerie() {
           und wer es nicht ausprobiert, sieht vier von sieben Bildern. Ein Satz
           und zwei Pfeile kosten eine Zeile und lösen genau das. */}
       <div className="schale galerie__leiste">
-        <p className="galerie__hinweis">Ziehen oder blättern. Es sind {BILDER.length}.</p>
+        <p className="galerie__hinweis">Es läuft von allein. Zeiger drauf hält an — oder ziehen. Es sind {BILDER_JE_SATZ}.</p>
         <div className="galerie__pfeile">
           <button
             type="button"
@@ -140,14 +143,22 @@ export default function Galerie() {
         ref={bahn}
         tabIndex={0}
         role="group"
-        aria-label={`Bilder aus dem Laden, ${BILDER.length} Stück, mit den Pfeiltasten bewegen`}
+        aria-label={`Bilder aus dem Laden, ${BILDER_JE_SATZ} Stück, mit den Pfeiltasten bewegen`}
       >
         {/* Eine echte Liste in Leserichtung. Für ein Vorleseprogramm ist der
             Unterschied, ob es „Liste mit sieben Einträgen" ansagt oder gar
             nichts. */}
+        {/* ═══ Zweimal dieselbe Reihe ═══
+            Damit das Band umlaufen kann, ohne dass man den Sprung sieht:
+            sobald es um genau eine Reihenbreite gewandert ist, steht dort
+            wieder dasselbe Bild. Die zweite Fassung ist fuer
+            Vorleseprogramme versteckt — siehe `aria-hidden` am Bogen. */}
         <ul className="galerie__arkade">
           {BILDER.map((bild, i) => (
             <Bogen key={bild.nr} bild={bild} i={i} />
+          ))}
+          {BILDER.map((bild, i) => (
+            <Bogen key={`echo-${bild.nr}`} bild={bild} i={i} echo />
           ))}
         </ul>
       </div>
