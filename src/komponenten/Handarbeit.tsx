@@ -101,10 +101,23 @@ const SCHRITTE = [
     zahl: '03',
     titel: 'Erst dann belegt',
     text: 'Käse, Zaatar, Hackfleisch. Was du bestellst.',
+    /* ═══ Neues Motiv am 07.09. ═══
+
+       Karol: „in dem Ofen 03 geht, glaube ich, auch besser."
+
+       Er hat recht, und der Grund ist die Abfolge: hier stand ein Brett, das
+       schon IN DEN OFEN fährt — dasselbe Motiv wie Schritt 04. Zwei
+       Ofenmäuler hintereinander, und der Unterschied zwischen „belegt" und
+       „in der Glut" fiel weg.
+
+       Jetzt ein Tisch voller frisch belegter, ROHER Lahmacun von oben. Das
+       ist buchstäblich, was die Zeile sagt, und es trennt den Schritt sauber
+       von 04. Aus ihrem eigenen Material; die unteren dreizehn Prozent sind
+       weg, weil dort wieder ein eingebranntes Aram-Wasserzeichen sass. */
     quelle: '/bilder/ofenwand/03-belegt.webp',
-    alt: 'Ein langes Brett mit drei belegten Fladen fährt in den brennenden Steinofen',
-    breite: 900,
-    hoehe: 1364,
+    alt: 'Ein Tisch voller frisch belegter Lahmacun, roh, dicht an dicht',
+    breite: 747,
+    hoehe: 1132,
     anteil: 1.1,
   },
   {
