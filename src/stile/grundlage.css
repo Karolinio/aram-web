@@ -516,6 +516,20 @@ section {
  * Ein durchgezogener Strich unter rotem Fettdruck sagt: hier ist etwas kaputt.
  * Eine gepunktete Linie unter Kursivem sagt: hier fehlt noch eine Angabe. Das
  * Zweite stimmt.
+ *
+ * ═══ Der Strich ist trotzdem raus ═══
+ *
+ * Karol am 07.09.: „diese Unterstriche und so soll alles raus."
+ *
+ * Er meinte die Kontaktangaben, aber der Einwand trifft hier genauso: eine
+ * Linie unter einem Wort liest sich als Link, ganz gleich, ob sie gepunktet
+ * ist. Im Laden stand sie direkt ueber drei echten Links — und war das
+ * einzige Unterstrichene, nachdem die dort weggefallen waren.
+ *
+ * Die Aufgabe bleibt: fehlender Text darf nicht aussehen wie fertiger Text,
+ * sonst geht er versehentlich live. Sie uebernimmt jetzt derselbe Punkt, der
+ * auf dieser Seite ohnehin Ausnahmen markiert — der Ruhetag traegt ihn, und
+ * der Betriebsstatus in der Kopfzeile auch. Ein Zeichen, drei Stellen.
  */
 .luecke {
   display: inline-block;
@@ -523,8 +537,16 @@ section {
   font-family: var(--font-text);
   font-size: 0.95em;
   font-style: italic;
-  border-bottom: 1px dotted var(--akzent);
-  padding-bottom: 2px;
+}
+.luecke::before {
+  content: '';
+  display: inline-block;
+  width: 0.4em;
+  height: 0.4em;
+  margin-right: 0.5em;
+  border-radius: 50%;
+  background: var(--akzent);
+  vertical-align: 0.08em;
 }
 
 /* ── Bewegung ─────────────────────────────────────────────────────────────── */

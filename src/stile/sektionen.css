@@ -2873,6 +2873,33 @@
 
 .laden__wort { grid-column: 7 / 13; }
 
+/**
+ * ═══ Das Raster kollabiert — bis heute tat es das nicht ═══
+ *
+ * Karol am 07.09.: „die Schriftplatzierung … sieht nicht so harmonisch aus wie
+ * die Restsektion."
+ *
+ * Gemessen war es schlimmer als unharmonisch. Die zwoelf Spalten standen auf
+ * JEDER Breite: Bilder auf 1/6, Text auf 7/13, ohne Umbruchpunkt. Auf einem
+ * Handy von 390 px ergab das eine Bildspalte von 134 px und eine Textspalte
+ * von 156 px — „Mehr als 25 Jahre" auf drei Zeilen in anderthalb Zentimetern.
+ *
+ * 62 rem ist die Grenze, weil dort ohnehin schon die Entscheidung faellt, ob
+ * Anschrift und Erreichbarkeit nebeneinander stehen (siehe weiter unten). Ein
+ * zweiter Umbruchpunkt daneben waeren zwei Wahrheiten ueber dieselbe Sektion.
+ */
+@media (max-width: 61.99rem) {
+  .laden__gitter { grid-template-columns: minmax(0, 1fr); }
+  .laden__stapel {
+    grid-column: 1;
+    /* Der Tiefsatz ist ein Mittel gegen Symmetrie — untereinander gibt es
+       keine Symmetrie, gegen die er helfen koennte. */
+    margin-top: 0;
+    padding-bottom: clamp(3rem, 12vw, 5rem);
+  }
+  .laden__wort { grid-column: 1; }
+}
+
 /* Die Datenzeilen liefen über sieben Spalten und wurden dadurch zu dünnen
    Balken. Auf Lesebreite gebracht stehen sie als Block. */
 .laden__wort .daten { max-width: 34rem; }
@@ -2890,19 +2917,30 @@
  * gepunkteten Linien fallen weg — zwischen Dingen, die ohnehin durch Abstand
  * getrennt sind, ist eine Linie ein zweiter Schnitt an derselben Stelle.
  */
+/**
+ * ═══ EINE Haarlinie, nicht zwei ═══
+ *
+ * Karol am 07.09.: „das ist viel zu umstaendlich."
+ *
+ * Hier lagen zwei Linien uebereinander: eine ueber den Zeiten, eine ueber der
+ * Anschrift. Dazwischen vier Zeilen Inhalt. Zwei Schnitte in einem Block, der
+ * ohnehin nur aus drei Auskuenften besteht, machen aus einer Auskunft ein
+ * Formular. Die Linie ueber den Zeiten bleibt — sie trennt den Text vom
+ * Auskunftsblock, und das ist der eine Schnitt, der etwas trennt.
+ */
 .laden__wort .daten {
-  margin-top: clamp(1.6rem, 3vw, 2.4rem);
-  padding-top: clamp(1.6rem, 3vw, 2.4rem);
-  border-top: 1px solid color-mix(in oklch, var(--creme) 18%, transparent);
+  margin-top: clamp(1.5rem, 3vw, 2.2rem);
 }
 
-/* Keine Punktlinie und kein Spaltenraster mehr — die Auskunft steht als Block. */
+/* Keine Punktlinie und kein Spaltenraster mehr — die Auskunft steht als Block,
+   die stille Beschriftung ueber ihrem Wert. */
 .laden__wort .datenzeile {
   grid-template-columns: minmax(0, 1fr);
-  gap: 0.15rem;
+  gap: 0.4rem;
   padding-block: 0;
   background-image: none;
 }
+.laden__wort .datenzeile dt { padding-top: 0; }
 
 .laden__wort .datenzeile + .datenzeile { margin-top: clamp(1.1rem, 2.2vw, 1.6rem); }
 
@@ -2929,7 +2967,35 @@
    Zwischenüberschrift. */
 .laden__wort .datenzeile dd {
   font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.28rem);
-  line-height: 1.4;
+  line-height: 1.55;
+}
+
+/**
+ * ═══ Keine Unterstriche unter Nummer und Adresse ═══
+ *
+ * Karol am 07.09.: „auch die Unterstriche bei Erreichbar und Telefonnummer,
+ * das ist viel zu umstaendlich."
+ *
+ * Der Unterstrich ist die richtige Auszeichnung fuer einen Link MITTEN IM
+ * FLIESSTEXT — dort ist er das einzige Merkmal, das ihn von seiner Umgebung
+ * trennt. Hier steht kein Fliesstext: der Block besteht ausschliesslich aus
+ * Kontaktangaben, jede auf ihrer eigenen Zeile. Es gibt nichts, wovon sie
+ * unterschieden werden muessten.
+ *
+ * Beim Zeigen und beim Tastaturfokus kommt er zurueck — dann ist er die
+ * Rueckmeldung, die sagt: das hier laesst sich anfassen.
+ */
+.laden__wort .datenzeile a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 160ms var(--ease-teig);
+}
+.laden__wort .datenzeile a:hover,
+.laden__wort .datenzeile a:focus-visible {
+  color: var(--akzent);
+  text-decoration: underline;
+  text-underline-offset: 0.22em;
+  text-decoration-thickness: 1px;
 }
 
 /**

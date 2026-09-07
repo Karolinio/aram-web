@@ -115,9 +115,36 @@ export function Sektion({
  *
  * Ein kurzer Strich, dann ein Wort. Es gibt genau diese eine Form — vorher
  * waren es fünf Varianten in vier Grössen und drei Farben.
+ *
+ * ═══ Und eine stille Fassung, aus einem gemessenen Grund ═══
+ *
+ * Karol am 07.09. zum Laden: „diese Striche soll alles raus … das ist viel zu
+ * umständlich, sieht auch nicht so harmonisch aus wie die Restsektion."
+ *
+ * Der Befund ist richtig, aber die Ursache ist nicht der Strich. Jede andere
+ * Sektion trägt GENAU EIN Etikett — über der Überschrift, einmal. Im Laden
+ * standen VIER untereinander: „Der Laden", „Geöffnet", „Wo", „Erreichbar".
+ * Vier gleiche Bausteine in einer Spalte lesen sich als Formular, und der
+ * Strich, der einmal ein Zeichen ist, wird viermal zu einem Muster.
+ *
+ * Also nicht den Strich abschaffen, sondern die Wiederholung: das
+ * Sektions-Etikett behält ihn (es steht ja nur einmal da), die Beschriftungen
+ * INNERHALB einer Sektion bekommen die stille Fassung. Mobbin bestätigt die
+ * Form — Clay und Waka Waka setzen genau so: kleine, gesperrte Versalien in
+ * gedämpftem Ton, der Wert darunter gross und schmucklos.
  */
-export function Etikett({ children, klasse }: { children: ReactNode; klasse?: string }) {
-  return <span className={`etikett${klasse ? ' ' + klasse : ''}`}>{children}</span>
+export function Etikett({
+  children,
+  klasse,
+  still,
+}: {
+  children: ReactNode
+  klasse?: string
+  /** Ohne Strich, gedämpft, gesperrt — für Beschriftungen INNERHALB einer Sektion. */
+  still?: boolean
+}) {
+  const namen = ['etikett', still ? 'etikett--still' : '', klasse ?? ''].filter(Boolean)
+  return <span className={namen.join(' ')}>{children}</span>
 }
 
 type KopfProps = {
@@ -247,7 +274,9 @@ export function Datenzeile({ was, children }: { was: string; children: ReactNode
   return (
     <div className="datenzeile">
       <dt>
-        <Etikett>{was}</Etikett>
+        {/* Still: eine Datenzeile steht per Definition INNERHALB einer Sektion,
+            nie über ihr. Der Strich gehört dem Sektions-Etikett. */}
+        <Etikett still>{was}</Etikett>
       </dt>
       <dd>{children}</dd>
     </div>

@@ -209,7 +209,7 @@ export default function Laden() {
               die man erst in einer Aufzählung suchen muss, ist eine Auskunft
               zweiter Klasse. */}
           <div className="laden__zeiten">
-            <Etikett>Geöffnet</Etikett>
+            <Etikett still>Geöffnet</Etikett>
             <Zeiten />
           </div>
 

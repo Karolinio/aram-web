@@ -388,6 +388,33 @@
   flex: none;
 }
 
+/**
+ * ═══ Die stille Fassung ═══
+ *
+ * Karol am 07.09. zum Laden: „diese Striche soll alles raus … viel zu
+ * umstaendlich, sieht nicht so harmonisch aus wie die Restsektion."
+ *
+ * Der Befund stimmt, die Ursache ist aber nicht der Strich, sondern seine
+ * WIEDERHOLUNG. Jede andere Sektion traegt genau ein Etikett, ueber der
+ * Ueberschrift. Im Laden standen vier untereinander — und ein Zeichen, das
+ * viermal in einer Spalte steht, ist kein Zeichen mehr, sondern ein Muster.
+ *
+ * Diese Fassung hat keinen Strich, ist gedaempft und gesperrt: sie ordnet
+ * ihren Wert ein, statt ihn anzukuendigen. Mobbin bestaetigt die Form — Clay
+ * und Waka Waka setzen ihre Kontaktbloecke genau so, kleine Versalien in
+ * Grau, der Wert darunter gross und schmucklos.
+ */
+.etikett--still {
+  color: var(--tinte-leise);
+  font-family: var(--font-lauf);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+.etikett--still::before { display: none; }
+.sektion--nacht .etikett--still { color: oklch(72% 0.02 72); }
+
 /* ── Sektionskopf ─────────────────────────────────────────────────────────── */
 
 .kopfblock {
