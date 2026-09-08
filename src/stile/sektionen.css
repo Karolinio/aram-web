@@ -4182,7 +4182,18 @@
   z-index: 2;
   position: relative;
   width: min(96vw, 60rem);
-  aspect-ratio: 811 / 568;
+  /**
+   * ═══ Das Verhaeltnis kommt aus der Datei, nicht aus der Erinnerung ═══
+   *
+   * 811 / 568 war die erzeugte Scheibe. Seit dem 08.09. ist es IHR Lahmacun
+   * (1500 x 1327) — Karol: „die Produkte, also die Pizza und so weiter, auch
+   * gegen schoenere Bilder austauschen, aber so nah wie moeglich am
+   * Aram-Look." Naeher als ihr eigenes Gericht geht nicht.
+   *
+   * Wer die Datei tauscht, muss diese Zahl mitziehen; sie steht auch in
+   * inhalt/vorhang.json und wird von dort an die Bildmasse gereicht.
+   */
+  aspect-ratio: 1500 / 1327;
   display: grid;
   place-items: stretch;
   pointer-events: none;

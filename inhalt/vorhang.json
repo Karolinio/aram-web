@@ -1,14 +1,14 @@
 {
  "scheibe": {
-  "breite": 811,
-  "hoehe": 568
+  "breite": 1500,
+  "hoehe": 1327
  },
  "scheibe-links": {
-  "breite": 811,
-  "hoehe": 568
+  "breite": 1500,
+  "hoehe": 1327
  },
  "scheibe-rechts": {
-  "breite": 811,
-  "hoehe": 568
+  "breite": 1500,
+  "hoehe": 1327
  }
 }
