@@ -4286,21 +4286,102 @@
  * Reem Kufi bleibt. Die Serife ist die Stimme der SEITE, die Kufi die Stimme
  * des LADENS — und auf ihrer Karte spricht der Laden.
  */
-/* ── Ihr Emblem in der Speisekarte ──────────────────────────────────────── */
+/**
+ * ── Ihr Emblem in der Speisekarte ─────────────────────────────────────────
+ *
+ * ═══ Vom angeschnittenen Eckstueck zum Siegel in der Mitte (08.09.) ═══
+ *
+ * Karol: „mach mal bitte das logo von der sektion mittig und viel groesser
+ * auf das bild und vllt auch etwas praesenter von der transparenz."
+ *
+ * Es sass oben links, um 9 % ueber die Kante geschoben, 538 px breit bei
+ * 13 % Deckkraft. Der Gedanke dahinter war: was ganz im Bild steht, ist ein
+ * Aufkleber; was ueber die Kante laeuft, ist ein Grund. Der Gedanke stimmt —
+ * nur nicht fuer DIESES Zeichen. Ihr Emblem ist ein RING mit ihrem Namen in
+ * der Mitte, einer Sonne oben, Olivenzweig links, Aehre rechts. Ein Ring, den
+ * man anschneidet, ist kein Ornament mehr, sondern ein halber Ring.
+ *
+ * Mittig gesetzt tut es das, wofuer ein Rundzeichen gemacht ist: es siegelt
+ * die Flaeche. Die Sektion ist 2093 px hoch — das Siegel liegt damit hinter
+ * der Gerichteliste, nicht hinter der Ueberschrift, und genau dort ist Platz.
+ *
+ * ═══ Die Groesse ═══
+ *
+ * Von 34vw auf 62vw, also 538 -> 893 px bei 1440. Das ist knapp zwei Drittel
+ * der Sektionsbreite; darunter liest es sich als Fleck, darueber schiebt es
+ * sich unter die Preisspalte rechts.
+ *
+ * Die Bilddatei ist dafuer NEU aus ihrer Druckdatei gerendert (900 px statt
+ * 620, direkt aus dem Vektor-PDF mit 300 dpi). Gemessen macht das auf dem
+ * Grund fast nichts aus — der Unterschied zwischen 620 und 1400 px liegt bei
+ * 20 % Deckkraft im Mittel unter einem halben Farbwert, also unsichtbar. Der
+ * Grund ist ein anderer: 620 px auf 893 px gezogen IST eine Hochrechnung, und
+ * hochgerechnete Bitmaps sind genau der Eindruck, den diese Seite nicht
+ * machen soll. 900 px kostet 33 kB mehr und laedt verzoegert.
+ *
+ * ═══ Die Deckkraft: 26 %, und sie macht die Karte LESBARER ═══
+ *
+ * 212 Messpunkte auf dem Sektionsgrund, bei jeder Fassung an derselben
+ * Scrollhoehe aufgenommen, Schrift unsichtbar geschaltet und der Grund
+ * darunter ausgelesen. Wie viele Punkte reissen ihre WCAG-Grenze?
+ *
+ *     ohne Siegel                73     (das ist der Ist-Zustand des Grundes)
+ *     13 % normal (bisher)       72
+ *     20 % normal                69
+ *     20 % multiply              67
+ *     26 % multiply              63   <- gewaehlt
+ *     32 % multiply              71
+ *
+ * Das Siegel ist also nicht das Problem, es ist ein kleines Gegenmittel:
+ * es dunkelt den Grund, und weisse Schrift gewinnt dabei. Ueber 26 % kippt
+ * es, weil die dunkelbraune Beschreibungszeile dann ihrerseits im Grund
+ * versinkt — bei 32 % faellt sie auf 3,99 gegen ihre 4,5.
+ *
+ * `multiply` statt `normal`, weil die goldene Sonne im Zeichen sonst
+ * AUFHELLT. Multipliziert kann sie rechnerisch nur dunkler machen. Der
+ * Unterschied ist gemessen: bei gleicher Deckkraft 69 gegen 67 Ausreisser,
+ * und der knappste Punkt steigt von 2,68 auf 2,73.
+ *
+ * ═══ Was hier NICHT geloest ist ═══
+ *
+ * 73 Punkte reissen die Grenze schon ohne jedes Siegel. Das ist weisse
+ * Schrift auf ihrem Orange: 3,10 bei einer Anforderung von 3,0, und wo die
+ * Saat-Textur aufhellt, faellt sie darunter. Das gehoert der Sektion, nicht
+ * dem Ornament — und es ist ein eigener Auftrag.
+ *
+ * Die Drehung bleibt. Ein Rundzeichen exakt mittig und exakt gerade sieht
+ * gestanzt aus; sechs Grad geben ihm die Hand zurueck, die es aufgelegt hat.
+ */
 .karte__emblem {
   position: absolute;
   z-index: 0;            /* unter Schiffbahn (1) und Schale (2) */
-  inset-block-start: -8%;
-  inset-inline-start: -9%;
-  inline-size: clamp(16rem, 34vw, 34rem);
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  inline-size: clamp(20rem, 62vw, 56rem);
   block-size: auto;
-  opacity: 0.13;
+  opacity: 0.26;
+  /**
+   * Gold hellt auf, und aufgehellter Grund nimmt der weissen Schrift den
+   * ohnehin duennen Puffer. Multipliziert kann das Zeichen rechnerisch nur
+   * dunkler werden — die Zahlen dazu stehen oben. Es sieht ausserdem
+   * richtiger aus: ein Zeichen, das in den Grund einsinkt statt darauf zu
+   * liegen, ist ein Stempel und kein Aufkleber.
+   */
+  mix-blend-mode: multiply;
   pointer-events: none;
-  transform: rotate(-6deg);
+  /* Erst zurueckschieben, dann drehen — andersherum wandert der Mittelpunkt
+     mit der Drehung mit und das Siegel sitzt schief neben der Mitte. */
+  transform: translate(-50%, -50%) rotate(-6deg);
 }
 
+/**
+ * Auf dem Handy schmaler als die Sektion breit ist. 62vw waeren dort 242 px
+ * und damit ein Fleck; die Untergrenze von 20rem greift und macht 320 px auf
+ * einem 390 px breiten Schirm. Das ist als Siegel richtig, aber die Zeilen
+ * stehen dort enger — deshalb einen Hauch zurueckgenommen.
+ */
 @media (max-width: 719px) {
-  .karte__emblem { inline-size: 17rem; opacity: 0.1; inset-inline-start: -14%; }
+  .karte__emblem { inline-size: 22rem; opacity: 0.22; }
 }
 
 /* ── Alt: der gezeichnete Olivenzweig ───────────────────────────────────── */

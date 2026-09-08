@@ -120,8 +120,10 @@ export default function Karte() {
         className="karte__emblem"
         src={pfad('bilder/marke/emblem.webp')}
         alt=""
-        width={620}
-        height={620}
+        /* 900 und nicht mehr 620: seit es mittig und auf 62vw steht, wurde die
+           alte Datei hochgerechnet. Neu aus ihrem Vektor-PDF gerendert. */
+        width={900}
+        height={900}
         aria-hidden="true"
         loading="lazy"
         decoding="async"
