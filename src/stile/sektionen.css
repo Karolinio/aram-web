@@ -4433,6 +4433,10 @@
   text-transform: uppercase;
   color: var(--tinte-leise);
 }
+/* Auf dem Handy glatte 12 px statt 11,52 — gemessen die Grenze zum Kneifen. */
+@media (max-width: 859px) {
+  .kartenblatt__ort { font-size: 0.75rem; }
+}
 
 .kartenblatt__liste { list-style: none; margin: 0; padding: 0; }
 

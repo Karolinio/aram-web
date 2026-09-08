@@ -413,6 +413,22 @@
   text-transform: uppercase;
 }
 .etikett--still::before { display: none; }
+
+/**
+ * ═══ Auf dem Handy einen halben Punkt groesser ═══
+ *
+ * Gemessen: 0,72 rem sind 11,52 px, und das ist auf einem Telefon die Grenze
+ * zum Kneifen. 0,75 rem sind glatte 12.
+ *
+ * Die Regel steht HIER und nicht in grundlage.css. Dort stand sie zuerst und
+ * hat nicht gegriffen: grundlage.css wird vor bausteine.css geladen, und bei
+ * gleicher Spezifitaet gewinnt die spaetere Datei. Eine Medienabfrage aendert
+ * an der Spezifitaet nichts. Dieselbe Falle wie beim doppelten
+ * `.schritt`-Regelsatz und bei der Schrittziffer.
+ */
+@media (max-width: 859px) {
+  .etikett--still { font-size: 0.75rem; }
+}
 .sektion--nacht .etikett--still { color: oklch(72% 0.02 72); }
 
 /* ── Sektionskopf ─────────────────────────────────────────────────────────── */

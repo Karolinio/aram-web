@@ -549,6 +549,48 @@ section {
   vertical-align: 0.08em;
 }
 
+/**
+ * ═══ Antippflaechen auf dem Handy ═══
+ *
+ * Karol am 08.09.: „Handy-Formatierung ist wichtig."
+ *
+ * Auf vier iPhone-Groessen (SE, 13 mini, 15, 15 Pro Max) nachgemessen: die
+ * Seite schiebt nirgends seitlich, aber elf Bedienelemente lagen unter der
+ * 44-Pixel-Grenze, die Apple fuer eine Fingerkuppe ansetzt:
+ *
+ *     kopf__marke      68 x 30
+ *     galerie__pfeil   42 x 42   (zweimal, zwei Pixel zu knapp)
+ *     Telefon, Festnetz, E-Mail im Laden      je 26 hoch
+ *     WhatsApp, Telefon, E-Mail, Impressum,
+ *     Datenschutz im Fuss                     je 27 hoch
+ *
+ * Sie sind alle gross genug ZU LESEN — nur nicht gross genug zu TREFFEN. Auf
+ * dem Schirm faellt das nicht auf, weil ein Mauszeiger einen Punkt trifft und
+ * ein Daumen eine Flaeche.
+ *
+ * `pointer: coarse` und nicht eine Fensterbreite: entscheidend ist das
+ * Eingabegeraet, nicht die Groesse des Bildschirms. Ein Tablet mit 1024 px
+ * wird mit dem Finger bedient, ein schmales Fenster am Rechner nicht.
+ *
+ * Die Flaeche waechst nach oben und unten um den Text herum; sichtbar aendert
+ * sich nur der Zeilenabstand in den beiden Kontaktbloecken, und der darf auf
+ * einem Handy ohnehin groesser sein.
+ */
+@media (pointer: coarse) {
+  .kopf__marke,
+  .laden__wort .datenzeile a,
+  .fuss__navi a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  .galerie__pfeil {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
 /* ── Bewegung ─────────────────────────────────────────────────────────────── */
 
 /* Jede Bewegung hat einen stehenden Ersatz — nicht abgeschaltet, ERSETZT.
