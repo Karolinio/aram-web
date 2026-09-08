@@ -271,8 +271,33 @@ function Gebaeckstueck({ g }: { g: Gebaeck }) {
       {/* HINTER dem Gebäck, nicht davor: Dampf vor dem Essen ist Nebel auf
           dem Teller. Die Leinwand ist breiter als das Gebäck und steht
           darüber — Dampf breitet sich aus, während er steigt. */}
-      {g.dampft && breit && g.tiefe < 0.45 ? (
-        <Dampf ton="ofen" klasse="gebaeck__dampf" dichte={4} />
+      {/* ═══ Wer dampft ═══
+
+          Karol am 07.09.: „die dann auch im Hintergrund jeweils dampfen. Das
+          ist ganz wichtig!"
+
+          Die Grenze lag bei tiefe 0,45 und traf damit nur drei Stücke. Jetzt
+          0,62: sechs der neun dampfen — alle, die vorne genug fliegen, um es
+          zu zeigen. Weiter hinten bleibt es aus, und das ist kein Sparen: bei
+          14 % Breite und 2 px Unschärfe ist eine Dampfwolke kein Dampf mehr,
+          sondern ein Fleck über einem Fleck.
+
+          Die Dichte ist dafür von 4 auf 3 Schwaden gesunken — als Vorsorge,
+          nicht auf Messung gestützt. Sechs Leinwände statt drei sind doppelt
+          so viel Rechenarbeit; drei Schwaden auf sechs Stücken ergeben 18
+          statt 12 Wolken, also MEHR sichtbaren Dampf bei anderthalbfacher
+          statt doppelter Last.
+
+          Belegen liess sich das am 08.09. nicht: die Maschine lief mit einer
+          Lastzahl von 21, und die Frame-Messungen stiegen von Lauf zu Lauf
+          (20,8 → 27,4 → 29,2 ms Median), ohne dass sich der Code änderte. Wer
+          das nachmessen will, muss es auf einer ruhigen Maschine tun.
+
+          Die Wiederholungen ganz hinten (`nurBreit`) tragen ohnehin
+          `dampft: false` — zweimal dasselbe Gericht mit zweimal derselben
+          Wolke wäre die Wiederholung, die die Tiefe gerade verbirgt. */}
+      {g.dampft && breit && g.tiefe < 0.62 ? (
+        <Dampf ton="ofen" klasse="gebaeck__dampf" dichte={3} />
       ) : null}
       <div className="gebaeck__folge" ref={folge}>
         {g.bilder.map((quelle, i) => (

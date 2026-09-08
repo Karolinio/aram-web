@@ -150,12 +150,17 @@ export type Gebaeck = {
    * ═══ Und woher der Wert kommt ═══
    *
    * Nicht aus dem Gefuehl, sondern aus der GEMESSENEN Schaerfe des Fotos.
-   * Stand nach der Ueberarbeitung mit seedream am 07.09. (Laplace-Varianz im
+   * Stand nach der zweiten Runde mit seedream am 08.09. (Laplace-Varianz im
    * deckenden Bereich, bei gleicher Darstellgroesse):
    *
-   *     lahmacun 4551 · zaatar 3893 · zaatar-2 2676 · bleche 2168
-   *     fatayer 1858 · stapel 1732 · rolle 1676 · gebacken 1302
-   *     kaese 1143 · sesam 861
+   *     lahmacun 4551 · zaatar-2 4285 · zaatar 3893 · stapel 2269
+   *     fatayer 1858 · rolle 1722 · kaese 1143 · gebacken 1100 · sesam 957
+   *
+   * Alle NEUN sind inzwischen ueber `is_inpaint` neu aufgenommen. Das zehnte
+   * hiess `bleche` und ist RAUS: seine Quelle war ein misslungener Freisteller
+   * (das rechte Blech halb Ofeninneres), und zwei Anlaeufe haben daraus einmal
+   * ein dupliziertes und einmal ein leeres Blech gemacht. Wo die Vorlage nicht
+   * traegt, hilft kein Modell.
    *
    * Verteilt wird nach RANG, nicht nach Rohwert. Die vier ueberarbeiteten
    * Stuecke haben ihre Schaerfe verdoppelt bis vervierfacht; nach Rohwert
@@ -291,8 +296,8 @@ export const GEBAECKE: Gebaeck[] = [
     alt: 'Ein Fata’er von Aram, gewölbt und glänzend, dicht mit Sesam und Schwarzkümmel bestreut',
     li: 3,
     ob: 6,
-    gr: 21,
-    tiefe: 0.44,
+    gr: 20,
+    tiefe: 0.5,
     liM: 58,
     grM: 52,
     breite: 900,
@@ -316,12 +321,12 @@ export const GEBAECKE: Gebaeck[] = [
     alt: 'Ein goldbraun gebackenes gefuelltes Gebaeck von Aram, die Fuellung tritt an den Einschnitten hervor',
     li: 70,
     ob: 20,
-    gr: 18,
-    tiefe: 0.67,
+    gr: 19,
+    tiefe: 0.62,
     liM: 72,
     grM: 48,
-    breite: 780,
-    hoehe: 574,
+    breite: 900,
+    hoehe: 669,
     y: [0.34, -0.48],
     x: [0.03, -0.06],
     dreh: [25, -36],
@@ -362,8 +367,8 @@ export const GEBAECKE: Gebaeck[] = [
     alt: 'Ein Manakisch mit Zaatar, frisch aus dem Ofen',
     li: 78,
     ob: 48,
-    gr: 26,
-    tiefe: 0.11,
+    gr: 24,
+    tiefe: 0.25,
     liM: 76,
     grM: 38,
     breite: 900,
@@ -385,12 +390,12 @@ export const GEBAECKE: Gebaeck[] = [
     alt: 'Ein zweites Manakisch mit Zaatar',
     li: 4,
     ob: 62,
-    gr: 24,
-    tiefe: 0.22,
+    gr: 25,
+    tiefe: 0.12,
     liM: 74,
     grM: 36,
-    breite: 780,
-    hoehe: 691,
+    breite: 900,
+    hoehe: 850,
     y: [0.44, -0.22],
     x: [-0.03, 0.07],
     dreh: [-22, 45],
@@ -412,8 +417,8 @@ export const GEBAECKE: Gebaeck[] = [
     tiefe: 1.0,
     liM: 60,
     grM: 50,
-    breite: 780,
-    hoehe: 761,
+    breite: 900,
+    hoehe: 893,
     y: [0.4, -0.34],
     x: [0.04, -0.08],
     dreh: [31, -39],
@@ -431,12 +436,12 @@ export const GEBAECKE: Gebaeck[] = [
     alt: 'Ein flacher, goldbraun gebackener Fata’er mit Sesam',
     li: 34,
     ob: 84,
-    gr: 17,
-    tiefe: 0.78,
+    gr: 16,
+    tiefe: 0.88,
     liM: 78,
     grM: 34,
-    breite: 780,
-    hoehe: 684,
+    breite: 900,
+    hoehe: 733,
     y: [0.5, -0.2],
     x: [-0.06, 0.04],
     dreh: [-28, 34],
@@ -454,8 +459,8 @@ export const GEBAECKE: Gebaeck[] = [
     alt: 'Ein runder Fladen von Aram, dick mit geschmolzenem Kaese belegt',
     li: 84,
     ob: 92,
-    gr: 15,
-    tiefe: 0.89,
+    gr: 17,
+    tiefe: 0.75,
     liM: 56,
     grM: 48,
     breite: 875,
@@ -469,55 +474,20 @@ export const GEBAECKE: Gebaeck[] = [
     skala: [0.56, 0.72],
   },
   {
-    /* ═══ Zwei Stuecke mehr, und warum es nicht mehr wurden ═══
-
-       Karol am 07.09.: „wie wir da die ganzen einzelnen Produkte im
-       Hintergrund dazumachen." Ich habe alle 54 Freisteller aus ihrem
-       Material durchgemessen. Von den zwoelf schaerfsten sind die meisten
-       Ofeninnenraeume, Menschen oder misslungene Schnitte — brauchbar und neu
-       waren genau diese zwei. Die acht davor sind im Wesentlichen schon das
-       Beste, was Aram geliefert hat.
-
-       Mehr Dichte kommt deshalb nicht aus mehr Dateien, sondern aus der
-       Tiefe: was hinten fliegt, ist klein und unscharf, und dort faellt
-       weder eine schwache Aufnahme noch eine Wiederholung auf. */
-    id: 'bleche',
-    dampft: false,
-    name: 'Zwei Bleche',
-    bilder: ['/bilder/echt/schwarm-bleche.webp'],
-    echt: true,
-    alt: 'Zwei runde Bleche mit frisch gebackenem Gebäck aus dem Laden',
-    li: 46,
-    ob: 30,
-    gr: 23,
-    tiefe: 0.33,
-    liM: 64,
-    grM: 40,
-    breite: 780,
-    hoehe: 438,
-    y: [0.46, -0.3],
-    x: [0.05, -0.06],
-    dreh: [18, -14],
-    drehY: [24, -20],
-    drehX: [-9, 7],
-    z: [-190, 60],
-    skala: [0.9, 1.02],
-  },
-  {
     id: 'stapel',
-    dampft: false,
+    dampft: true,
     name: 'Fladenstapel',
     bilder: ['/bilder/echt/schwarm-stapel.webp'],
     echt: true,
     alt: 'Ein hoher Stapel gebackener Fladen aus der Backstube',
     li: 24,
     ob: 68,
-    gr: 20,
-    tiefe: 0.56,
+    gr: 22,
+    tiefe: 0.38,
     liM: 30,
     grM: 34,
-    breite: 438,
-    hoehe: 780,
+    breite: 518,
+    hoehe: 900,
     y: [0.42, -0.28],
     x: [-0.05, 0.05],
     dreh: [-12, 16],
@@ -621,8 +591,8 @@ export const GEBAECKE: Gebaeck[] = [
     nurBreit: true,
     liM: 50,
     grM: 30,
-    breite: 780,
-    hoehe: 574,
+    breite: 900,
+    hoehe: 669,
     y: [0.44, -0.29],
     x: [-0.04, 0.05],
     dreh: [-18, 14],

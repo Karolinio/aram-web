@@ -1768,7 +1768,11 @@
  */
 .tor__maul {
   position: relative;
-  height: calc(var(--wand-hoehe, 34rem) * 0.74 * var(--anteil, 1));
+  /* 0,64 statt 0,74. Karol am 07.09.: „die Oefen koennte man vielleicht ein
+     bisschen kleiner machen, damit man die Produkte im Hintergrund ein
+     bisschen mehr sieht." Dreizehn Prozent weniger Hoehe geben rund ein
+     Viertel mehr freien Grund zwischen Kopfzeile und Theke. */
+  height: calc(var(--wand-hoehe, 34rem) * 0.64 * var(--anteil, 1));
   border-radius: var(--maul);
   overflow: clip;
   /* Das leere Maul ist dunkel. `--fuellung` kommt aus useOfenwand und nimmt
@@ -1889,7 +1893,10 @@
   left: -1rem;
   right: -1rem;
   bottom: -1.8rem;
-  height: 12rem;
+  /* Gemessen nach dem Verkleinern der Maeuler: die Fuesse stehen auf −139 px
+     zur Wandunterkante (vorher −151). 11,25 rem legen die Oberkante zwoelf
+     Pixel darueber — dieselbe Einbindung wie vorher. */
+  height: 11.25rem;
   z-index: -1;
   /**
    * Vier Schichten, alle SENKRECHT — und das ist der Grund.
@@ -1921,16 +1928,35 @@
   .tor:nth-child(even)::before { left: -0.8rem; right: -50vw; }
 }
 
+/**
+ * ═══ Die Ziffer ist ein Index, nicht die Botschaft ═══
+ *
+ * Karol am 07.09.: „die Schriftart unter den Oefen auch anpassen
+ * groessentechnisch."
+ *
+ * Sie stand bei bis zu 3,2 rem und damit mehr als doppelt so gross wie der
+ * Schrittname darunter. Die Hierarchie sagte also: die ZAHL ist die Sache.
+ * Das stimmt nicht — „Von Hand gerollt" ist die Sache, die 02 sagt nur, an
+ * welcher Stelle sie steht.
+ *
+ * Mobbin bestaetigt es zweimal. Samara setzt die Nummer als kleines Plaettchen
+ * ueber einer normal grossen Ueberschrift; der AI-Design-Report (schwarz auf
+ * Orange, fast unsere Palette) stellt Nummer und Wort auf DIESELBE Groesse.
+ * Beide machen die Ziffer klein oder gleich — keiner macht sie gross.
+ *
+ * Jetzt: Ziffer hoechstens 2 rem, Ueberschrift bis 1,75 rem. Der Abstand
+ * bleibt lesbar, die Reihenfolge stimmt wieder.
+ */
 .tor__zahl {
   display: block;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.35rem;
   color: var(--akzent);
   font-variant-numeric: tabular-nums;
   font-family: var(--font-display);
-  font-size: clamp(1.9rem, 1rem + 2.4vw, 3.2rem);
+  font-size: clamp(1.4rem, 1rem + 1.1vw, 2rem);
   font-weight: 700;
   line-height: 0.9;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
 }
 /* Das Etikett bringt sonst einen Strich mit; vor einer Ziffer laese er sich
    als Minus. */
@@ -1940,19 +1966,22 @@
   margin: 0;
   font-family: var(--font-display);
   font-variation-settings: var(--wonk-klein);
-  /* Weiss auf Orange traegt erst ab 24 px. 1,5 rem statt einer Spanne, die
-     genau darunter endete. */
-  font-size: 1.5rem;
+  /* Die Untergrenze bleibt 1,5 rem = 24 px: Weiss auf Orange traegt erst ab
+     dort (gemessen 3,52 auf der Theke, Grenze fuer grosse Schrift ist 3,0).
+     Nach oben darf sie jetzt wachsen — der Platz kommt von der kleineren
+     Ziffer und den kleineren Maeulern. */
+  font-size: clamp(1.5rem, 1.25rem + 0.7vw, 1.75rem);
   font-weight: 600;
   line-height: 1.15;
   letter-spacing: -0.01em;
 }
 
 .tor__text {
-  margin: 0.35rem 0 0;
+  margin: 0.4rem 0 0;
   color: var(--tinte-leise);
   max-width: 26ch;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
+  line-height: 1.5;
 }
 
 /* Der Dampf gehoert ueber die WAND, nicht in ein Maul: ein Ofen dampft, nicht
@@ -1982,10 +2011,20 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: clamp(0.9rem, 3vw, 1.5rem) clamp(0.75rem, 3vw, 1.25rem);
   }
-  .tor__maul { height: calc(var(--wand-hoehe, 30rem) * 0.34 * var(--anteil, 1)); }
-  .tor__zahl { font-size: clamp(1.5rem, 1rem + 2.6vw, 2.2rem); }
-  .tor__titel { font-size: 1.15rem; }
-  .tor__text { font-size: 0.9rem; }
+  .tor__maul { height: calc(var(--wand-hoehe, 30rem) * 0.3 * var(--anteil, 1)); }
+  .tor__zahl { font-size: clamp(1.2rem, 0.9rem + 1.4vw, 1.6rem); }
+  /**
+   * Am Handy ist die Ueberschrift kleiner als 24 px — damit gilt nicht mehr
+   * die Grenze fuer grosse Schrift (3,0), sondern die strenge (4,5). Weiss
+   * kommt auf der Theke auf 3,5 und faellt damit durch.
+   *
+   * Zwei Wege: die Schrift auf 24 px zwingen (in einer 169-px-Spalte wird
+   * daraus ein Wort je Zeile) oder die Farbe wechseln. Der Fliesston erreicht
+   * dort 5,3. Also die Farbe — auf einem Handy ist die Displayschrift ohnehin
+   * kein Auszeichnungsmittel mehr, sondern nur noch klein und hell.
+   */
+  .tor__titel { font-size: 1.1rem; color: var(--tinte); }
+  .tor__text { font-size: 0.85rem; }
   .prozess__dampf { top: -4%; height: 16%; }
 }
 
