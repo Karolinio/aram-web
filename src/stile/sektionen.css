@@ -4381,7 +4381,16 @@
  * stehen dort enger — deshalb einen Hauch zurueckgenommen.
  */
 @media (max-width: 719px) {
-  .karte__emblem { inline-size: 22rem; opacity: 0.22; }
+  /**
+   * `min()` und nicht 22rem fest: gemessen war das Siegel auf dem iPhone SE
+   * 387 px breit in einer 375 px schmalen Sektion und stand links und rechts
+   * je 6 px ueber. Die Seite schob dadurch zwar nicht — die Sektion schneidet
+   * ab — aber abgeschnitten war genau der RING. Und ein angeschnittener Ring
+   * ist der Fehler, wegen dem das Zeichen ueberhaupt in die Mitte gerueckt
+   * ist. 88vw laesst auf jedem Geraet einen Rand stehen: 330 px auf dem SE,
+   * 378 auf dem Pro Max.
+   */
+  .karte__emblem { inline-size: min(22rem, 88vw); opacity: 0.22; }
 }
 
 /* ── Alt: der gezeichnete Olivenzweig ───────────────────────────────────── */
