@@ -107,19 +107,41 @@ export default function Backstube() {
           {/* Der Schlüssel erzwingt ein neues `video`-Element, wenn sich die
               Breite ändert. Ohne ihn behält der Browser die einmal gewählte
               Quelle bei — `<source>` wird nur beim ERSTEN Laden ausgewertet. */}
-          {/* ═══ Die webm-Quelle ist raus, und zwar gemessen ═══
+          {/* ═══ Warum DIESER Clip, und was die Messung NICHT sagt ═══
 
-              Hier standen zwei Quellen, webm zuerst. Das ist die uebliche
-              Reihenfolge, weil VP9 h264 normalerweise schlaegt. Bei DIESEM
-              Material tut es das nicht: das Handyvideo ist verwackelt und
-              koernig, und daran verschluckt sich VP9.
+              Karol am 10.09.: „wegen qualität und weil das ein unnötiges
+              video ist. entweder das vorherige mit dem steinofen oder nur
+              hinter der theke von essen ein video."
 
-                  gross   h264 2,84 MB   vs   VP9 4,44 MB
-                  klein   h264 1,55 MB   vs   VP9 2,28 MB
+              Hier lief ein Gang durch den Laden an der Auslage entlang.
+              Gemessen war er von allen sechs Kandidaten der SCHAERFSTE
+              (Laplace-Varianz 2150 gegen 1293 bei diesem hier). Die Messung
+              beantwortet aber nicht die Frage, die er stellt: ein Schwenk
+              ueber eine Vitrine sagt nichts, was nicht jede Baeckerei sagen
+              koennte. „Unnoetig" ist keine Bildqualitaet, sondern ein Urteil
+              ueber den Inhalt, und da hat er recht.
 
-              Der Browser nimmt die ERSTE Quelle, die er kann — er haette also
-              in jedem Fall die schwerere geladen. h264 versteht jeder Browser,
-              der diese Seite je zu sehen bekommt. */}
+              Was die Messung beitraegt, ist eine andere Zahl: die BEWEGUNG
+              zwischen den Bildern. Dieser Clip hat mit 50,0 die ruhigste
+              Kamera von allen sechs (Vitrine 57,5, der alte Ofen 57,7,
+              Belegen 61,0). Hinter einer Ueberschrift zaehlt das mehr als
+              Schaerfe: ein ruhiges Bild traegt Text, ein hektisches frisst
+              ihn.
+
+              Und er ist beides, was Karol zur Wahl gestellt hat — der
+              Steinofen mit der blauen Flamme im Hintergrund UND ein Brett
+              voller Kaeseschiffe im Vordergrund, in jedem einzelnen Bild.
+
+              Acht Sekunden statt zwoelf: die Quelle ist neun lang, und ein
+              Schleifenschnitt kostet eine davon. Kuerzer ist hier kein
+              Verlust — die Kamera steht fast still, es gibt keinen Bogen, den
+              man abwarten muesste.
+
+              ═══ Die webm-Quelle bleibt raus ═══
+              VP9 schlaegt h264 normalerweise; an diesem koernigen
+              Handymaterial nicht (gemessen 4,44 gegen 2,84 MB). Der Browser
+              nimmt die erste Quelle, die er kann — er haette immer die
+              schwerere geladen. */}
           <source
             key={schmal ? 'k-mp4' : 'g-mp4'}
             src={schmal ? '/video/ofen.mp4' : '/video/ofen-gross.mp4'}
