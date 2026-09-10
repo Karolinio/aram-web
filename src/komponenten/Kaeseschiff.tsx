@@ -208,10 +208,22 @@ const BAHN: readonly Punkt[] = [
  * heile darunter — schlimmer als ein Geist. Ein Schnitt ist hier ohnehin das
  * Richtige: ein Gebäck bricht nicht über eine halbe Sekunde auf, es bricht.
  */
+/**
+ * ═══ Die Folge heisst jetzt anders, weil sein Schiff anders entsteht ═══
+ *
+ * Hier stand „gewalzt" und „belegt". Das ist die Folge eines OFFENEN
+ * Kaeseschiffs: Teig flach ausrollen, belegen, backen. Aram macht ein
+ * GESCHLOSSENES — Karol am 10.09.: „das käseschiff von aram ist von außen zu,
+ * man sieht den typischen käse nur in der mitte leicht."
+ *
+ * Ein geschlossenes Schiffchen wird nicht gewalzt, es wird geformt und
+ * zugedrueckt; und es wird nicht belegt, es wird bestreut. Die Bilder zeigen
+ * das jetzt, also heissen die Stufen auch so.
+ */
 const STUFEN: readonly { klasse: string; ab: number }[] = [
   { klasse: 'stufe-1-kugel', ab: 0.0 },
-  { klasse: 'stufe-2-gewalzt', ab: 0.13 },
-  { klasse: 'stufe-3-belegt', ab: 0.27 },
+  { klasse: 'stufe-2-geformt', ab: 0.13 },
+  { klasse: 'stufe-3-bestreut', ab: 0.27 },
   { klasse: 'stufe-4-gebacken', ab: 0.4 },
 ]
 

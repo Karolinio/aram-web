@@ -3,11 +3,11 @@
   "breite": 1500,
   "hoehe": 603
  },
- "stufe-2-gewalzt": {
+ "stufe-2-geformt": {
   "breite": 1500,
   "hoehe": 603
  },
- "stufe-3-belegt": {
+ "stufe-3-bestreut": {
   "breite": 1500,
   "hoehe": 603
  },
@@ -15,19 +15,7 @@
   "breite": 1500,
   "hoehe": 603
  },
- "riss-1": {
-  "breite": 1500,
-  "hoehe": 603
- },
- "riss-2": {
-  "breite": 1500,
-  "hoehe": 603
- },
  "riss-3": {
-  "breite": 1500,
-  "hoehe": 603
- },
- "riss-4": {
   "breite": 1500,
   "hoehe": 603
  }
