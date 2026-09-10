@@ -1,0 +1,114 @@
+[
+ {
+  "datei": "zaatar",
+  "titel": "Zaatar",
+  "nr": 1,
+  "breite": 1000,
+  "hoehe": 750
+ },
+ {
+  "datei": "muhammara",
+  "titel": "Muhammara",
+  "nr": 2,
+  "breite": 1000,
+  "hoehe": 750
+ },
+ {
+  "datei": "lange-käse",
+  "titel": "Lange Käse",
+  "nr": 3,
+  "breite": 1000,
+  "hoehe": 750
+ },
+ {
+  "datei": "doppelt-käse",
+  "titel": "Doppelt Käse",
+  "nr": 4,
+  "breite": 1000,
+  "hoehe": 750
+ },
+ {
+  "datei": "schamiyeh",
+  "titel": "Schamiyeh",
+  "nr": 5,
+  "breite": 1000,
+  "hoehe": 750
+ },
+ {
+  "datei": "oliven",
+  "titel": "Oliven",
+  "nr": 8,
+  "breite": 1000,
+  "hoehe": 750
+ },
+ {
+  "datei": "frischkäse",
+  "titel": "Frischkäse",
+  "nr": 9,
+  "breite": 1000,
+  "hoehe": 750
+ },
+ {
+  "datei": "hackfleisch-&-gemüse",
+  "titel": "Hackfleisch & Gemüse",
+  "nr": 10,
+  "breite": 1000,
+  "hoehe": 750
+ },
+ {
+  "datei": "hackfleisch",
+  "titel": "Hackfleisch",
+  "nr": 11,
+  "breite": 1000,
+  "hoehe": 750
+ },
+ {
+  "datei": "schaorma-roll",
+  "titel": "Schaorma Roll",
+  "nr": 13,
+  "breite": 1000,
+  "hoehe": 750
+ },
+ {
+  "datei": "fahita",
+  "titel": "Fahita",
+  "nr": 14,
+  "breite": 1000,
+  "hoehe": 750
+ },
+ {
+  "datei": "toschka",
+  "titel": "Toschka",
+  "nr": 18,
+  "breite": 1000,
+  "hoehe": 750
+ },
+ {
+  "datei": "gross-käse-scharf",
+  "titel": "Groß Käse, scharf",
+  "nr": 20,
+  "breite": 1000,
+  "hoehe": 750
+ },
+ {
+  "datei": "gross-käse-gemüse",
+  "titel": "Groß Käse, Gemüse",
+  "nr": 21,
+  "breite": 1000,
+  "hoehe": 750
+ },
+ {
+  "datei": "lahmacun",
+  "titel": "Lahmacun",
+  "nr": 22,
+  "breite": 1000,
+  "hoehe": 750
+ },
+ {
+  "datei": "lahmacun-mit-zwiebeln",
+  "titel": "Lahmacun mit Zwiebeln",
+  "nr": 22,
+  "breite": 1000,
+  "hoehe": 750
+ }
+]

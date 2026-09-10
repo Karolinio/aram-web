@@ -114,7 +114,12 @@ def querformat(quelle: Path, ziel: Path, dreh: int = 0) -> tuple[int, int]:
     else:                                   # zu hoch: ein Band aus der Mitte
         h = int(im.width / ziel_v)
         im = im.crop((0, (im.height - h) // 2, im.width, (im.height - h) // 2 + h))
-    im.resize((BREIT, HOCH), Image.LANCZOS).save(ziel, 'WEBP', quality=80, method=6)
+    gross = im.resize((BREIT, HOCH), Image.LANCZOS)
+    gross.save(ziel, 'WEBP', quality=80, method=6)
+    # Kleine Fassung fuer die Produktgalerie und das Vorschaubild: dieselbe
+    # Datei zweimal auszuliefern waere ein Megabyte fuer 150 px Anzeige.
+    gross.resize((520, 390), Image.LANCZOS).save(
+        ziel.with_name(ziel.stem + '-klein.webp'), 'WEBP', quality=78, method=6)
     return BREIT, HOCH
 
 
@@ -122,6 +127,7 @@ if __name__ == '__main__':
     ZIEL.mkdir(parents=True, exist_ok=True)
     karte = json.loads((WURZEL / 'inhalt' / 'speisekarte.json').read_text())
     gesetzt = 0
+    galerie = []
     for gruppe in karte:
         for g in gruppe['gerichte']:
             eintrag = ZUORDNUNG.get(g['name'])
@@ -134,7 +140,20 @@ if __name__ == '__main__':
             g['bild'] = {'quelle': f'/bilder/karte/{name}', 'alt': alt, 'breite': w, 'hoehe': h}
             kb = (ZIEL / name).stat().st_size // 1024
             print(f"{str(g.get('nr','—')):>3} {g['name']:<22} {datei:<18} {kb:>3} kB  ({sicherheit})")
+            galerie.append({'datei': name.removesuffix('.webp'),
+                            'titel': g['name'],
+                            'nr': g.get('nr'),
+                            'breite': w, 'hoehe': h})
             gesetzt += 1
     (WURZEL / 'inhalt' / 'speisekarte.json').write_text(
         json.dumps(karte, ensure_ascii=False, indent=1) + '\n')
+
+    # ── Die Produktgalerie liest dieselben Dateien ──
+    # Karol am 10.09.: „eine Galerie wäre auch, glaube ich, krass: nur mit
+    # Produktbildern … so wie bei der Speisekarte, von links nach rechts."
+    # Sie bekommt KEINE eigenen Dateien: dasselbe Bild zweimal auszuliefern
+    # waere anderthalb Megabyte fuer nichts.
+    (WURZEL / 'inhalt' / 'produktgalerie.json').write_text(
+        json.dumps(galerie, ensure_ascii=False, indent=1) + '\n')
     print(f'\n{gesetzt} von 22 Gerichten haben jetzt ein Bild.')
+    print(f'{len(galerie)} davon stehen auch in der Produktgalerie.')

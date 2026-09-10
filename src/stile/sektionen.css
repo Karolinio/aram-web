@@ -4116,6 +4116,25 @@
   filter: var(--schatten-speise);
 }
 
+/**
+ * ═══ Die Produktgalerie hat QUERE Bögen ═══
+ *
+ * Karol am 10.09.: „am besten auch nicht hochkant, sondern von links nach
+ * rechts die Produkte."
+ *
+ * Der hochkante Bogen ist für die erste Arkade richtig — dort stehen Bleche,
+ * Öfen und Menschen im Bild, und die sind hoch. Ein Gebäck ist es nicht: das
+ * lange Käseschiff wurde im 3:4-Bogen in der Mitte durchgeschnitten, übrig
+ * blieb ein Stück Brett. Gemessen war vom Gebäck nichts mehr zu sehen.
+ *
+ * 4:3 statt 3:4, und die Höhe sinkt entsprechend, damit die Bögen nicht
+ * doppelt so breit werden wie nebenan.
+ */
+.galerie--quer .bogen__rahmen {
+  aspect-ratio: 4 / 3;
+  height: clamp(9.5rem, 18vw, 15rem);
+}
+
 .bogen__rahmen img {
   display: block;
   width: 100%;

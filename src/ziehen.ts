@@ -69,7 +69,13 @@ const SCHWEBE_RICHTUNG = -1
 /** Wie lange nach einer Beruehrung gewartet wird, bevor es weitergeht. */
 const SCHWEBE_RUHE = 1800
 
-export function useZiehband<T extends HTMLElement>(schwebt = false) {
+/**
+ * `jeSatz` statt der festen `BILDER_JE_SATZ`: seit dem 10.09. gibt es ZWEI
+ * Baender auf der Seite — die Galerie aus dem Laden und die Produktgalerie —
+ * und sie haben unterschiedlich viele Bilder. Eine Konstante fuer beide haette
+ * das zweite Band an der falschen Stelle umlaufen lassen.
+ */
+export function useZiehband<T extends HTMLElement>(schwebt = false, jeSatz = BILDER_JE_SATZ) {
   const ref = useRef<T>(null)
   const [stand, setStand] = useState<Stand>({ links: false, rechts: true })
 
@@ -148,7 +154,7 @@ export function useZiehband<T extends HTMLElement>(schwebt = false) {
     const satzBreite = () => {
       const liste = el.firstElementChild
       const a = liste?.children[0] as HTMLElement | undefined
-      const b = liste?.children[BILDER_JE_SATZ] as HTMLElement | undefined
+      const b = liste?.children[jeSatz] as HTMLElement | undefined
       return a && b ? b.offsetLeft - a.offsetLeft : 0
     }
 
@@ -251,7 +257,7 @@ export function useZiehband<T extends HTMLElement>(schwebt = false) {
       el.classList.remove('schwebt')
       beobachter.disconnect()
     }
-  }, [schwebt])
+  }, [schwebt, jeSatz])
 
   /**
    * Einen Schritt weiter — für die Pfeilknöpfe.

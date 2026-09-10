@@ -1,12 +1,30 @@
 import galerieRoh from '../../inhalt/galerie.json'
+import produktRoh from '../../inhalt/produktgalerie.json'
 import { pfad } from '../pfad.ts'
-import { BILDER_JE_SATZ } from '../galeriemass.ts'
 import { useZiehband } from '../ziehen.ts'
 import { Kopf, Sektion } from './ui/bausteine.tsx'
 import Untergrund from './ui/Untergrund.tsx'
 
 type Bild = { nr: number; titel: string; lage: 'hoch' | 'quer'; breite: number; hoehe: number }
 const BILDER = galerieRoh as Bild[]
+
+/**
+ * ═══ Die zweite Arkade: nur Produkte ═══
+ *
+ * Karol am 10.09.: „eine Galerie wäre auch, glaube ich, krass: nur mit
+ * Produktbildern … so wie bei der Speisekarte, von links nach rechts … und
+ * trotzdem können die Speisekarten neben den Produkten bleiben."
+ *
+ * Der Unterschied zur ersten ist nicht die Form, sondern der INHALT. Die erste
+ * zeigt den Betrieb — Bleche, Ofen, die Brüder, ein gedeckter Tisch. Sie
+ * beantwortet „wie ist es da". Diese hier zeigt je EIN Gericht, freigestellt
+ * vom Rest, und beantwortet „was bekomme ich". Zwei Fragen, zwei Bänder.
+ *
+ * Sie liest dieselben Dateien wie die Speisekarte (`/bilder/karte/`). Eigene
+ * Ausgaben davon waeren anderthalb Megabyte fuer dasselbe Bild.
+ */
+type Produkt = { datei: string; titel: string; nr: number | null; breite: number; hoehe: number }
+const PRODUKTE = produktRoh as Produkt[]
 
 /**
  * Die Galerie — eine Arkade, die der Besucher selbst bewegt.
@@ -53,8 +71,9 @@ const BILDER = galerieRoh as Bild[]
  * Seite weiter.
  */
 
-function Bogen({ bild, i, echo }: { bild: Bild; i: number; echo?: boolean }) {
-  const nr = String(bild.nr).padStart(2, '0')
+function Bogen({ quelle, klein, titel, i, echo }: {
+  quelle: string; klein: string; titel: string; i: number; echo?: boolean
+}) {
   return (
     /* Die zweite Fassung ist nur da, damit das Band umlaufen kann. Fuer ein
        Vorleseprogramm waeren vierzehn Bilder statt sieben schlicht falsch. */
@@ -63,12 +82,10 @@ function Bogen({ bild, i, echo }: { bild: Bild; i: number; echo?: boolean }) {
         <img
           /* Über `pfad` und nicht als blosse Zeichenkette — siehe src/pfad.ts.
              Genau hier ging es unter einem Unterpfad kaputt. */
-          src={pfad(`bilder/galerie/${nr}.webp`)}
-          srcSet={`${pfad(`bilder/galerie/${nr}-klein.webp`)} 520w, ${pfad(`bilder/galerie/${nr}.webp`)} 900w`}
+          src={pfad(quelle)}
+          srcSet={`${pfad(klein)} 520w, ${pfad(quelle)} 900w`}
           sizes="(max-width: 719px) 62vw, 26vw"
-          alt={bild.titel}
-          width={bild.breite}
-          height={bild.hoehe}
+          alt={titel}
           loading={!echo && i < 3 ? 'eager' : 'lazy'}
           decoding="async"
         />
@@ -76,16 +93,27 @@ function Bogen({ bild, i, echo }: { bild: Bild; i: number; echo?: boolean }) {
       {/* Die Bildzeile steht wieder da — anders als beim Stapel. Dort war sie
           falsch, weil ein Stapel Abzüge keine Beschriftung hat; unter einem
           Bogen in einer Arkade ist sie eine Tafel, und die gehört dorthin. */}
-      <p className="bogen__wort">{bild.titel}</p>
+      <p className="bogen__wort">{titel}</p>
     </li>
   )
 }
 
-export default function Galerie() {
-  const { ref: bahn, stand, schieben } = useZiehband<HTMLDivElement>(true)
+type BandBild = { quelle: string; klein: string; titel: string; schluessel: string }
+
+/**
+ * Ein Band aus Bogen. Kopf und Inhalt kommen von aussen; die Mechanik —
+ * Ziehen, Schweben, Umlaufen, Pfeiltasten — ist fuer beide dieselbe.
+ */
+function Arkade({ id, etikett, titel, lead, hinweis, bilder, quer }: {
+  id: string; etikett: string; titel: string; lead: string; hinweis: string
+  bilder: BandBild[]
+  /** Bögen im Querformat statt hochkant — für Gebäcke, die länger als hoch sind. */
+  quer?: boolean
+}) {
+  const { ref: bahn, stand, schieben } = useZiehband<HTMLDivElement>(true, bilder.length)
 
   return (
-    <Sektion id="galerie" grund="nacht" klasse="galerie" beschriftetVon="galerie-titel">
+    <Sektion id={id} grund="nacht" klasse={`galerie${quer ? ' galerie--quer' : ''}`} beschriftetVon={`${id}-titel`}>
       {/* ═══ Die Überschrift stand AUSSERHALB der Schale ═══
           Karol am 26.08.: „Überschrift muss weiter rechts formatiert."
           Sie klebte am Fensterrand — als einzige Überschrift der Seite. Jede
@@ -96,12 +124,7 @@ export default function Galerie() {
       <Untergrund ton="nacht" muster="saat" />
 
       <div className="schale">
-        <Kopf
-          id="galerie-titel"
-          etikett="Aus dem Laden"
-          titel="Was an einem Morgen entsteht"
-          lead="Vom Blech über die Glut auf den Tisch."
-        />
+        <Kopf id={`${id}-titel`} etikett={etikett} titel={titel} lead={lead} />
       </div>
 
       {/* ═══ Warum der Hinweis dasteht ═══
@@ -110,7 +133,7 @@ export default function Galerie() {
           und wer es nicht ausprobiert, sieht vier von sieben Bildern. Ein Satz
           und zwei Pfeile kosten eine Zeile und lösen genau das. */}
       <div className="schale galerie__leiste">
-        <p className="galerie__hinweis">Es läuft von allein. Zeiger drauf hält an — oder ziehen. Es sind {BILDER_JE_SATZ}.</p>
+        <p className="galerie__hinweis">{hinweis}</p>
         <div className="galerie__pfeile">
           <button
             type="button"
@@ -143,7 +166,7 @@ export default function Galerie() {
         ref={bahn}
         tabIndex={0}
         role="group"
-        aria-label={`Bilder aus dem Laden, ${BILDER_JE_SATZ} Stück, mit den Pfeiltasten bewegen`}
+        aria-label={`${titel}, ${bilder.length} Bilder, mit den Pfeiltasten bewegen`}
       >
         {/* Eine echte Liste in Leserichtung. Für ein Vorleseprogramm ist der
             Unterschied, ob es „Liste mit sieben Einträgen" ansagt oder gar
@@ -154,14 +177,54 @@ export default function Galerie() {
             wieder dasselbe Bild. Die zweite Fassung ist fuer
             Vorleseprogramme versteckt — siehe `aria-hidden` am Bogen. */}
         <ul className="galerie__arkade">
-          {BILDER.map((bild, i) => (
-            <Bogen key={bild.nr} bild={bild} i={i} />
+          {bilder.map((b, i) => (
+            <Bogen key={b.schluessel} quelle={b.quelle} klein={b.klein} titel={b.titel} i={i} />
           ))}
-          {BILDER.map((bild, i) => (
-            <Bogen key={`echo-${bild.nr}`} bild={bild} i={i} echo />
+          {bilder.map((b, i) => (
+            <Bogen key={`echo-${b.schluessel}`} quelle={b.quelle} klein={b.klein} titel={b.titel} i={i} echo />
           ))}
         </ul>
       </div>
     </Sektion>
+  )
+}
+
+export default function Galerie() {
+  const ausDemLaden: BandBild[] = BILDER.map((b) => {
+    const nr = String(b.nr).padStart(2, '0')
+    return { quelle: `bilder/galerie/${nr}.webp`, klein: `bilder/galerie/${nr}-klein.webp`,
+             titel: b.titel, schluessel: nr }
+  })
+  return (
+    <Arkade
+      id="galerie"
+      etikett="Aus dem Laden"
+      titel="Was an einem Morgen entsteht"
+      lead="Vom Blech über die Glut auf den Tisch."
+      hinweis={`Es läuft von allein. Zeiger drauf hält an — oder ziehen. Es sind ${ausDemLaden.length}.`}
+      bilder={ausDemLaden}
+    />
+  )
+}
+
+export function Produktgalerie() {
+  const produkte: BandBild[] = PRODUKTE.map((p) => ({
+    quelle: `bilder/karte/${p.datei}.webp`,
+    klein: `bilder/karte/${p.datei}-klein.webp`,
+    /* Die Nummer steht mit dabei, weil Gaeste am Telefon die Nummer nennen —
+       dieselbe Ueberlegung wie in der Speisekarte. */
+    titel: p.nr != null ? `${p.nr} · ${p.titel}` : p.titel,
+    schluessel: p.datei,
+  }))
+  return (
+    <Arkade
+      id="produkte"
+      etikett="Einzeln angesehen"
+      titel="Jedes Gebäck für sich"
+      lead="Dieselben Aufnahmen wie in der Karte, nur gross genug zum Ansehen."
+      hinweis={`Es läuft von allein. Zeiger drauf hält an — oder ziehen. Es sind ${produkte.length}.`}
+      bilder={produkte}
+      quer
+    />
   )
 }

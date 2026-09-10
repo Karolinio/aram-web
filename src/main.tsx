@@ -15,7 +15,7 @@ import './stile/sektionen.css'
 
 import Kopfzeile from './komponenten/Kopfzeile.tsx'
 import Backstube from './komponenten/Backstube.tsx'
-import Galerie from './komponenten/Galerie.tsx'
+import Galerie, { Produktgalerie } from './komponenten/Galerie.tsx'
 import Handarbeit from './komponenten/Handarbeit.tsx'
 import Reise from './komponenten/Reise.tsx'
 import Karte from './komponenten/Karte.tsx'
@@ -161,6 +161,11 @@ function Seite() {
             Sektion — ein Höhepunkt nach zwei Bildschirmhöhen ist kein
             Höhepunkt. */}
         <Galerie />
+
+        {/* Die zweite Arkade: je EIN Gericht statt des Betriebs.
+            Sie steht direkt hinter der ersten und vor der Karte — wer die
+            Produkte gesehen hat, will als Naechstes die Preise. */}
+        <Produktgalerie />
 
         {/* Der letzte Takt der Reise: hier reisst das Käseschiff auseinander. */}
         <Reise />
