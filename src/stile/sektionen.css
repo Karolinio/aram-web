@@ -1724,7 +1724,21 @@
 
 .prozess__tore {
   list-style: none;
-  margin: 0;
+  /**
+   * ═══ Ein Stueck schmaler als die Schale ═══
+   *
+   * Karol am 10.09.: „die vier Öfen in der Mitte und die Leiste ganz leicht
+   * noch minimal in die Mitte zentrieren, damit die Sektion noch mehr Platz
+   * zum Atmen hat."
+   *
+   * 92 % und nicht weniger: die Wand soll eine WAND bleiben. Bei 80 % steht
+   * sie als Kasten in der Fläche, bei 92 % bleibt sie breit und bekommt
+   * trotzdem an beiden Seiten Luft. Die Theke darunter (`.tor::before`) läuft
+   * bewusst weiter über den vollen Rand — ein Tresen hört nicht auf, nur weil
+   * die Öfen aufhören.
+   */
+  inline-size: 92%;
+  margin: 0 auto;
   padding: 0;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -2525,7 +2539,25 @@
   /* Ein Produktfoto darf nicht die ganze Höhe des Fensters nehmen — sonst
      steht der Name unter der Falte, und der ist der Grund fürs Öffnen. */
   max-height: 56vh;
-  object-fit: cover;
+  /**
+   * ═══ `contain` und nicht `cover` ═══
+   *
+   * Hier stand `cover`. Zusammen mit `max-height: 56vh` hiess das: was nicht
+   * in 56 vh passt, wird oben und unten ABGESCHNITTEN. Karol am 10.09.: „man
+   * sieht leider nicht das gesamte Bild beziehungsweise das gesamte Produkt.
+   * Die Screenshots sind immer so 80 %."
+   *
+   * Genau 80 % — bei einem quadratischen Bild in einem Kasten, der breiter
+   * als hoch ist, bleiben rund vier Fuenftel stehen. `cover` ist richtig, wo
+   * ein Bild eine FLAECHE fuellen soll; hier soll es einen GEGENSTAND zeigen,
+   * und dann darf nichts fehlen.
+   *
+   * Die Bilder sind dazu von quadratisch auf 4:3 quer umgestellt (siehe
+   * werkzeug/kartenbilder.py) — damit bleibt bei `contain` kein Rand uebrig,
+   * der erklaert werden muesste.
+   */
+  object-fit: contain;
+  background: var(--ton-tief);
 }
 
 .bildschau__luecke {

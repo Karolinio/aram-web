@@ -33,6 +33,41 @@ QUELLE_RISS = '/tmp/lahmacun-riss.png'
 STAERKE, AUFHELLEN = 1.5, 0.09
 BREIT, HOCH = 1200, 844          # dasselbe Seitenverhaeltnis wie bisher (1,42)
 
+def bruchlinie(hoehe: int, mitte: int, breite: int, saat: int = 7) -> np.ndarray:
+    """Eine Bruchkante als x-Wert je Bildzeile.
+
+    ═══ Warum eine LINIE und nicht das gerissene Bild ═══
+
+    Der erste Versuch nahm die erzeugte, auseinandergerissene Aufnahme und
+    schnitt sie in der Mitte durch. Karol am 10.09.: „das ist nicht mal
+    zusammen zu Beginn der Sektion." Er hat recht, und der Fehler ist
+    grundsaetzlich: in dem Bild klafft der Spalt schon, also klafft er auch,
+    solange die Haelften uebereinanderliegen. Ein Vorhang, der beim Aufgehen
+    schon offen ist, ist kein Vorhang.
+
+    Also umgekehrt: das HEILE Gebaeck wird geteilt, aber nicht gerade. Jeder
+    Bildpunkt gehoert genau einer Haelfte, sie passen bei translateX(0) also
+    lueckenlos zusammen — und sobald sie auseinanderfahren, zeigt sich eine
+    zackige Kante statt eines Messerschnitts.
+
+    Die Linie ist die Summe dreier Wellen plus etwas Zittern: die lange Welle
+    gibt den groben Verlauf, die kurze das Ausfransen, das Zittern die
+    Kruemel. Feste Saat, damit derselbe Lauf dieselbe Kante ergibt.
+    """
+    rng = np.random.default_rng(saat)
+    y = np.arange(hoehe)
+    a = breite * 0.030
+    linie = (a * np.sin(y / hoehe * 3.1 + 0.7)
+             + a * 0.55 * np.sin(y / hoehe * 11.0 + 2.1)
+             + a * 0.30 * np.sin(y / hoehe * 27.0 + 4.3)
+             + rng.normal(0, a * 0.14, hoehe))
+    # Dreifach gleitendes Mittel: nimmt dem Zittern die Zacken, die kein Teig
+    # macht, laesst die groberen Ausbrueche stehen.
+    for _ in range(3):
+        linie = np.convolve(linie, np.ones(5) / 5, mode='same')
+    return (mitte + linie).astype(int)
+
+
 if __name__ == '__main__':
     im = Image.open(QUELLE).convert('RGBA')
     bb = im.getbbox()
@@ -44,28 +79,19 @@ if __name__ == '__main__':
     rahmen.paste(k, (x0, y0))
     rahmen = graduiere(rahmen, STAERKE, AUFHELLEN)
 
-    # Die HAELFTEN kommen aus dem gerissenen Bild, nicht aus dem heilen: ein
-    # gerader Schnitt durch eine Scheibe sieht aus wie ein Messer, und Karol
-    # will „wie das Gebaeck knickt und voneinander abreisst".
-    riss = Image.open(QUELLE_RISS).convert('RGBA')
-    bb2 = riss.getbbox()
-    riss = riss.crop(bb2) if bb2 else riss
-    f2 = (HOCH * 0.94) / max(riss.size)
-    k2 = riss.resize((round(riss.width * f2), round(riss.height * f2)), Image.LANCZOS)
-    rissrahmen = Image.new('RGBA', (BREIT, HOCH), (0, 0, 0, 0))
-    rissrahmen.paste(k2, ((BREIT - k2.width) // 2, (HOCH - k2.height) // 2))
-    rissrahmen = graduiere(rissrahmen, STAERKE, AUFHELLEN)
-    sp = (np.array(rissrahmen)[..., 3] > 60).sum(0)
-    fenster = slice(int(BREIT * 0.35), int(BREIT * 0.65))
-    trenn = fenster.start + int(np.argmin(sp[fenster]))
-    print(f'Bruchlinie bei Spalte {trenn} von {BREIT} ({sp[trenn]} Bildpunkte dick)')
+    linie = bruchlinie(HOCH, BREIT // 2, BREIT)
+    spalten = np.arange(BREIT)[None, :]
+    linksmaske = spalten < linie[:, None]
+    print(f'Bruchkante schwankt um {linie.max() - linie.min()} Bildpunkte '
+          f'({(linie.max() - linie.min()) / BREIT * 100:.1f} % der Breite)')
 
     masse = {}
-    for name, quelle, kasten in (('scheibe',        rahmen,     (0, 0, BREIT, HOCH)),
-                                 ('scheibe-links',  rissrahmen, (0, 0, trenn, HOCH)),
-                                 ('scheibe-rechts', rissrahmen, (trenn, 0, BREIT, HOCH))):
-        h = Image.new('RGBA', (BREIT, HOCH), (0, 0, 0, 0))
-        h.paste(quelle.crop(kasten), (kasten[0], 0))
+    voll = np.array(rahmen)
+    for name, maske in (('scheibe', None), ('scheibe-links', linksmaske), ('scheibe-rechts', ~linksmaske)):
+        a = voll.copy()
+        if maske is not None:
+            a[..., 3] = np.where(maske, a[..., 3], 0)
+        h = Image.fromarray(a, 'RGBA')
         h.save(ZIEL / f'{name}.webp', 'WEBP', quality=88, method=6)
         masse[name] = {'breite': BREIT, 'hoehe': HOCH}
         print(f'{name:<16} {BREIT} x {HOCH}  {(ZIEL / f"{name}.webp").stat().st_size // 1024} kB')

@@ -88,6 +88,7 @@ export default function Vorhang() {
 
     const links = b.querySelector<HTMLElement>('.vorhang__haelfte--links')
     const rechts = b.querySelector<HTMLElement>('.vorhang__haelfte--rechts')
+    const dampf = b.querySelector<HTMLElement>('.vorhang__dampf')
     const wort = b.querySelector<HTMLElement>('.vorhang__wort')
     const karte = b.querySelector<HTMLElement>('.vorhang__einladung')
     if (!links || !rechts) return
@@ -155,6 +156,20 @@ export default function Vorhang() {
         const weg = weich * 130
         links.style.transform = `translateX(${-weg}%) rotate(${-weich * 9}deg)`
         rechts.style.transform = `translateX(${weg}%) rotate(${weich * 9}deg)`
+
+        /* ═══ Der Dampf hoert auf, wenn die Scheibe aufbricht ═══
+
+           Karol am 10.09.: „Der Dampf ist in Ordnung, aber dass er, während
+           das schon voneinander getrennt ist, macht überhaupt keinen Sinn."
+
+           Er hat recht: Dampf steigt von einem GANZEN Gebäck auf. Sobald die
+           Hälften auseinanderfahren, ist die Quelle weg, und was dann noch
+           aufsteigt, gehört zu nichts mehr.
+
+           Er geht früher als die Hälften: bei `weich * 2.2` ist er schon
+           verschwunden, wenn sie sich um ein Viertel geöffnet haben. Dampf,
+           der bis zum letzten Moment mitläuft, wirkt wie ein Nachzügler. */
+        if (dampf) dampf.style.opacity = String(Math.max(0, 1 - weich * 2.2))
 
         /* Die Schlagzeile dahinter geht mit der Scheibe: sie ist am Anfang da,
            wird von ihr verdeckt und verschwindet, wenn die Einladung kommt.

@@ -27,14 +27,25 @@ Sechs Gerichte bleiben ohne Bild, weil es zu ihnen keine eigene Aufnahme gibt
 (Beirut, Spinat, Mexicano Roll, Sucuk, Sucuk mit Kaese, Gemuese Kaese). Zwei
 Namen dasselbe Foto zu geben waere kein Fuellen, sondern eine Falschaussage.
 
-═══ Quadratisch, weil der Platz quadratisch ist ═══
+═══ QUER, nicht quadratisch ═══
 
-`.zeile__bild` hat `aspect-ratio: 1`. Ein quadratischer Zuschnitt aus der Mitte
-trifft bei seinen Aufnahmen das Produkt, weil er es beim Fotografieren mittig
-gelegt hat — nachgemessen an allen sechs.
+Hier wurde quadratisch aus der Mitte geschnitten, weil `.zeile__bild` quadratisch
+ist. Das war ein Fehlschluss: das Vorschaubild ist 54 bis 74 px klein, aber
+dieselbe Datei wird beim Antippen GROSS gezeigt — und dort fehlte dann, was der
+quadratische Zuschnitt weggenommen hatte.
 
-700 px, nicht 1400: der Platz ist 54 bis 74 px breit, und dasselbe Bild dient
-der Grossansicht beim Antippen. 700 traegt beides und wiegt rund 70 kB.
+Karol am 10.09.: „man sieht leider nicht das gesamte Bild beziehungsweise das
+gesamte Produkt … am besten auch nicht hochkant, sondern von links nach rechts
+die Produkte."
+
+Jetzt 4:3 quer, und das Produkt liegt ganz darin. Seine Aufnahmen sind hochkant
+mit dem Gebäck in der Mitte; ein waagerechtes Band ueber die volle Breite
+erwischt es vollstaendig. Der quadratische Ausschnitt fuer die Zeile macht
+danach das Stilblatt (`object-fit: cover`) — dort schadet er nicht, weil dort
+niemand das ganze Produkt sucht.
+
+1000 x 750: das Vorschaubild braucht davon 150 px, die Grossansicht die vollen
+1000. Rund 90 kB.
 """
 import json
 import subprocess
@@ -45,7 +56,15 @@ from PIL import Image
 WURZEL = Path(__file__).parent.parent
 ROH = WURZEL / 'rohbilder' / 'eingang' / 'neu-2026-09' / 'rest'
 ZIEL = WURZEL / 'public' / 'bilder' / 'karte'
-KANTE = 700
+BREIT, HOCH = 1000, 750
+
+# Gebaecke, die in seiner Aufnahme senkrecht liegen: um 90 Grad drehen,
+# damit sie im Querformat der Laenge nach liegen.
+DREHUNG = {
+    'Groß Käse, scharf': 90,
+    'Frischkäse': -90,
+    'Lange Käse': 90,
+}
 
 # Name auf ihrer Karte -> (Datei, Bildbeschreibung, wie sicher)
 #
@@ -77,16 +96,26 @@ ZUORDNUNG = {
 }
 
 
-def quadrat(quelle: Path, ziel: Path) -> tuple[int, int]:
+def querformat(quelle: Path, ziel: Path, dreh: int = 0) -> tuple[int, int]:
     zwischen = Path('/tmp') / (quelle.stem + '.jpg')
     subprocess.run(['sips', '-s', 'format', 'jpeg', '-s', 'formatOptions', '95',
                     str(quelle), '--out', str(zwischen)], capture_output=True, check=True)
     im = Image.open(zwischen).convert('RGB')
-    k = min(im.size)
-    x, y = (im.width - k) // 2, (im.height - k) // 2
-    im.crop((x, y, x + k, y + k)).resize((KANTE, KANTE), Image.LANCZOS) \
-      .save(ziel, 'WEBP', quality=80, method=6)
-    return KANTE, KANTE
+    # Ein paar Gebaecke liegen in seiner Aufnahme senkrecht im Bild. Karol:
+    # „sonst kann man die leider nicht wegklicken, wenn die so nicht auf Kopf,
+    # sondern auf links gedreht sind." Gedreht wird die QUELLE, nicht der
+    # Zuschnitt — sonst schneidet das Band quer durch das Gebaeck.
+    if dreh:
+        im = im.rotate(dreh, expand=True)
+    ziel_v = BREIT / HOCH
+    if im.width / im.height > ziel_v:      # zu breit: an den Seiten beschneiden
+        b = int(im.height * ziel_v)
+        im = im.crop(((im.width - b) // 2, 0, (im.width - b) // 2 + b, im.height))
+    else:                                   # zu hoch: ein Band aus der Mitte
+        h = int(im.width / ziel_v)
+        im = im.crop((0, (im.height - h) // 2, im.width, (im.height - h) // 2 + h))
+    im.resize((BREIT, HOCH), Image.LANCZOS).save(ziel, 'WEBP', quality=80, method=6)
+    return BREIT, HOCH
 
 
 if __name__ == '__main__':
@@ -99,8 +128,9 @@ if __name__ == '__main__':
             if not eintrag:
                 continue
             datei, alt, sicherheit = eintrag
+            dreh = DREHUNG.get(g['name'], 0)
             name = g['name'].lower().replace('ß','ss').replace(', ','-').replace(' ','-') + '.webp'
-            w, h = quadrat(ROH / datei, ZIEL / name)
+            w, h = querformat(ROH / datei, ZIEL / name, dreh)
             g['bild'] = {'quelle': f'/bilder/karte/{name}', 'alt': alt, 'breite': w, 'hoehe': h}
             kb = (ZIEL / name).stat().st_size // 1024
             print(f"{str(g.get('nr','—')):>3} {g['name']:<22} {datei:<18} {kb:>3} kB  ({sicherheit})")

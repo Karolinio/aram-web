@@ -184,11 +184,24 @@ function Ofenwand() {
             <Tor key={x.zahl} s={x} />
           ))}
         </ol>
-        {/* Der Dampf gehoert ueber die WAND, nicht in ein einzelnes Maul: ein
-            Ofen dampft, nicht ein Bild. Schmal und flach — die vorige Leinwand
-            mass 655 x 443 und begann 57 px ueber dem Fensterrand, lag also zur
-            Haelfte hinter der Kopfzeile und als Nebel ueber allem anderen. */}
-        <Dampf ton="ofen" klasse="prozess__dampf" dichte={5} />
+        {/* ═══ Der Ofendampf ist RAUS ═══
+
+            Hier stand eine Dampfleinwand ueber der ganzen Wand, mit der
+            Begruendung „ein Ofen dampft, nicht ein Bild". Das stimmt in der
+            Sache und war hier trotzdem falsch.
+
+            Karol am 10.09.: „Der Rauch soll nicht von den Öfen ausgehen, also
+            dann nur von jedem einzelnen Produkt im Hintergrund aus … damit er
+            nicht im Vordergrund ist. Man soll die Produkte da gut erkennen
+            können."
+
+            Der Punkt ist die Reihenfolge im Bild. Der Wanddampf lag VOR den
+            Mäulern und damit vor allem, was in der Sektion zu sehen ist — er
+            hat genau das verschleiert, was die Sektion zeigen will. Der Dampf
+            an den einzelnen Gebäcken liegt dagegen HINTER ihnen (siehe
+            `gebaeck__dampf`) und hebt sie heraus, statt sie zuzudecken.
+
+            Es dampft also weiterhin, nur von der richtigen Stelle aus. */}
       </div>
     </div>
   )

@@ -15,8 +15,8 @@
     "bild": {
      "quelle": "/bilder/karte/zaatar.webp",
      "alt": "Ein runder Fladen, dunkel mit Zaatar bestrichen und dicht mit Sesam bestreut",
-     "breite": 700,
-     "hoehe": 700
+     "breite": 1000,
+     "hoehe": 750
     }
    },
    {
@@ -31,8 +31,8 @@
     "bild": {
      "quelle": "/bilder/karte/muhammara.webp",
      "alt": "Ein runder Fladen mit roter Paprikapaste und Sesam in der Mitte",
-     "breite": 700,
-     "hoehe": 700
+     "breite": 1000,
+     "hoehe": 750
     }
    },
    {
@@ -48,8 +48,8 @@
     "bild": {
      "quelle": "/bilder/karte/lange-käse.webp",
      "alt": "Eine lange schmale Teigrolle, mit Sesam bestreut",
-     "breite": 700,
-     "hoehe": 700
+     "breite": 1000,
+     "hoehe": 750
     }
    },
    {
@@ -64,8 +64,8 @@
     "bild": {
      "quelle": "/bilder/karte/doppelt-käse.webp",
      "alt": "Ein quadratisch gefaltetes Gebaeck mit Kaese und Gemuese",
-     "breite": 700,
-     "hoehe": 700
+     "breite": 1000,
+     "hoehe": 750
     }
    },
    {
@@ -81,8 +81,8 @@
     "bild": {
      "quelle": "/bilder/karte/schamiyeh.webp",
      "alt": "Ein quadratisch gefaltetes Gebaeck mit Kaese und gruenen Kraeutern",
-     "breite": 700,
-     "hoehe": 700
+     "breite": 1000,
+     "hoehe": 750
     }
    },
    {
@@ -115,8 +115,8 @@
     "bild": {
      "quelle": "/bilder/karte/oliven.webp",
      "alt": "Ein runder Fladen mit gruenen Oliven, Tomatenwuerfeln und Hirtenkaese",
-     "breite": 700,
-     "hoehe": 700
+     "breite": 1000,
+     "hoehe": 750
     }
    },
    {
@@ -131,8 +131,8 @@
     "bild": {
      "quelle": "/bilder/karte/frischkäse.webp",
      "alt": "Eine geschlossene halbmondfoermige Teigtasche",
-     "breite": 700,
-     "hoehe": 700
+     "breite": 1000,
+     "hoehe": 750
     }
    },
    {
@@ -146,8 +146,8 @@
     "bild": {
      "quelle": "/bilder/karte/hackfleisch-&-gemüse.webp",
      "alt": "Ein offenes Schiffchen mit Hackfleisch, aus einem anderen Blickwinkel",
-     "breite": 700,
-     "hoehe": 700
+     "breite": 1000,
+     "hoehe": 750
     }
    },
    {
@@ -161,8 +161,8 @@
     "bild": {
      "quelle": "/bilder/karte/hackfleisch.webp",
      "alt": "Ein offenes Schiffchen aus Teig, mit Hackfleisch gefuellt",
-     "breite": 700,
-     "hoehe": 700
+     "breite": 1000,
+     "hoehe": 750
     }
    },
    {
@@ -177,8 +177,8 @@
     "bild": {
      "quelle": "/bilder/karte/schaorma-roll.webp",
      "alt": "Eine gefuellte Teigrolle mit drei Einschnitten",
-     "breite": 700,
-     "hoehe": 700
+     "breite": 1000,
+     "hoehe": 750
     }
    },
    {
@@ -193,8 +193,8 @@
     "bild": {
      "quelle": "/bilder/karte/fahita.webp",
      "alt": "Ein runder Fladen mit Kartoffelwuerfeln, Paprika und Tomate",
-     "breite": 700,
-     "hoehe": 700
+     "breite": 1000,
+     "hoehe": 750
     }
    },
    {
@@ -239,8 +239,8 @@
     "bild": {
      "quelle": "/bilder/karte/toschka.webp",
      "alt": "Ein runder Fladen mit Hackfleisch und vier Wuerfeln Hirtenkaese",
-     "breite": 700,
-     "hoehe": 700
+     "breite": 1000,
+     "hoehe": 750
     }
    },
    {
@@ -265,8 +265,8 @@
     "bild": {
      "quelle": "/bilder/karte/gross-käse-scharf.webp",
      "alt": "Ein geschlossenes Schiffchen aus Teig mit Sesam und Schwarzkuemmel",
-     "breite": 700,
-     "hoehe": 700
+     "breite": 1000,
+     "hoehe": 750
     }
    },
    {
@@ -281,8 +281,8 @@
     "bild": {
      "quelle": "/bilder/karte/gross-käse-gemüse.webp",
      "alt": "Ein runder Fladen mit Kaese, Oliven, Paprika und Tomate",
-     "breite": 700,
-     "hoehe": 700
+     "breite": 1000,
+     "hoehe": 750
     }
    },
    {
@@ -296,8 +296,8 @@
     "bild": {
      "quelle": "/bilder/karte/lahmacun.webp",
      "alt": "Ein Lahmacun, duenn ausgerollt und flaechig mit Hackfleisch belegt",
-     "breite": 700,
-     "hoehe": 700
+     "breite": 1000,
+     "hoehe": 750
     }
    },
    {
@@ -311,8 +311,8 @@
     "bild": {
      "quelle": "/bilder/karte/lahmacun-mit-zwiebeln.webp",
      "alt": "Ein Lahmacun mit Hackfleisch, aus einem anderen Blickwinkel",
-     "breite": 700,
-     "hoehe": 700
+     "breite": 1000,
+     "hoehe": 750
     }
    }
   ]
