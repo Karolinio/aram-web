@@ -91,7 +91,7 @@ export default function Backstube() {
         <video
           ref={video}
           className="backstube__video"
-          poster="/video/kaeseschiffe-poster.jpg"
+          poster="/video/ofen-poster.jpg"
           /* Alle vier Angaben sind Pflicht, nicht Geschmack:
              `muted` — ohne sie verweigert jeder Browser das Abspielen.
              `playsInline` — ohne sie reisst iOS das Video ins Vollbild.
@@ -107,14 +107,22 @@ export default function Backstube() {
           {/* Der Schlüssel erzwingt ein neues `video`-Element, wenn sich die
               Breite ändert. Ohne ihn behält der Browser die einmal gewählte
               Quelle bei — `<source>` wird nur beim ERSTEN Laden ausgewertet. */}
-          <source
-            key={schmal ? 'k-webm' : 'g-webm'}
-            src={schmal ? '/video/kaeseschiffe.webm' : '/video/kaeseschiffe-gross.webm'}
-            type="video/webm"
-          />
+          {/* ═══ Die webm-Quelle ist raus, und zwar gemessen ═══
+
+              Hier standen zwei Quellen, webm zuerst. Das ist die uebliche
+              Reihenfolge, weil VP9 h264 normalerweise schlaegt. Bei DIESEM
+              Material tut es das nicht: das Handyvideo ist verwackelt und
+              koernig, und daran verschluckt sich VP9.
+
+                  gross   h264 2,84 MB   vs   VP9 4,44 MB
+                  klein   h264 1,55 MB   vs   VP9 2,28 MB
+
+              Der Browser nimmt die ERSTE Quelle, die er kann — er haette also
+              in jedem Fall die schwerere geladen. h264 versteht jeder Browser,
+              der diese Seite je zu sehen bekommt. */}
           <source
             key={schmal ? 'k-mp4' : 'g-mp4'}
-            src={schmal ? '/video/kaeseschiffe.mp4' : '/video/kaeseschiffe-gross.mp4'}
+            src={schmal ? '/video/ofen.mp4' : '/video/ofen-gross.mp4'}
             type="video/mp4"
           />
         </video>
