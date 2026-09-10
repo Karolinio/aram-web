@@ -122,11 +122,27 @@ export default function Backstube() {
               ueber den Inhalt, und da hat er recht.
 
               Was die Messung beitraegt, ist eine andere Zahl: die BEWEGUNG
-              zwischen den Bildern. Dieser Clip hat mit 50,0 die ruhigste
-              Kamera von allen sechs (Vitrine 57,5, der alte Ofen 57,7,
-              Belegen 61,0). Hinter einer Ueberschrift zaehlt das mehr als
-              Schaerfe: ein ruhiges Bild traegt Text, ein hektisches frisst
-              ihn.
+              zwischen den Bildern. Hinter einer Ueberschrift zaehlt sie mehr
+              als Schaerfe — ein ruhiges Bild traegt Text, ein hektisches
+              frisst ihn. Ueber die ganze Cliplaenge gemittelt, und daneben
+              die ruhigsten acht Sekunden, die jeder Clip zu bieten hat:
+
+                                    Mittel   ruhigste 8 s
+                  06 Theke           42,9      31,8  (ab 15,5 s)
+                  04 Ofen+Schiffe    46,8      46,8  (ab  0,9 s)  <- gewaehlt
+                  02 Ofen (alt)      55,8      45,9  (ab 45,2 s)
+                  08 Handwerk        56,6      52,9
+                  01 Vitrine         56,7      56,7
+                  03 Belegen+Ofen    58,9      60,2
+
+              Die Theke ist also die ruhigste, nicht dieser Clip — eine
+              frueher gerechnete Fassung, die nur die ersten zwoelf Sekunden
+              jedes Clips ansah, legte das Gegenteil nahe. Es aendert die Wahl
+              nicht: die Theke ist aus INHALTLICHEN Gruenden raus, und dagegen
+              hilft keine Bewegungszahl. Unter den verbleibenden ist dieser
+              der ruhigste, und sein ruhigster Abschnitt liegt gleichauf mit
+              dem des alten Ofenclips (46,8 gegen 45,9) — nur zeigt er dabei
+              auch das Gebaeck.
 
               Und er ist beides, was Karol zur Wahl gestellt hat — der
               Steinofen mit der blauen Flamme im Hintergrund UND ein Brett
