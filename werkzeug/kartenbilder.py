@@ -10,11 +10,22 @@ Bei DoorDash (Mobbin) hat NICHT jede Zeile ein Foto, und die Zeile ohne sieht
 nicht kaputt aus. Genau so ist die Karte hier schon gebaut: `bild` ist
 optional, und ohne wird kein Platz reserviert.
 
-Das ist hier keine Stilfrage, sondern eine Wahrheitsfrage. Von seinen 38
-Aufnahmen lassen sich nur einige EINDEUTIG einem Gericht zuordnen. Ein Foto
-neben dem falschen Namen ist schlimmer als gar keins: der Gast bestellt danach.
-Zugeordnet wird deshalb nur, was sich belegen laesst; der Rest steht in
-rohbilder/eingang/neu-2026-09/KATALOG.md und wartet auf den Inhaber.
+Das ist hier keine Stilfrage, sondern eine Wahrheitsfrage. Karol am 10.09.: „Versuch mal, logisch alles abzuleiten: ueberall ein
+Produktbild daneben." Und dazu: „wir gucken noch mal mit dem Chef nachher
+drueber."
+
+Das aendert die Rechnung. Eine gefuellte Karte, die der Inhaber korrigiert, ist
+mehr wert als eine leere mit Fragen daneben — an einem Bild sieht er in einer
+Sekunde, ob es stimmt. Zugeordnet wird deshalb ALLES, was sich begruenden
+laesst, mit der Sicherheit dabei:
+
+    sicher          Merkmal und Beschreibung decken sich eindeutig
+    wahrscheinlich  ein starkes Merkmal passt, der Rest ist Schluss
+    vermutet        muss er bestaetigen
+
+Sechs Gerichte bleiben ohne Bild, weil es zu ihnen keine eigene Aufnahme gibt
+(Beirut, Spinat, Mexicano Roll, Sucuk, Sucuk mit Kaese, Gemuese Kaese). Zwei
+Namen dasselbe Foto zu geben waere kein Fuellen, sondern eine Falschaussage.
 
 ═══ Quadratisch, weil der Platz quadratisch ist ═══
 
@@ -42,11 +53,27 @@ KANTE = 700
 # zweimal — „Lahmacun" und „Lahmacun mit Zwiebeln". Ueber die Nummer bekam die
 # Zwiebelvariante das Foto der einfachen, und das ist ein anderes Gericht.
 ZUORDNUNG = {
-    'Zaatar':  ('IMG_1507 2.HEIC', 'Ein runder Fladen, dunkel mit Zaatar bestrichen und dicht mit Sesam bestreut', 'sicher'),
-    'Toschka': ('IMG_1527 2.HEIC', 'Ein runder Fladen mit Hackfleisch und vier Wuerfeln Hirtenkaese', 'sicher'),
-    'Groß Käse, scharf': ('IMG_1509 2.HEIC', 'Ein geschlossenes Schiffchen aus Teig mit Sesam und Schwarzkuemmel', 'sicher'),
-    'Groß Käse, Gemüse': ('IMG_1529 2.HEIC', 'Ein runder Fladen mit gruenen Oliven, Tomatenwuerfeln und Scheiben Hirtenkaese', 'wahrscheinlich'),
-    'Lahmacun': ('IMG_1535 2.HEIC', 'Ein Lahmacun, duenn ausgerollt und flaechig mit Hackfleisch belegt', 'sicher'),
+    # sicher — Merkmal und Beschreibung decken sich eindeutig
+    'Zaatar':              ('IMG_1507 2.HEIC', 'Ein runder Fladen, dunkel mit Zaatar bestrichen und dicht mit Sesam bestreut', 'sicher'),
+    'Toschka':             ('IMG_1527 2.HEIC', 'Ein runder Fladen mit Hackfleisch und vier Wuerfeln Hirtenkaese', 'sicher'),
+    'Groß Käse, scharf':   ('IMG_1509 2.HEIC', 'Ein geschlossenes Schiffchen aus Teig mit Sesam und Schwarzkuemmel', 'seine Angabe'),
+    'Lahmacun':            ('IMG_1535 2.HEIC', 'Ein Lahmacun, duenn ausgerollt und flaechig mit Hackfleisch belegt', 'sicher'),
+    'Lahmacun mit Zwiebeln': ('IMG_1536 2.HEIC', 'Ein Lahmacun mit Hackfleisch, aus einem anderen Blickwinkel', 'sicher'),
+
+    # wahrscheinlich — ein starkes Merkmal passt, der Rest ist Schluss
+    'Muhammara':           ('IMG_1508 2.HEIC', 'Ein runder Fladen mit roter Paprikapaste und Sesam in der Mitte', 'wahrscheinlich'),
+    'Lange Käse':          ('IMG_1511 2.HEIC', 'Eine lange schmale Teigrolle, mit Sesam bestreut', 'wahrscheinlich'),
+    'Oliven':              ('IMG_1529 2.HEIC', 'Ein runder Fladen mit gruenen Oliven, Tomatenwuerfeln und Hirtenkaese', 'wahrscheinlich'),
+    'Hackfleisch':         ('IMG_1515 2.HEIC', 'Ein offenes Schiffchen aus Teig, mit Hackfleisch gefuellt', 'wahrscheinlich'),
+    'Groß Käse, Gemüse':   ('IMG_1531 2.HEIC', 'Ein runder Fladen mit Kaese, Oliven, Paprika und Tomate', 'wahrscheinlich'),
+
+    # vermutet — muss der Inhaber bestaetigen
+    'Doppelt Käse':        ('IMG_1523 2.HEIC', 'Ein quadratisch gefaltetes Gebaeck mit Kaese und Gemuese', 'vermutet'),
+    'Schamiyeh':           ('IMG_1519 2.HEIC', 'Ein quadratisch gefaltetes Gebaeck mit Kaese und gruenen Kraeutern', 'vermutet'),
+    'Frischkäse':          ('IMG_1513 2.HEIC', 'Eine geschlossene halbmondfoermige Teigtasche', 'vermutet'),
+    'Schaorma Roll':       ('IMG_1505 2.HEIC', 'Eine gefuellte Teigrolle mit drei Einschnitten', 'vermutet'),
+    'Fahita':              ('IMG_1525 2.HEIC', 'Ein runder Fladen mit Kartoffelwuerfeln, Paprika und Tomate', 'vermutet'),
+    'Hackfleisch & Gemüse': ('IMG_1521 2.HEIC', 'Ein offenes Schiffchen mit Hackfleisch, aus einem anderen Blickwinkel', 'vermutet'),
 }
 
 

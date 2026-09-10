@@ -143,9 +143,23 @@ const BAHN: readonly Punkt[] = [
      Gedreht wird hier nicht — `rotateY` verschiebt einen 1750 px breiten
      Gegenstand unter der Perspektive seitlich, gemessen 71 px bei sechs Grad,
      und genau das las Karol als „zu weit rechts". */
-  { p: 0.66, x: 0, y: 0.02, dreh: 0, drehY: 0, drehX: 0, skala: 0.96, deck: 1 },
-  { p: 0.72, x: 0, y: 0.0, dreh: 0, drehY: 0, drehX: 0, skala: 1.03, deck: 1 },
-  { p: 0.78, x: 0, y: -0.01, dreh: 0, drehY: 0, drehX: 0, skala: 1.09, deck: 1 },
+  /* ═══ Es steht STILL, bevor es aufbricht ═══
+
+     Karol am 10.09.: „eine halbe Sekunde vorher in der Mitte zentrieren und
+     dann harmonisch aufbrechen lassen."
+
+     Hier wuchs die Grösse quer durch den Riss hindurch — 0,96 → 1,03 → 1,09,
+     und der Schnitt fiel bei 0,70 mitten in diese Bewegung. Ein Gegenstand,
+     der sich verändert, WÄHREND er sich bewegt, hat keinen Moment; man sieht
+     zwei Dinge gleichzeitig und keins davon richtig.
+
+     Jetzt liegt zwischen 0,66 und 0,72 eine echte Ruhe: gleiche Grösse,
+     gleiche Lage, keine Drehung. Der Riss bei 0,70 fällt hinein. Bei rund
+     4600 px Sektionsweg sind 0,04 Verlauf etwa 180 px Scroll — genau die
+     halbe Sekunde, die er meint. Erst danach wächst es weiter. */
+  { p: 0.66, x: 0, y: 0.0, dreh: 0, drehY: 0, drehX: 0, skala: 1.0, deck: 1 },
+  { p: 0.72, x: 0, y: 0.0, dreh: 0, drehY: 0, drehX: 0, skala: 1.0, deck: 1 },
+  { p: 0.78, x: 0, y: -0.01, dreh: 0, drehY: 0, drehX: 0, skala: 1.06, deck: 1 },
   /* Und weg zur Seite — nach rechts, weil die Leserichtung dorthin zeigt.
      Über 0,22 des Verlaufs statt über 0,14: ein langer Abflug liest sich
      ruhig, ein kurzer als Zucken. */

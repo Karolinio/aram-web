@@ -27,7 +27,13 @@
     "allergene": [
      "Gluten",
      "Sesam"
-    ]
+    ],
+    "bild": {
+     "quelle": "/bilder/karte/muhammara.webp",
+     "alt": "Ein runder Fladen mit roter Paprikapaste und Sesam in der Mitte",
+     "breite": 700,
+     "hoehe": 700
+    }
    },
    {
     "nr": 3,
@@ -38,7 +44,13 @@
      "Gluten",
      "Sesam",
      "Milch"
-    ]
+    ],
+    "bild": {
+     "quelle": "/bilder/karte/lange-käse.webp",
+     "alt": "Eine lange schmale Teigrolle, mit Sesam bestreut",
+     "breite": 700,
+     "hoehe": 700
+    }
    },
    {
     "nr": 4,
@@ -48,7 +60,13 @@
     "allergene": [
      "Gluten",
      "Milch"
-    ]
+    ],
+    "bild": {
+     "quelle": "/bilder/karte/doppelt-käse.webp",
+     "alt": "Ein quadratisch gefaltetes Gebaeck mit Kaese und Gemuese",
+     "breite": 700,
+     "hoehe": 700
+    }
    },
    {
     "nr": 5,
@@ -59,7 +77,13 @@
      "Gluten",
      "Milch",
      "Ei"
-    ]
+    ],
+    "bild": {
+     "quelle": "/bilder/karte/schamiyeh.webp",
+     "alt": "Ein quadratisch gefaltetes Gebaeck mit Kaese und gruenen Kraeutern",
+     "breite": 700,
+     "hoehe": 700
+    }
    },
    {
     "nr": 6,
@@ -87,7 +111,13 @@
     "preis": 2,
     "allergene": [
      "Gluten"
-    ]
+    ],
+    "bild": {
+     "quelle": "/bilder/karte/oliven.webp",
+     "alt": "Ein runder Fladen mit gruenen Oliven, Tomatenwuerfeln und Hirtenkaese",
+     "breite": 700,
+     "hoehe": 700
+    }
    },
    {
     "nr": 9,
@@ -97,7 +127,13 @@
     "allergene": [
      "Gluten",
      "Milch"
-    ]
+    ],
+    "bild": {
+     "quelle": "/bilder/karte/frischkäse.webp",
+     "alt": "Eine geschlossene halbmondfoermige Teigtasche",
+     "breite": 700,
+     "hoehe": 700
+    }
    },
    {
     "nr": 10,
@@ -106,7 +142,13 @@
     "preis": 2,
     "allergene": [
      "Gluten"
-    ]
+    ],
+    "bild": {
+     "quelle": "/bilder/karte/hackfleisch-&-gemüse.webp",
+     "alt": "Ein offenes Schiffchen mit Hackfleisch, aus einem anderen Blickwinkel",
+     "breite": 700,
+     "hoehe": 700
+    }
    },
    {
     "nr": 11,
@@ -115,7 +157,13 @@
     "preis": 2,
     "allergene": [
      "Gluten"
-    ]
+    ],
+    "bild": {
+     "quelle": "/bilder/karte/hackfleisch.webp",
+     "alt": "Ein offenes Schiffchen aus Teig, mit Hackfleisch gefuellt",
+     "breite": 700,
+     "hoehe": 700
+    }
    },
    {
     "nr": 13,
@@ -125,7 +173,13 @@
     "allergene": [
      "Gluten",
      "Ei"
-    ]
+    ],
+    "bild": {
+     "quelle": "/bilder/karte/schaorma-roll.webp",
+     "alt": "Eine gefuellte Teigrolle mit drei Einschnitten",
+     "breite": 700,
+     "hoehe": 700
+    }
    },
    {
     "nr": 14,
@@ -135,7 +189,13 @@
     "allergene": [
      "Gluten",
      "Ei"
-    ]
+    ],
+    "bild": {
+     "quelle": "/bilder/karte/fahita.webp",
+     "alt": "Ein runder Fladen mit Kartoffelwuerfeln, Paprika und Tomate",
+     "breite": 700,
+     "hoehe": 700
+    }
    },
    {
     "nr": 15,
@@ -220,7 +280,7 @@
     ],
     "bild": {
      "quelle": "/bilder/karte/gross-käse-gemüse.webp",
-     "alt": "Ein runder Fladen mit gruenen Oliven, Tomatenwuerfeln und Scheiben Hirtenkaese",
+     "alt": "Ein runder Fladen mit Kaese, Oliven, Paprika und Tomate",
      "breite": 700,
      "hoehe": 700
     }
@@ -247,7 +307,13 @@
     "preis": 2.5,
     "allergene": [
      "Gluten"
-    ]
+    ],
+    "bild": {
+     "quelle": "/bilder/karte/lahmacun-mit-zwiebeln.webp",
+     "alt": "Ein Lahmacun mit Hackfleisch, aus einem anderen Blickwinkel",
+     "breite": 700,
+     "hoehe": 700
+    }
    }
   ]
  }

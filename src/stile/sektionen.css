@@ -4177,6 +4177,26 @@
   color: var(--creme);
 }
 
+/**
+ * Der Dampf sitzt UEBER der Scheibe, nicht dahinter: die beiden Haelften
+ * fahren beim Scrollen auseinander, und was dahinter liegt, waere im Spalt
+ * ploetzlich sichtbar und wuerde als Fehler gelesen. Vor ihnen zieht er ueber
+ * beide Haelften hinweg, wie es Dampf tut.
+ *
+ * `bottom: 62%` und nicht 55 wie beim Schwarm: der Fladen liegt hier flach im
+ * Bild statt zu fliegen, die Quelle ist also seine Flaeche und nicht seine
+ * Unterkante.
+ */
+.vorhang__dampf {
+  position: absolute;
+  left: -20%;
+  width: 140%;
+  bottom: 62%;
+  height: 120%;
+  z-index: 3;
+  pointer-events: none;
+}
+
 .vorhang__scheibe {
   grid-area: 1 / 1;
   z-index: 2;
@@ -4760,7 +4780,26 @@
    * wird an drei Stellen gebraucht, und drei Abschriften derselben Zahl laufen
    * beim ersten Ändern auseinander.
    */
-  --breite: min(124vw, 100rem);
+  /**
+   * ═══ 75rem statt 100rem, und das ist gerechnet ═══
+   *
+   * Karol am 10.09.: „lass es noch ein wenig weiter zurück … sodass links und
+   * rechts vom Käseschiff ein bisschen Bildschirmplatz ist. Ein bisschen
+   * kleiner ziehen, aber auch nicht viel, viel kleiner."
+   *
+   * Gemessen belegt das Gebäck 85,8 % des 1500er Rahmens — vorher waren es
+   * 70 %, weil damals die weit gezogene Stufe den Rahmen aufspannte. Die ist
+   * seit dem 10.09. raus (sie wurde von niemandem angefordert), und dadurch
+   * ist dasselbe `--breite` plötzlich ein Fünftel mehr Gebäck.
+   *
+   * Bei 100 rem lag das Gebäck auf einem 1440er Schirm bei 1502 px und stand
+   * beidseitig 62 px über. 75 rem bringen es auf 1126 px, also 78 % der
+   * Fensterbreite — links und rechts bleibt je ein Achtel frei.
+   *
+   * Der vw-Deckel geht von 124 auf 102: am Handy soll es weiterhin fast die
+   * ganze Breite nehmen (87 % auf 390 px), nur eben nicht mehr darüber hinaus.
+   */
+  --breite: min(102vw, 75rem);
   left: 50%;
   top: 50%;
   margin-left: calc(var(--breite) / -2);

@@ -16,6 +16,14 @@
   "kb": 98
  },
  {
+  "nr": 50,
+  "titel": "Frisch vom Schieber, direkt vor dem Ofen",
+  "lage": "hoch",
+  "breite": 900,
+  "hoehe": 1200,
+  "kb": 71
+ },
+ {
   "nr": 6,
   "titel": "Der Teig kommt auf den Schieber",
   "lage": "quer",
@@ -30,6 +38,14 @@
   "breite": 900,
   "hoehe": 1200,
   "kb": 99
+ },
+ {
+  "nr": 51,
+  "titel": "Sesambrote, eines nach dem anderen",
+  "lage": "quer",
+  "breite": 900,
+  "hoehe": 675,
+  "kb": 137
  },
  {
   "nr": 35,
@@ -48,6 +64,14 @@
   "kb": 66
  },
  {
+  "nr": 52,
+  "titel": "Zwei Fladen mit Gemüse und Hirtenkäse",
+  "lage": "hoch",
+  "breite": 900,
+  "hoehe": 1200,
+  "kb": 182
+ },
+ {
   "nr": 10,
   "titel": "Der Inhaber und seine Brüder",
   "lage": "quer",
@@ -61,6 +85,14 @@
   "lage": "quer",
   "breite": 900,
   "hoehe": 572
+ },
+ {
+  "nr": 53,
+  "titel": "Käse und Kräuter, quadratisch gefaltet",
+  "lage": "quer",
+  "breite": 900,
+  "hoehe": 675,
+  "kb": 86
  },
  {
   "nr": 41,

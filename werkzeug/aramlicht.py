@@ -22,20 +22,37 @@ from PIL import Image
 
 WAERME_LICHT, WAERME_TIEFE, SAETTIGUNG, KURVE = 0.04, 0.03, 0.12, 0.14
 
-def graduiere(im: Image.Image) -> Image.Image:
+
+def graduiere(im: Image.Image, staerke: float = 1.0, aufhellen: float = 0.0) -> Image.Image:
+    """`staerke` skaliert alle drei Griffe, `aufhellen` hebt zusaetzlich an.
+
+    Der Vorhang-Lahmacun bekommt staerke=1.5 und aufhellen=0.09 — Karol am
+    10.09.: „ein bisschen heller machen, noch mal appetitlicher machen, weil
+    das ja im Endeffekt auch die erste Sektion nach dem Video ist."
+
+    Das Aufhellen sitzt in einer GAMMA-Kurve und nicht in einem Zuschlag: ein
+    Zuschlag verschiebt alles nach oben und drueckt die Kruste in die Saettigung,
+    Gamma hebt die Mitten und laesst die Spitzen, wo sie sind. Gemessen am
+    Vorhang-Lahmacun hebt staerke=1.5/aufhellen=0.09 die mittlere Helligkeit von
+    99,6 auf 113,6 — die Spitzlichter auf der Kruste lagen schon in der Vorlage
+    bei 255 und bleiben dort, es brennt also nichts NEU aus.
+    """
     a = np.array(im.convert('RGBA')).astype(np.float32)
     rgb, alpha = a[..., :3] / 255.0, a[..., 3:4]
     hell = rgb.mean(-1, keepdims=True)
 
     # S-Kurve um die Mitte: x + k*(x-0.5)*(1-|2x-1|)
-    rgb = np.clip(rgb + KURVE * (rgb - 0.5) * (1 - np.abs(2 * rgb - 1)), 0, 1)
+    rgb = np.clip(rgb + KURVE * staerke * (rgb - 0.5) * (1 - np.abs(2 * rgb - 1)), 0, 1)
 
-    rgb[..., 0] += WAERME_LICHT * hell[..., 0]              # Rot in den Lichtern
-    rgb[..., 2] -= WAERME_TIEFE * (1 - hell[..., 0])        # Blau aus den Tiefen
+    rgb[..., 0] += WAERME_LICHT * staerke * hell[..., 0]         # Rot in den Lichtern
+    rgb[..., 2] -= WAERME_TIEFE * staerke * (1 - hell[..., 0])   # Blau aus den Tiefen
     rgb = np.clip(rgb, 0, 1)
 
     grau = rgb.mean(-1, keepdims=True)
-    rgb = np.clip(grau + (rgb - grau) * (1 + SAETTIGUNG), 0, 1)
+    rgb = np.clip(grau + (rgb - grau) * (1 + SAETTIGUNG * staerke), 0, 1)
+
+    if aufhellen:
+        rgb = np.clip(rgb ** (1.0 - aufhellen * 2.2), 0, 1)
 
     return Image.fromarray(np.concatenate([rgb * 255, alpha], -1).astype(np.uint8), 'RGBA')
 

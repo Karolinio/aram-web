@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react'
 import vorhangRoh from '../../inhalt/vorhang.json'
 import { SCRUB_KOERPER, useMedienabfrage, werkzeugHolen } from '../bewegung.ts'
 import { inhalt } from '../inhalt.ts'
+import Dampf from './ui/Dampf.tsx'
 
 type Mass = { breite: number; hoehe: number }
 const M = vorhangRoh as Record<string, Mass>
@@ -220,6 +221,22 @@ export default function Vorhang() {
             steht sie jetzt. */}
 
         <div className="vorhang__scheibe" aria-hidden="true">
+          {/* ═══ Er dampft ═══
+
+              Karol am 10.09.: „Der Lahmacun muss noch ein bisschen dampfen …
+              weil das ja im Endeffekt auch die erste Sektion nach dem Video
+              ist."
+
+              Er hat recht, und zwar aus einem Grund, der nicht Geschmack ist:
+              was hier steht, ist ein Foto von einem Gegenstand, der auf einem
+              Brett lag. Ein Foto hat keine Zeit. Dampf ist das einzige
+              Element auf dieser Seite, das man nicht fotografieren kann —
+              deshalb wird er gerechnet, und deshalb ist er hier richtig: er
+              gibt dem Standbild das Jetzt zurueck.
+
+              Acht Schwaden, nicht zwanzig. Ueber EINEM Fladen lesen sich
+              zwanzig als Brand — steht so im Kopf von Dampf.tsx. */}
+          <Dampf ton="hell" klasse="vorhang__dampf" dichte={8} />
           <img
             className="vorhang__haelfte vorhang__haelfte--links"
             src="/bilder/vorhang/scheibe-links.webp"
