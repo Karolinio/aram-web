@@ -14,14 +14,14 @@
   "hoehe": 750
  },
  {
-  "datei": "lange-käse",
+  "datei": "lange-kaese",
   "titel": "Lange Käse",
   "nr": 3,
   "breite": 1000,
   "hoehe": 750
  },
  {
-  "datei": "doppelt-käse",
+  "datei": "doppelt-kaese",
   "titel": "Doppelt Käse",
   "nr": 4,
   "breite": 1000,
@@ -42,14 +42,14 @@
   "hoehe": 750
  },
  {
-  "datei": "frischkäse",
+  "datei": "frischkaese",
   "titel": "Frischkäse",
   "nr": 9,
   "breite": 1000,
   "hoehe": 750
  },
  {
-  "datei": "hackfleisch-&-gemüse",
+  "datei": "hackfleisch-und-gemuese",
   "titel": "Hackfleisch & Gemüse",
   "nr": 10,
   "breite": 1000,
@@ -84,14 +84,14 @@
   "hoehe": 750
  },
  {
-  "datei": "gross-käse-scharf",
+  "datei": "gross-kaese-scharf",
   "titel": "Groß Käse, scharf",
   "nr": 20,
   "breite": 1000,
   "hoehe": 750
  },
  {
-  "datei": "gross-käse-gemüse",
+  "datei": "gross-kaese-gemuese",
   "titel": "Groß Käse, Gemüse",
   "nr": 21,
   "breite": 1000,

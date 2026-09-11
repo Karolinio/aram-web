@@ -96,6 +96,29 @@ ZUORDNUNG = {
 }
 
 
+def schluessel(name: str) -> str:
+    """Ein Dateiname ohne Umlaute, ohne Ampersand, ohne Leerzeichen.
+
+    ═══ Was ohne diese Funktion passiert ═══
+
+    Erst hiessen die Dateien `lange-käse.webp` und `hackfleisch-&-gemüse.webp`.
+    Lokal lief das; auf der Live-Adresse standen sie als
+    `lange-k%C3%A4se.webp` in der Anfrage und kamen als 404 zurueck.
+
+    Ein Dateiname, der ueber HTTP geht, haelt sich an ASCII. Das ist keine
+    Vorsicht, sondern die Erfahrung, dass Umlaute irgendwo auf dem Weg
+    zwischen Dateisystem, Git, Bau und Server einmal anders kodiert werden —
+    und dann ist es still kaputt, weil ein 404 auf einem Bild keine
+    Fehlermeldung erzeugt.
+    """
+    ersatz = {'ä': 'ae', 'ö': 'oe', 'ü': 'ue', 'ß': 'ss', '&': 'und'}
+    aus = ''.join(ersatz.get(z, z) for z in name.lower())
+    aus = ''.join(z if z.isalnum() else '-' for z in aus)
+    while '--' in aus:
+        aus = aus.replace('--', '-')
+    return aus.strip('-')
+
+
 def querformat(quelle: Path, ziel: Path, dreh: int = 0) -> tuple[int, int]:
     zwischen = Path('/tmp') / (quelle.stem + '.jpg')
     subprocess.run(['sips', '-s', 'format', 'jpeg', '-s', 'formatOptions', '95',
@@ -135,7 +158,7 @@ if __name__ == '__main__':
                 continue
             datei, alt, sicherheit = eintrag
             dreh = DREHUNG.get(g['name'], 0)
-            name = g['name'].lower().replace('ß','ss').replace(', ','-').replace(' ','-') + '.webp'
+            name = schluessel(g['name']) + '.webp'
             w, h = querformat(ROH / datei, ZIEL / name, dreh)
             g['bild'] = {'quelle': f'/bilder/karte/{name}', 'alt': alt, 'breite': w, 'hoehe': h}
             kb = (ZIEL / name).stat().st_size // 1024

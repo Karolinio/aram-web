@@ -245,7 +245,7 @@ export default function Karte() {
                           onClick={() => setGross(g)}
                         >
                           <img
-                            src={g.bild.quelle}
+                            src={pfad(g.bild.quelle)}
                             alt=""
                             width={g.bild.breite}
                             height={g.bild.hoehe}

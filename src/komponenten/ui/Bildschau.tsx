@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 
 import type { Gericht } from '../../inhalt.ts'
+import { pfad } from '../../pfad.ts'
 
 /**
  * Ein Gericht gross ansehen.
@@ -95,7 +96,7 @@ export default function Bildschau({ gericht, schliessen }: Props) {
           {bild ? (
             <img
               className="bildschau__bild"
-              src={bild.quelle}
+              src={pfad(bild.quelle)}
               alt={bild.alt}
               width={bild.breite}
               height={bild.hoehe}

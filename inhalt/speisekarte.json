@@ -46,7 +46,7 @@
      "Milch"
     ],
     "bild": {
-     "quelle": "/bilder/karte/lange-käse.webp",
+     "quelle": "/bilder/karte/lange-kaese.webp",
      "alt": "Eine lange schmale Teigrolle, mit Sesam bestreut",
      "breite": 1000,
      "hoehe": 750
@@ -62,7 +62,7 @@
      "Milch"
     ],
     "bild": {
-     "quelle": "/bilder/karte/doppelt-käse.webp",
+     "quelle": "/bilder/karte/doppelt-kaese.webp",
      "alt": "Ein quadratisch gefaltetes Gebaeck mit Kaese und Gemuese",
      "breite": 1000,
      "hoehe": 750
@@ -129,7 +129,7 @@
      "Milch"
     ],
     "bild": {
-     "quelle": "/bilder/karte/frischkäse.webp",
+     "quelle": "/bilder/karte/frischkaese.webp",
      "alt": "Eine geschlossene halbmondfoermige Teigtasche",
      "breite": 1000,
      "hoehe": 750
@@ -144,7 +144,7 @@
      "Gluten"
     ],
     "bild": {
-     "quelle": "/bilder/karte/hackfleisch-&-gemüse.webp",
+     "quelle": "/bilder/karte/hackfleisch-und-gemuese.webp",
      "alt": "Ein offenes Schiffchen mit Hackfleisch, aus einem anderen Blickwinkel",
      "breite": 1000,
      "hoehe": 750
@@ -263,7 +263,7 @@
      "Milch"
     ],
     "bild": {
-     "quelle": "/bilder/karte/gross-käse-scharf.webp",
+     "quelle": "/bilder/karte/gross-kaese-scharf.webp",
      "alt": "Ein geschlossenes Schiffchen aus Teig mit Sesam und Schwarzkuemmel",
      "breite": 1000,
      "hoehe": 750
@@ -279,7 +279,7 @@
      "Milch"
     ],
     "bild": {
-     "quelle": "/bilder/karte/gross-käse-gemüse.webp",
+     "quelle": "/bilder/karte/gross-kaese-gemuese.webp",
      "alt": "Ein runder Fladen mit Kaese, Oliven, Paprika und Tomate",
      "breite": 1000,
      "hoehe": 750
