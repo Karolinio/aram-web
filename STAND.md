@@ -3,9 +3,101 @@
 Wiedereinstieg. Alles, was eine neue Sitzung braucht, um ohne Rückfragen
 weiterzubauen.
 
-**Letzter Stand:** `HEAD` · **Zweig:** `main` · **Notiz vom:** 23.08.2026
+**Letzter Stand:** `HEAD` · **Zweig:** `main` · **Notiz vom:** 11.09.2026
 
 ---
+
+## 10.–11.09. — sein eigenes Material ist drin
+
+Der Inhaber hat **38 Fotos und 12 Videos** geschickt (AirDrop, 10.09. 03:25).
+Sie liegen in `rohbilder/eingang/neu-2026-09/` — nicht im Repo, Rohmaterial
+bleibt draussen. Was auf welcher Aufnahme zu sehen ist und wie sicher die
+Zuordnung ist, steht in **BILDKATALOG.md**, samt sechs offener Fragen an ihn.
+
+**Auf der ganzen Seite gibt es kein erzeugtes Produkt mehr.** Alles stammt aus
+diesen 50 Aufnahmen.
+
+### Was wo herkommt
+
+| Stelle | Quelle |
+|---|---|
+| Startseitenvideo | Clip 04 (`55BAB0F2`), Steinofen + Kaeseschiffe, 8 s |
+| Neun Schwarmprodukte | IMG_1533/1510/1535/1507/1529/1518/1525/1509/1527 |
+| Kaeseschiff-Reise | IMG_1533, fuenf Stufen aus einer Vorlage abgeleitet |
+| Vorhang-Lahmacun | IMG_1535 |
+| 16 Kartenbilder | siehe `werkzeug/kartenbilder.py`, Sicherheit steht dabei |
+| Produktgalerie | dieselben Dateien wie die Karte |
+| Vier neue Galeriebilder | IMG_5804, IMG_1517, IMG_5664, IMG_1520 |
+
+### Die Regel, die diese Runde gekostet hat
+
+**Higgsfield schneidet aus, der Code macht schoen.**
+
+Erster Lauf mit einem Schoenheits-Auftrag („relight, deepen the browns, wie ein
+guter Foodfotograf") gab ein ANDERES Gericht zurueck — Farbabstand 44,8 zur
+Vorlage, mit Kaeseflecken und Kraeutern, die es auf seinem Lahmacun nicht gibt.
+Derselbe Input mit einem Auftrag, der nur freistellt und jede Veraenderung
+ausdruecklich verbietet: **3,0**.
+
+Die Aram-Optik kommt seitdem aus `werkzeug/aramlicht.py` (S-Kurve, Waerme,
+Saettigung, optional staerker und aufgehellt). Eine Gradation hat eine
+Obergrenze, ein Modellauftrag nicht.
+
+### Werkzeuge, die neu sind
+
+    werkzeug/aramlicht.py       die Gradation
+    werkzeug/schwarmbilder.py   Freisteller -> Schwarmprodukte
+    werkzeug/reisebilder.py     die fuenf Stufen der Kaeseschiff-Reise
+    werkzeug/vorhangbilder.py   Scheibe + Haelften entlang einer Bruchlinie
+    werkzeug/kartenbilder.py    Kartenbilder + Produktgalerie-Verzeichnis
+
+Alle laufen mit `/tmp/pdfvenv/bin/python` (pymupdf, numpy, Pillow). Ein
+frisches System braucht dieses venv neu.
+
+### Drei Fehler, die erst echte Durchlaeufe gefunden haben
+
+**Die Vorhang-Haelften kamen aus dem GERISSENEN Bild.** Damit klaffte der Spalt
+schon, solange sie uebereinanderlagen — ein Vorhang, der beim Aufgehen offen
+ist. Jetzt wird das HEILE Gebaeck entlang einer gezackten Linie geteilt;
+nachgemessen 0 Bildpunkte Ueberlappung, 0 Loch.
+
+**Die Kartenbilder waren zu 80 % zu sehen.** `object-fit: cover` bei
+`max-height: 56vh` schneidet ab. Dazu waren sie quadratisch zugeschnitten, weil
+das VORSCHAUBILD quadratisch ist — dass dieselbe Datei gross gezeigt wird, war
+uebersehen. Jetzt 4:3 quer und `contain`.
+
+**Die Ziffer war groesser als die Ueberschrift** (31,8 gegen 28 px) — die
+Nummer stand lauter da als das, was sie nummeriert.
+
+### Der Riegel, den niemand anfassen darf
+
+Die Ueberschrift auf der Theke steht bei **genau 24 px**. Weiss darauf misst
+3,52; die WCAG-Grenze fuer grosse Schrift ist 3,0, fuer kleine 4,5 — und 4,5
+erreicht sie nicht. 24 px ist der kleinste erlaubte Wert. Wer sie kleiner
+macht, muss die Theke dunkler machen.
+
+### Was offen ist
+
+1. **Sechs Gerichte ohne Bild** — Beirut, Spinat, Mexicano Roll, Sucuk, Sucuk
+   mit Kaese, Gemuese Kaese. Es gibt keine eigene Aufnahme dazu.
+2. **Sechs Zuordnungen sind nur „vermutet"** und muessen vom Inhaber bestaetigt
+   werden. Liste in BILDKATALOG.md.
+3. **Wie heisst das Kaeseschiff auf seiner Karte?** Es steht dort nicht.
+   Vermutung: „3 Lange Kaese". Davon haengt die Beschriftung der Scroll-Sektion
+   ab.
+4. **Die Steinofen-Galerie** ist um vier Bilder ergaenzt, aber keins der alten
+   ist ersetzt. Karol wollte pruefen, ob treffendere die alten abloesen.
+5. Unveraendert offen: Rechtsform fuers Impressum, WhatsApp-Nummer,
+   Instagram-Handle, der Absatz ueber den Laden (steht als Luecke drin).
+6. **18,1 Bildschirmhoehen am Handy** — die einzige Warnung des Fabrikpruefers.
+   Durch die zweite Galerie eine Hoehe laenger geworden.
+
+### Was gemessen gut steht
+
+    CLS 0,015   Video laeuft auf allen drei Groessen
+    Antippflaechen und Schriftgroessen am Handy: keine Beanstandung
+    Kontraste auf der Theke: Ziffer 5,15 · Titel 3,52 · Text 5,76
+
 
 ## Speisekarte und Laden — 23.08.
 
