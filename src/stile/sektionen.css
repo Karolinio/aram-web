@@ -1782,11 +1782,12 @@
  */
 .tor__maul {
   position: relative;
-  /* 0,64 statt 0,74. Karol am 07.09.: „die Oefen koennte man vielleicht ein
-     bisschen kleiner machen, damit man die Produkte im Hintergrund ein
-     bisschen mehr sieht." Dreizehn Prozent weniger Hoehe geben rund ein
-     Viertel mehr freien Grund zwischen Kopfzeile und Theke. */
-  height: calc(var(--wand-hoehe, 34rem) * 0.64 * var(--anteil, 1));
+  /* 0,56 statt 0,64 statt urspruenglich 0,74 — zweimal auf dieselbe Bitte.
+     Karol am 07.09.: „die Oefen koennte man vielleicht ein bisschen kleiner
+     machen, damit man die Produkte im Hintergrund ein bisschen mehr sieht."
+     Und am 11.09.: „die groesse der oefen muss etwas kleiner."
+     Gemessen: 299 px Maulhoehe werden 262. */
+  height: calc(var(--wand-hoehe, 34rem) * 0.56 * var(--anteil, 1));
   border-radius: var(--maul);
   overflow: clip;
   /* Das leere Maul ist dunkel. `--fuellung` kommt aus useOfenwand und nimmt
@@ -1907,10 +1908,11 @@
   left: -1rem;
   right: -1rem;
   bottom: -1.8rem;
-  /* Gemessen nach dem Verkleinern der Maeuler: die Fuesse stehen auf −139 px
-     zur Wandunterkante (vorher −151). 11,25 rem legen die Oberkante zwoelf
-     Pixel darueber — dieselbe Einbindung wie vorher. */
-  height: 11.25rem;
+  /* Karol am 11.09.: „die leiste dort mit den ganzen 01-04 … noch etwas
+     enger ziehen." Die Beschriftung ist durch die kleinere Ziffer und die
+     engeren Abstaende flacher geworden; die Theke folgt ihr.
+     Nachgemessen steht sie unten — siehe Commit. */
+  height: 9.4rem;
   z-index: -1;
   /**
    * Vier Schichten, alle SENKRECHT — und das ist der Grund.
@@ -1963,14 +1965,21 @@
  */
 .tor__zahl {
   display: block;
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.2rem;
   color: var(--akzent);
   font-variant-numeric: tabular-nums;
   font-family: var(--font-display);
-  font-size: clamp(1.4rem, 1rem + 1.1vw, 2rem);
+  /* ═══ Die Ziffer war groesser als die Ueberschrift ═══
+     Gemessen 31,8 px gegen 28 — und damit stand die Nummer lauter da als
+     das, was sie nummeriert. Eine Schrittziffer ist eine Marke, keine
+     Aussage.
+     1,5 rem sind 24 px und damit die Untergrenze, ab der Schrift auf der
+     Theke als „gross" gilt (Grenze 3,0 statt 4,5). Darunter faengt sie an,
+     einen Kontrast zu brauchen, den ihr Orange auf der Theke nicht hat. */
+  font-size: clamp(1.25rem, 1rem + 0.5vw, 1.5rem);
   font-weight: 700;
   line-height: 0.9;
-  letter-spacing: -0.01em;
+  letter-spacing: 0.02em;
 }
 /* Das Etikett bringt sonst einen Strich mit; vor einer Ziffer laese er sich
    als Minus. */
@@ -1980,22 +1989,23 @@
   margin: 0;
   font-family: var(--font-display);
   font-variation-settings: var(--wonk-klein);
-  /* Die Untergrenze bleibt 1,5 rem = 24 px: Weiss auf Orange traegt erst ab
-     dort (gemessen 3,52 auf der Theke, Grenze fuer grosse Schrift ist 3,0).
-     Nach oben darf sie jetzt wachsen — der Platz kommt von der kleineren
-     Ziffer und den kleineren Maeulern. */
-  font-size: clamp(1.5rem, 1.25rem + 0.7vw, 1.75rem);
+  /* 1,5 rem = 24 px, oben wie unten. Das ist keine Geschmacksfrage: Weiss
+     auf der Theke misst 3,52, und die Grenze fuer GROSSE Schrift ist 3,0 —
+     fuer kleine waere es 4,5, und das erreicht sie nicht. 24 px ist damit
+     der kleinste Wert, der noch erlaubt ist, und Karol will die Leiste
+     enger. Also genau dorthin. */
+  font-size: 1.5rem;
   font-weight: 600;
   line-height: 1.15;
   letter-spacing: -0.01em;
 }
 
 .tor__text {
-  margin: 0.4rem 0 0;
+  margin: 0.3rem 0 0;
   color: var(--tinte-leise);
   max-width: 26ch;
-  font-size: 0.92rem;
-  line-height: 1.5;
+  font-size: 0.88rem;
+  line-height: 1.45;
 }
 
 /* Der Dampf gehoert ueber die WAND, nicht in ein Maul: ein Ofen dampft, nicht
