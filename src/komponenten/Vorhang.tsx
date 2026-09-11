@@ -89,6 +89,8 @@ export default function Vorhang() {
     const links = b.querySelector<HTMLElement>('.vorhang__haelfte--links')
     const rechts = b.querySelector<HTMLElement>('.vorhang__haelfte--rechts')
     const dampf = b.querySelector<HTMLElement>('.vorhang__dampf')
+    const licht = b.querySelector<HTMLElement>('.vorhang__licht')
+    const marke = b.querySelector<HTMLElement>('.vorhang__marke')
     const wort = b.querySelector<HTMLElement>('.vorhang__wort')
     const karte = b.querySelector<HTMLElement>('.vorhang__einladung')
     if (!links || !rechts) return
@@ -171,6 +173,14 @@ export default function Vorhang() {
            der bis zum letzten Moment mitläuft, wirkt wie ein Nachzügler. */
         if (dampf) dampf.style.opacity = String(Math.max(0, 1 - weich * 2.2))
 
+        /* Licht und Beschriftung gehoeren zum GANZEN Fladen. Sobald er
+           aufbricht, ist der Gegenstand weg, den sie beleuchten und benennen —
+           also gehen sie mit. Etwas frueher als der Dampf, damit die Buehne
+           leer ist, wenn die Karte hereinkommt. */
+        const ab = String(Math.max(0, 1 - weich * 2.6))
+        if (licht) licht.style.opacity = ab
+        if (marke) marke.style.opacity = ab
+
         /* Die Schlagzeile dahinter geht mit der Scheibe: sie ist am Anfang da,
            wird von ihr verdeckt und verschwindet, wenn die Einladung kommt.
            Zwei Aussagen gleichzeitig sind keine. */
@@ -235,6 +245,44 @@ export default function Vorhang() {
             Sie gehört in „Der Laden", wo Anschrift und Zeiten stehen. Dort
             steht sie jetzt. */}
 
+        {/* ═══ Licht und Boden ═══
+
+            Karol am 11.09.: „die lahmacun sektion ist auch noch etwas zu
+            unprofessionell … iteriere mit mobbin wie wir das besser in
+            szene setzen."
+
+            Bei Mobbin nachgesehen — Artisan Kitchen (v0) und Squarespace
+            zeigen beide dasselbe: ein Produkt auf dunklem Grund braucht eine
+            LICHTQUELLE und einen BODEN, sonst ist es ein Aufkleber. Bei ihnen
+            liegt hinter der Ware eine warme Lichtinsel und darunter ein
+            weicher Kontaktschatten; deshalb sieht man einen Gegenstand, der
+            irgendwo liegt, statt eines Bildes, das aufgeklebt wurde.
+
+            Genau das fehlte hier. Der Fladen schwebte auf flachem Schwarz,
+            ohne Licht, ohne Schatten, ohne Ort.
+
+            Es ist ein eigenes Element und kein `::before` an der Scheibe: die
+            Scheibe DREHT sich (232 Grad ueber die Sektion), und ein Lichtkegel,
+            der mitdreht, ist keine Lichtquelle mehr. */}
+        <div className="vorhang__licht" aria-hidden="true" />
+
+        {/* ═══ Die Sektion sagt jetzt, was sie zeigt ═══
+
+            Hier stand bis zum 26.08. „Mehr als 25 Jahre" — zu Recht raus (der
+            Fladen verdeckte sie zur Haelfte). Seitdem stand hier GAR NICHTS,
+            und eine Sektion ohne ein einziges Wort liest sich als unfertig.
+
+            Statt einer Schlagzeile HINTER dem Gegenstand jetzt eine ruhige
+            Zeile DARUEBER — dieselbe Rolle wie das „ARTISAN · SMALL BATCH ·
+            PREMIUM" bei Artisan Kitchen. Sie nimmt dem Fladen nichts weg und
+            benennt ihn.
+
+            Der Inhalt ist ihre eigene Karte: Nummer 22, Lahmacun. Nichts
+            erfunden, und es zeigt schon auf die Karte, die gleich aufgeht. */}
+        <p className="vorhang__marke" aria-hidden="true">
+          <span>22</span> Lahmacun
+        </p>
+
         <div className="vorhang__scheibe" aria-hidden="true">
           {/* ═══ Er dampft ═══
 
@@ -249,9 +297,15 @@ export default function Vorhang() {
               deshalb wird er gerechnet, und deshalb ist er hier richtig: er
               gibt dem Standbild das Jetzt zurueck.
 
-              Acht Schwaden, nicht zwanzig. Ueber EINEM Fladen lesen sich
-              zwanzig als Brand — steht so im Kopf von Dampf.tsx. */}
-          <Dampf ton="hell" klasse="vorhang__dampf" dichte={8} />
+              Sechs Schwaden, nicht zwanzig. Ueber EINEM Fladen lesen sich
+              zwanzig als Brand — steht so im Kopf von Dampf.tsx.
+
+              Ton `ofen` und nicht `hell`: `hell` hat einen Kern mit 0,85
+              Deckkraft, und auf dem dunklen Grund neben der warmen Lichtinsel
+              stand da kein Dampf, sondern ein grauer Fleck. `ofen` ist warm,
+              faellt streng nach aussen ab und ist heller als jeder Grund
+              dieser Seite — dafuer wurde er gebaut. */}
+          <Dampf ton="ofen" klasse="vorhang__dampf" dichte={6} />
           <img
             className="vorhang__haelfte vorhang__haelfte--links"
             src="/bilder/vorhang/scheibe-links.webp"
