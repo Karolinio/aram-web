@@ -541,10 +541,10 @@ section {
 .luecke::before {
   content: '';
   display: inline-block;
-  width: 0.4em;
-  height: 0.4em;
+  width: 0.62em;
+  height: 0.52em;
   margin-right: 0.5em;
-  border-radius: 50%;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0; /* Bogen, kein Punkt */
   background: var(--akzent);
   vertical-align: 0.08em;
 }

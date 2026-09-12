@@ -196,12 +196,21 @@ export default function Laden() {
                Stehen bleibt nur, was auf ihrer eigenen Ladentür steht
                (Foto 11 in rohbilder/eingang): mehr als 25 Jahre. */
             titel="Mehr als 25 Jahre"
-            lead={
-              <>
-                <span className="luecke">Diesen Absatz schreibt der Inhaber selbst</span>. Was
-                seinen Laden ausmacht, weiss er besser als wir.
-              </>
-            }
+            /* ═══ Ein Satz statt der Luecke ═══
+
+               Karol am 12.09.: „macht nur diesen einen Strich da weg und
+               schreibt da irgendeinen Satz hin."
+
+               „Irgendein Satz" darf trotzdem nichts behaupten, was nicht
+               belegt ist — die Regel vom 27.08. gilt weiter. Jedes Wort hier
+               steht auf ihrer eigenen Ladenfront (Foto ladenfront.webp):
+               „Orientalisches Gebäck (Fatayer & Manakisch)", „Mehr als 25
+               Jahre Erfahrung", die Anschrift. Der Steinofen steht in jedem
+               ihrer Videos.
+
+               Der Inhaber kann ihn jederzeit durch seinen ersetzen; bis dahin
+               steht hier keine Luecke mehr, sondern sein Schild. */
+            lead="Fatayer und Manakisch aus dem Steinofen, mit mehr als 25 Jahren Erfahrung — an der Rochusstraße in Hardtberg." 
           />
 
           {/* Die Zeiten stehen VOR der Adresse und ausserhalb der Datenliste.

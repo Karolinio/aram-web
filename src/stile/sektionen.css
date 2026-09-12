@@ -3178,12 +3178,13 @@
 .zeitblock__ruhe::before {
   content: '';
   display: inline-block;
-  width: 0.42em;
-  height: 0.42em;
+  /* Ein Bogen, kein Punkt — siehe `.etikett::before` in bausteine.css. */
+  width: 0.62em;
+  height: 0.52em;
   margin-right: 0.55em;
-  border-radius: 50%;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
   background: var(--akzent);
-  vertical-align: 0.06em;
+  vertical-align: -0.02em;
 }
 
 
@@ -4758,7 +4759,8 @@
      Daumen ist das Arbeit, und der Vorhang hat drei Takte, die dort schneller
      durchlaufen dürfen als am Rechner. */
   .vorhang { min-height: 172vh; }
-  .vorhang__scheibe { width: 128vw; }
+  /* 138 statt 128 vw — Karol am 12.09., am Handy: „noch etwas zu klein". */
+  .vorhang__scheibe { width: 138vw; }
 }
 
 /**

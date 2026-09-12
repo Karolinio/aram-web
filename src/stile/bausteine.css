@@ -380,12 +380,28 @@
   color: var(--akzent);
 }
 
+/**
+ * ═══ Ein Bogen statt eines Strichs ═══
+ *
+ * Karol am 12.09.: „diese Punkte und Striche einfach mit so Steinofen
+ * ersetzen." Der Strich war ein Etikettenstrich wie auf jeder zweiten Seite.
+ * Der Bogen ist IHRE Form — das Ofenmaul, der Rahmen in der Galerie, die
+ * Kacheln unter „Bestellen". Ein Marker, der aus dem Laden kommt, nicht aus
+ * dem Musterbuch.
+ *
+ * Rund oben, flach unten: `border-radius` mit zwei Radien je Ecke macht aus
+ * einem Rechteck einen Halbkreis auf einem Sockel. Kein SVG, kein Zeichen.
+ */
 .etikett::before {
   content: '';
-  width: 1.1rem;
-  height: 1px;
+  width: 0.75em;
+  height: 0.62em;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
   background: currentColor;
   flex: none;
+  /* Der Bogen steht auf der Grundlinie, nicht in der Mitte der Zeile. */
+  align-self: flex-end;
+  margin-bottom: 0.12em;
 }
 
 /**

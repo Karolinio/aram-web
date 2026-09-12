@@ -64,6 +64,11 @@ DREHUNG = {
     'Groß Käse, scharf': 90,
     'Frischkäse': -90,
     'Lange Käse': 90,
+    # Karol am 12.09., am Mac: „nichts soll auf dem Kopf sein, alles logisch
+    # von links nach rechts liegen." An vier Drehungen je Bild probiert:
+    'Hackfleisch': 90,             # das Schiff stand senkrecht
+    'Schaorma Roll': 90,           # die Rolle stand senkrecht; +90 legt die Schnitte nach oben
+    'Lahmacun mit Zwiebeln': -90,  # hing rechts aus dem Bild; -90 bringt die ganze Scheibe rein
 }
 
 # Name auf ihrer Karte -> (Datei, Bildbeschreibung, wie sicher)

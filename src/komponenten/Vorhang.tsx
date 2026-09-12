@@ -4,6 +4,7 @@ import vorhangRoh from '../../inhalt/vorhang.json'
 import { SCRUB_KOERPER, useMedienabfrage, werkzeugHolen } from '../bewegung.ts'
 import { inhalt } from '../inhalt.ts'
 import Dampf from './ui/Dampf.tsx'
+import Untergrund from './ui/Untergrund.tsx'
 
 type Mass = { breite: number; hoehe: number }
 const M = vorhangRoh as Record<string, Mass>
@@ -126,7 +127,11 @@ export default function Vorhang() {
         /* Sie kommt von unten und wächst. `skala` läuft weiter, während sie
            sich teilt — das Auseinanderfahren wird dadurch schneller, als es
            gerechnet ist. */
-        const skala = 0.6 + p * 0.72
+        /* 0,68 statt 0,6 am Start — Karol am 12.09.: „der Lahmacun kann
+           leicht etwas groesser sein", am Handy „noch etwas zu klein".
+           Das Ende bleibt bei 1,32: der Riss soll nicht groesser werden,
+           nur der Auftritt davor. */
+        const skala = 0.68 + p * 0.64
         /* Sie steht schon im ersten Bild der Sektion, nur tiefer und kleiner.
            Bei 46 vh Startversatz war das erste Bild der Sektion schwarz und
            leer — gemessen ein ganzer Bildschirm ohne Inhalt, bevor überhaupt
@@ -230,6 +235,13 @@ export default function Vorhang() {
   return (
     <section className="sektion sektion--nacht vorhang" aria-labelledby="vorhang-titel">
       <div className="vorhang__buehne" ref={buehne}>
+        {/* ═══ Dieselben Koerner wie in den dunklen Sektionen danach ═══
+            Karol am 12.09.: „diese scroll-getriebenen Koerner im Hintergrund
+            sollen von den folgenden Seiten fuer diese Lahmacun-Szene
+            uebernommen werden." Die Buehne war die einzige dunkle Flaeche der
+            Seite ohne die Saat-Folie — deshalb las sie sich als anderer Raum.
+            Jetzt ist es ein Raum, vom Vorhang bis zum Fuss. */}
+        <Untergrund ton="nacht" muster="saat" />
         {/* Die Schlagzeile liegt UNTER der Scheibe — siehe Kopf der Datei. */}
         {/* ═══ Hier stand „Mehr als 25 Jahre" ═══
 
@@ -303,7 +315,7 @@ export default function Vorhang() {
               stand da kein Dampf, sondern ein grauer Fleck. `ofen` ist warm,
               faellt streng nach aussen ab und ist heller als jeder Grund
               dieser Seite — dafuer wurde er gebaut. */}
-          <Dampf ton="ofen" klasse="vorhang__dampf" dichte={11} />
+          <Dampf ton="ofen" klasse="vorhang__dampf" dichte={14} feinheit={0.6} />
           <img
             className="vorhang__haelfte vorhang__haelfte--links"
             src="/bilder/vorhang/scheibe-links.webp"

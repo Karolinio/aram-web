@@ -73,13 +73,21 @@ type Props = {
    * Brand.
    */
   dichte?: number
+  /**
+   * Multiplikator auf den Radius der Schwaden. 1 ist der Ofen; 0,65 sind
+   * feine Faeden ueber einem einzelnen Fladen. Karol am 12.09. zum Vorhang:
+   * „der Rauch gefaellt mir noch nicht 100 Prozent" — bei 546 px Leinwand
+   * waren die Schwaden bis zu 70 px gross, das liest sich als Wolke, nicht
+   * als Dampf von einem Gebaeck.
+   */
+  feinheit?: number
 }
 
 /** Kantenlänge des vorgemalten Wölkchens. Genug für weiche Ränder, wenig genug
  *  für den Speicher — es wird ohnehin nie grösser gezeichnet als die Leinwand. */
 const SPRITE = 96
 
-export default function Dampf({ klasse, ton = 'hell', dichte: wunsch }: Props) {
+export default function Dampf({ klasse, ton = 'hell', dichte: wunsch, feinheit = 1 }: Props) {
   const ref = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
@@ -174,7 +182,7 @@ export default function Dampf({ klasse, ton = 'hell', dichte: wunsch }: Props) {
       /* Klein anfangen. Erster Versuch stand bei 7–13 % der Breite; daraus
          wurden Wolken von 190 px, und zwanzig davon übereinander ergeben
          Nebel statt Dampf — die Fotografie dahinter war weggewaschen. */
-      s.r = breite * (0.032 + Math.random() * 0.03)
+      s.r = breite * (0.032 + Math.random() * 0.03) * feinheit
       /**
        * ═══ Der Fehler, den nur eine Messung gefunden hat ═══
        *
@@ -287,7 +295,7 @@ export default function Dampf({ klasse, ton = 'hell', dichte: wunsch }: Props) {
       groesse.disconnect()
       document.removeEventListener('visibilitychange', sichtbarkeit)
     }
-  }, [ton, wunsch])
+  }, [ton, wunsch, feinheit])
 
   return <canvas ref={ref} className={`dampf${klasse ? ' ' + klasse : ''}`} aria-hidden="true" />
 }
