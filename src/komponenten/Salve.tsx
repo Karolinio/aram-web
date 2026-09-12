@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { SCRUB_KOERPER, useMedienabfrage, werkzeugHolen } from '../bewegung.ts'
 import { GEBAECKE } from '../gebaecke.ts'
-import { pfad } from '../pfad.ts'
 import Dampf from './ui/Dampf.tsx'
 
 /**
@@ -291,7 +290,14 @@ export default function Salve() {
           <div className="salve__stueck" data-salve={id} key={id}>
             <Dampf ton="ofen" klasse="salve__dampf" dichte={2} feinheit={0.7} />
             <img
-              src={pfad(g.bilder[0].replace('.webp', '-500.webp'))}
+              /* KEIN pfad() hier. `g.bilder[0]` ist im Quelltext eine
+                 Zeichenkette mit Anfuehrungszeichen — genau die faengt das
+                 Unterpfad-Plugin in vite.config.ts beim Bauen ab und setzt
+                 die Basis davor. pfad() setzte sie dann ein zweites Mal:
+                 gemessen auf der Live-Adresse `/aram-web/aram-web/bilder/…`,
+                 sechsmal 404. Der Schwarm in Handarbeit.tsx nutzt dieselben
+                 Pfade ohne pfad() und laeuft — also so wie dort. */
+              src={g.bilder[0].replace('.webp', '-500.webp')}
               alt=""
               width={500}
               height={Math.round((500 * g.hoehe) / g.breite)}
