@@ -4881,30 +4881,6 @@
  * das Schiff bei 26 bis 80 % davon: es kommt aus der Tiefe nach vorn, und der
  * Riss ist der Moment, in dem es am nächsten ist.
  */
-/**
- * ═══ Am Handy deutlich schmaler ═══
- *
- * Karol am 11.09., auf dem Telefon: „das Kaeseschiff ist auf dem Handy
- * deutlich zu breit, die Enden sind gar nicht zu sehen. Und wenn das
- * zerbricht, sieht man eigentlich nur in der Mitte den Kaese, links und
- * rechts sieht man kaum das Schiff."
- *
- * Gerechnet: `102vw` sind auf einem 393-px-Schirm 401 px, das Gebaeck belegt
- * davon 85,8 % — also 344 px in einem 393 px breiten Fenster. Dazu kommt der
- * Ruck beim Bruch (+3,5 %) und die Drehung, die den umschliessenden Kasten
- * weiter aufzieht. Die Spitzen liegen damit ausserhalb.
- *
- * 84vw geben 330 px Element und 283 px Gebaeck — je 55 px frei an beiden
- * Seiten. Genug, dass die Spitzen im Bild bleiben und man beim Bruch beide
- * Haelften sieht, nicht nur den Kaese dazwischen.
- *
- * Die Art, wie es herein- und herausfliegt, bleibt unangetastet: „das ist
- * top, das bleibt so."
- */
-@media (max-width: 719px) {
-  .schiff { --breite: 84vw; }
-}
-
 .schiff {
   /* `inset: 0` + `margin: auto` + feste Masse = exakt mittig, ohne eine
      einzige Transformation. Das ist hier keine Feinheit, sondern Pflicht: die
@@ -5059,11 +5035,27 @@
 
 @media (max-width: 719px) {
   .schiff {
-    /* Am Handy ist das Fenster hochkant: 124 vw wären hier 460 px und damit
-       kein Höhepunkt. 210 vw bringen das Gebäck im Riss auf gut anderthalb
-       Fensterbreiten — es läuft über beide Kanten, und genau das ist gemeint.
-       Nur die Variable wird gesetzt; Breite und Ränder rechnen sich daraus. */
-    --breite: 210vw;
+    /**
+     * ═══ 62 vw statt 210 — eine Entscheidung ist zurueckgenommen ═══
+     *
+     * Hier stand 210 vw mit der Begruendung, das Gebaeck solle im Riss ueber
+     * beide Kanten laufen, „genau das ist gemeint". Karol hat es am Telefon
+     * zweimal anders gesehen (11. und 12.09.): „man sieht nur die Mitte, wie
+     * das aufgeht, die Enden sind gar nicht zu sehen." Ein Hoehepunkt, von
+     * dem man nur den Kaese sieht, ist kein Hoehepunkt.
+     *
+     * Und: diese Regel steht am ENDE der Datei. Zwei frueher gesetzte
+     * Handy-Werte (84 vw am 11.09., 62 vw heute) verloren still gegen sie —
+     * gleiche Spezifitaet, spaetere Regel gewinnt. Gemessen war der Riss auf
+     * 393 px trotz beider Versuche 831 px breit. Deshalb wird der Wert HIER
+     * geaendert und nicht noch einmal davor gesetzt.
+     *
+     * Erst 62 vw probiert: gemessen 245 px, je 73 px Luft — die ganze Form
+     * war da, aber zu klein fuer einen Hoehepunkt. 100 vw: Element 393,
+     * Gebaeck 337, im Riss mit Skala 1,03 rund 347 — je rund 23 px Luft.
+     * Die Spitzen bleiben knapp im Bild, und das Gebaeck fuellt den Schirm.
+     */
+    --breite: 100vw;
   }
 }
 

@@ -324,8 +324,14 @@ function Gebaeckstueck({ g }: { g: Gebaeck }) {
           Zwei Schwaden statt drei am Handy: derselbe Handgriff wie damals beim
           Schritt von vier auf drei. Sichtbar bleibt es, die Last steigt nicht
           auf das Schirmniveau. */}
-      {g.dampft && g.tiefe < 0.62 ? (
-        <Dampf ton="ofen" klasse="gebaeck__dampf" dichte={breit ? 3 : 2} />
+      {/* Die Tiefe-Sperre (< 0,62) ist raus. Karol am 12.09.: „so, dass jedes
+          Produkt dampft im Hintergrund." Die Sperre hielt drei der neun
+          trocken, weil hinten „ein Fleck ueber einem Fleck" drohte — seit
+          die Stuecke auf einem Raster liegen und nicht mehr uebereinander,
+          hat jedes seinen eigenen Platz fuer seine Wolke. Die Wiederholungen
+          ganz hinten tragen weiter `dampft: false`. */}
+      {g.dampft ? (
+        <Dampf ton="ofen" klasse="gebaeck__dampf" dichte={breit ? 4 : 3} />
       ) : null}
       <div className="gebaeck__folge" ref={folge}>
         {g.bilder.map((quelle, i) => (

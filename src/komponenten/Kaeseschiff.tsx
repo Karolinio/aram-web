@@ -452,7 +452,11 @@ export default function Kaeseschiff() {
          * davon anfasst. Ein Versatz auf der Hochachse löst denselben Fall mit
          * einer Zahl — die Bahn bleibt die Bahn, sie liegt nur tiefer.
          */
-        const tiefer = schmal ? 0.22 : 0
+        /* 0,08 statt 0,22: mit 0,22 stand das Gebaeck am Handy im unteren
+           Drittel, unter einem halben Bildschirm Leere. Karol am 12.09.: „zu
+           zentriert" hiess bei ihm zu gross, nicht zu mittig — mittig soll
+           es sein. */
+        const tiefer = schmal ? 0.08 : 0
 
         /**
          * ═══ Der Ruck im Moment des Aufbrechens ═══
