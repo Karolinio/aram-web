@@ -4202,6 +4202,22 @@
   top: 0;
   height: 100vh;
   display: grid;
+  /**
+   * ═══ Die Spalte ist so breit wie das Fenster, nicht wie ihr Inhalt ═══
+   *
+   * Ohne diese Zeile ist die einzige Spalte `auto`, also so breit wie das
+   * breiteste Kind. Am Handy ist das die Scheibe mit 128 vw = 503 px auf
+   * einem 393-px-Schirm. Die Zelle wird 503 breit, ihr linker Rand liegt bei
+   * 0, und `place-items: center` zentriert in DIESER Zelle — gemessen stand
+   * die Mitte der Scheibe 55 px rechts der Fenstermitte, das Kartenblatt
+   * ebenso. Karol am 11.09.: „die Sektion driftet nach rechts ab, die Karte
+   * ist komplett abgeschnitten."
+   *
+   * Mit einer festen Spalte von 100 % steht ein Kind, das breiter ist als
+   * das Fenster, zu beiden Seiten gleich weit ueber. Das ist die Wurzel; die
+   * Lichtinsel vom 11.09. war nur der zweite Fall desselben Fehlers.
+   */
+  grid-template-columns: 100%;
   place-items: center;
   /* Die Hälften fahren über den Rand hinaus — hier wird abgeschnitten, nicht
      gescrollt. Ohne diese Zeile schiebt die Scheibe eine waagerechte
