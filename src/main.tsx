@@ -26,6 +26,7 @@ import Fusszeile from './komponenten/Fusszeile.tsx'
 import Bestellleiste from './komponenten/Bestellleiste.tsx'
 import Wasserzeichen from './komponenten/Wasserzeichen.tsx'
 import Kaeseschiff from './komponenten/Kaeseschiff.tsx'
+import Salve from './komponenten/Salve.tsx'
 import Mehlstaub from './komponenten/ui/Mehlstaub.tsx'
 
 import { scrollenStarten } from './scrollen.ts'
@@ -136,6 +137,10 @@ function Seite() {
             Vorleseprogramm liest, und ein rein dekoratives Element gehört dort
             nicht zwischen zwei Sektionen. */}
         <Kaeseschiff />
+        {/* Die Salve: sechs Gebaecke aus dem aufgehenden Lahmacun, um die
+            Karte, hinueber zum Schwarm der Handarbeit. Dieselbe Bauart wie
+            das Kaeseschiff — feste Ebene, Scrub, Wegpunkte. Siehe Salve.tsx. */}
+        <Salve />
 
         {/* ═══ Der Vorhang steht GANZ VORN ═══
 
