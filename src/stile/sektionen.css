@@ -4116,7 +4116,10 @@
      daraus über das Seitenverhältnis, damit jeder Bogen dieselbe Form hat,
      egal ob das Foto quer oder hoch ist. */
   aspect-ratio: 3 / 4;
-  height: clamp(13rem, 25vw, 20.5rem);
+  /* Karol am 11.09.: „die Steinofen-Galerie ein bisschen kleiner machen." Die
+     Produktgalerie bleibt, wie sie ist — sie traegt je EIN Gebaeck und braucht
+     die Flaeche; die erste zeigt ganze Szenen und liest sich auch kleiner. */
+  height: clamp(11rem, 21vw, 17rem);
   width: auto;
   padding: clamp(0.3rem, 0.7vw, 0.55rem);
   background: var(--creme);
@@ -4273,76 +4276,34 @@
 }
 
 /**
- * ═══ Die Lichtinsel unter dem Fladen ═══
+ * ═══ Nur noch der Kontaktschatten ═══
  *
- * Zwei Schichten in EINEM Element, beide vom selben Mittelpunkt aus:
+ * Hier lag zusaetzlich ein warmer Schein in ihrem Orange. Karol am 11.09.:
+ * „den finde ich unpassend." Und er hat die Sektion kaputtgemacht: mit
+ * `150vw` war er auf einem 393-px-Handy 590 px breit. Alle Kinder der Buehne
+ * liegen in DERSELBEN Rasterzelle — also wurde die Zelle 590 breit, und
+ * zentriert wurde danach in der Zelle statt im Fenster. Gemessen stand die
+ * Scheibe 97 px ueber dem rechten Rand.
  *
- *   1  ein warmer Schein, ihr Orange, weit und schwach — die Waerme des
- *      Ofens, aus dem das Ding kommt. Er macht aus flachem Schwarz einen
- *      Raum, in dem etwas liegen kann.
- *   2  ein Kontaktschatten darunter, flach und breit gedrueckt. Er ist das,
- *      was den Gegenstand auf etwas STELLT. Ohne ihn schwebt jedes
- *      freigestellte Foto, egal wie gut es beleuchtet ist.
+ * `position: absolute` ist die Lehre daraus: was hier nur schmueckt, gehoert
+ * nicht in den Fluss. Es kann die Zelle dann nicht mehr aufblaehen, egal wie
+ * gross es gesetzt ist.
  *
- * Der Schatten sitzt tiefer als die Mitte (62 %), weil Licht in dieser Szene
- * von oben kommt — wie im Laden, wo die Lampen ueber der Theke haengen.
- *
- * `mix-blend-mode: screen` fuer den Schein: er soll AUFHELLEN, nicht
- * uebermalen. Der Schatten bleibt normal, er soll abdunkeln.
+ * Der Schatten sitzt tiefer als die Mitte, weil Licht in dieser Szene von
+ * oben kommt — wie im Laden, wo die Lampen ueber der Theke haengen.
  */
 .vorhang__licht {
-  grid-area: 1 / 1;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(74vw, 34rem);
+  aspect-ratio: 3 / 1;
+  transform: translate(-50%, 34%);
   z-index: 0;
-  width: min(150vw, 92rem);
-  aspect-ratio: 3 / 2;
   pointer-events: none;
-  background:
-    radial-gradient(closest-side ellipse at 50% 62%,
-      oklch(0% 0 0 / 0.55) 0%, oklch(0% 0 0 / 0.28) 34%, transparent 62%)
-      50% 58% / 46% 15% no-repeat,
-    radial-gradient(closest-side circle at 50% 46%,
-      color-mix(in oklch, var(--glut-grund) 62%, transparent) 0%,
-      color-mix(in oklch, var(--glut-grund) 16%, transparent) 45%,
-      transparent 72%);
+  background: radial-gradient(closest-side ellipse at 50% 50%,
+    oklch(0% 0 0 / 0.5) 0%, oklch(0% 0 0 / 0.24) 38%, transparent 68%);
 }
-
-/**
- * ═══ Die stille Zeile ueber dem Fladen ═══
- *
- * Sie steht am oberen Drittel und nicht in der Mitte: die Mitte gehoert dem
- * Gegenstand, und zwei Dinge im selben Punkt sind eins zu wenig. Klein,
- * gesperrt, in Versalien — eine Beschriftung, keine Schlagzeile.
- *
- * Die Nummer bekommt IHREN Kreis aus der Karte (`.zeile__nr` dort), damit
- * die Sektion und die Speisekarte sichtbar dieselbe Sprache sprechen.
- */
-.vorhang__marke {
-  grid-area: 1 / 1;
-  z-index: 3;
-  align-self: start;
-  margin: clamp(4.5rem, 14vh, 9rem) 0 0;
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  color: var(--creme);
-  font-size: clamp(0.78rem, 0.7rem + 0.25vw, 0.95rem);
-  font-weight: 600;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-}
-
-.vorhang__marke span {
-  display: grid;
-  place-items: center;
-  min-width: 1.9em;
-  height: 1.9em;
-  border-radius: 999px;
-  background: var(--glut-grund);
-  color: var(--nacht);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0;
-}
-
 
 .vorhang__scheibe {
   grid-area: 1 / 1;
@@ -4902,6 +4863,30 @@
  * das Schiff bei 26 bis 80 % davon: es kommt aus der Tiefe nach vorn, und der
  * Riss ist der Moment, in dem es am nächsten ist.
  */
+/**
+ * ═══ Am Handy deutlich schmaler ═══
+ *
+ * Karol am 11.09., auf dem Telefon: „das Kaeseschiff ist auf dem Handy
+ * deutlich zu breit, die Enden sind gar nicht zu sehen. Und wenn das
+ * zerbricht, sieht man eigentlich nur in der Mitte den Kaese, links und
+ * rechts sieht man kaum das Schiff."
+ *
+ * Gerechnet: `102vw` sind auf einem 393-px-Schirm 401 px, das Gebaeck belegt
+ * davon 85,8 % — also 344 px in einem 393 px breiten Fenster. Dazu kommt der
+ * Ruck beim Bruch (+3,5 %) und die Drehung, die den umschliessenden Kasten
+ * weiter aufzieht. Die Spitzen liegen damit ausserhalb.
+ *
+ * 84vw geben 330 px Element und 283 px Gebaeck — je 55 px frei an beiden
+ * Seiten. Genug, dass die Spitzen im Bild bleiben und man beim Bruch beide
+ * Haelften sieht, nicht nur den Kaese dazwischen.
+ *
+ * Die Art, wie es herein- und herausfliegt, bleibt unangetastet: „das ist
+ * top, das bleibt so."
+ */
+@media (max-width: 719px) {
+  .schiff { --breite: 84vw; }
+}
+
 .schiff {
   /* `inset: 0` + `margin: auto` + feste Masse = exakt mittig, ohne eine
      einzige Transformation. Das ist hier keine Feinheit, sondern Pflicht: die

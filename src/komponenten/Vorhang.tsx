@@ -258,30 +258,27 @@ export default function Vorhang() {
             weicher Kontaktschatten; deshalb sieht man einen Gegenstand, der
             irgendwo liegt, statt eines Bildes, das aufgeklebt wurde.
 
-            Genau das fehlte hier. Der Fladen schwebte auf flachem Schwarz,
-            ohne Licht, ohne Schatten, ohne Ort.
+            ═══ Der warme Schein ist wieder RAUS ═══
 
-            Es ist ein eigenes Element und kein `::before` an der Scheibe: die
-            Scheibe DREHT sich (232 Grad ueber die Sektion), und ein Lichtkegel,
-            der mitdreht, ist keine Lichtquelle mehr. */}
+            Karol am 11.09.: „diesen orangen Schatten kannst du rausnehmen, den
+            finde ich unpassend."
+
+            Er hatte doppelt recht. Der Schein war nicht nur Geschmackssache,
+            er hat die ganze Sektion nach rechts gezogen: mit `150vw` war er
+            auf einem 393-px-Handy 590 px breit, und weil alle Kinder in
+            DERSELBEN Rasterzelle liegen, wurde die Zelle 590 breit. Zentriert
+            wurde danach in dieser Zelle und nicht im Fenster — gemessen stand
+            die Scheibe 97 px ueber dem rechten Rand und das Kartenblatt 40.
+
+            Geblieben ist nur der Kontaktschatten, und der ist nicht orange
+            sondern schwarz: er ist das, was den Fladen auf etwas STELLT.
+            `position: absolute` nimmt ihn aus dem Raster heraus — was nicht im
+            Fluss liegt, kann die Zelle nicht mehr aufblaehen.
+
+            Eigenes Element und kein `::before` an der Scheibe: die Scheibe
+            DREHT sich (232 Grad ueber die Sektion), und ein Schatten, der
+            mitdreht, liegt nicht mehr unten. */}
         <div className="vorhang__licht" aria-hidden="true" />
-
-        {/* ═══ Die Sektion sagt jetzt, was sie zeigt ═══
-
-            Hier stand bis zum 26.08. „Mehr als 25 Jahre" — zu Recht raus (der
-            Fladen verdeckte sie zur Haelfte). Seitdem stand hier GAR NICHTS,
-            und eine Sektion ohne ein einziges Wort liest sich als unfertig.
-
-            Statt einer Schlagzeile HINTER dem Gegenstand jetzt eine ruhige
-            Zeile DARUEBER — dieselbe Rolle wie das „ARTISAN · SMALL BATCH ·
-            PREMIUM" bei Artisan Kitchen. Sie nimmt dem Fladen nichts weg und
-            benennt ihn.
-
-            Der Inhalt ist ihre eigene Karte: Nummer 22, Lahmacun. Nichts
-            erfunden, und es zeigt schon auf die Karte, die gleich aufgeht. */}
-        <p className="vorhang__marke" aria-hidden="true">
-          <span>22</span> Lahmacun
-        </p>
 
         <div className="vorhang__scheibe" aria-hidden="true">
           {/* ═══ Er dampft ═══
@@ -297,7 +294,8 @@ export default function Vorhang() {
               deshalb wird er gerechnet, und deshalb ist er hier richtig: er
               gibt dem Standbild das Jetzt zurueck.
 
-              Sechs Schwaden, nicht zwanzig. Ueber EINEM Fladen lesen sich
+              Elf Schwaden — Karol am 11.09.: „der Lahmacun soll noch mehr
+              dampfen." Zwanzig Ueber EINEM Fladen lesen sich
               zwanzig als Brand — steht so im Kopf von Dampf.tsx.
 
               Ton `ofen` und nicht `hell`: `hell` hat einen Kern mit 0,85
@@ -305,7 +303,7 @@ export default function Vorhang() {
               stand da kein Dampf, sondern ein grauer Fleck. `ofen` ist warm,
               faellt streng nach aussen ab und ist heller als jeder Grund
               dieser Seite — dafuer wurde er gebaut. */}
-          <Dampf ton="ofen" klasse="vorhang__dampf" dichte={6} />
+          <Dampf ton="ofen" klasse="vorhang__dampf" dichte={11} />
           <img
             className="vorhang__haelfte vorhang__haelfte--links"
             src="/bilder/vorhang/scheibe-links.webp"

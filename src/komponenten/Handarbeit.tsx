@@ -309,8 +309,23 @@ function Gebaeckstueck({ g }: { g: Gebaeck }) {
           Die Wiederholungen ganz hinten (`nurBreit`) tragen ohnehin
           `dampft: false` — zweimal dasselbe Gericht mit zweimal derselben
           Wolke wäre die Wiederholung, die die Tiefe gerade verbirgt. */}
-      {g.dampft && breit && g.tiefe < 0.62 ? (
-        <Dampf ton="ofen" klasse="gebaeck__dampf" dichte={3} />
+      {/* ═══ Es dampft jetzt auch am Handy ═══
+
+          Hier stand `&& breit`, also nur am Schirm. Karol am 11.09.: „auf dem
+          Handy dampfen sie leider nicht."
+
+          Die Sperre war Vorsorge gegen die Rechenlast, nie eine Messung — am
+          08.09. liess sich auf dieser Maschine ueberhaupt nichts belegen (Last
+          21, Werte stiegen von Lauf zu Lauf ohne Codeaenderung). Vorsorge
+          gegen etwas Unbelegtes darf aber nicht dazu fuehren, dass die Haelfte
+          der Besucher den Effekt gar nicht sieht — und ein Imbiss wird am
+          Handy angeschaut, nicht am Schreibtisch.
+
+          Zwei Schwaden statt drei am Handy: derselbe Handgriff wie damals beim
+          Schritt von vier auf drei. Sichtbar bleibt es, die Last steigt nicht
+          auf das Schirmniveau. */}
+      {g.dampft && g.tiefe < 0.62 ? (
+        <Dampf ton="ofen" klasse="gebaeck__dampf" dichte={breit ? 3 : 2} />
       ) : null}
       <div className="gebaeck__folge" ref={folge}>
         {g.bilder.map((quelle, i) => (
