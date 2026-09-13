@@ -14,7 +14,6 @@ import './stile/bausteine.css'
 import './stile/sektionen.css'
 
 import Kopfzeile from './komponenten/Kopfzeile.tsx'
-import Backstube from './komponenten/Backstube.tsx'
 import Galerie, { Produktgalerie } from './komponenten/Galerie.tsx'
 import Handarbeit from './komponenten/Handarbeit.tsx'
 import Reise from './komponenten/Reise.tsx'
@@ -117,7 +116,15 @@ function Seite() {
       <Kopfzeile />
       <Mehlstaub />
       <main>
-        <Backstube />
+        {/* ═══ Keine eigene Startseite mehr ═══
+            Karol am 13.09.: „Mach das Video im Hintergrund weg. Mach diese
+            Lahmacun-Szene als Startseite." Der Vorhang ist jetzt die erste
+            Sektion und traegt, was die Startseite trug: H1, Ort, Status,
+            Steine, Logo. Das Video (2,7 MB, die einzige Ladeverschiebung der
+            Seite) ist raus. Backstube.tsx bleibt vorerst als Datei — sie
+            traegt die Geschichte von vier Fassungen — wird aber nicht mehr
+            gerendert. */}
+
 
         {/* ═══ Die Reise des Käseschiffs beginnt HIER und endet bei .reise ═══
 

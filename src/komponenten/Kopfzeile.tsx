@@ -59,7 +59,7 @@ function useEngerKopf(): boolean {
   const [eng, setEng] = useState(false)
 
   useEffect(() => {
-    const hero = document.querySelector('.backstube')
+    const hero = document.querySelector('.vorhang')
     if (!hero) return
     const b = new IntersectionObserver(([e]) => setEng(!(e?.isIntersecting ?? true)), {
       /* Nicht bei null: sonst schaltet es genau an der Kante hin und her,

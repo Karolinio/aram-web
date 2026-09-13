@@ -1,10 +1,11 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import vorhangRoh from '../../inhalt/vorhang.json'
 import { SCRUB_KOERPER, useMedienabfrage, werkzeugHolen } from '../bewegung.ts'
 import { inhalt } from '../inhalt.ts'
-import Dampf from './ui/Dampf.tsx'
+import { ARAM } from '../aram.config.ts'
 import Untergrund from './ui/Untergrund.tsx'
+import { status, statusText } from '../oeffnung.ts'
 
 type Mass = { breite: number; hoehe: number }
 const M = vorhangRoh as Record<string, Mass>
@@ -79,8 +80,33 @@ function fenster(p: number, von: number, bis: number, rand = 0.06): number {
   return 1
 }
 
+/**
+ * ═══ Nur, wenn offen ═══
+ *
+ * Karol hat „Geschlossen · öffnet um 08:00" viermal von der Startseite
+ * genommen (zuletzt 23.08.): als Erstes, was ein Besucher liest, ist es die
+ * schlechteste Zeile — sie nimmt die Handlung weg, statt zu einer zu führen.
+ * Am 13.09. sagte er zum Entwurf: „Dieses ‚Geöffnet bis 19 Uhr' kann man
+ * lassen." Beides gilt: die Zeile steht, solange sie GEÖFFNET sagt, und
+ * steht nicht, wenn sie „geschlossen" sagen müsste. Die vollen Zeiten stehen
+ * ohnehin in „Der Laden".
+ *
+ * Gerendert erst nach dem Aufbau (useEffect), nicht beim ersten Zeichnen:
+ * die Uhr des Besuchers ist die Wahrheit, nicht die des Bauservers.
+ */
+function Offenzeile() {
+  const [zeile, setZeile] = useState<string | null>(null)
+  useEffect(() => {
+    const s = status(new Date())
+    setZeile(s.art === 'offen' ? statusText(s) : null)
+  }, [])
+  if (!zeile) return null
+  return <p className="vorhang__offen">{zeile}</p>
+}
+
 export default function Vorhang() {
   const ruhig = useMedienabfrage('(prefers-reduced-motion: reduce)')
+  const schmal = useMedienabfrage('(max-width: 719px)')
   const buehne = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -91,7 +117,8 @@ export default function Vorhang() {
     const rechts = b.querySelector<HTMLElement>('.vorhang__haelfte--rechts')
     const dampf = b.querySelector<HTMLElement>('.vorhang__dampf')
     const licht = b.querySelector<HTMLElement>('.vorhang__licht')
-    const marke = b.querySelector<HTMLElement>('.vorhang__marke')
+    const logo = b.querySelector<HTMLElement>('.vorhang__logo')
+    const auftakt = b.querySelector<HTMLElement>('.vorhang__auftakt')
     const wort = b.querySelector<HTMLElement>('.vorhang__wort')
     const karte = b.querySelector<HTMLElement>('.vorhang__einladung')
     if (!links || !rechts) return
@@ -137,7 +164,12 @@ export default function Vorhang() {
            leer — gemessen ein ganzer Bildschirm ohne Inhalt, bevor überhaupt
            etwas passiert. Eine angeheftete Bühne, die leer beginnt, liest sich
            als Ladefehler. */
-        const hoch = (1 - glatt(klemmen(p / 0.2))) * 17
+        /* 26 vh am Schirm statt 17: seit dem 13.09. ist der Vorhang die
+           Startseite, und ueber dem Fladen stehen Logo und Zeile. Gemessen
+           endete der Block auf 900 vh bei 432 px; bei 22 vh begann der Fladen
+           schon bei 418. Am Handy bleiben 17 — dort ist der Fladen schmaler
+           und unter der Zeile ist ohnehin Luft. */
+        const hoch = (1 - glatt(klemmen(p / 0.2))) * (schmal ? 17 : 26)
 
         /**
          * ═══ Die Drehung gehört der SCHEIBE, das Auseinanderfahren den HÄLFTEN ═══
@@ -176,15 +208,58 @@ export default function Vorhang() {
            Er geht früher als die Hälften: bei `weich * 2.2` ist er schon
            verschwunden, wenn sie sich um ein Viertel geöffnet haben. Dampf,
            der bis zum letzten Moment mitläuft, wirkt wie ein Nachzügler. */
-        if (dampf) dampf.style.opacity = String(Math.max(0, 1 - weich * 2.2))
+        if (dampf) {
+          /* Der Dampf folgt dem Fladen in Hoehe und Groesse, aber NICHT in
+             der Drehung — Dampf steigt senkrecht, auch ueber etwas, das sich
+             dreht. Und er hoert auf, sobald die Scheibe aufbricht. */
+          dampf.style.transform = `translate3d(-50%, calc(-50% + ${hoch}vh), 0) scale(${skala})`
+          dampf.style.opacity = String(Math.max(0, 0.9 - weich * 2.2))
+        }
 
-        /* Licht und Beschriftung gehoeren zum GANZEN Fladen. Sobald er
-           aufbricht, ist der Gegenstand weg, den sie beleuchten und benennen —
-           also gehen sie mit. Etwas frueher als der Dampf, damit die Buehne
-           leer ist, wenn die Karte hereinkommt. */
-        const ab = String(Math.max(0, 1 - weich * 2.6))
-        if (licht) licht.style.opacity = ab
-        if (marke) marke.style.opacity = ab
+        /* ═══ Das Logo faehrt nach unten rechts und wird das Wasserzeichen ═══
+
+           Karol am 13.09.: „das Logo verschwindet cool zur Seite, aber das
+           soll nach unten rechts verschwinden, damit es wasserzeichenartig
+           fungiert."
+
+           Es ist EIN Element mit EINEM Weg: gross und mittig in Ruhe, dann
+           ueber das erste Viertel der Strecke in die Ecke, auf die Groesse
+           und Deckung von `.wasserzeichen` (11 vw, 0,58). Sobald die Sektion
+           das Bild verlaesst, uebernimmt das feste Wasserzeichen an derselben
+           Stelle — der Wechsel ist nicht zu sehen, weil beide gleich gross
+           und gleich hell sind. */
+        if (logo) {
+          const t = glatt(klemmen(p / 0.25))
+          const vw = window.innerWidth
+          const vh = window.innerHeight
+          const bild = logo.firstElementChild as HTMLElement | null
+          const lw = bild?.offsetWidth || 1
+          const lh = bild?.offsetHeight || 1
+          const zielW = Math.min(Math.max(vw * 0.11, 104), 192)
+          const rand = Math.min(Math.max(vw * 0.014, 14.4), 25.6)
+          const sk = zielW / lw
+          const x = (vw - rand - zielW) - (vw / 2 - lw / 2)
+          const y = (vh - rand - lh * sk) - logo.offsetTop
+          logo.style.transform = `translate3d(${x * t}px, ${y * t}px, 0) scale(${1 - (1 - sk) * t})`
+          logo.style.opacity = String(1 - 0.42 * t)
+        }
+        if (auftakt) {
+          const g = 1 - glatt(klemmen(p / 0.14))
+          auftakt.style.opacity = String(g)
+          /* translate(-50%, …) und nicht translateY: das Stilblatt zentriert den
+             Block ueber translateX(-50%), und wer hier nur translateY schreibt,
+             loescht das — gemessen stand der Block dann bei 720 bis 1360 px
+             statt mittig. Zwei Schreiber auf einer Eigenschaft, derselbe
+             Fehler wie beim Kaeseschiff am 05.09. */
+          auftakt.style.transform = `translate(-50%, ${(1 - g) * -18}px)`
+          auftakt.style.pointerEvents = g < 0.3 ? 'none' : ''
+        }
+
+        /* Der Kontaktschatten gehoert zum GANZEN Fladen. Sobald er aufbricht,
+           ist der Gegenstand weg, der ihn wirft — also geht er mit, etwas
+           frueher als der Dampf, damit die Buehne leer ist, wenn die Karte
+           hereinkommt. */
+        if (licht) licht.style.opacity = String(Math.max(0, 1 - weich * 2.6))
 
         /* Die Schlagzeile dahinter geht mit der Scheibe: sie ist am Anfang da,
            wird von ihr verdeckt und verschwindet, wenn die Einladung kommt.
@@ -230,7 +305,7 @@ export default function Vorhang() {
       tot = true
       abraeumen?.()
     }
-  }, [ruhig])
+  }, [ruhig, schmal])
 
   return (
     <section className="sektion sektion--nacht vorhang" aria-labelledby="vorhang-titel">
@@ -292,30 +367,71 @@ export default function Vorhang() {
             mitdreht, liegt nicht mehr unten. */}
         <div className="vorhang__licht" aria-hidden="true" />
 
+        {/* ═══ Der Auftakt — seit dem 13.09. ist das die Startseite ═══
+
+            Karol: „Mach das Video im Hintergrund weg. Mach diese Lahmacun-
+            Szene als Startseite mit dem Logo präsent in der Mitte … das Logo
+            viel grösser … dieser Satz viel kleiner. Das Logo steht im
+            Vordergrund, und dieser dampfende Lahmacun."
+
+            Was die alte Startseite trug, steht jetzt hier, nur kleiner: die
+            H1 (Google), der Ort (der Gast von Maps), der Status, die drei
+            Steine. Nichts davon ist weggefallen — es steht am Fladen statt am
+            Video. Das Video ist raus: 2,7 MB und die einzige
+            Ladeverschiebung der Seite. */}
+        <a className="vorhang__logo" href="#start" aria-label={`${ARAM.name} — zum Anfang`}>
+          <img
+            src="/bilder/echt/logo.webp"
+            alt=""
+            width={1220}
+            height={540}
+            fetchPriority="high"
+            decoding="async"
+          />
+        </a>
+        <div className="vorhang__auftakt">
+          <h1 id="vorhang-titel" className="vorhang__titel">
+            Jeder Teig wird morgens von Hand gerollt
+          </h1>
+          <p className="vorhang__ort">
+            {ARAM.ort.strasse} · {ARAM.ort.stadtteil}
+          </p>
+          <Offenzeile />
+          <nav className="vorhang__steine" aria-label="Schnellwege">
+            <a className="stein stein--erst stein--klein" href="#karte">
+              <span className="stein__wort">Zur Karte</span>
+            </a>
+            <a className="stein stein--klein" href={ARAM.kontakt.telefonHref}>
+              <span className="stein__wort">Anrufen</span>
+            </a>
+            <a className="stein stein--klein" href={ARAM.kontakt.whatsapp} rel="noopener noreferrer" target="_blank">
+              <span className="stein__wort">WhatsApp</span>
+            </a>
+          </nav>
+        </div>
+
+        {/* ═══ Echter Dampf ═══
+
+            Ein Clip von Dampf auf reinem Schwarz (Higgsfield, 7,5 Credits,
+            107 kB als nahtlose Schleife). `mix-blend-mode: screen` macht das
+            Schwarz unsichtbar: auf dem dunklen Grund bleibt nur der Dampf.
+            Drei Kopien, versetzt und gespiegelt, damit es nicht wie EINE
+            Quelle aussieht. Karol: „Der Dampf ist richtig geil."
+
+            Er ersetzt hier die gerechneten Schwaden. Das Element steht NEBEN
+            der Scheibe, nicht darin: die Scheibe dreht sich, Dampf tut das
+            nicht — Hoehe und Groesse gehen mit, die Drehung nicht.
+
+            EIN Strom, nicht drei. Der Entwurf hatte drei Kopien fuer die
+            Vielfalt; der Fabrikpruefer hat sie als kritisch gemeldet — drei
+            gleichzeitige Decoder haben auf diesem Projekt schon einmal die
+            CPU ueberfordert, am Handy kostet es Akku und Bildrate. Ein Clip
+            echten Dampfes liest sich auch allein als Dampf. */}
+        <div className="vorhang__dampf" aria-hidden="true">
+          <video src="/video/dampf.mp4" autoPlay muted loop playsInline />
+        </div>
+
         <div className="vorhang__scheibe" aria-hidden="true">
-          {/* ═══ Er dampft ═══
-
-              Karol am 10.09.: „Der Lahmacun muss noch ein bisschen dampfen …
-              weil das ja im Endeffekt auch die erste Sektion nach dem Video
-              ist."
-
-              Er hat recht, und zwar aus einem Grund, der nicht Geschmack ist:
-              was hier steht, ist ein Foto von einem Gegenstand, der auf einem
-              Brett lag. Ein Foto hat keine Zeit. Dampf ist das einzige
-              Element auf dieser Seite, das man nicht fotografieren kann —
-              deshalb wird er gerechnet, und deshalb ist er hier richtig: er
-              gibt dem Standbild das Jetzt zurueck.
-
-              Elf Schwaden — Karol am 11.09.: „der Lahmacun soll noch mehr
-              dampfen." Zwanzig Ueber EINEM Fladen lesen sich
-              zwanzig als Brand — steht so im Kopf von Dampf.tsx.
-
-              Ton `ofen` und nicht `hell`: `hell` hat einen Kern mit 0,85
-              Deckkraft, und auf dem dunklen Grund neben der warmen Lichtinsel
-              stand da kein Dampf, sondern ein grauer Fleck. `ofen` ist warm,
-              faellt streng nach aussen ab und ist heller als jeder Grund
-              dieser Seite — dafuer wurde er gebaut. */}
-          <Dampf ton="ofen" klasse="vorhang__dampf" dichte={14} feinheit={0.6} />
           <img
             className="vorhang__haelfte vorhang__haelfte--links"
             src="/bilder/vorhang/scheibe-links.webp"

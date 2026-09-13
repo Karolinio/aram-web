@@ -304,6 +304,20 @@
 
 .kopf__marke { display: flex; flex: none; }
 
+/**
+ * ═══ Kein zweites Logo, solange das grosse im Bild ist ═══
+ *
+ * Seit dem 13.09. traegt die Startseite das Logo gross in der Mitte, und es
+ * faehrt beim Scrollen als Wasserzeichen nach unten rechts. Solange die
+ * Startseite im Bild ist (`data-eng="nein"`), stuende das kleine Logo der
+ * Kopfzeile links oben ein zweites Mal daneben — ein Logo, zweimal auf
+ * einem Schirm, liest sich als Versehen. Es kommt, sobald die Kopfzeile eng
+ * wird, also mit der ersten Sektion danach. Die Flaeche bleibt reserviert,
+ * damit die Navigation nicht springt.
+ */
+.kopf[data-eng='nein'] .kopf__marke { opacity: 0; pointer-events: none; }
+.kopf__marke { transition: opacity var(--dauer-normal, 300ms) var(--kurve, ease); }
+
 /* Ihr Logo bekommt eine feste kleine Höhe und wird nirgends vergrössert.
    38 px, nicht 28: bei 28 war die Wortmarke ein roter Fleck, und ein Logo, das
    man nicht lesen kann, erfüllt seinen einzigen Zweck nicht — ihre Kunden
@@ -4262,38 +4276,33 @@
 }
 
 /**
- * Der Dampf sitzt UEBER der Scheibe, nicht dahinter: die beiden Haelften
- * fahren beim Scrollen auseinander, und was dahinter liegt, waere im Spalt
- * ploetzlich sichtbar und wuerde als Fehler gelesen. Vor ihnen zieht er ueber
- * beide Haelften hinweg, wie es Dampf tut.
+ * ═══ Echter Dampf: ein Clip auf reinem Schwarz, screen-geblendet ═══
  *
- * `bottom: 62%` und nicht 55 wie beim Schwarm: der Fladen liegt hier flach im
- * Bild statt zu fliegen, die Quelle ist also seine Flaeche und nicht seine
- * Unterkante.
+ * `mix-blend-mode: screen` macht Schwarz unsichtbar — auf dem dunklen Grund
+ * bleibt nur der Dampf. EIN Strom — drei parallele Decoder hat der Pruefer
+ * als kritisch gemeldet. Die Maske nimmt dem Clip die harte Kante seines
+ * Rahmens. Hoehe und Groesse setzt
+ * Vorhang.tsx je Scrollstand; gedreht wird er nie.
  */
 .vorhang__dampf {
   position: absolute;
-  /**
-   * ═══ Gemessen: die Leinwand war dreimal so breit wie der Fladen ═══
-   *
-   * 140 % der Scheibe sind bei 1440 px Fenster 1344 px — der Fladen selbst
-   * misst aber nur rund 450. Die Schwaden verteilten sich ueber die ganze
-   * Flaeche und zogen sichtbar rechts am Gebaeck vorbei, statt von ihm
-   * aufzusteigen. Dampf, der neben seiner Quelle steht, ist kein Dampf.
-   *
-   * 52 % breit, mittig: das ist ungefaehr die Breite des Fladens plus etwas
-   * Spiel nach aussen, weil Dampf sich beim Steigen ausbreitet.
-   *
-   * Und er setzt tiefer an (52 statt 62 %): die Quelle ist die FLAECHE des
-   * Fladens, nicht ein Punkt darueber.
-   */
-  left: 24%;
-  width: 52%;
-  bottom: 52%;
-  height: 105%;
+  left: 50%;
+  top: 50%;
+  width: min(46vw, 34rem);
+  aspect-ratio: 1;
+  transform: translate3d(-50%, -50%, 0);
   z-index: 3;
   pointer-events: none;
+  mix-blend-mode: screen;
+  opacity: 0.9;
+  -webkit-mask-image: radial-gradient(ellipse at 50% 100%, #000 30%, transparent 72%);
+  mask-image: radial-gradient(ellipse at 50% 100%, #000 30%, transparent 72%);
+  /* Der Clip sitzt mit seiner Unterkante auf dem Fladen: die Mitte des
+     Elements liegt eine halbe Fladenhoehe ueber der Fladenmitte. */
+  margin-top: -22vh;
 }
+.vorhang__dampf video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
 
 /**
  * ═══ Nur noch der Kontaktschatten ═══
@@ -4323,6 +4332,92 @@
   pointer-events: none;
   background: radial-gradient(closest-side ellipse at 50% 50%,
     oklch(0% 0 0 / 0.5) 0%, oklch(0% 0 0 / 0.24) 38%, transparent 68%);
+}
+
+/* ═══ Der Auftakt: Logo, Zeile, Steine — seit dem 13.09. die Startseite ═══ */
+.vorhang__logo {
+  position: absolute;
+  left: 50%;
+  top: clamp(4.4rem, 9vh, 7rem);
+  /* Gross. Karol am 13.09.: „das Logo soll dreimal so gross sein … das Logo
+     steht im Vordergrund." 44 vw am Schirm, am Handy 78. */
+  width: min(44vw, 34rem);
+  margin-left: calc(min(44vw, 34rem) / -2);
+  z-index: 6;
+  transform-origin: 0 0;
+  will-change: transform, opacity;
+  filter: drop-shadow(0 0.5rem 1.4rem oklch(0% 0 0 / 0.55));
+}
+.vorhang__logo img { display: block; width: 100%; height: auto; }
+.vorhang__logo:focus-visible { outline: 2px solid var(--akzent); outline-offset: 6px; border-radius: 0.5rem; }
+
+.vorhang__auftakt {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: calc(clamp(4.4rem, 9vh, 7rem) + min(44vw, 34rem) * 540 / 1220 + 0.9rem);
+  width: min(92vw, 40rem);
+  text-align: center;
+  z-index: 5;
+}
+/* Klein. Karol: „dieser Satz viel kleiner … auch die Strasse." Die Zeile ist
+   eine Beschriftung unter dem Logo, keine Schlagzeile — in Reem Kufi, der
+   zweiten Schrift der Seite. Die H1 bleibt trotzdem H1: Google liest die
+   Rolle, nicht die Groesse. */
+.vorhang__titel {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: clamp(0.92rem, 0.8rem + 0.5vw, 1.15rem);
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+  color: var(--creme);
+  text-wrap: balance;
+}
+.vorhang__ort {
+  margin: 0.2rem 0 0;
+  font-family: var(--font-text);
+  font-size: clamp(0.76rem, 0.7rem + 0.3vw, 0.9rem);
+  color: var(--tinte-leise);
+  letter-spacing: 0.03em;
+}
+.vorhang__offen {
+  margin: 0.55rem 0 0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--creme);
+}
+.vorhang__offen::before {
+  content: '';
+  display: inline-block;
+  width: 0.62em;
+  height: 0.52em;
+  margin-right: 0.5em;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  background: var(--akzent);
+  vertical-align: -0.02em;
+}
+/* Die drei Steine, klein. Karol: „als drei kleine schwarze Steine." Dieselbe
+   Form wie auf der alten Startseite (`.stein`), nur eine Nummer kleiner. */
+.vorhang__steine {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.85rem;
+}
+.stein--klein {
+  min-width: 0;
+  padding: 0.55rem 1rem 0.5rem;
+  font-size: 0.82rem;
+}
+.stein--klein .stein__wort { font-size: inherit; }
+
+@media (max-width: 719px) {
+  .vorhang__logo { width: 78vw; margin-left: -39vw; top: clamp(3.6rem, 7vh, 5rem); }
+  .vorhang__auftakt { top: calc(clamp(3.6rem, 7vh, 5rem) + 78vw * 540 / 1220 + 0.7rem); }
+  .vorhang__dampf { width: 72vw; margin-top: -18vh; }
 }
 
 .vorhang__scheibe {

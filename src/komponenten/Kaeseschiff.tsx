@@ -392,8 +392,12 @@ export default function Kaeseschiff() {
     void werkzeugHolen().then((werkzeug) => {
       if (tot || !werkzeug) return
       const st = werkzeug.ScrollTrigger.create({
-        trigger: '.backstube',
-        start: 'bottom bottom',
+        /* Seit dem 13.09. ist der Vorhang die Startseite; `.backstube` gibt
+           es nicht mehr. Gebaut wird, sobald der Besucher zu scrollen beginnt
+           — `top -10%` ist ein Zehntel Fensterhoehe. Vorher gehoert die
+           Ladezeit dem Auftakt. */
+        trigger: '.vorhang',
+        start: 'top -10%',
         onEnter: () => setBereit(true),
         onEnterBack: () => setBereit(true),
       })

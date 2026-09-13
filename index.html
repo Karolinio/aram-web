@@ -30,34 +30,20 @@
          nach /favicon.ico und bekommt eine 404. -->
     <link rel="icon" type="image/webp" href="/bilder/echt/logo.webp" />
     <!--
-      ═══ Die Vorladung muss dem <picture> im Hero ENTSPRECHEN ═══
+      ═══ Die Vorladung muss dem ersten Bild ENTSPRECHEN ═══
 
-      Sie tat es nicht mehr. Der Hero zeigt seit dem 16.08. ihre Ladenfront;
-      hier stand weiter die Mehl-auf-Holz-Textur — und die Handy-Fassung davon
-      (mehl-holz-klein.webp) war beim Umbau gelöscht worden. Ergebnis: am
-      Rechner wurde ein Bild vorgeladen, das gar nicht mehr im Hero steht, und
-      am Handy lief die Vorladung in einen 404.
+      Dieser Kommentar hat schon einmal eine falsche Vorladung dokumentiert
+      (Mehl-Textur statt Ladenfront, 16.08.). Jetzt zum zweiten Mal: seit dem
+      13.09. ist der Vorhang die Startseite, und das erste Bild sind das Logo
+      und die zwei Haelften des Lahmacun. Die Ladenfront (team-laden) steht
+      erst in „Der Laden", weit unten — sie hier vorzuladen belegte die
+      teuerste Verbindung mit drei Dateien, die niemand im ersten Bild sieht.
 
-      Eine falsche Vorladung ist schlimmer als keine: sie belegt die erste,
-      teuerste Verbindung mit der falschen Datei. Die drei Zeilen decken sich
-      jetzt exakt mit den drei Quellen in Backstube.tsx.
+      Eine falsche Vorladung ist schlimmer als keine.
     -->
-    <link
-      rel="preload"
-      as="image"
-      href="/bilder/echt/team-laden-schmal.webp"
-      media="(max-width: 640px)" />
-    <link
-      rel="preload"
-      as="image"
-      href="/bilder/echt/team-laden-900.webp"
-      media="(min-width: 641px) and (max-width: 1100px)" />
-    <link
-      rel="preload"
-      as="image"
-      href="/bilder/echt/team-laden.webp"
-      media="(min-width: 1101px)" />
-    <link rel="preload" as="image" href="/bilder/echt/fatayer-frei.webp" />
+    <link rel="preload" as="image" href="/bilder/echt/logo.webp" />
+    <link rel="preload" as="image" href="/bilder/vorhang/scheibe-links.webp" />
+    <link rel="preload" as="image" href="/bilder/vorhang/scheibe-rechts.webp" />
   </head>
   <body>
     <div id="wurzel"></div>

@@ -36,7 +36,7 @@ export default function Wasserzeichen() {
   const [sichtbar, setSichtbar] = useState(false)
 
   useEffect(() => {
-    const hero = document.querySelector('.backstube')
+    const hero = document.querySelector('.vorhang')
     const fuss = document.querySelector('.fuss')
     if (!hero || !fuss) return
 

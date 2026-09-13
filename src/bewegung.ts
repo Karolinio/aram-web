@@ -202,7 +202,7 @@ export function useDrehung<T extends HTMLElement>(grad: number) {
           scrollTrigger: {
             /* Ausgelöst von der Bühne, nicht vom Element: hinge der Bereich am
                Schild, verschöbe er sich mit jeder Drehung selbst. */
-            trigger: '.backstube',
+            trigger: '.vorhang',
             start: 'top top',
             end: 'bottom top',
             scrub: SCRUB_KOERPER,
