@@ -3,7 +3,34 @@
 Wiedereinstieg. Alles, was eine neue Sitzung braucht, um ohne Rückfragen
 weiterzubauen.
 
-**Letzter Stand:** `HEAD` · **Zweig:** `main` · **Notiz vom:** 11.09.2026
+**Letzter Stand:** `HEAD` · **Zweig:** `main` · **Notiz vom:** 13.09.2026
+
+---
+
+## 13.09. — Startseite ohne Video, Schweif, Kopfzeile mit zwei Wegen
+
+Live auf https://karolinio.github.io/aram-web/ (GitHub Pages, `ARAM_BASIS=/aram-web/`).
+
+- **Startseite = Vorhang.** Logo gross und mittig (`logo.webp` ist jetzt auf
+  den Inhalt beschnitten, 875×381 — vorher 31 % durchsichtiger Rand, ungleich,
+  darum kleiner als gesetzt und 3 % links der Mitte). Zeile klein in Reem
+  Kufi, ihre Unterkante haengt am Dampf, nicht am Logo.
+- **Fahrt:** erst hoch (0–0,2), dann drehen; Teilung bei `TEILT_AB 0,58`
+  (110° statt 75°), Karte haengt an TEILT_AB. Logo faehrt ueber 0–0,25 nach
+  unten rechts aufs Wasserzeichenmass.
+- **Salve = Schweif** (Salve.tsx): eine Catmull-Rom-Kurve, sechs Perlen mit
+  `ABSTAND 0,075 / DAUER 0,55`, Start erst bei 28 % der Oeffnung
+  (`SPALT_OFFEN`), Uebergabe an den Schwarm ueber `--schwarm-deck` (0,78–0,98).
+- **Kopfzeile:** Anrufen + WhatsApp als Glasknoepfe oben rechts (`.kopf__weg`),
+  am Handy nur Zeichen 44 px. Die drei Steine der Startseite sind raus,
+  „Zur Karte" ganz (die Karte ist der naechste Takt).
+- Dampf: Salve-Perlen `dichte 6`, Schwarm 8/6.
+
+**Offen (Karols Entscheidung):** Sektionsfarben tauschen — Vorhang bleibt
+schwarz (auf Orange verschwinden Fladen und Dampf, gemessen/gesehen),
+„Alles entsteht" auf Schwarz, Galerien auf Orange. Probe-Screens lagen in der
+Sitzung vom 13.09.; Umbau = `grund`-Prop je Sektion + Untergrund-Ton + die
+tonabhaengigen Regeln der drei Sektionen (Dampf-Ton, Theke bleibt orange).
 
 ---
 

@@ -579,7 +579,6 @@ section {
 @media (pointer: coarse) {
   .kopf__marke,
   .laden__wort .datenzeile a,
-  .vorhang__steine .stein,
   .fuss__navi a {
     display: inline-flex;
     align-items: center;

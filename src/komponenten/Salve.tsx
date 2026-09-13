@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { SCRUB_KOERPER, useMedienabfrage, werkzeugHolen } from '../bewegung.ts'
 import { GEBAECKE } from '../gebaecke.ts'
+import { TEILT_AB, TEILT_BIS } from './Vorhang.tsx'
 import Dampf from './ui/Dampf.tsx'
 
 /**
@@ -131,8 +132,8 @@ function bahn(p: number, i: number, schmal: boolean): Lage {
   const dreh = Math.atan2(y2 - y, x2 - x) * (180 / Math.PI) * 0.25
   /* Klein aus dem Spalt, voll auf der Kette, kleiner beim Hineinfliegen —
      was in die nächste Sektion geht, entfernt sich. */
-  const sk = s < 0.12 ? misch(0.15, 1, glatt(s / 0.12)) : s > 0.8 ? misch(1, 0.72, glatt((s - 0.8) / 0.2)) : 1
-  const deck = s <= 0 ? 0 : s < 0.08 ? glatt(s / 0.08) : s > 0.86 ? 1 - glatt((s - 0.86) / 0.14) : 1
+  const sk = s < 0.2 ? misch(0.15, 1, glatt(s / 0.2)) : s > 0.8 ? misch(1, 0.72, glatt((s - 0.8) / 0.2)) : 1
+  const deck = s <= 0 ? 0 : s < 0.1 ? glatt(s / 0.1) : s > 0.86 ? 1 - glatt((s - 0.86) / 0.14) : 1
   return { x, y, dreh, sk: sk * (schmal ? 0.62 : 0.62), deck }
 }
 
@@ -188,16 +189,26 @@ export default function Salve() {
 
       /* ═══ Wo die Salve beginnt ═══
          Der Scrub läuft von der Oberkante des Vorhangs bis zur Oberkante der
-         Handarbeit. Der Lahmacun öffnet sich aber erst bei 46 % SEINES
-         Weges (TEILT_AB in Vorhang.tsx). Der Anteil davon am Gesamtweg hängt
-         an den Sektionshöhen und wird bei jedem Refresh neu gerechnet — eine
-         feste Zahl wäre beim ersten Handy falsch. */
+         Handarbeit. Der Lahmacun öffnet sich aber erst bei TEILT_AB SEINES
+         Weges (Vorhang.tsx). Der Anteil davon am Gesamtweg hängt an den
+         Sektionshöhen und wird bei jedem Refresh neu gerechnet — eine feste
+         Zahl wäre beim ersten Handy falsch.
+
+         ═══ Nicht beim ersten Riss, sondern wenn der Spalt offen ist ═══
+         Karol am 13.09.: „kommt ein grünes Produkt zu früh raus … muss ein
+         bisschen Verzögerung noch haben." Gerechnet: die erste Perle war
+         nach 11 vh Scroll voll gross, die Hälften bis dahin erst 16 %
+         auseinander — sie stand VOR dem Fladen statt aus ihm zu treten.
+         Jetzt beginnt die Kette bei 28 % der Öffnung (die Hälften sind dann
+         ein gutes Viertel auseinander) und wächst langsamer (bahn: 0,2 statt
+         0,12); wenn sie voll da ist, sind die Hälften zu vier Fünfteln weg. */
+      const SPALT_OFFEN = TEILT_AB + 0.28 * (TEILT_BIS - TEILT_AB)
       let abP = 0.3
       const rechnen = () => {
         const vh = window.innerHeight
         const vorhangWeg = Math.max(1, vorhang.offsetHeight - vh)
         const gesamt = Math.max(1, prozess.offsetTop - vorhang.offsetTop)
-        abP = klemmen((0.46 * vorhangWeg) / gesamt, 0.05, 0.9)
+        abP = klemmen((SPALT_OFFEN * vorhangWeg) / gesamt, 0.05, 0.9)
       }
       rechnen()
 
@@ -287,7 +298,11 @@ export default function Salve() {
         if (!g) return null
         return (
           <div className="salve__stueck" data-salve={id} key={id}>
-            <Dampf ton="ofen" klasse="salve__dampf" dichte={2} feinheit={0.7} />
+            {/* Dampf auch im Flug — Karol am 13.09.: „auch den Dampf, wenn
+                die fliegen, nicht nur, wenn die landen." Zwei Schwaden bei
+                0,7 waren am Schirm nicht zu sehen; sechs bei voller Groesse
+                ueber einer breiteren Leinwand sind es. */}
+            <Dampf ton="ofen" klasse="salve__dampf" dichte={6} />
             <img
               /* KEIN pfad() hier. `g.bilder[0]` ist im Quelltext eine
                  Zeichenkette mit Anfuehrungszeichen — genau die faengt das

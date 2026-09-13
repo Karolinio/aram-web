@@ -355,70 +355,65 @@
 }
 
 /**
- * Die Telefonnummer im Kopf — ZWEI Fassungen zur Wahl.
+ * ═══ Die zwei Wege oben rechts: Anrufen und WhatsApp ═══
  *
- * Karol: „nimm mal diese dunkelrote Hintergrundfarbe hinter der Telefonnummer,
- * das sieht unpassend aus. Mach einmal mit der roten Farbe vom Logo und einmal
- * mit der Clay."
+ * Karol am 13.09.: „Nur Anrufen als Telefonbutton und WhatsApp als
+ * WhatsApp-Button oben rechts in die Ecke."
  *
- * Beide stehen hier, umschaltbar über `data-probe` am `<html>`. Ausgeliefert
- * wird `clay` — die Begründung steht unten. Die rote bleibt im Code, bis Karol
- * entschieden hat; danach fliegt die Verliererin raus, damit hier nicht zwei
- * Wahrheiten nebeneinander stehen bleiben.
+ * Glasknöpfe mit heller Kante — dieselbe Fassung, die hier schon einmal die
+ * Nummer trug (Karol am 22.08.: der Kopf liest dunkel, ist aber nicht
+ * dunkel; Glas an EINER Stelle ist ein Bedienelement, Glas über die ganze
+ * Breite ist eine Optik). Am Schirm Zeichen und Wort, am Handy nur das
+ * Zeichen in 44 px — darunter ist es kein Ziel für einen Daumen.
  */
-.kopf__anruf {
-  padding: 0.5em 1.1em;
-  font-size: var(--text-meta);
+.kopf__wege {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-inline-start: auto;
+  flex: none;
 }
-
-/**
- * FASSUNG CLAY — ausgeliefert.
- *
- * Der zweite Grund der Seite als Fläche, die Tinte darauf, eine Haarlinie
- * herum. Gemessen 8,9:1. Sie ist ruhig, weil sie aus dem Zweiklang kommt, den
- * die Seite ohnehin spricht — und trotzdem als Bedienelement zu erkennen,
- * weil sie die einzige Fläche im Kopf ist.
- */
-/**
- * Über dem dunklen Hero: Glasknopf mit heller Kante — und jetzt trägt ER die
- * Scheibe, weil die Kopfzeile darüber keine mehr hat.
- *
- * Das ist die Umkehrung, die den Kopf rettet: statt eines Balkens über die
- * volle Breite gibt es genau EIN gläsernes Element, und es ist das, das man
- * anfassen soll. Glas an einer Stelle ist ein Bedienelement; Glas über die
- * ganze Breite ist eine Optik.
- */
-.kopf__anruf {
+.kopf__weg {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  padding: 0.5em 0.95em;
+  font-family: var(--font-display);
+  font-variation-settings: var(--wonk-klein);
+  font-size: var(--text-meta);
+  font-weight: 620;
+  text-decoration: none;
   background: color-mix(in oklch, var(--ton-tief) 82%, transparent);
-  color: var(--tinte);
+  /* Erbt wie die Anker: die Kopfzeile weiss, ob sie hell oder dunkel liest.
+     `var(--tinte)` stand hier zuerst — gemessen 1,1 : 1, dunkle Tinte auf
+     dunklem Glas. */
+  color: inherit;
   border: 1px solid var(--linie);
   border-radius: 999px;
   -webkit-backdrop-filter: blur(12px) saturate(130%);
   backdrop-filter: blur(12px) saturate(130%);
-  text-shadow: none;
   box-shadow: inset 0 1px 0 color-mix(in oklch, var(--creme) 60%, transparent);
+  transition: background var(--dauer-mikro) var(--ease-teig),
+    color var(--dauer-mikro) var(--ease-teig),
+    border-color var(--dauer-mikro) var(--ease-teig),
+    transform var(--dauer-mikro) var(--ease-teig);
 }
-
-/* Ab der hellen Sektion wieder Clay mit Tinte — dort trägt die Kopfzeile
-   selbst die Scheibe, der Knopf braucht keine zweite. */
-.kopf[data-eng='ja'] .kopf__anruf {
-  background: var(--ton-tief);
-  color: var(--tinte);
-  border-color: var(--linie);
+.kopf__weg svg { width: 1.05em; height: 1.05em; flex: none; }
+/* Ab der ersten Sektion danach trägt die Kopfzeile selbst die Scheibe; die
+   Knöpfe brauchen keine zweite. */
+.kopf[data-eng='ja'] .kopf__weg {
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
   box-shadow: none;
 }
-
-.kopf__anruf:hover {
+.kopf__weg:hover {
   background: var(--ton-hell);
   border-color: var(--akzent);
   color: var(--akzent);
+  transform: translateY(-1px);
 }
-
-
-
-.kopf__anruf-kurz { display: none; }
+.kopf__weg:active { transform: translateY(0); }
+.kopf__weg:focus-visible { outline: 2px solid var(--akzent); outline-offset: 3px; }
 
 /* ── Der Menüknopf und das Handymenü ─────────────────────────────────────── */
 
@@ -3755,7 +3750,7 @@
 
 @media (max-width: 1000px) {
   .kopf__navi { display: none; }
-  .kopf__anruf { margin-inline-start: auto; }
+  .kopf__wege { margin-inline-start: auto; }
 
   .backstube { padding-block: 2rem 4rem; }
 
@@ -3831,9 +3826,24 @@
     flex: 0 1 auto;
     overflow: hidden;
   }
-  .kopf__anruf { margin-inline-start: 0; }
-  .kopf__anruf-text { display: none; }
-  .kopf__anruf-kurz { display: inline; }
+  /* Nur das Zeichen, 44 px rund. Das Wort bleibt im Baum — ein
+     Vorleseprogramm liest es, das Auge sieht die Marke. */
+  .kopf__weg {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    justify-content: center;
+    gap: 0;
+  }
+  .kopf__weg svg { width: 1.25rem; height: 1.25rem; }
+  .kopf__weg-wort {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
 
     /* 92 statt 70 svh. 70 stammt aus der Zeit, als hier ein Foto lag und
      darunter sofort Inhalt kam. Ein Video, das nur zwei Drittel des Schirms
@@ -4340,9 +4350,17 @@
   left: 50%;
   top: clamp(4.4rem, 9vh, 7rem);
   /* Gross. Karol am 13.09.: „das Logo soll dreimal so gross sein … das Logo
-     steht im Vordergrund." 44 vw am Schirm, am Handy 78. */
-  width: min(44vw, 34rem);
-  margin-left: calc(min(44vw, 34rem) / -2);
+     steht im Vordergrund." Und danach: „das Logo wirklich noch mal 5
+     grösser." Gemessen war es 371 px auf 2560 — obwohl 544 gesetzt waren:
+     die Bilddatei trug 31 % durchsichtigen Rand, ungleich verteilt, deshalb
+     war es kleiner als gesetzt UND sass 3 % links von der Mitte. Das Bild
+     ist jetzt beschnitten (875×381), die Breite hier ist die sichtbare. */
+  /* Die dritte Grenze ist die Hoehe: auf einem 900 px hohen MacBook muss
+     unter dem Logo noch die Zeile UND darunter der Dampf Platz haben. 60 vh
+     Breite sind bei 2,3 : 1 rund 26 vh Hoehe — das Logo endet dann bei 35 vh
+     und die Zeile beginnt bei 39. */
+  width: min(52vw, 44rem, 60vh);
+  margin-left: calc(min(52vw, 44rem, 60vh) / -2);
   z-index: 6;
   transform-origin: 0 0;
   will-change: transform, opacity;
@@ -4351,11 +4369,20 @@
 .vorhang__logo img { display: block; width: 100%; height: auto; }
 .vorhang__logo:focus-visible { outline: 2px solid var(--akzent); outline-offset: 6px; border-radius: 0.5rem; }
 
+/* ═══ Die Zeile haengt am Fladen, nicht am Logo ═══
+   Karol am 13.09.: „Den Text mässig weiter in die Mitte. Der soll leicht von
+   dem Rauch vom Lahmacun angefasst werden." Vorher stand der Block direkt
+   unter dem Logo, mit einer Bildschirmhaelfte Luft bis zum Dampf. Jetzt
+   liegt seine Unterkante dort, wo der Dampf oben auslaeuft: 26 vh unter der
+   Mitte liegt der Fladen (Vorhang.tsx `hoch`), sein Dampf reicht rund 30 vh
+   darueber — also endet die Zeile bei 50 % + 26 vh − 30 vh. Am Handy (17 vh)
+   entsprechend. */
 .vorhang__auftakt {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  top: calc(clamp(4.4rem, 9vh, 7rem) + min(44vw, 34rem) * 540 / 1220 + 0.9rem);
+  top: auto;
+  bottom: calc(50% - 26vh + 30vh);
   width: min(92vw, 40rem);
   text-align: center;
   z-index: 5;
@@ -4399,24 +4426,13 @@
   background: var(--akzent);
   vertical-align: -0.02em;
 }
-/* Die drei Steine, klein. Karol: „als drei kleine schwarze Steine." Dieselbe
-   Form wie auf der alten Startseite (`.stein`), nur eine Nummer kleiner. */
-.vorhang__steine {
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  margin-top: 0.85rem;
-}
-.stein--klein {
-  min-width: 0;
-  padding: 0.55rem 1rem 0.5rem;
-  font-size: 0.82rem;
-}
-.stein--klein .stein__wort { font-size: inherit; }
+/* Die drei kleinen Steine (Zur Karte, Anrufen, WhatsApp) standen hier bis
+   zum 13.09. — jetzt sind Anrufen und WhatsApp in der Kopfzeile
+   (.kopf__weg), und „Zur Karte" ist raus: die Karte ist der naechste Takt. */
 
 @media (max-width: 719px) {
-  .vorhang__logo { width: 78vw; margin-left: -39vw; top: clamp(3.6rem, 7vh, 5rem); }
-  .vorhang__auftakt { top: calc(clamp(3.6rem, 7vh, 5rem) + 78vw * 540 / 1220 + 0.7rem); }
+  .vorhang__logo { width: 86vw; margin-left: -43vw; top: clamp(3.6rem, 7vh, 5rem); }
+  .vorhang__auftakt { bottom: calc(50% - 17vh + 26vh); }
   .vorhang__dampf { width: 72vw; margin-top: -18vh; }
 }
 
@@ -4919,12 +4935,14 @@
   height: auto;
   filter: drop-shadow(0 0.9rem 1.2rem oklch(18% 0.03 50 / 0.34));
 }
+/* Breiter und hoeher als zuerst (60 % × 120 %): der Dampf einer fliegenden
+   Perle soll im Flug zu sehen sein, nicht erst beim Landen. */
 .salve__dampf {
   position: absolute;
-  left: 20%;
-  width: 60%;
-  bottom: 55%;
-  height: 120%;
+  left: -10%;
+  width: 120%;
+  bottom: 50%;
+  height: 150%;
   z-index: -1;
   pointer-events: none;
 }

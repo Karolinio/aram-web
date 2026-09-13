@@ -78,7 +78,7 @@ export default function Wasserzeichen() {
 
   return (
     <div className="wasserzeichen" data-da={sichtbar ? 'ja' : 'nein'} aria-hidden="true">
-      <img src="/bilder/echt/logo.webp" alt="" width={1220} height={540} loading="lazy" />
+      <img src="/bilder/echt/logo.webp" alt="" width={875} height={381} loading="lazy" />
     </div>
   )
 }

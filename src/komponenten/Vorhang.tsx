@@ -65,9 +65,20 @@ const ALLE = inhalt.speisekarte.flatMap((gr) => gr.gerichte)
 const PROBE = ALLE.filter((g): g is typeof g & { preis: number } => g.preis !== null).slice(0, 5)
 const ZAHL_REST = ALLE.length - PROBE.length
 
-/** Wo im Verlauf sich die Scheibe teilt. Davor dreht sie, danach fliegt die Karte herein. */
-const TEILT_AB = 0.46
-const TEILT_BIS = 0.78
+/**
+ * Wo im Verlauf sich die Scheibe teilt. Davor dreht sie, danach fliegt die
+ * Karte herein.
+ *
+ * 0,58 statt 0,46 — Karol am 13.09.: „Er soll sich noch ein bisschen weiter
+ * nach rechts drehen und es dann öffnen." Die Drehung läuft seit dem Umbau
+ * ab 0,2; bei 0,46 stand die Scheibe beim Aufbrechen erst bei 75 Grad,
+ * jetzt bei 110. Das Winkeltempo bleibt — „die Drehzeit passt".
+ *
+ * Exportiert, weil die Salve daran hängt: sie tritt aus dem Spalt, und der
+ * Spalt ist hier definiert, nirgends sonst.
+ */
+export const TEILT_AB = 0.58
+export const TEILT_BIS = 0.88
 
 const glatt = (t: number) => t * t * (3 - 2 * t)
 const klemmen = (t: number) => (t < 0 ? 0 : t > 1 ? 1 : t)
@@ -277,7 +288,7 @@ export default function Vorhang() {
 
         /* Und die Karte fliegt herein — aus der Tiefe, nicht von der Seite:
            sie kommt DURCH den Spalt, nicht daran vorbei. */
-        const ein = glatt(klemmen((p - 0.52) / 0.34))
+        const ein = glatt(klemmen((p - (TEILT_AB + 0.06)) / 0.32))
         if (karte) {
           karte.style.opacity = String(ein)
           karte.style.transform =
@@ -381,16 +392,15 @@ export default function Vorhang() {
             Vordergrund, und dieser dampfende Lahmacun."
 
             Was die alte Startseite trug, steht jetzt hier, nur kleiner: die
-            H1 (Google), der Ort (der Gast von Maps), der Status, die drei
-            Steine. Nichts davon ist weggefallen — es steht am Fladen statt am
-            Video. Das Video ist raus: 2,7 MB und die einzige
-            Ladeverschiebung der Seite. */}
+            H1 (Google), der Ort (der Gast von Maps), der Status. Die Wege
+            (Anrufen, WhatsApp) sind in die Kopfzeile gezogen. Das Video ist
+            raus: 2,7 MB und die einzige Ladeverschiebung der Seite. */}
         <a className="vorhang__logo" href="#start" aria-label={`${ARAM.name} — zum Anfang`}>
           <img
             src="/bilder/echt/logo.webp"
             alt=""
-            width={1220}
-            height={540}
+            width={875}
+            height={381}
             fetchPriority="high"
             decoding="async"
           />
@@ -403,17 +413,19 @@ export default function Vorhang() {
             {ARAM.ort.strasse} · {ARAM.ort.stadtteil}
           </p>
           <Offenzeile />
-          <nav className="vorhang__steine" aria-label="Schnellwege">
-            <a className="stein stein--erst stein--klein" href="#karte">
-              <span className="stein__wort">Zur Karte</span>
-            </a>
-            <a className="stein stein--klein" href={ARAM.kontakt.telefonHref}>
-              <span className="stein__wort">Anrufen</span>
-            </a>
-            <a className="stein stein--klein" href={ARAM.kontakt.whatsapp} rel="noopener noreferrer" target="_blank">
-              <span className="stein__wort">WhatsApp</span>
-            </a>
-          </nav>
+          {/* ═══ Hier standen drei Steine: Zur Karte, Anrufen, WhatsApp ═══
+
+              Karol am 13.09.: „die Karte also komplett raus von der
+              Startseite, weil es kommt ja direkt danach … Nur Anrufen als
+              Telefonbutton und WhatsApp als WhatsApp-Button oben rechts in
+              die Ecke."
+
+              Er hat recht, zweimal. „Zur Karte" auf einer Seite, deren
+              nächster Takt die Karte IST, verspricht, was ohnehin kommt. Und
+              Anrufen/WhatsApp gehören dorthin, wo sie auf jedem
+              Bildschirmmeter erreichbar sind — in die Kopfzeile
+              (Kopfzeile.tsx), nicht auf die eine Stelle, die man als Erstes
+              wegscrollt. */}
         </div>
 
         {/* ═══ Echter Dampf ═══

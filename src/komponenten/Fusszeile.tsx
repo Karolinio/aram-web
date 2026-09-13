@@ -24,8 +24,8 @@ export default function Fusszeile() {
           <img
             src="/bilder/echt/logo.webp"
             alt=""
-            width={1220}
-            height={540}
+            width={875}
+            height={381}
             loading="lazy"
             className="fuss__logo"
           />

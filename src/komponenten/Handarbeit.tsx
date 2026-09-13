@@ -331,7 +331,7 @@ function Gebaeckstueck({ g }: { g: Gebaeck }) {
           hat jedes seinen eigenen Platz fuer seine Wolke. Die Wiederholungen
           ganz hinten tragen weiter `dampft: false`. */}
       {g.dampft ? (
-        <Dampf ton="ofen" klasse="gebaeck__dampf" dichte={breit ? 4 : 3} />
+        <Dampf ton="ofen" klasse="gebaeck__dampf" dichte={breit ? 8 : 6} />
       ) : null}
       <div className="gebaeck__folge" ref={folge}>
         {g.bilder.map((quelle, i) => (
