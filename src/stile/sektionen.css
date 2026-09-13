@@ -2171,7 +2171,12 @@
   /* `--schwarm-deck` schreibt Salve.tsx auf `.prozess`: 0, solange die Salve
      fliegt, 1 nach der Uebergabe. Ohne Salve (Bewegungswunsch) bleibt die
      Vorgabe 1 — der Schwarm ist dann einfach da. */
-  opacity: calc((1 - var(--tiefe, 0) * 0.28) * var(--schwarm-deck, 1));
+  /* 0,86 vorn, 0,52 hinten — Karol am 13.09.: „die Produkte im
+     Hintergrund sind einfach im Vordergrund, ungewollt." Ein Stueck in
+     voller Deckung auf Orange ist ein Vordergrund; eines, durch das ein
+     Fuenftel Orange scheint, liegt im Raum. Dazu die Groessen in
+     gebaecke.ts um ein Fuenftel zurueck. */
+  opacity: calc((0.86 - var(--tiefe, 0) * 0.34) * var(--schwarm-deck, 1));
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -4344,7 +4349,45 @@
     oklch(0% 0 0 / 0.5) 0%, oklch(0% 0 0 / 0.24) 38%, transparent 68%);
 }
 
-/* ═══ Der Auftakt: Logo, Zeile, Steine — seit dem 13.09. die Startseite ═══ */
+/* ═══ Der Film hinter der Buehne ═══
+   Absolut, nicht im Raster — was nicht im Fluss liegt, kann die Zelle nicht
+   aufblaehen (die Lehre vom orangen Schein). z-index 0 wie der Untergrund,
+   aber spaeter im Baum: darueber. Der Kontaktschatten (.vorhang__licht, auch
+   z 0) kommt noch spaeter und liegt damit auf dem Film. Hochkant gedreht
+   (720×1040) und mit `cover` beschnitten; 34 % von oben zeigt Ofen UND
+   Brett, wie in der Backstube gemessen. */
+.vorhang__film {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: clip;
+  pointer-events: none;
+  background: var(--nacht);
+}
+.vorhang__film video,
+.vorhang__film img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* 22 % statt der 34 % der Backstube: das Brett mit den Kaeseschiffen
+     liegt unten im Clip und ist seine hellste Stelle — genau dort steht
+     jetzt der Fladen. Hoeher gefasst zeigt der Ausschnitt Ofen und Flamme
+     und schiebt das Brett unter den Rand. */
+  object-position: 50% 22%;
+  filter: brightness(0.38) saturate(0.85);
+}
+/* Die Vignette: der Film laeuft am Rand in den Nachtgrund aus, damit er
+   Grund ist und kein Rechteck. Ein Rechteck mit Rand bleibt ein Rechteck. */
+.vorhang__film::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 46%, transparent 0%, color-mix(in oklch, var(--nacht) 55%, transparent) 55%, var(--nacht) 100%);
+}
+
+/* ═══ Der Auftakt: Logo, Zeile — seit dem 13.09. die Startseite ═══ */
 .vorhang__logo {
   position: absolute;
   left: 50%;
@@ -4440,7 +4483,10 @@
   grid-area: 1 / 1;
   z-index: 2;
   position: relative;
-  width: min(96vw, 60rem);
+  /* 68 statt 60 rem: auf 2560 war der Fladen in Ruhe 444 px breit, ein
+     Sechstel des Bildes. Zusammen mit skala 0,84 (Vorhang.tsx) sind es
+     jetzt rund 620. */
+  width: min(96vw, 68rem);
   /**
    * ═══ Das Verhaeltnis kommt aus der Datei, nicht aus der Erinnerung ═══
    *

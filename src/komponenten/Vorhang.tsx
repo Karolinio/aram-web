@@ -129,6 +129,8 @@ export default function Vorhang() {
     const dampf = b.querySelector<HTMLElement>('.vorhang__dampf')
     const licht = b.querySelector<HTMLElement>('.vorhang__licht')
     const logo = b.querySelector<HTMLElement>('.vorhang__logo')
+    const film = b.querySelector<HTMLElement>('.vorhang__film')
+    const filmVideo = film?.querySelector('video') ?? null
     const auftakt = b.querySelector<HTMLElement>('.vorhang__auftakt')
     const wort = b.querySelector<HTMLElement>('.vorhang__wort')
     const karte = b.querySelector<HTMLElement>('.vorhang__einladung')
@@ -175,7 +177,13 @@ export default function Vorhang() {
            leicht etwas groesser sein", am Handy „noch etwas zu klein".
            Das Ende bleibt bei 1,32: der Riss soll nicht groesser werden,
            nur der Auftritt davor. */
-        const skala = 0.68 + p * 0.64
+        /* 0,84 seit dem 13.09. — Karol zur Startseite ohne Video: „zu
+           langweilig". Bei Artisan Kitchen (Mobbin) und Hulu ist der
+           Gegenstand GROESSER als der Rahmen, der Rahmen ist voll. Hier
+           stand ein Fladen von 444 px auf 2560 in schwarzer Leere. Jetzt
+           liegt er in Ruhe mit der Unterkante am Bildrand. Das Ende bleibt
+           1,32. */
+        const skala = 0.84 + p * 0.48
         /* Sie steht schon im ersten Bild der Sektion, nur tiefer und kleiner.
            Bei 46 vh Startversatz war das erste Bild der Sektion schwarz und
            leer — gemessen ein ganzer Bildschirm ohne Inhalt, bevor überhaupt
@@ -260,6 +268,21 @@ export default function Vorhang() {
           logo.style.transform = `translate3d(${x * t}px, ${y * t}px, 0) scale(${1 - (1 - sk) * t})`
           logo.style.opacity = String(1 - 0.42 * t)
         }
+        /* ═══ Der Film geht, wenn der Fladen steigt ═══
+           In Ruhe lebt der Raum (Ofen, blaue Flamme, Kaeseschiffe); sobald
+           gescrollt wird, wird es still, und die Teilung passiert auf dem
+           ruhigen Grund — dieselbe Idee wie beim Logo: die Ruhelage ist
+           voll, die Fahrt ist klar. Ein Video, das hinter einer Teilung
+           weiterlaeuft, frisst die Teilung. Pausiert, sobald unsichtbar:
+           ein Decoder, der unter Schwarz weiterrechnet, kostet Akku. */
+        if (film) {
+          const t = glatt(klemmen(p / 0.25))
+          film.style.opacity = String(1 - t)
+          if (filmVideo) {
+            if (t >= 1 && !filmVideo.paused) filmVideo.pause()
+            else if (t < 1 && filmVideo.paused) void filmVideo.play().catch(() => {})
+          }
+        }
         if (auftakt) {
           const g = 1 - glatt(klemmen(p / 0.14))
           auftakt.style.opacity = String(g)
@@ -334,6 +357,43 @@ export default function Vorhang() {
             Seite ohne die Saat-Folie — deshalb las sie sich als anderer Raum.
             Jetzt ist es ein Raum, vom Vorhang bis zum Fuss. */}
         <Untergrund ton="nacht" muster="saat" />
+
+        {/* ═══ Der Film ist zurueck — hinter allem, dunkel, und nur in Ruhe ═══
+
+            Karol am 13.09., zur Startseite ohne Video: „ich fand die
+            Startseite vorher irgendwie besser. Mit dem Video … jetzt zu
+            langweilig." Am 13.09. frueh hatte er das Video weggenommen —
+            beides stimmt: das Video ALS Startseite war beliebig (ein Clip,
+            den jede Baeckerei zeigen koennte), die Startseite OHNE es ist
+            eine schwarze Leere um zwei Gegenstaende.
+
+            Bei Mobbin nachgesehen: Artisan Kitchen (v0) legt hinter das
+            beleuchtete Produkt eine dunkle, texturierte Kueche — Atmosphaere,
+            kein Bild. Genau so hier: derselbe Clip wie vorher (Steinofen,
+            blaue Flamme, Kaeseschiffe — Clip 04, siehe Backstube.tsx), auf
+            42 % Helligkeit, mit Vignette in den Nachtgrund, HINTER Logo,
+            Zeile und Fladen. Er ist Grund, nicht Motiv; die Weichheit des
+            Handymaterials spielt dann keine Rolle mehr.
+
+            Er faehrt beim Scrollen aus (0–0,25) und pausiert. Ohne
+            Bewegungswunsch steht das Poster. */}
+        <div className="vorhang__film" aria-hidden="true">
+          {ruhig ? (
+            <img src="/video/ofen-poster.jpg" alt="" width={720} height={1040} decoding="async" />
+          ) : (
+            <video
+              key={schmal ? 'k' : 'g'}
+              poster="/video/ofen-poster.jpg"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+            >
+              <source src={schmal ? '/video/ofen.mp4' : '/video/ofen-gross.mp4'} type="video/mp4" />
+            </video>
+          )}
+        </div>
         {/* Die Schlagzeile liegt UNTER der Scheibe — siehe Kopf der Datei. */}
         {/* ═══ Hier stand „Mehr als 25 Jahre" ═══
 

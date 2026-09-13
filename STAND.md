@@ -25,6 +25,14 @@ Live auf https://karolinio.github.io/aram-web/ (GitHub Pages, `ARAM_BASIS=/aram-
   am Handy nur Zeichen 44 px. Die drei Steine der Startseite sind raus,
   „Zur Karte" ganz (die Karte ist der naechste Takt).
 - Dampf: Salve-Perlen `dichte 6`, Schwarm 8/6.
+- **Der Film ist zurueck, aber als Grund:** Clip 04 (`public/video/ofen*.mp4`,
+  aus e583713^ geholt) liegt HINTER Logo, Zeile und Fladen (`.vorhang__film`),
+  38 % Helligkeit, Vignette, Ausschnitt 50 % 22 %; faehrt ueber p 0–0,25 aus
+  und pausiert. Karol: Startseite ohne Video „zu langweilig". Referenz
+  Artisan Kitchen (Mobbin): dunkle Kueche hinter beleuchtetem Produkt.
+- Fladen in Ruhe `skala 0,84` (Ende 1,32), Scheibe `min(96vw, 68rem)`.
+- **Schwarm leiser:** `gr`/`grM` × 0,78, Deckung 0,86 vorn bis 0,52 hinten
+  (Karol: „die Produkte im Hintergrund sind ungewollt im Vordergrund").
 
 **Offen (Karols Entscheidung):** Sektionsfarben tauschen — Vorhang bleibt
 schwarz (auf Orange verschwinden Fladen und Dampf, gemessen/gesehen),
