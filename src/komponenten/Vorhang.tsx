@@ -77,8 +77,10 @@ const ZAHL_REST = ALLE.length - PROBE.length
  * Exportiert, weil die Salve daran hängt: sie tritt aus dem Spalt, und der
  * Spalt ist hier definiert, nirgends sonst.
  */
-export const TEILT_AB = 0.58
-export const TEILT_BIS = 0.88
+/* 0,63 seit dem Viertel-Fladen (13.09. spaet): der Aufstieg dauert bis 0,25,
+   die Drehung beginnt dort — bei 0,63 stehen wieder die 110 Grad. */
+export const TEILT_AB = 0.63
+export const TEILT_BIS = 0.9
 
 const glatt = (t: number) => t * t * (3 - 2 * t)
 const klemmen = (t: number) => (t < 0 ? 0 : t > 1 ? 1 : t)
@@ -169,7 +171,7 @@ export default function Vorhang() {
            dreht er sich." Die Drehung beginnt deshalb erst, wenn die Ruhelage
            abgebaut ist (0,2) — dieselben 232 Grad, nur auf 0,2 bis 1 statt
            auf 0 bis 1. Bis dahin steigt er nur, mit seinem Dampf. */
-        const dreh = klemmen((p - 0.2) / 0.8) * 232
+        const dreh = klemmen((p - 0.25) / 0.8) * 232
         /* Sie kommt von unten und wächst. `skala` läuft weiter, während sie
            sich teilt — das Auseinanderfahren wird dadurch schneller, als es
            gerechnet ist. */
@@ -194,7 +196,18 @@ export default function Vorhang() {
            endete der Block auf 900 vh bei 432 px; bei 22 vh begann der Fladen
            schon bei 418. Am Handy bleiben 17 — dort ist der Fladen schmaler
            und unter der Zeile ist ohnehin Luft. */
-        const hoch = (1 - glatt(klemmen(p / 0.2))) * (schmal ? 17 : 26)
+        /* ═══ Nur ein Viertel im Bild ═══
+           Karol am 13.09., spaet: „Der soll weiter unten anfangen, halbiert,
+           sodass er sich nicht ins Bild reintaucht. Der soll nur zu einem
+           Viertel oder so gesehen werden. Wenn du dann scrollst, schiebt er
+           sich hoch in die Mitte, und dann dreht er sich."
+
+           58 vh unter der Mitte: auf 1440×900 steht die Oberkante des
+           Fladens damit bei 84 % der Hoehe (ein Drittel zu sehen), auf
+           2560×1440 bei 93 % (ein Viertel). Die Groesse bleibt — er ragt
+           herein statt zu schrumpfen. Der Aufstieg dauert bis 0,25, so lang
+           wie der Flug des Logos in die Ecke: beide Bewegungen sind EINE. */
+        const hoch = (1 - glatt(klemmen(p / 0.25))) * (schmal ? 56 : 58)
 
         /**
          * ═══ Die Drehung gehört der SCHEIBE, das Auseinanderfahren den HÄLFTEN ═══
@@ -234,10 +247,21 @@ export default function Vorhang() {
            verschwunden, wenn sie sich um ein Viertel geöffnet haben. Dampf,
            der bis zum letzten Moment mitläuft, wirkt wie ein Nachzügler. */
         if (dampf) {
-          /* Der Dampf folgt dem Fladen in Hoehe und Groesse, aber NICHT in
-             der Drehung — Dampf steigt senkrecht, auch ueber etwas, das sich
-             dreht. Und er hoert auf, sobald die Scheibe aufbricht. */
-          dampf.style.transform = `translate3d(-50%, calc(-50% + ${hoch}vh), 0) scale(${skala})`
+          /* Der Dampf steht mit dem FUSS auf der Oberkante des Fladens und
+             waechst von dort nach oben (transform-origin unten). Die
+             sichtbare Oberkante liegt 34 % der Scheibenhoehe ueber deren
+             Mitte — gemessen am Alphakanal der Haelften. Er folgt dem Fladen
+             in Hoehe und Groesse, aber NICHT in der Drehung: Dampf steigt
+             senkrecht, auch ueber etwas, das sich dreht. Und er hoert auf,
+             sobald die Scheibe aufbricht.
+
+             Die Groesse ist auf die Ruhelage normiert (skala / 0,84): in Ruhe
+             hat er seine volle Hoehe aus dem Stilblatt (72 vh) — so reicht er
+             vom Viertel-Fladen bis unter das Logo. Karol: „nur von dem Rauch
+             erreicht werden … der Rauch zieht zum Logo." */
+          const fuss = 0.34 * (scheibe?.offsetHeight ?? 0) * skala
+          dampf.style.transform =
+            `translate3d(-50%, calc(-100% + ${hoch}vh - ${fuss.toFixed(1)}px), 0) scale(${(skala / 0.84).toFixed(3)})`
           dampf.style.opacity = String(Math.max(0, 0.9 - weich * 2.2))
         }
 
@@ -299,7 +323,11 @@ export default function Vorhang() {
            ist der Gegenstand weg, der ihn wirft — also geht er mit, etwas
            frueher als der Dampf, damit die Buehne leer ist, wenn die Karte
            hereinkommt. */
-        if (licht) licht.style.opacity = String(Math.max(0, 1 - weich * 2.6))
+        if (licht) {
+          licht.style.opacity = String(Math.max(0, 1 - weich * 2.6))
+          /* Er liegt unter dem Fladen, also faehrt er mit ihm hoch. */
+          licht.style.transform = `translate(-50%, calc(34% + ${hoch}vh))`
+        }
 
         /* Die Schlagzeile dahinter geht mit der Scheibe: sie ist am Anfang da,
            wird von ihr verdeckt und verschwindet, wenn die Einladung kommt.
@@ -311,7 +339,7 @@ export default function Vorhang() {
 
         /* Und die Karte fliegt herein — aus der Tiefe, nicht von der Seite:
            sie kommt DURCH den Spalt, nicht daran vorbei. */
-        const ein = glatt(klemmen((p - (TEILT_AB + 0.06)) / 0.32))
+        const ein = glatt(klemmen((p - (TEILT_AB + 0.06)) / 0.28))
         if (karte) {
           karte.style.opacity = String(ein)
           karte.style.transform =

@@ -4304,17 +4304,21 @@
   left: 50%;
   top: 50%;
   width: min(46vw, 34rem);
-  aspect-ratio: 1;
-  transform: translate3d(-50%, -50%, 0);
+  /* Hoch, nicht quadratisch: der Dampf ist seit dem Viertel-Fladen die
+     Bruecke von der Unterkante des Bildes bis unter das Logo. 72 vh, davon
+     sind durch die Maske rund 52 sichtbar. Der quadratische Clip wird mit
+     `cover` an den Seiten beschnitten — die Saeule steht in seiner Mitte. */
+  height: 72vh;
+  transform: translate3d(-50%, -100%, 0);
+  transform-origin: 50% 100%;
   z-index: 3;
   pointer-events: none;
   mix-blend-mode: screen;
   opacity: 0.9;
-  -webkit-mask-image: radial-gradient(ellipse at 50% 100%, #000 30%, transparent 72%);
-  mask-image: radial-gradient(ellipse at 50% 100%, #000 30%, transparent 72%);
-  /* Der Clip sitzt mit seiner Unterkante auf dem Fladen: die Mitte des
-     Elements liegt eine halbe Fladenhoehe ueber der Fladenmitte. */
-  margin-top: -22vh;
+  /* 78 statt 72 %: auf 2560×1440 endete der sichtbare Dampf sechs Prozent
+     unter der Zeile — er soll sie erreichen. */
+  -webkit-mask-image: radial-gradient(ellipse at 50% 100%, #000 30%, transparent 78%);
+  mask-image: radial-gradient(ellipse at 50% 100%, #000 30%, transparent 78%);
 }
 .vorhang__dampf video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 
@@ -4412,20 +4416,15 @@
 .vorhang__logo img { display: block; width: 100%; height: auto; }
 .vorhang__logo:focus-visible { outline: 2px solid var(--akzent); outline-offset: 6px; border-radius: 0.5rem; }
 
-/* ═══ Die Zeile haengt am Fladen, nicht am Logo ═══
-   Karol am 13.09.: „Den Text mässig weiter in die Mitte. Der soll leicht von
-   dem Rauch vom Lahmacun angefasst werden." Vorher stand der Block direkt
-   unter dem Logo, mit einer Bildschirmhaelfte Luft bis zum Dampf. Jetzt
-   liegt seine Unterkante dort, wo der Dampf oben auslaeuft: 26 vh unter der
-   Mitte liegt der Fladen (Vorhang.tsx `hoch`), sein Dampf reicht rund 30 vh
-   darueber — also endet die Zeile bei 50 % + 26 vh − 30 vh. Am Handy (17 vh)
-   entsprechend. */
 .vorhang__auftakt {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  top: auto;
-  bottom: calc(50% - 26vh + 30vh);
+  /* Wieder unter dem Logo, mittig — Karol am 13.09., spaet: „unter das
+     Logo mittig, nicht von dem Lahmacun, sondern nur von dem Rauch
+     erreicht werden." Der Fladen ist jetzt unten am Rand; was die Zeile
+     erreicht, ist der Dampf. */
+  top: calc(clamp(4.4rem, 9vh, 7rem) + min(52vw, 44rem, 60vh) * 381 / 875 + 1rem);
   width: min(92vw, 40rem);
   text-align: center;
   z-index: 5;
@@ -4475,8 +4474,12 @@
 
 @media (max-width: 719px) {
   .vorhang__logo { width: 86vw; margin-left: -43vw; top: clamp(3.6rem, 7vh, 5rem); }
-  .vorhang__auftakt { bottom: calc(50% - 17vh + 26vh); }
-  .vorhang__dampf { width: 72vw; margin-top: -18vh; }
+  .vorhang__auftakt { top: calc(clamp(3.6rem, 7vh, 5rem) + 86vw * 381 / 875 + 0.8rem); }
+  .vorhang__dampf { width: 72vw; height: 76vh; }
+  /* Am Handy zeigt `cover` fast den ganzen Clip samt hellem Brett — dunkler,
+     damit der Grund Grund bleibt. */
+  .vorhang__film video,
+  .vorhang__film img { filter: brightness(0.3) saturate(0.85); }
 }
 
 .vorhang__scheibe {

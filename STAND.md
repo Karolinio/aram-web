@@ -30,7 +30,13 @@ Live auf https://karolinio.github.io/aram-web/ (GitHub Pages, `ARAM_BASIS=/aram-
   38 % Helligkeit, Vignette, Ausschnitt 50 % 22 %; faehrt ueber p 0–0,25 aus
   und pausiert. Karol: Startseite ohne Video „zu langweilig". Referenz
   Artisan Kitchen (Mobbin): dunkle Kueche hinter beleuchtetem Produkt.
-- Fladen in Ruhe `skala 0,84` (Ende 1,32), Scheibe `min(96vw, 68rem)`.
+- Fladen in Ruhe `skala 0,84` (Ende 1,32), Scheibe `min(96vw, 68rem)` — und
+  **nur zu einem Viertel im Bild** (`hoch` 58 vh Schirm / 56 Handy): Oberkante
+  bei 84 % (1440×900), 93 % (2560, Handy). Aufstieg bis 0,25 = Logoflug;
+  Drehung ab 0,25; `TEILT_AB 0,63 / TEILT_BIS 0,9`.
+- Zeile wieder unter dem Logo; der Dampf (72 vh hoch, Fuss auf der
+  Fladenoberkante, transform-origin unten, auf Ruhe normiert) ist die Bruecke
+  vom Fladen bis unters Logo.
 - **Schwarm leiser:** `gr`/`grM` × 0,78, Deckung 0,86 vorn bis 0,52 hinten
   (Karol: „die Produkte im Hintergrund sind ungewollt im Vordergrund").
 
