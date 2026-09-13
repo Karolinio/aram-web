@@ -1,4 +1,30 @@
 /**
+ * ═══ Die Rechtsseiten stehen auf der Nacht ═══
+ *
+ * Karol am 12.09.: „guck mal, wie das Impressum aktuell aussieht auf dem
+ * Mac, feiere ich nicht."
+ *
+ * Er hatte recht, und der Grund war kein Geschmack: die Seiten standen auf
+ * `--ton-hell`, und das ist seit dem Farbumbau IHR ORANGE. Gebaut waren sie
+ * gegen ein Creme; sie sind still mitgekippt. Folge: Telefon und E-Mail —
+ * Links in Akzentfarbe — auf gleichfarbigem Grund unsichtbar, die Kleinzeile
+ * ueber der Ueberschrift ebenso.
+ *
+ * Jetzt dieselben Werte wie `.sektion--nacht`: dunkler Grund, Creme-Schrift,
+ * Orange nur fuer das, was man antippt. Das ist der Grund des Fusses, aus
+ * dem beide Seiten aufgerufen werden — man bleibt im selben Raum.
+ */
+body.koerper--nacht { background: var(--nacht); }
+
+.rechtskopf,
+.rechtsseite {
+  color: var(--creme);
+  --tinte: var(--creme);
+  --tinte-leise: oklch(80% 0.022 74);
+  --linie: oklch(42% 0.03 55);
+}
+
+/**
  * Impressum und Datenschutz.
  *
  * ═══ Was diese Seiten von der Startseite übernehmen ═══
@@ -18,7 +44,7 @@
   position: sticky;
   top: 0;
   z-index: 10;
-  background: var(--ton-hell);
+  background: var(--nacht);
   background-image: var(--linie-punkt);
   background-position: bottom;
   background-size: 100% 1px;
@@ -46,7 +72,7 @@
 .rechtskopf__anruf { padding: 0.45em 1em; font-size: var(--text-meta); }
 
 .rechtsseite {
-  background: var(--ton-hell);
+  background: var(--nacht);
   padding-block: clamp(2.5rem, 6vw, 5rem) clamp(4rem, 9vw, 8rem);
   /* Nicht die volle Sektionshöhe der Startseite: dort trennt der Raum
      Ereignisse, hier trennt er Absätze. */
