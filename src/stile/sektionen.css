@@ -4444,6 +4444,7 @@
   text-wrap: balance;
 }
 .vorhang__ort {
+  max-width: none;
   margin: 0.2rem 0 0;
   font-family: var(--font-text);
   font-size: clamp(0.76rem, 0.7rem + 0.3vw, 0.9rem);
@@ -4451,6 +4452,11 @@
   letter-spacing: 0.03em;
 }
 .vorhang__offen {
+  /* `p { max-width: var(--breite-satz) }` aus der Grundlage gilt auch hier:
+     gemessen war der Absatz 404 px breit im 640 px breiten Block und stand
+     links — Karol: „geoeffnet bis 19 Uhr ist verrutscht." Die Zeile ist
+     kein Lesetext. */
+  max-width: none;
   margin: 0.55rem 0 0;
   font-size: 0.72rem;
   font-weight: 600;
@@ -4698,7 +4704,30 @@
    * ist. 88vw laesst auf jedem Geraet einen Rand stehen: 330 px auf dem SE,
    * 378 auf dem Pro Max.
    */
-  .karte__emblem { inline-size: min(22rem, 88vw); opacity: 0.22; }
+  /* ═══ Am Handy klebt das Emblem mit ═══
+     Karol am 13.09.: „auf dem Handy sehr klein, nur auf 10–20 % der
+     Speisekarte zu sehen, unten und oben ist gar nix." Die Karte ist dort
+     eine lange Spalte; ein Ornament in ihrer Mitte ist auf neun Zehnteln
+     des Weges nicht im Bild. Also bleibt es stehen, waehrend die Zeilen
+     darueber ziehen: sticky in einer Lage, die die ganze Sektion
+     ueberspannt. Groesser (min 26 rem / 96 vw), etwas leiser. */
+  .karte__emblemlage {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: clip;
+  }
+  .karte__emblem {
+    position: sticky;
+    inset-block-start: 18svh;
+    inset-inline-start: auto;
+    display: block;
+    margin-inline: auto;
+    transform: none;
+    inline-size: min(26rem, 96vw);
+    opacity: 0.2;
+  }
 }
 
 /* ── Alt: der gezeichnete Olivenzweig ───────────────────────────────────── */

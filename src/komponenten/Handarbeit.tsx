@@ -6,6 +6,9 @@ import { Etikett, Kopf, Sektion } from './ui/bausteine.tsx'
 import Dampf from './ui/Dampf.tsx'
 import Untergrund from './ui/Untergrund.tsx'
 
+/** Probe-Schalter, siehe Kommentar an der Sektion. Nur die Adresse entscheidet. */
+const NACHT = typeof location !== 'undefined' && new URLSearchParams(location.search).get('ton') === 'nacht'
+
 /**
  * Der Weg zum Fata’er — die Savor-Sequenz.
  *
@@ -331,7 +334,7 @@ function Gebaeckstueck({ g }: { g: Gebaeck }) {
           hat jedes seinen eigenen Platz fuer seine Wolke. Die Wiederholungen
           ganz hinten tragen weiter `dampft: false`. */}
       {g.dampft ? (
-        <Dampf ton="ofen" klasse="gebaeck__dampf" dichte={breit ? 8 : 6} />
+        <Dampf ton={NACHT ? 'hell' : 'ofen'} klasse="gebaeck__dampf" dichte={breit ? 8 : 6} />
       ) : null}
       <div className="gebaeck__folge" ref={folge}>
         {g.bilder.map((quelle, i) => (
@@ -381,7 +384,16 @@ export default function Handarbeit() {
 
           Auftritt.tsx und Collage.tsx bleiben liegen; sie werden woanders
           gebraucht. */}
-      <Sektion grund="hell" klasse="prozess" beschriftetVon="prozess-titel">
+      {/* ═══ Probe: dieselbe Sektion auf Schwarz ═══
+          Karol am 13.09.: „Der Hintergrund ist orange, die Leiste ist orange,
+          die Bilder sind alle hell. Ich frage mich, ob man diesen Hintergrund
+          schwarz macht … iterier einfach, wie das aussehen wuerde."
+
+          Kein Artefakt, sondern die echte Sektion mit der echten Salve:
+          `?ton=nacht` an der Adresse schaltet sie auf Schwarz. Beides live,
+          im Vergleich, mit dem Bogen, der hineinfliegt. Sobald er entschieden
+          hat, fliegt der Schalter raus — eine Sektion hat EINEN Grund. */}
+      <Sektion grund={NACHT ? 'nacht' : 'hell'} klasse="prozess" beschriftetVon="prozess-titel">
         {/* ═══ Das Mehlfoto ist raus ═══
 
             Karol am 02.09.: „mach da bitte auch die Körner, also kein
@@ -395,7 +407,7 @@ export default function Handarbeit() {
 
             Die Saat stellt nichts dar und stört deshalb nicht. Damit trägt
             jede orange Sektion der Seite denselben Grund. */}
-        <Untergrund ton="glut" muster="saat" />
+        <Untergrund ton={NACHT ? 'nacht' : 'glut'} muster="saat" />
         <div className="schale prozess__buehne">
           <Kopf
             id="prozess-titel"

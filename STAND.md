@@ -40,6 +40,14 @@ Live auf https://karolinio.github.io/aram-web/ (GitHub Pages, `ARAM_BASIS=/aram-
 - **Schwarm leiser:** `gr`/`grM` × 0,78, Deckung 0,86 vorn bis 0,52 hinten
   (Karol: „die Produkte im Hintergrund sind ungewollt im Vordergrund").
 
+- 13.09. spaet: Statuszeile mittig (`max-width: none` gegen das globale
+  `p`), Fladen 12 % kleiner (`skala 0,74 → 1,16`), Emblem in der Karte klebt am
+  Handy (`.karte__emblemlage` + sticky), **obere Galerie neu kuratiert**
+  (`werkzeug/galeriebilder.py`: 10 Bilder, keine Einzelprodukte — Strasse,
+  Brueder, Team, Ofen, Bleche, Tisch; 54 = Ladenfront aus der Lieferung 10.09.),
+  **Probe-Schalter `?ton=nacht`** auf der Adresse schaltet „Alles entsteht" auf
+  Schwarz (Handarbeit.tsx `NACHT`) — nach Karols Entscheidung entfernen.
+
 **Offen (Karols Entscheidung):** Sektionsfarben tauschen — Vorhang bleibt
 schwarz (auf Orange verschwinden Fladen und Dampf, gemessen/gesehen),
 „Alles entsteht" auf Schwarz, Galerien auf Orange. Probe-Screens lagen in der

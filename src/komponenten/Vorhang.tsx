@@ -185,7 +185,11 @@ export default function Vorhang() {
            stand ein Fladen von 444 px auf 2560 in schwarzer Leere. Jetzt
            liegt er in Ruhe mit der Unterkante am Bildrand. Das Ende bleibt
            1,32. */
-        const skala = 0.84 + p * 0.48
+        /* Zwoelf Prozent kleiner (13.09., spaet): „vor dem Cut ist er oben
+           schon und unten nicht mehr ganz im Bild … verkleinere ihn um zehn
+           bis fuenfzehn Prozent, mehr nicht." 0,74 → 1,16 statt 0,84 → 1,32;
+           beim Aufbrechen (0,63) steht er bei 1,0. */
+        const skala = 0.74 + p * 0.42
         /* Sie steht schon im ersten Bild der Sektion, nur tiefer und kleiner.
            Bei 46 vh Startversatz war das erste Bild der Sektion schwarz und
            leer — gemessen ein ganzer Bildschirm ohne Inhalt, bevor überhaupt
@@ -255,13 +259,13 @@ export default function Vorhang() {
              senkrecht, auch ueber etwas, das sich dreht. Und er hoert auf,
              sobald die Scheibe aufbricht.
 
-             Die Groesse ist auf die Ruhelage normiert (skala / 0,84): in Ruhe
+             Die Groesse ist auf die Ruhelage normiert (skala / 0,74): in Ruhe
              hat er seine volle Hoehe aus dem Stilblatt (72 vh) — so reicht er
              vom Viertel-Fladen bis unter das Logo. Karol: „nur von dem Rauch
              erreicht werden … der Rauch zieht zum Logo." */
           const fuss = 0.34 * (scheibe?.offsetHeight ?? 0) * skala
           dampf.style.transform =
-            `translate3d(-50%, calc(-100% + ${hoch}vh - ${fuss.toFixed(1)}px), 0) scale(${(skala / 0.84).toFixed(3)})`
+            `translate3d(-50%, calc(-100% + ${hoch}vh - ${fuss.toFixed(1)}px), 0) scale(${(skala / 0.74).toFixed(3)})`
           dampf.style.opacity = String(Math.max(0, 0.9 - weich * 2.2))
         }
 

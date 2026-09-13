@@ -13,25 +13,42 @@ Fuer eine Galerie gilt deshalb das Umgekehrte: das ganze Foto, gut
 beschnitten.
 """
 import json, os
-from PIL import Image
+from PIL import Image, ImageOps
 
-# Nummern aus rohbilder/inventur.json, Reihenfolge = Reihenfolge in der Galerie.
+# ═══ Keine Einzelprodukte in dieser Galerie ═══
+# Karol am 13.09.: „ich will in der oberen Galerie kein einziges
+# Einzelproduktfoto, weil dafuer haben wir die untere Galerie aufgestellt …
+# es sind halt viele Kaeseschiff-Bilder." Raus sind deshalb 9 (Fata'er auf
+# dem Schieber), 21 (ein Sesambrot), 41 (eine Zaatar-Platte), 51 (Sesambrote),
+# 52 (ein Teller), 53 (ein Kaese-Quadrat) und 6 (Haende am Teig — dasselbe
+# Foto traegt schon Bogen 02). Rein sind die Strasse, die Brueder vor der
+# Tuer und zwei volle Bleche. Die Reihenfolge ist ein Morgen: Strasse, Tuer,
+# Ofen, Bleche, Tisch.
+#
+# Nummern < 50: rohbilder/inventur.json (Lieferung 20.08.).
+# Nummern >= 50: rohbilder/eingang/neu-2026-09/ (Lieferung 10.09.), Datei steht dabei.
 AUSWAHL = [
-    (19, 'Manakisch vom Blech', 'hoch'),
-    ( 9, 'Fata’er, direkt aus der Glut', 'hoch'),
-    ( 6, 'Der Teig kommt auf den Schieber', 'quer'),
-    (12, 'Manakisch, kurz vor dem Ofen', 'hoch'),
-    (35, 'Ein Brett für den Tisch', 'quer'),
-    (21, 'Sesam und Schwarzkümmel', 'quer'),
-    (10, 'Der Inhaber und seine Brüder', 'quer'),
+    (54, 'Rochusstraße 246, von der Straße', 'hoch', 'neu-2026-09/F94B8E56-04FE-4CD5-86CA-E26C2A8C8EEF.JPG'),
+    ( 5, 'Die Brüder vor der Tür', 'hoch', None),
+    (10, 'Der Inhaber und seine Brüder', 'quer', None),
+    (12, 'Manakisch, kurz vor dem Ofen', 'hoch', None),
+    (50, 'Frisch vom Schieber, direkt vor dem Ofen', 'hoch', 'neu-2026-09/IMG_5804.JPG'),
+    (40, 'Ein Blech Lahmacun, gerade aus dem Ofen', 'quer', None),
+    (33, 'Ein Blech Käsegebäck', 'hoch', None),
+    (38, 'Bleche voll, bevor der erste Gast kommt', 'quer', None),
+    (19, 'Manakisch vom Blech', 'hoch', None),
+    (35, 'Ein Brett für den Tisch', 'quer', None),
 ]
 BREITEN = [520, 900]
 
 inv = {z['nr']: z['datei'] for z in json.load(open('rohbilder/inventur.json'))}
 os.makedirs('public/bilder/galerie', exist_ok=True)
 liste = []
-for nr, titel, lage in AUSWAHL:
-    im = Image.open('rohbilder/eingang/' + inv[nr]).convert('RGB')
+for nr, titel, lage, quelle in AUSWAHL:
+    pfad = 'rohbilder/eingang/' + (quelle or inv[nr])
+    # exif_transpose: die Handyfotos tragen ihre Drehung im EXIF, nicht in
+    # den Pixeln — ohne das liegt ein Hochkantfoto quer.
+    im = ImageOps.exif_transpose(Image.open(pfad)).convert('RGB')
     w, h = im.size
     # Auf ein festes Verhaeltnis beschneiden, mittig — eine Galerie mit sieben
     # verschiedenen Verhaeltnissen ist keine Galerie, sondern ein Stapel.

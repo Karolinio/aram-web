@@ -116,6 +116,9 @@ export default function Karte() {
           Angeschnitten und nicht vollständig im Bild: ein Ornament, das ganz
           zu sehen ist, ist ein Aufkleber; eines, das über die Kante läuft, ist
           ein Grund. */}
+      {/* Die Lage ist nur fuer das Handy da: dort klebt das Emblem in ihr
+          (sticky), am Schirm bleibt sie ein Rahmen ohne Wirkung. */}
+      <div className="karte__emblemlage" aria-hidden="true">
       <img
         className="karte__emblem"
         src={pfad('bilder/marke/emblem.webp')}
@@ -128,6 +131,7 @@ export default function Karte() {
         loading="lazy"
         decoding="async"
       />
+      </div>
       <div className="schale">
         {/* Überschrift links, Allergenfilter rechts. Vorher stand der Filter
             UNTER dem Kopf, und die rechte Hälfte des Bildschirms blieb über
