@@ -58,90 +58,82 @@ const glatt = (t: number) => t * t * (3 - 2 * t)
 const misch = (a: number, b: number, t: number) => a + (b - a) * t
 
 /**
- * Die Bahn eines Stücks über den Fortschritt 0..1 der Salve.
+ * ═══ Der Schweif ═══
  *
- *   0,00–0,28  AUSTRITT   aus dem Spalt, klein, wird gross, fächert auf
- *   0,28–0,62  BOGEN      um die Karte, jedes auf seinem Winkel
- *   0,62–0,84  RAND       drei links, drei rechts, ruhig
- *   0,84–1,00  ÜBERGABE   sinkt Richtung Schwarm und verblasst
+ * Karol am 13.09.: „nicht im Kreis, sondern als Schweif um die Karte …
+ * alle nacheinander, von rechts oben nach einer Kurve in die Mitte nach
+ * links, und an der linken Seite wieder eine Kurve rechts in die Mitte, wie
+ * magische Schweife … dann in die Mitte reinfliegen und in die neue Sektion."
  *
- * Koordinaten in Prozent des Fensters (x, y = Mitte des Stücks).
+ * Also EINE Kurve, und die sechs Stücke sitzen als Perlen darauf, jedes ein
+ * Stück hinter dem vorigen — wie das Band bei Copy.ai (Mobbin), das um den
+ * Inhalt herumführt. Nicht sechs Bahnen, sondern eine Bahn mit sechs
+ * Abständen; nur so bleibt die Kette eine Kette.
+ *
+ * Die Kurve läuft durch Stützpunkte (Catmull-Rom, glatt durch jeden Punkt):
+ * aus dem Spalt hoch nach rechts, über die Karte hinweg nach links, an der
+ * linken Seite hinunter, und unten zur Mitte hinein — dort übernimmt der
+ * Schwarm der nächsten Sektion. Am Handy liegen die Punkte weiter aussen,
+ * damit die Kette die Karte nicht kreuzt.
  */
+type Punkt = [number, number]
+
+const SCHWEIF_BREIT: Punkt[] = [
+  [50, 50],  // der Spalt
+  [68, 34],  // hoch nach rechts
+  [80, 10],  // rechts oben
+  [52, -3],  // über die Karte hinweg — knapp über dem Rand, damit die Perle
+             // die Bogenspitze der Karte nicht streift (gemessen bei y 5)
+  [22, 10],  // links oben
+  [10, 40],  // die linke Seite hinunter
+  [17, 68],  // links unten
+  [42, 86],  // zur Mitte hinein
+  [52, 104], // und hinaus — in die nächste Sektion
+]
+/* Am Handy weiter aussen als am Schirm, aber nicht ganz hinaus: gemessen
+   lagen bei x 92 und x 3 zwei Perlen vollstaendig ausserhalb des Bildes.
+   Bei 82 / 14 steht eine 36-vw-Perle halb im Bild — das ist der Rand, den
+   Karol meint, und man sieht sie noch. */
+const SCHWEIF_SCHMAL: Punkt[] = [
+  [50, 50],
+  [80, 30],
+  [84, 8],
+  [50, -4],
+  [16, 10],
+  [12, 40],
+  [16, 68],
+  [38, 88],
+  [52, 104],
+]
+
+/** Catmull-Rom durch die Stützpunkte; t in 0..1 über die ganze Kette. */
+function aufKurve(pts: Punkt[], t: number): Punkt {
+  const n = pts.length - 1
+  const f = klemmen(t) * n
+  const i = Math.min(Math.floor(f), n - 1)
+  const u = f - i
+  const p0 = pts[Math.max(0, i - 1)]!, p1 = pts[i]!, p2 = pts[i + 1]!, p3 = pts[Math.min(n, i + 2)]!
+  const cr = (a: number, b: number, c: number, d: number) =>
+    0.5 * (2 * b + (-a + c) * u + (2 * a - 5 * b + 4 * c - d) * u * u + (-a + 3 * b - 3 * c + d) * u * u * u)
+  return [cr(p0[0], p1[0], p2[0], p3[0]), cr(p0[1], p1[1], p2[1], p3[1])]
+}
+
+/** Abstand der Perlen auf der Kette und Dauer je Perle, in Anteilen der Salve. */
+const ABSTAND = 0.075
+const DAUER = 0.55
+
 function bahn(p: number, i: number, schmal: boolean): Lage {
-  const n = SECHS.length
-  const links = i % 2 === 0
-  /* Jedes Stück hat seinen Winkel auf dem Bogen; die Reihenfolge läuft im
-     Uhrzeigersinn von oben, damit Zaatar oben steht und Lahmacun unten. */
-  const winkel = -Math.PI / 2 + (i / n) * Math.PI * 2
-  /* Der Bogen muss die Karte freilassen: min(86vw, 29rem) breit, gut 60 vh
-     hoch. Am Schirm reicht ein breites Oval, am Handy ist die Karte fast so
-     breit wie das Fenster — dort wird das Oval hoch und schmal, die Stücke
-     streifen oben und unten an ihr vorbei. */
-  /* Am Handy liegt der Bogen AUF dem Fensterrand: die Karte ist dort 86 %
-     der Breite, ein Bogen um sie herum hätte sie gekreuzt — gemessen lagen
-     bei rx 40 zwei Stücke auf den Preiszeilen. Bei rx 50 stehen die Stücke
-     halb im Bild und rahmen die Karte von den vier Rändern her; das ist der
-     Rand-Entwurf von Anfang an, und das Einzige, was dort nicht verdeckt. */
-  const rx = schmal ? 50 : 34
-  const ry = schmal ? 50 : 42
-  const bx = 50 + Math.cos(winkel) * rx
-  const by = 50 + Math.sin(winkel) * ry
-  /* Der Rand: drei Stück je Seite, senkrecht gestaffelt. */
-  const rxRand = schmal ? (links ? 14 : 86) : (links ? 9 : 91)
-  const ryRand = 22 + Math.floor(i / 2) * 28
-  /* Die Übergabe: der Schwarm kommt von UNTEN ins Bild. Die Stücke sinken
-     ein Stück, damit die Richtung stimmt, und verblassen dabei. */
-  const uebergabeY = ryRand + 26
-
-  const sk0 = schmal ? 0.62 : 0.62   // Grundgrösse; Lahmacun und Zaatar sind ohnehin die grössten Bilder
-
-  if (p < 0.28) {
-    const t = glatt(klemmen(p / 0.28))
-    /* Versetzt: Stück i startet ein wenig später, damit sie nicht als Klumpen
-       austreten, sondern nacheinander — „eins nach dem anderen". */
-    const tv = glatt(klemmen((p - i * 0.025) / 0.24))
-    return {
-      x: misch(50, bx, tv),
-      y: misch(52, by, tv),
-      dreh: misch(links ? -40 : 40, links ? -8 : 8, tv),
-      sk: misch(0.12, sk0, tv),
-      deck: t <= 0 ? 0 : klemmen(tv * 3),
-    }
-  }
-  if (p < 0.62) {
-    /* Auf dem Bogen wandern alle gemeinsam ein Viertel weiter — das ist das
-       „Swingen" um die Karte. */
-    const t = glatt(klemmen((p - 0.28) / 0.34))
-    const w = winkel + t * Math.PI * 0.5
-    return {
-      x: 50 + Math.cos(w) * rx,
-      y: 50 + Math.sin(w) * ry,
-      dreh: (links ? -8 : 8) + Math.sin(t * Math.PI) * 6,
-      sk: sk0 + Math.sin(t * Math.PI) * 0.06,
-      deck: 1,
-    }
-  }
-  if (p < 0.84) {
-    const t = glatt(klemmen((p - 0.62) / 0.22))
-    const w = winkel + Math.PI * 0.5
-    const ax = 50 + Math.cos(w) * rx
-    const ay = 50 + Math.sin(w) * ry
-    return {
-      x: misch(ax, rxRand, t),
-      y: misch(ay, ryRand, t),
-      dreh: misch(links ? -8 : 8, links ? -12 : 12, t),
-      sk: misch(sk0, sk0 * 0.92, t),
-      deck: 1,
-    }
-  }
-  const t = glatt(klemmen((p - 0.84) / 0.16))
-  return {
-    x: rxRand,
-    y: misch(ryRand, uebergabeY, t),
-    dreh: links ? -12 : 12,
-    sk: sk0 * 0.92,
-    deck: 1 - t,
-  }
+  const pts = schmal ? SCHWEIF_SCHMAL : SCHWEIF_BREIT
+  const s = klemmen((p - i * ABSTAND) / DAUER)
+  const [x, y] = aufKurve(pts, s)
+  /* Die Neigung folgt der Kurve: ein Stück weiter vorn zeigt die Richtung. */
+  const [x2, y2] = aufKurve(pts, Math.min(1, s + 0.02))
+  const dreh = Math.atan2(y2 - y, x2 - x) * (180 / Math.PI) * 0.25
+  /* Klein aus dem Spalt, voll auf der Kette, kleiner beim Hineinfliegen —
+     was in die nächste Sektion geht, entfernt sich. */
+  const sk = s < 0.12 ? misch(0.15, 1, glatt(s / 0.12)) : s > 0.8 ? misch(1, 0.72, glatt((s - 0.8) / 0.2)) : 1
+  const deck = s <= 0 ? 0 : s < 0.08 ? glatt(s / 0.08) : s > 0.86 ? 1 - glatt((s - 0.86) / 0.14) : 1
+  return { x, y, dreh, sk: sk * (schmal ? 0.62 : 0.62), deck }
 }
 
 export default function Salve() {
@@ -232,7 +224,10 @@ export default function Salve() {
            schreibt die Deckung nur, wer im Bereich ist; ausserhalb gilt die
            Vorgabe 1, und die steht im Stilblatt, nicht hier. */
         if (aktiv) {
-          prozess.style.setProperty('--schwarm-deck', String(glatt(klemmen((p - 0.84) / 0.16))))
+          /* Die letzte Perle verlässt die Kette bei 5 * ABSTAND + DAUER = 0,925;
+             der Schwarm kommt genau in dem Fenster, in dem die Kette in die
+             Mitte hineinfliegt. */
+          prozess.style.setProperty('--schwarm-deck', String(glatt(klemmen((p - 0.78) / 0.2))))
         } else {
           prozess.style.removeProperty('--schwarm-deck')
         }

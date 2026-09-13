@@ -150,7 +150,13 @@ export default function Vorhang() {
          * begonnen hat, und dann war die Drehung umsonst. Bei etwa zwei
          * Dritteln steht die Scheibe sichtbar anders als am Anfang.
          */
-        const dreh = p * 232
+        /* ═══ Erst hoch, dann drehen ═══
+           Karol am 13.09.: „während der Lahmacun beim Scrollen hochgeht und
+           das Logo runtergeht. Danach, wenn er mittig zentralisiert ist,
+           dreht er sich." Die Drehung beginnt deshalb erst, wenn die Ruhelage
+           abgebaut ist (0,2) — dieselben 232 Grad, nur auf 0,2 bis 1 statt
+           auf 0 bis 1. Bis dahin steigt er nur, mit seinem Dampf. */
+        const dreh = klemmen((p - 0.2) / 0.8) * 232
         /* Sie kommt von unten und wächst. `skala` läuft weiter, während sie
            sich teilt — das Auseinanderfahren wird dadurch schneller, als es
            gerechnet ist. */
