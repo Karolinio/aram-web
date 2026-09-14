@@ -1,5 +1,6 @@
 import { ARAM, lueckenVorLive } from '../aram.config.ts'
 import { Etikett } from './ui/bausteine.tsx'
+import { pfad } from '../pfad.ts'
 
 /**
  * Der Fuss.
@@ -66,10 +67,10 @@ export default function Fusszeile() {
                 ist ehrlich; ein Fuss, der die Pflichtseite verschweigt, ist es
                 nicht. Den Livegang blockiert weiterhin `lueckenVorLive()`. */}
             <li>
-              <a href="/impressum.html">Impressum</a>
+              <a href={pfad('impressum.html')}>Impressum</a>
             </li>
             <li>
-              <a href="/datenschutz.html">Datenschutz</a>
+              <a href={pfad('datenschutz.html')}>Datenschutz</a>
             </li>
           </ul>
         </nav>

@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 
 import { ARAM } from '../aram.config.ts'
+import { pfad } from '../pfad.ts'
 
 /**
  * Die Hülle für Impressum und Datenschutz.
@@ -31,7 +32,7 @@ export default function Rechtsseite({ titel, etikett, children }: Props) {
     <>
       <header className="rechtskopf">
         <div className="schale rechtskopf__zeile">
-          <a className="rechtskopf__zurueck" href="/">
+          <a className="rechtskopf__zurueck" href={pfad('')}>
             <span aria-hidden="true">←</span> Zurück zu {ARAM.name}
           </a>
           <a className="knopf knopf--leise rechtskopf__anruf" href={ARAM.kontakt.telefonHref}>

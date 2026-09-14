@@ -1,0 +1,12 @@
+{
+  "name": "Aram · Pizzeria & orientalisches Gebäck",
+  "short_name": "Aram",
+  "start_url": "../../",
+  "display": "browser",
+  "background_color": "#1d140e",
+  "theme_color": "#1d140e",
+  "icons": [
+    { "src": "symbol-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "symbol-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

@@ -48,6 +48,14 @@ Live auf https://karolinio.github.io/aram-web/ (GitHub Pages, `ARAM_BASIS=/aram-
   **Probe-Schalter `?ton=nacht`** auf der Adresse schaltet „Alles entsteht" auf
   Schwarz (Handarbeit.tsx `NACHT`) — nach Karols Entscheidung entfernen.
 
+- 14.09.: **Impressum/Datenschutz waren auf der Testadresse nicht verlinkt
+  erreichbar** (`href="/impressum.html"` → `karolinio.github.io/impressum.html`,
+  404) — jetzt `pfad()`. Dazu: `theme-color` Nacht, PNG-Symbole + Manifest in
+  `public/bilder/marke/`, `og:image` = `vorschau.jpg` (1200×630, Logo auf
+  Nacht) mit Ursprung aus `ARAM_URSPRUNG` (Workflow) solange die Domain
+  fehlt, eigene 404-Seite (`404.html` → `src/fehlseite.tsx`), keine
+  Tab-Stopps mehr auf Unsichtbarem (Kopf-Logo, „Zur Karte").
+
 **Offen (Karols Entscheidung):** Sektionsfarben tauschen — Vorhang bleibt
 schwarz (auf Orange verschwinden Fladen und Dampf, gemessen/gesehen),
 „Alles entsteht" auf Schwarz, Galerien auf Orange. Probe-Screens lagen in der

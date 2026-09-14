@@ -78,7 +78,16 @@ function strukturdatenPlugin(): Plugin {
            zur Werkstatt. */
         if (!ctx.path.endsWith('index.html')) return html
 
-        const d = ARAM.web.domain
+        /* ═══ Absolute Adresse fuer die Vorschau ═══
+           WhatsApp, iMessage und Facebook brauchen fuer das Vorschaubild
+           eine ABSOLUTE Adresse. Die Domain steht in aram.config.ts und ist
+           noch offen; bis dahin kommt der Ursprung aus der Umgebung
+           (ARAM_URSPRUNG, setzt der Workflow auf die GitHub-Pages-Adresse).
+           Ohne beides: keine Vorschau, aber auch keine falsche. */
+        const ursprung =
+          (globalThis as { process?: { env?: Record<string, string | undefined> } }).process?.env
+            ?.ARAM_URSPRUNG
+        const d = ARAM.web.domain ?? (ursprung ? ursprung.replace(/\/$/, '') + BASIS.replace(/\/$/, '') : null)
         const marken = [
           `<meta property="og:type" content="restaurant.restaurant" />`,
           `<meta property="og:locale" content="de_DE" />`,
@@ -90,10 +99,14 @@ function strukturdatenPlugin(): Plugin {
             ? [
                 `<link rel="canonical" href="${d}/" />`,
                 `<meta property="og:url" content="${d}/" />`,
-                `<meta property="og:image" content="${d}/bilder/echt/team-laden.webp" />`,
-                `<meta property="og:image:width" content="1024" />`,
-                `<meta property="og:image:height" content="784" />`,
-                `<meta property="og:image:alt" content="Der Inhaber und seine Brüder vor ihrer Tür in Bonn-Hardtberg" />`,
+                /* JPG, nicht WebP: iMessage und aeltere WhatsApp-Fassungen
+                   zeigen WebP-Vorschauen nicht. 1200×630 ist das Mass, das
+                   alle drei nehmen. Das Logo auf Nacht — die Vorschau soll
+                   die Marke zeigen, den Text liefert die Zeile darunter. */
+                `<meta property="og:image" content="${d}/bilder/marke/vorschau.jpg" />`,
+                `<meta property="og:image:width" content="1200" />`,
+                `<meta property="og:image:height" content="630" />`,
+                `<meta property="og:image:alt" content="${ARAM.langname}" />`,
               ]
             : []),
           `<script type="application/ld+json">${JSON.stringify(strukturdaten())}</script>`,
@@ -197,6 +210,9 @@ export default defineConfig({
            keine — und genau darauf zielt eine Abmahnung. */
         impressum: 'impressum.html',
         datenschutz: 'datenschutz.html',
+        /* GitHub Pages und die meisten Hoster liefern 404.html fuer
+           unbekannte Adressen. */
+        fehlseite: '404.html',
       },
     },
   },

@@ -32,6 +32,7 @@ jobs:
       - run: npm run build
         env:
           ARAM_BASIS: /${{ github.event.repository.name }}/
+          ARAM_URSPRUNG: https://${{ github.repository_owner }}.github.io
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

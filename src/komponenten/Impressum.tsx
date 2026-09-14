@@ -1,5 +1,6 @@
 import { ARAM } from '../aram.config.ts'
 import Rechtsseite, { Fehlt } from './Rechtsseite.tsx'
+import { pfad } from '../pfad.ts'
 
 /**
  * Das Impressum nach § 5 DDG.
@@ -90,7 +91,7 @@ export default function Impressum() {
       <p className="rechtsseite__fuss leise">
         Diese Seite verwendet keine Cookies, bindet keine fremden Inhalte ein und
         misst kein Verhalten. Was sie technisch tut, steht in der{' '}
-        <a href="/datenschutz.html">Datenschutzerklärung</a>.
+        <a href={pfad('datenschutz.html')}>Datenschutzerklärung</a>.
       </p>
     </Rechtsseite>
   )

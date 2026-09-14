@@ -346,6 +346,9 @@ export default function Vorhang() {
         const ein = glatt(klemmen((p - (TEILT_AB + 0.06)) / 0.28))
         if (karte) {
           karte.style.opacity = String(ein)
+          /* Unsichtbar heisst auch: nicht per Tab erreichbar. „Zur Karte"
+             war sonst ein Fokus-Stopp auf einer Flaeche mit Deckung 0. */
+          karte.style.visibility = ein > 0 ? '' : 'hidden'
           karte.style.transform =
             `translate3d(0, ${(1 - ein) * 16}vh, 0) scale(${0.82 + ein * 0.18})`
         }

@@ -25,10 +25,15 @@
     <!-- Die Adressleiste des Handys nimmt die Farbe des Grundes an. Fassung 1
          stand hier auf Ofenschwarz; auf einer Cremeseite wäre das ein dunkler
          Balken über einer hellen Seite. -->
-    <meta name="theme-color" content="#f7ece0" />
-    <!-- Ihr eigenes Logo als Tab-Symbol. Ohne diese Zeile fragt jeder Browser
-         nach /favicon.ico und bekommt eine 404. -->
-    <link rel="icon" type="image/webp" href="/bilder/echt/logo.webp" />
+    <meta name="theme-color" content="#1d140e" />
+    <!-- Ihr Logo als Tab-Symbol, als PNG auf Nachtgrund: Safari und iOS nehmen
+         kein WebP als Symbol, und ein freigestelltes Logo auf einem hellen
+         Tab war ein roter Fleck. Das theme-color ist seit dem 13.09. Nacht —
+         die Seite beginnt schwarz, und ein cremefarbener Rahmen darum
+         (iOS, Android-Chrome) las sich als fremde Leiste. -->
+    <link rel="icon" type="image/png" sizes="48x48" href="/bilder/marke/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/bilder/marke/apple-touch-icon.png" />
+    <link rel="manifest" href="/bilder/marke/manifest.webmanifest" />
     <!--
       ═══ Die Vorladung muss dem ersten Bild ENTSPRECHEN ═══
 

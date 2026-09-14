@@ -315,8 +315,16 @@
  * wird, also mit der ersten Sektion danach. Die Flaeche bleibt reserviert,
  * damit die Navigation nicht springt.
  */
-.kopf[data-eng='nein'] .kopf__marke { opacity: 0; pointer-events: none; }
-.kopf__marke { transition: opacity var(--dauer-normal, 300ms) var(--kurve, ease); }
+/* `visibility` und nicht nur `opacity`: ein Element mit opacity 0 bleibt
+   in der Tab-Reihenfolge — gemessen war der zweite Tab-Stopp der Seite ein
+   unsichtbares Logo. `visibility: hidden` nimmt es heraus, und die
+   Verzoegerung auf `visibility` laesst die Ueberblendung zu Ende laufen. */
+.kopf[data-eng='nein'] .kopf__marke { opacity: 0; visibility: hidden; pointer-events: none; }
+.kopf__marke {
+  transition: opacity var(--dauer-normal, 300ms) var(--kurve, ease),
+    visibility 0s linear var(--dauer-normal, 300ms);
+}
+.kopf[data-eng='ja'] .kopf__marke { transition-delay: 0s, 0s; }
 
 /* Ihr Logo bekommt eine feste kleine Höhe und wird nirgends vergrössert.
    38 px, nicht 28: bei 28 war die Wortmarke ein roter Fleck, und ein Logo, das
