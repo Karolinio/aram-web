@@ -86,7 +86,7 @@ function strukturdatenPlugin(): Plugin {
            Ohne beides: keine Vorschau, aber auch keine falsche. */
         const ursprung =
           (globalThis as { process?: { env?: Record<string, string | undefined> } }).process?.env
-            ?.ARAM_URSPRUNG
+            ?.ARAM_URSPRUNG?.toLowerCase()
         const d = ARAM.web.domain ?? (ursprung ? ursprung.replace(/\/$/, '') + BASIS.replace(/\/$/, '') : null)
         const marken = [
           `<meta property="og:type" content="restaurant.restaurant" />`,
