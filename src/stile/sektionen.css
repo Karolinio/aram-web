@@ -4416,6 +4416,17 @@
 .vorhang__logo img { display: block; width: 100%; height: auto; }
 .vorhang__logo:focus-visible { outline: 2px solid var(--akzent); outline-offset: 6px; border-radius: 0.5rem; }
 
+/* Jedes Kind des Blocks steht mittig — auch eines, das spaeter dazukommt.
+   Die Grundlage gibt jedem `p` eine Lesebreite (--breite-satz); im
+   zentrierten Block wird daraus ein linksbuendiger Kasten, und der Text
+   darin sitzt links der Mitte. Gemessen am 13.09.: Ort und Status 70 bzw.
+   100 px neben dem Logo. Hier gilt: keine Lesebreite, und wenn doch eine
+   kommt, sitzt der Kasten in der Mitte. */
+.vorhang__auftakt > * {
+  max-width: none;
+  margin-inline: auto;
+  text-align: center;
+}
 .vorhang__auftakt {
   position: absolute;
   left: 50%;
