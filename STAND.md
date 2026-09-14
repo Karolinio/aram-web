@@ -56,6 +56,34 @@ Live auf https://karolinio.github.io/aram-web/ (GitHub Pages, `ARAM_BASIS=/aram-
   fehlt, eigene 404-Seite (`404.html` → `src/fehlseite.tsx`), keine
   Tab-Stopps mehr auf Unsichtbarem (Kopf-Logo, „Zur Karte").
 
+### 14.09. — Fundstücke im Netz, Impressum fast vollständig
+
+Karol hat zwei Quellen gefunden:
+
+- **sites.google.com/view/arampizzeria** (seine Google-Seite): Inhaber Arfan
+  Omar, Festnetz 0228 18034488, WhatsApp 0152 090 921 00, Mail
+  arampizzeria@gmail.com.
+- **arampizzeria-bonn.de** — eine WordPress/Elementor-Seite vom Juni 2026 auf
+  **Hostinger** (dns-parking.com, LiteSpeed). Impressum dort: „Aram Pizza &
+  Orientlisches Gebäck", vertreten durch **Aram Omar, Shair Omar**, Tel 0177
+  4637662, Mail info@arampizzaria-bonn.de (Tippfehler, kein MX — tot),
+  **USt-IdNr DE368715327** (VIES: gültig), Streitbeilegung „nein",
+  Platzhalter „[Vor- und Nachname]" als redaktionell Verantwortlicher,
+  Instagram @aram.pizza.
+
+Übernommen in `aram.config.ts`: `steuernummer`, `streitbeilegung: 'nein'`.
+**Impressum zeigt keine Lücke mehr**; Datenschutz nur noch der Hoster.
+
+Widersprüche, die nur er auflösen kann, stehen in **FRAGEN-AN-DEN-CHEF.md**
+(Name, WhatsApp-Nummer, Domain/Zugang, Mail, Zeiten, Instagram,
+Lieferdienste, sechs Fotos).
+
+**Hosting-Empfehlung:** Domain und Hosting gibt es schon (Hostinger). Den
+statischen Bau (`ARAM_BASIS=/`) nach `public_html` laden, WordPress abschalten
+— dann `web.domain = 'https://arampizzeria-bonn.de'`, `recht.hoster` =
+Hostinger (Rechtsträger vor dem Eintrag prüfen). Alternative: DNS auf GitHub
+Pages + CNAME-Datei; dann hängt die Seite an Karols GitHub-Konto.
+
 **Offen (Karols Entscheidung):** Sektionsfarben tauschen — Vorhang bleibt
 schwarz (auf Orange verschwinden Fladen und Dampf, gemessen/gesehen),
 „Alles entsteht" auf Schwarz, Galerien auf Orange. Probe-Screens lagen in der

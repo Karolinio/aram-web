@@ -142,7 +142,12 @@ export const ARAM = {
      * etwas als fehlend anmahnen, das gar nicht gefordert ist — deshalb der
      * dritte Zustand neben Wert und Lücke.
      */
-    steuernummer: null as string | 'keine' | Luecke,
+    /* ═══ Von seiner eigenen Seite, am 14.09. gegen VIES geprueft ═══
+       Karol hat arampizzeria-bonn.de gefunden — eine WordPress-Seite vom
+       Juni 2026 mit Impressum. Dort steht diese Nummer; die EU-Pruefung
+       (ec.europa.eu/taxation_customs/vies) meldet sie als GUELTIG. Zwei
+       Belege: seine Veroeffentlichung und das Register. */
+    steuernummer: 'DE368715327' as string | 'keine' | Luecke,
     /* Wer die Seite ausliefert, ist datenschutzrechtlich Auftragsverarbeiter
        und muss in der Erklärung stehen — mit Namen und Sitz. Solange es keinen
        Server gibt, gibt es auch keinen Hoster; die Erklärung sagt das offen,
@@ -151,7 +156,11 @@ export const ARAM = {
     /* Für Verbraucherstreitbeilegung: § 36 VSBG verlangt eine Aussage, ob man
        teilnimmt. Die übliche Antwort kleiner Betriebe ist „nein" — aber das
        muss der Betrieb sagen, nicht ich. */
-    streitbeilegung: null as 'ja' | 'nein' | Luecke,
+    /* „nein" — so steht es auf seiner eigenen Seite (arampizzeria-bonn.de/
+       impressum, 14.09.): „Wir sind nicht bereit und nicht verpflichtet".
+       Uebernommen, weil er es selbst veroeffentlicht hat; in der Liste an ihn
+       steht es trotzdem zur Bestaetigung. */
+    streitbeilegung: 'nein' as 'ja' | 'nein' | Luecke,
   },
 
   sozial: {
