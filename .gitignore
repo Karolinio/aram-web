@@ -8,3 +8,6 @@ rohbilder/
 
 # Werkzeug-Umgebung fürs Freistellen (Python 3.11, ~700 MB). Lokal, nicht ins Repo.
 .venv-bild/
+
+# Verkaufsmuster — liegen lokal, gehen nicht ins Repo und nie live.
+muster/
