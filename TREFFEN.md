@@ -1,4 +1,14 @@
-# Treffen mit Arfan — 17.09.2026
+# Treffen mit Arfan — verschoben, Karol geht hin (Stand 17.09.)
+
+**Neu am 17.09.:** Arfan hat Karol auf den GitHub-Link geantwortet: „da ist
+irgendwas falsch" — WAS, hat er nicht gesagt. Karol vermutet Kleinigkeiten
+wie Beschriftungen einzelner Produkte (Karte, Galerie-Titel). Sie machen es
+zusammen vor Ort. Beim Wiedereinstieg: **erst seine Liste aufnehmen, dann
+bauen** — die geratenen Foto-Zuordnungen (kartenbilder.py ZUORDNUNG,
+Sicherheit „vermutet") sind der wahrscheinlichste Fehler.
+
+Karols Liste fürs Treffen (0–8) steht unten in Teil D; er hat sie in seinen
+Notizen.
 
 Zwei Teile: **A** ist die Nachricht, die du ihm HEUTE schickst (damit er
 morgen das Richtige dabeihat). **B** ist deine Liste fürs Treffen. **C** ist,
@@ -96,3 +106,36 @@ GitHub Inc. (USA, Datenschutzrahmen). Hostinger ist der bessere Weg.
 
 **Nicht am Treffen klären, kommt später:** Dampf-Clip für den Schwarm,
 Hamburger-Menü, die 16 Bildschirmhöhen am Handy, Fotos nachpflegen.
+
+---
+
+## D · Karols Liste fürs Treffen (0–8), wie am 16.09. gegeben
+
+0. Einstieg: „Die Seite ist fertig. Was fehlt, kann nur von dir kommen: drei
+   Angaben und der Zugang zu deiner alten Seite." Kein Datum nennen, bevor
+   der Zugang da ist.
+1. Zeigen — auf SEINEM Handy: Start, Scrollen (Salve), Anrufen/WhatsApp
+   antippen, Karte (16 mit Foto, 6 fehlen), Galerie, Der Laden, Impressum.
+   Was er sagt: aufschreiben, nicht diskutieren.
+2. Blocker: (a) Hostinger-Zugang — wer hat die alte Seite gebaut, hPanel,
+   Karol als Nutzer hinzufügen, Ablaufdatum, zahlt er noch jemandem?
+   (b) Name — Gewerbeanmeldung abfotografieren, ein Name = Einzelunternehmen,
+   zwei = GbR. (c) WhatsApp-Nummer — in WhatsApp-Einstellungen nachsehen:
+   0152 090 921 00 oder 0177 4637662; Anruf-Nummer getrennt fragen.
+3. Bestätigen: Mail arampizzeria@gmail.com · Mo Ruhetag, Di–So 8–19 ·
+   Festnetz 0228 18034488 · USt-IdNr DE368715327 · keine Schlichtung ·
+   Instagram @aram.pizza / Facebook · Lieferdienste · Parkplatz Auf der
+   Urdel · „mehr als 25 Jahre".
+4. Entscheiden: Orange/Schwarz (`?ton=nacht`) · geratene Fotos durchgehen
+   (Muhammara, Lange Käse, Oliven, Hackfleisch, Groß Käse Gemüse, Doppelt
+   Käse, Schamiyeh, Frischkäse, Schaorma Roll, Fahita, Hackfleisch &
+   Gemüse) · Name des Käseschiffs · Satz in „Der Laden".
+5. Mitnehmen: 6 Fotos (Beirut, Spinat, Mexicano Roll, Sucuk, Sucuk mit
+   Käse, Gemüse Käse) als Dokument/AirDrop · Foto Gewerbeanmeldung · ggf.
+   Kartenblatt.
+6. Erklären: „ein Nachmittag nach Zugang, dann auf arampizzeria-bonn.de,
+   alte Links leiten um, du pflegst nichts, Hosting zahlst du schon."
+7. Nicht tun: nichts an der alten Seite ändern · kein Livegang heute ·
+   nicht raten lassen · nichts Neues zusagen (Lieferando o. ä.).
+8. Häkchen vor dem Gehen: Zugang · Name+Rechtsform · Nummern · 9 Ja/Nein ·
+   Orange/Schwarz · Liste falscher Zuordnungen · 6 Fotos · seine Wünsche.

@@ -3,7 +3,7 @@
 Wiedereinstieg. Alles, was eine neue Sitzung braucht, um ohne Rückfragen
 weiterzubauen.
 
-**Letzter Stand:** `HEAD` · **Zweig:** `main` · **Notiz vom:** 13.09.2026
+**Letzter Stand:** `HEAD` · **Zweig:** `main` · **Notiz vom:** 17.09.2026
 
 ---
 
@@ -55,6 +55,17 @@ Live auf https://karolinio.github.io/aram-web/ (GitHub Pages, `ARAM_BASIS=/aram-
   Nacht) mit Ursprung aus `ARAM_URSPRUNG` (Workflow) solange die Domain
   fehlt, eigene 404-Seite (`404.html` → `src/fehlseite.tsx`), keine
   Tab-Stopps mehr auf Unsichtbarem (Kopf-Logo, „Zur Karte").
+
+### 17.09. — Wiedereinstieg: das Treffen
+
+Arfan sagt zur Vorschau: „da ist irgendwas falsch" — ohne zu sagen, was.
+Karol geht hin und schließt es mit ihm zusammen ab. **TREFFEN.md** hat
+Nachricht, Liste (0–8) und die Deploy-Schritte. Beim Wiedereinstieg zuerst
+Karols Notizen vom Treffen aufnehmen; wahrscheinlichste Fehler: Beschriftungen
+und die geratenen Zuordnungen in `werkzeug/kartenbilder.py`. Alles Technische
+ist deployt und geprüft (14.09.: 0 Fehler, Impressum ohne Lücke, Datenschutz
+nur noch Hoster). `?ton=nacht` und `muster/` (lokal, nicht mehr im Repo)
+siehe unten.
 
 ### 14.09. — Fundstücke im Netz, Impressum fast vollständig
 
