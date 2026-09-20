@@ -313,6 +313,8 @@ export default function Salve() {
                  Pfade ohne pfad() und laeuft — also so wie dort. */
               src={g.bilder[0].replace('.webp', '-500.webp')}
               alt=""
+              data-ki={g.echt ? undefined : 'erzeugt'}
+              title={g.echt ? undefined : 'Mit KI erzeugt'}
               width={500}
               height={Math.round((500 * g.hoehe) / g.breite)}
               decoding="async"

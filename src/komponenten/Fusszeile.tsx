@@ -76,6 +76,17 @@ export default function Fusszeile() {
         </nav>
       </div>
 
+      {/* KI-Kennzeichnung nach EU AI Act Art. 50 Abs. 4 — Regel und Begründung
+          in website-factory/engine/ki-kennzeichnung.md. Die erzeugten Gerichte,
+          die Teigstufen und der Dampf sind keine Aufnahmen des Betriebs; das
+          steht hier, damit niemand es dafür hält. */}
+      <div className="schale">
+        <p className="leise fuss__ki">
+          Einzelne Bilder und Videos dieser Seite sind mit KI erzeugt und zeigen keine echten
+          Aufnahmen des Betriebs. Fotos von Laden, Team und Ofen sind echt.
+        </p>
+      </div>
+
       {import.meta.env.DEV && offen.length > 0 && (
         <div className="schale">
           <div className="nichtlive">

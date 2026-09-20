@@ -541,7 +541,7 @@ export default function Vorhang() {
             CPU ueberfordert, am Handy kostet es Akku und Bildrate. Ein Clip
             echten Dampfes liest sich auch allein als Dampf. */}
         <div className="vorhang__dampf" aria-hidden="true">
-          <video src="/video/dampf.mp4" autoPlay muted loop playsInline />
+          <video src="/video/dampf.mp4" autoPlay muted loop playsInline data-ki="erzeugt" title="Mit KI erzeugt" />
         </div>
 
         <div className="vorhang__scheibe" aria-hidden="true">

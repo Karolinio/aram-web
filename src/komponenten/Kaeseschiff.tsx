@@ -653,6 +653,10 @@ export default function Kaeseschiff() {
             width={M[klasse]!.breite}
             height={M[klasse]!.hoehe}
             alt=""
+            /* Die Teigstufen (kugel, geformt, bestreut) sind erzeugt; gebacken
+               und riss-3 sind Fotos ihres Schiffs. Kennzeichnung: engine/ki-kennzeichnung.md */
+            data-ki={klasse.startsWith('stufe-') && !klasse.includes('gebacken') ? 'erzeugt' : undefined}
+            title={klasse.startsWith('stufe-') && !klasse.includes('gebacken') ? 'Mit KI erzeugt' : undefined}
             decoding="async"
           />
         ))}
