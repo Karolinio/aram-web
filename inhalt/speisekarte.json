@@ -280,5 +280,304 @@
     ]
    }
   ]
+ },
+ {
+  "gruppe": "Manakisch",
+  "hinweis": "Wir backen mit Weizenmehl.",
+  "gerichte": [
+   {
+    "nr": 41,
+    "name": "Zaatar",
+    "beschreibung": "Sesam, Olivenöl, Würzmischung mit Thymian",
+    "preis": 3.5,
+    "allergene": [
+     "Gluten",
+     "Sesam"
+    ]
+   },
+   {
+    "nr": 42,
+    "name": "Muhammara",
+    "beschreibung": "Scharfe Paprikapaste, Sesam, Olivenöl, Gewürze, Granatapfelreduktion",
+    "preis": 3.5,
+    "allergene": [
+     "Gluten",
+     "Sesam"
+    ]
+   },
+   {
+    "nr": 43,
+    "name": "Käse",
+    "beschreibung": "Hirtenkäse aus Kuhmilch",
+    "preis": 5,
+    "allergene": [
+     "Gluten",
+     "Milch"
+    ]
+   },
+   {
+    "nr": 44,
+    "name": "Manakisch-Mix",
+    "beschreibung": "Käse, Würzmischung mit Thymian, scharfe Paprikapaste",
+    "preis": 5,
+    "allergene": [
+     "Gluten",
+     "Sesam",
+     "Milch"
+    ]
+   },
+   {
+    "nr": 45,
+    "name": "Hackfleisch",
+    "beschreibung": "Hackfleisch und Gemüse",
+    "preis": 5,
+    "allergene": [
+     "Gluten"
+    ]
+   },
+   {
+    "nr": 46,
+    "name": "Gemüse Manakisch",
+    "beschreibung": "Käse und Gemüse",
+    "preis": 5,
+    "allergene": [
+     "Gluten",
+     "Sesam",
+     "Milch"
+    ]
+   },
+   {
+    "nr": 48,
+    "name": "Spinat",
+    "beschreibung": "Spinat, Zwiebeln, Paprika, Zitrone, Sumach",
+    "preis": 5,
+    "allergene": [
+     "Gluten"
+    ]
+   },
+   {
+    "nr": 49,
+    "name": "Sucuk",
+    "beschreibung": "Hackfleisch, Gewürze, Käse",
+    "preis": 5,
+    "allergene": [
+     "Gluten",
+     "Eier",
+     "Sesam"
+    ]
+   }
+  ]
+ },
+ {
+  "gruppe": "Pizza",
+  "hinweis": "Wir backen mit Weizenmehl. Alle Pizzen haben einen Durchmesser von ca. 32 cm und sind mit Tomatensauce und Käse belegt. Gerne belegen wir auf Wunsch – jede weitere Zutat 1,00 €. Familienpizza 40 cm, Belag nach Wunsch: 17,00 €.",
+  "gerichte": [
+   {
+    "nr": 61,
+    "name": "Margherita",
+    "beschreibung": "Tomate, Käse",
+    "preis": 9.5,
+    "allergene": [
+     "Gluten",
+     "Milch"
+    ],
+    "zusatzstoffe": [
+     "Farbstoff",
+     "Süßstoff"
+    ]
+   },
+   {
+    "nr": 62,
+    "name": "Prosciutto",
+    "beschreibung": "Formfleisch Truthahnschinken",
+    "preis": 11,
+    "allergene": [
+     "Gluten",
+     "Milch"
+    ],
+    "zusatzstoffe": [
+     "Farbstoff",
+     "Süßstoff",
+     "Konservierungsstoff"
+    ]
+   },
+   {
+    "nr": 63,
+    "name": "Prosciutto Funghi",
+    "beschreibung": "Formfleisch Truthahnschinken, Champignons",
+    "preis": 11,
+    "allergene": [
+     "Gluten",
+     "Milch"
+    ],
+    "zusatzstoffe": [
+     "Farbstoff",
+     "Süßstoff",
+     "Konservierungsstoff"
+    ]
+   },
+   {
+    "nr": 64,
+    "name": "Salami",
+    "beschreibung": "Salami",
+    "preis": 11,
+    "allergene": [
+     "Gluten",
+     "Milch"
+    ],
+    "zusatzstoffe": [
+     "Farbstoff",
+     "Süßstoff",
+     "Konservierungsstoff"
+    ]
+   },
+   {
+    "nr": 65,
+    "name": "Salami Funghi",
+    "beschreibung": "Salami, Champignons",
+    "preis": 11,
+    "allergene": [
+     "Gluten",
+     "Milch"
+    ],
+    "zusatzstoffe": [
+     "Farbstoff",
+     "Süßstoff",
+     "Konservierungsstoff"
+    ]
+   },
+   {
+    "nr": 66,
+    "name": "Funghi",
+    "beschreibung": "Champignons",
+    "preis": 11,
+    "allergene": [
+     "Gluten",
+     "Milch"
+    ],
+    "zusatzstoffe": [
+     "Farbstoff",
+     "Süßstoff",
+     "Konservierungsstoff"
+    ]
+   },
+   {
+    "nr": 67,
+    "name": "Hawaii",
+    "beschreibung": "Formfleisch Truthahnschinken, Ananas",
+    "preis": 11,
+    "allergene": [
+     "Gluten",
+     "Milch"
+    ],
+    "zusatzstoffe": [
+     "Farbstoff",
+     "Süßstoff",
+     "Konservierungsstoff"
+    ]
+   },
+   {
+    "nr": 68,
+    "name": "Tonno",
+    "beschreibung": "Thunfisch und Zwiebeln",
+    "preis": 11,
+    "allergene": [
+     "Gluten",
+     "Milch",
+     "Fisch"
+    ],
+    "zusatzstoffe": [
+     "Farbstoff",
+     "Süßstoff"
+    ]
+   },
+   {
+    "nr": 69,
+    "name": "Diablo",
+    "beschreibung": "Formfleisch Truthahnschinken, Salami, Zwiebeln, Peperoni, Artischocken – auf Wunsch scharf",
+    "preis": 11,
+    "allergene": [
+     "Gluten",
+     "Milch"
+    ],
+    "zusatzstoffe": [
+     "Farbstoff",
+     "Süßstoff",
+     "Konservierungsstoff"
+    ]
+   },
+   {
+    "nr": 71,
+    "name": "Vegetaria",
+    "beschreibung": "Gemischtes Gemüse",
+    "preis": 11,
+    "allergene": [
+     "Gluten",
+     "Milch"
+    ],
+    "zusatzstoffe": [
+     "Farbstoff",
+     "Süßstoff"
+    ]
+   },
+   {
+    "nr": 72,
+    "name": "Sucuk",
+    "beschreibung": "Hausgemachtes Sucuk mit Champignons",
+    "preis": 11,
+    "allergene": [
+     "Gluten",
+     "Milch",
+     "Eier"
+    ],
+    "zusatzstoffe": [
+     "Farbstoff",
+     "Süßstoff"
+    ]
+   },
+   {
+    "nr": 73,
+    "name": "Popeye",
+    "beschreibung": "Spinat, Eier, Knoblauch, Mais",
+    "preis": 11,
+    "allergene": [
+     "Gluten",
+     "Milch",
+     "Eier"
+    ],
+    "zusatzstoffe": [
+     "Farbstoff",
+     "Süßstoff"
+    ]
+   },
+   {
+    "nr": 74,
+    "name": "Rustica",
+    "beschreibung": "Frische Tomaten, Oliven, Zwiebeln",
+    "preis": 11,
+    "allergene": [
+     "Gluten",
+     "Milch"
+    ],
+    "zusatzstoffe": [
+     "Farbstoff",
+     "Süßstoff"
+    ]
+   },
+   {
+    "nr": 75,
+    "name": "Mozzarella",
+    "beschreibung": "Mozzarella",
+    "preis": 11,
+    "allergene": [
+     "Gluten",
+     "Milch"
+    ],
+    "zusatzstoffe": [
+     "Farbstoff",
+     "Süßstoff"
+    ]
+   }
+  ]
  }
 ]

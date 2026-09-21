@@ -920,9 +920,10 @@ body:has(.leiste) .wasserzeichen {
    * eine eigene Eigenschaft, wird VOR `transform` angewandt, und beide gelten
    * nebeneinander.
    *
-   * Die beiden Werte schreibt src/saat.ts an das Wurzelelement, EINMAL je
-   * Bild für alle sieben Sektionen. Die Ausweichwerte stehen hier, damit die
-   * Seite auch ohne das Skript vollständig aussieht.
+   * Die beiden Werte schreibt src/saat.ts an jede dieser Ebenen direkt (nicht
+   * mehr an die Wurzel — das kostete eine Stilprüfung der ganzen Seite je
+   * Bild). Die Ausweichwerte stehen hier, damit die Seite auch ohne das
+   * Skript vollständig aussieht.
    */
   translate: var(--saat-seite, 0) var(--saat-schub, 0);
 }

@@ -83,19 +83,30 @@ export function useZiehband<T extends HTMLElement>(schwebt = false, jeSatz = BIL
     const el = ref.current
     if (!el) return
 
+    /* ═══ Nur setzen, wenn sich etwas AENDERT (21.09.) ═══
+       Vorher bekam React bei jedem `scroll`-Ereignis des Bandes ein neues
+       Objekt — und das Band scrollt, solange es schwebt, in JEDEM Bild. Ein
+       neues Objekt heisst fuer React: neu rendern, mitsamt allen zweiunddreissig
+       Boegen. Im Profil am gedrosselten Handy war das die groesste einzelne
+       Rechnung waehrend des Scrollens, obwohl sich am Bildschirm nichts
+       aenderte. Jetzt wird der Zustand nur geschrieben, wenn ein Pfeil
+       tatsaechlich ein- oder ausgraut. */
+    let letzterStand = { links: false, rechts: true }
+    const standSetzen = (links: boolean, rechts: boolean) => {
+      if (links === letzterStand.links && rechts === letzterStand.rechts) return
+      letzterStand = { links, rechts }
+      setStand(letzterStand)
+    }
     const messen = () => {
       /* Ein umlaufendes Band hat kein Ende — beide Pfeile bleiben nutzbar.
          Mit der Randmessung wuerden sie beim Umschlag kurz ausgrauen, und ein
          Knopf, der ohne erkennbaren Grund flackert, liest sich als Fehler. */
       if (schwebt) {
-        setStand({ links: true, rechts: true })
+        standSetzen(true, true)
         return
       }
       const weg = el.scrollWidth - el.clientWidth
-      setStand({
-        links: el.scrollLeft > RAND,
-        rechts: el.scrollLeft < weg - RAND,
-      })
+      standSetzen(el.scrollLeft > RAND, el.scrollLeft < weg - RAND)
     }
 
     let zieht = false
@@ -175,12 +186,20 @@ export function useZiehband<T extends HTMLElement>(schwebt = false, jeSatz = BIL
      */
     let lage = -1
 
+    /* ═══ Die Satzbreite wird GEMERKT, nicht je Bild gemessen (21.09.) ═══
+       `offsetLeft` zwingt den Browser, das Layout fertigzurechnen — und das
+       stand hier VOR der Frage, ob das Band ueberhaupt im Bild ist. Im Profil
+       am gedrosselten Handy war das die zweitteuerste Funktion der Seite:
+       sechzig erzwungene Layouts je Sekunde fuer ein Band, das gerade niemand
+       sieht. Jetzt: erst die Halt-Bedingungen, dann eine gemerkte Breite, die
+       nur nach einer Groessenaenderung neu gemessen wird. */
+    let satzGemerkt = 0
+    const satzNeuMessen = () => { satzGemerkt = 0 }
+
     const takt = (t: number) => {
       bandId = requestAnimationFrame(takt)
       const dt = letzteZeit ? Math.min(60, t - letzteZeit) : 0
       letzteZeit = t
-      const satz = satzBreite()
-      if (satz <= 0) return
       /* Angehalten wird bei Zeiger, Fokus, Ziehen, ausserhalb des Bildes und
          kurz nach jeder Beruehrung. Der Zeiger deckt die Maus ab, der Fokus
          die Tastatur — beides zusammen ist der Halt, den bewegter Inhalt
@@ -189,6 +208,9 @@ export function useZiehband<T extends HTMLElement>(schwebt = false, jeSatz = BIL
         lage = -1
         return
       }
+      if (satzGemerkt <= 0) satzGemerkt = satzBreite()
+      const satz = satzGemerkt
+      if (satz <= 0) return
       if (lage < 0) lage = el.scrollLeft
       lage += (SCHWEBE_RICHTUNG * SCHWEBE_TEMPO * dt) / 1000
       if (lage < 0) lage += satz
@@ -222,6 +244,7 @@ export function useZiehband<T extends HTMLElement>(schwebt = false, jeSatz = BIL
          warum schoene Seiten auf Handys heiss werden. */
       sicht = new IntersectionObserver(([e]) => { imBild = e.isIntersecting }, { rootMargin: '120px' })
       sicht.observe(el)
+      window.addEventListener('resize', satzNeuMessen)
       if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         el.classList.add('schwebt')
         bandId = requestAnimationFrame(takt)
@@ -254,6 +277,7 @@ export function useZiehband<T extends HTMLElement>(schwebt = false, jeSatz = BIL
       el.removeEventListener('wheel', anhalten)
       cancelAnimationFrame(bandId)
       sicht?.disconnect()
+      window.removeEventListener('resize', satzNeuMessen)
       el.classList.remove('schwebt')
       beobachter.disconnect()
     }

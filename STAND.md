@@ -32,6 +32,24 @@ Animation („wirkt wie Baustelle, langsamer"), KI-Bilder kennzeichnen
   Galerie nicht mehr; ZUORDNUNG = nur noch Kartengerichte.
 - **Obere Arkade raus, mit Bildern:** public/bilder/galerie/, galerie.json,
   galeriebilder.py gelöscht. `galeriemass.ts` zählt jetzt die Produktgalerie.
+- **Karte vollständig: Manakisch (41–49) und Pizza (61–75)** aus seinen
+  Kartenfotos (rohbilder/eingang Bild 2 + 7) abgelesen — vorher stand nur
+  Fata'er auf der Seite, eine Pizzeria ohne Pizza. Neues Feld
+  `zusatzstoffe` (Farbstoff/Süßstoff/Konservierungsstoff), getrennt von den
+  Allergenen, in derselben Zeile gezeigt. 44 Gerichte, Teaser „und 39 weitere".
+  Nummer 47 und 70 fehlen auf SEINER Karte.
+- **Flüssiger am Handy — vier Befunde aus dem CPU-Profil (4×-Drossel):**
+  ① `saat.ts` schrieb zwei Variablen je Bild an `<html>` → Stilprüfung der
+  ganzen Seite je Bild; jetzt an die `.untergrund__saat`-Ebenen, Schleife
+  ruht, wenn nichts abklingt. ② `ziehen.ts` maß `offsetLeft` je Bild (Layout
+  erzwungen) auch außer Sicht → gemerkt, Halt-Bedingungen zuerst.
+  ③ `setStand` bekam je Band-Scroll ein neues Objekt → React renderte alle
+  32 Bögen je Bild; jetzt nur bei Änderung. ④ Mehlstaub (Vollbild-Canvas,
+  60 Hz) und Kopfzeilen-`backdrop-filter` (28 px Blur je Bild) am groben
+  Zeiger aus. Ergebnis im Profil: Hauptstrang beim Scrollen 47 % frei statt
+  30 %, React-Arbeit 1,25 s → 0,28 s je 10 s Scroll. Lighthouse/Scroll-Bench
+  auf diesem Mac (Load 15–20) zu verrauscht für eine Zahl — das Handy
+  entscheidet. Weiter offen: natives Rendering (7 Saat-Ebenen, Scrub).
 - Fußzeile: KI-Satz sagt jetzt ausdrücklich, dass alle Gerichte echte Fotos
   sind; erzeugt sind nur Dampf und drei Teigstufen.
 - **Lighthouse mobil (live, 21.09.): Performance 27**, TBT 6,3 s, LCP 7,5 s,

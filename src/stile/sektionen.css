@@ -282,6 +282,25 @@
     0 14px 34px -22px oklch(0% 0 0 / 0.55);
 }
 
+/**
+ * ═══ Am Handy ohne Glas (21.09.) ═══
+ *
+ * `backdrop-filter` an einer festen Kopfzeile heisst: der Browser weichzeichnet
+ * in JEDEM Bild, das unter ihr durchscrollt, den Streifen dahinter neu — bei
+ * dreifacher Pixeldichte und 28 px Radius ist das am Handy die teuerste
+ * Dauerarbeit der Seite, und sie läuft genau dann, wenn es ruckeln darf:
+ * beim Scrollen. Grober Zeiger heisst: dichtere Fläche statt Glas. Der
+ * Unterschied ist am 6-Zoll-Schirm nicht zu sehen, der Gewinn schon.
+ */
+@media (pointer: coarse) {
+  .kopf,
+  .kopf[data-eng='ja'] {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background-color: color-mix(in oklch, var(--ton-tief) 88%, transparent);
+  }
+}
+
 .kopf__zeile {
   display: flex;
   align-items: center;

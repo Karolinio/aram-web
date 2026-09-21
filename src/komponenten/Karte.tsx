@@ -302,7 +302,7 @@ export default function Karte() {
                         <p className="zeile__beschreibung">{g.beschreibung}</p>
                         <p className="zeile__allergene">
                           <span className="visuell-versteckt">Enthält: </span>
-                          {g.allergene.join(' · ')}
+                          {[...g.allergene, ...(g.zusatzstoffe ?? [])].join(' · ')}
                         </p>
                       </div>
 

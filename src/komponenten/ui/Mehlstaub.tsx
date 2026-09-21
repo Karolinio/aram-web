@@ -35,6 +35,14 @@ export default function Mehlstaub() {
     if (!ctx) return
 
     const ruhig = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    /* ═══ Am Handy gar nicht (21.09.) ═══
+       Der Staub ist eine bildschirmfuellende Leinwand, die sechzig Mal je
+       Sekunde geleert und neu gefuellt wird — ueber ALLEM, die ganze Seite
+       lang. Am Schreibtisch faellt das nicht auf; am Handy ist es der
+       teuerste Dauerposten, fuer Koerner mit drei bis zehn Prozent Deckung,
+       die auf einem 6-Zoll-Schirm ohnehin niemand sieht. Grober Zeiger
+       (Finger) heisst: kein Staub. Der Rest der Seite bleibt, wie er ist. */
+    if (window.matchMedia('(pointer: coarse)').matches) return
     let breite = 0
     let hoehe = 0
     let koerner: Korn[] = []

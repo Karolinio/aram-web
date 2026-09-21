@@ -60,6 +60,13 @@ export type Gericht = {
   preis: number | null
   /** Pflicht, sobald Preise online stehen (LMIV). Leer ist ein Befund, kein Zustand. */
   allergene: string[]
+  /**
+   * Kennzeichnungspflichtige Zusatzstoffe, ausgeschrieben („Farbstoff",
+   * „Konservierungsstoff"). Auf ihrer Karte stehen sie als Ziffern 1–6 vor
+   * den Allergenen; hier getrennt, weil ein Zusatzstoff kein Allergen ist und
+   * der Allergen-Filter ihn nicht als solches behandeln darf.
+   */
+  zusatzstoffe?: string[]
   /** Fehlt noch bei allen 22 Gerichten — siehe `Gerichtbild` und ABLICHTUNG.md. */
   bild?: Gerichtbild
 }
