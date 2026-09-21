@@ -82,8 +82,9 @@ export default function Fusszeile() {
           steht hier, damit niemand es dafür hält. */}
       <div className="schale">
         <p className="leise fuss__ki">
-          Einzelne Bilder und Videos dieser Seite sind mit KI erzeugt und zeigen keine echten
-          Aufnahmen des Betriebs. Fotos von Laden, Team und Ofen sind echt.
+          Alle Gerichte, der Laden, das Team und der Ofen sind echte Fotos aus der
+          Rochusstraße. Mit KI erzeugt sind nur der Dampf und die drei Teigstufen
+          des fliegenden Käseschiffs; sie sind im Quelltext als solche gekennzeichnet.
         </p>
       </div>
 

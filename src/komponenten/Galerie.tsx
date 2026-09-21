@@ -1,12 +1,8 @@
-import galerieRoh from '../../inhalt/galerie.json'
 import produktRoh from '../../inhalt/produktgalerie.json'
 import { pfad } from '../pfad.ts'
 import { useZiehband } from '../ziehen.ts'
 import { Kopf, Sektion } from './ui/bausteine.tsx'
 import Untergrund from './ui/Untergrund.tsx'
-
-type Bild = { nr: number; titel: string; lage: 'hoch' | 'quer'; breite: number; hoehe: number }
-const BILDER = galerieRoh as Bild[]
 
 /**
  * ═══ Die zweite Arkade: nur Produkte ═══
@@ -189,31 +185,18 @@ function Arkade({ id, etikett, titel, lead, hinweis, bilder, quer }: {
   )
 }
 
-export default function Galerie() {
-  const ausDemLaden: BandBild[] = BILDER.map((b) => {
-    const nr = String(b.nr).padStart(2, '0')
-    return { quelle: `bilder/galerie/${nr}.webp`, klein: `bilder/galerie/${nr}-klein.webp`,
-             titel: b.titel, schluessel: nr }
-  })
-  return (
-    <Arkade
-      id="galerie"
-      etikett="Aus dem Laden"
-      titel="Was an einem Morgen entsteht"
-      lead="Vom Blech über die Glut auf den Tisch."
-      hinweis={`Es läuft von allein. Zeiger drauf hält an — oder ziehen. Es sind ${ausDemLaden.length}.`}
-      bilder={ausDemLaden}
-    />
-  )
-}
+/* Die erste Arkade (Betriebsfotos aus inhalt/galerie.json) ist am 21.09.
+   ausgebaut worden — siehe main.tsx. Die Bilder liegen noch in
+   public/bilder/galerie/, werden aber nicht mehr geladen. */
 
 export function Produktgalerie() {
   const produkte: BandBild[] = PRODUKTE.map((p) => ({
     quelle: `bilder/karte/${p.datei}.webp`,
     klein: `bilder/karte/${p.datei}-klein.webp`,
-    /* Die Nummer steht mit dabei, weil Gaeste am Telefon die Nummer nennen —
-       dieselbe Ueberlegung wie in der Speisekarte. */
-    titel: p.nr != null ? `${p.nr} · ${p.titel}` : p.titel,
+    /* OHNE Nummer. Arfan am 21.09. nach dem Treffen: „Erstes, Zweites … gibt
+       es nicht mehr" — in der Galerie nur der Name; die Nummer bleibt allein
+       in der Speisekarte, wo sie am Telefon gebraucht wird. */
+    titel: p.titel,
     schluessel: p.datei,
   }))
   return (
@@ -221,7 +204,7 @@ export function Produktgalerie() {
       id="produkte"
       etikett="Einzeln angesehen"
       titel="Jedes Gebäck für sich"
-      lead="Dieselben Aufnahmen wie in der Karte, nur gross genug zum Ansehen."
+      lead="Jedes Gebäck, wie es bei uns über die Theke geht."
       hinweis={`Es läuft von allein. Zeiger drauf hält an — oder ziehen. Es sind ${produkte.length}.`}
       bilder={produkte}
       quer

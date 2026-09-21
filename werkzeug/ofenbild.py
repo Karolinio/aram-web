@@ -18,7 +18,7 @@ import numpy as np
 from PIL import Image
 import os, json
 
-QUELLE = 'public/bilder/galerie/09.webp'
+QUELLE = 'public/bilder/galerie/09.webp'  # 21.09.: Ordner geloescht, Werkzeug ist ohnehin ausser Betrieb (Ofen raus)
 AUS = 'public/bilder/reise'
 os.makedirs(AUS, exist_ok=True)
 

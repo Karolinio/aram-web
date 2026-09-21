@@ -62,13 +62,9 @@ BREIT, HOCH = 1000, 750
 # damit sie im Querformat der Laenge nach liegen.
 DREHUNG = {
     'Groß Käse, scharf': 90,
-    'Frischkäse': -90,
-    'Lange Käse': 90,
-    # Karol am 12.09., am Mac: „nichts soll auf dem Kopf sein, alles logisch
-    # von links nach rechts liegen." An vier Drehungen je Bild probiert:
-    'Hackfleisch': 90,             # das Schiff stand senkrecht
-    'Schaorma Roll': 90,           # die Rolle stand senkrecht; +90 legt die Schnitte nach oben
-    'Lahmacun mit Zwiebeln': -90,  # hing rechts aus dem Bild; -90 bringt die ganze Scheibe rein
+    'Sucuk': 90,
+    'Hackfleisch': 90,
+    'Mexicano Roll': 90,
 }
 
 # Name auf ihrer Karte -> (Datei, Bildbeschreibung, wie sicher)
@@ -76,29 +72,28 @@ DREHUNG = {
 # Ueber den NAMEN und nicht ueber die Nummer: auf ihrer Karte steht die 22
 # zweimal — „Lahmacun" und „Lahmacun mit Zwiebeln". Ueber die Nummer bekam die
 # Zwiebelvariante das Foto der einfachen, und das ist ein anderes Gericht.
+# ═══ Stand 21.09. — nach Arfans Durchsicht ═══
+# Die Produktgalerie (inhalt/produktgalerie.json) wird seitdem VON HAND
+# gepflegt und traegt seine Namen; dieses Werkzeug schreibt sie NICHT mehr.
+# Hier stehen nur noch die Fotos, die zu einem Karteneintrag gehoeren.
+# Fotos, die ein Gericht zeigen, das die Karte nicht kennt (Pizza Gemüse,
+# Ricotta Käse, Kartoffel Käse, Pizza, Mexicano scharf, Käseschiff), liegen
+# unter ihrem Namen in public/bilder/karte/ und nur in der Galerie.
 ZUORDNUNG = {
-    # sicher — Merkmal und Beschreibung decken sich eindeutig
-    'Zaatar':              ('IMG_1507 2.HEIC', 'Ein runder Fladen, dunkel mit Zaatar bestrichen und dicht mit Sesam bestreut', 'sicher'),
-    'Toschka':             ('IMG_1527 2.HEIC', 'Ein runder Fladen mit Hackfleisch und vier Wuerfeln Hirtenkaese', 'sicher'),
-    'Groß Käse, scharf':   ('IMG_1509 2.HEIC', 'Ein geschlossenes Schiffchen aus Teig mit Sesam und Schwarzkuemmel', 'seine Angabe'),
-    'Lahmacun':            ('IMG_1535 2.HEIC', 'Ein Lahmacun, duenn ausgerollt und flaechig mit Hackfleisch belegt', 'sicher'),
-    'Lahmacun mit Zwiebeln': ('IMG_1536 2.HEIC', 'Ein Lahmacun mit Hackfleisch, aus einem anderen Blickwinkel', 'sicher'),
-
-    # wahrscheinlich — ein starkes Merkmal passt, der Rest ist Schluss
-    'Muhammara':           ('IMG_1508 2.HEIC', 'Ein runder Fladen mit roter Paprikapaste und Sesam in der Mitte', 'wahrscheinlich'),
-    'Lange Käse':          ('IMG_1511 2.HEIC', 'Eine lange schmale Teigrolle, mit Sesam bestreut', 'wahrscheinlich'),
-    'Oliven':              ('IMG_1529 2.HEIC', 'Ein runder Fladen mit gruenen Oliven, Tomatenwuerfeln und Hirtenkaese', 'wahrscheinlich'),
-    'Hackfleisch':         ('IMG_1515 2.HEIC', 'Ein offenes Schiffchen aus Teig, mit Hackfleisch gefuellt', 'wahrscheinlich'),
-    'Groß Käse, Gemüse':   ('IMG_1531 2.HEIC', 'Ein runder Fladen mit Kaese, Oliven, Paprika und Tomate', 'wahrscheinlich'),
-
-    # vermutet — muss der Inhaber bestaetigen
-    'Doppelt Käse':        ('IMG_1523 2.HEIC', 'Ein quadratisch gefaltetes Gebaeck mit Kaese und Gemuese', 'vermutet'),
-    'Schamiyeh':           ('IMG_1519 2.HEIC', 'Ein quadratisch gefaltetes Gebaeck mit Kaese und gruenen Kraeutern', 'vermutet'),
-    'Frischkäse':          ('IMG_1513 2.HEIC', 'Eine geschlossene halbmondfoermige Teigtasche', 'vermutet'),
-    'Schaorma Roll':       ('IMG_1505 2.HEIC', 'Eine gefuellte Teigrolle mit drei Einschnitten', 'vermutet'),
-    'Fahita':              ('IMG_1525 2.HEIC', 'Ein runder Fladen mit Kartoffelwuerfeln, Paprika und Tomate', 'vermutet'),
-    'Hackfleisch & Gemüse': ('IMG_1521 2.HEIC', 'Ein offenes Schiffchen mit Hackfleisch, aus einem anderen Blickwinkel', 'vermutet'),
+    'Zaatar':               ('IMG_1507 2.HEIC', 'Ein runder Fladen, dunkel mit Zaatar bestrichen und dicht mit Sesam bestreut', 'sicher'),
+    'Muhammara':            ('IMG_1508 2.HEIC', 'Ein runder Fladen mit roter Paprikapaste und Sesam in der Mitte', 'sicher'),
+    'Schamiyeh':            ('IMG_1519 2.HEIC', 'Ein quadratisch gefaltetes Gebaeck mit Kaese und gruenen Kraeutern', 'sicher'),
+    'Hackfleisch & Gemüse': ('IMG_1515 2.HEIC', 'Ein offenes Schiffchen aus Teig mit Hackfleisch und Gemuese', 'sicher'),
+    'Hackfleisch':          ('IMG_1521 2.HEIC', 'Ein offenes Schiffchen aus Teig mit Hackfleisch und Granatapfelreduktion', 'sicher'),
+    'Mexicano Roll':        ('IMG_1505 2.HEIC', 'Eine gefuellte Teigrolle mit drei Einschnitten', 'sicher'),
+    'Sucuk':                ('IMG_1511 2.HEIC', 'Eine lange, geschlossene Teigrolle mit Sucuk, mit Sesam bestreut', 'sicher'),
+    'Toschka':              ('IMG_1527 2.HEIC', 'Ein runder Fladen mit Hackfleisch und vier Wuerfeln Hirtenkaese', 'sicher'),
+    'Groß Käse, scharf':    ('IMG_1509 2.HEIC', 'Ein geschlossenes Schiffchen aus Teig mit Sesam und Schwarzkuemmel', 'seine Angabe'),
+    'Lahmacun':             ('IMG_1535 2.HEIC', 'Ein Lahmacun, duenn ausgerollt und flaechig mit Hackfleisch belegt', 'sicher'),
 }
+# Nur Galerie (Dateiname → Rohbild):  pizza-gemuese IMG_1529 · ricotta-kaese
+# IMG_1513 · kartoffel-kaese IMG_1525 · pizza IMG_1531 · mexicano-scharf
+# IMG_1523 · kaeseschiff IMG_1533.
 
 
 def schluessel(name: str) -> str:
@@ -181,7 +176,6 @@ if __name__ == '__main__':
     # Produktbildern … so wie bei der Speisekarte, von links nach rechts."
     # Sie bekommt KEINE eigenen Dateien: dasselbe Bild zweimal auszuliefern
     # waere anderthalb Megabyte fuer nichts.
-    (WURZEL / 'inhalt' / 'produktgalerie.json').write_text(
-        json.dumps(galerie, ensure_ascii=False, indent=1) + '\n')
+    # produktgalerie.json wird seit dem 21.09. von Hand gepflegt — nicht ueberschreiben.
     print(f'\n{gesetzt} von 22 Gerichten haben jetzt ein Bild.')
     print(f'{len(galerie)} davon stehen auch in der Produktgalerie.')

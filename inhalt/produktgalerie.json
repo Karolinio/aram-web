@@ -2,112 +2,112 @@
  {
   "datei": "zaatar",
   "titel": "Zaatar",
-  "nr": 1,
+  "nr": null,
   "breite": 1000,
   "hoehe": 750
  },
  {
   "datei": "muhammara",
   "titel": "Muhammara",
-  "nr": 2,
+  "nr": null,
   "breite": 1000,
   "hoehe": 750
  },
  {
-  "datei": "lange-kaese",
-  "titel": "Lange Käse",
-  "nr": 3,
+  "datei": "kaeseschiff",
+  "titel": "Käseschiff",
+  "nr": null,
   "breite": 1000,
   "hoehe": 750
  },
  {
-  "datei": "doppelt-kaese",
-  "titel": "Doppelt Käse",
-  "nr": 4,
+  "datei": "sucuk",
+  "titel": "Sucuk",
+  "nr": null,
+  "breite": 1000,
+  "hoehe": 750
+ },
+ {
+  "datei": "mexicano-scharf",
+  "titel": "Mexicano scharf",
+  "nr": null,
   "breite": 1000,
   "hoehe": 750
  },
  {
   "datei": "schamiyeh",
   "titel": "Schamiyeh",
-  "nr": 5,
+  "nr": null,
   "breite": 1000,
   "hoehe": 750
  },
  {
-  "datei": "oliven",
-  "titel": "Oliven",
-  "nr": 8,
+  "datei": "pizza-gemuese",
+  "titel": "Pizza Gemüse",
+  "nr": null,
   "breite": 1000,
   "hoehe": 750
  },
  {
-  "datei": "frischkaese",
-  "titel": "Frischkäse",
-  "nr": 9,
+  "datei": "ricotta-kaese",
+  "titel": "Ricotta Käse",
+  "nr": null,
   "breite": 1000,
   "hoehe": 750
  },
  {
-  "datei": "hackfleisch-und-gemuese",
-  "titel": "Hackfleisch & Gemüse",
-  "nr": 10,
+  "datei": "hackfleisch-granatapfel",
+  "titel": "Hackfleisch mit Granatapfelsirup",
+  "nr": null,
   "breite": 1000,
   "hoehe": 750
  },
  {
-  "datei": "hackfleisch",
-  "titel": "Hackfleisch",
-  "nr": 11,
+  "datei": "hackfleisch-gemuese",
+  "titel": "Hackfleisch mit Gemüse",
+  "nr": null,
   "breite": 1000,
   "hoehe": 750
  },
  {
-  "datei": "schaorma-roll",
-  "titel": "Schaorma Roll",
-  "nr": 13,
+  "datei": "mexicano-roll",
+  "titel": "Mexicano Roll",
+  "nr": null,
   "breite": 1000,
   "hoehe": 750
  },
  {
-  "datei": "fahita",
-  "titel": "Fahita",
-  "nr": 14,
+  "datei": "kartoffel-kaese",
+  "titel": "Kartoffel Käse",
+  "nr": null,
   "breite": 1000,
   "hoehe": 750
  },
  {
   "datei": "toschka",
   "titel": "Toschka",
-  "nr": 18,
+  "nr": null,
   "breite": 1000,
   "hoehe": 750
  },
  {
   "datei": "gross-kaese-scharf",
   "titel": "Groß Käse, scharf",
-  "nr": 20,
+  "nr": null,
   "breite": 1000,
   "hoehe": 750
  },
  {
-  "datei": "gross-kaese-gemuese",
-  "titel": "Groß Käse, Gemüse",
-  "nr": 21,
+  "datei": "pizza",
+  "titel": "Pizza",
+  "nr": null,
   "breite": 1000,
   "hoehe": 750
  },
  {
   "datei": "lahmacun",
   "titel": "Lahmacun",
-  "nr": 22,
-  "breite": 1000,
-  "hoehe": 750
- },
- {
-  "datei": "lahmacun-mit-zwiebeln",
-  "titel": "Lahmacun mit Zwiebeln",
-  "nr": 22,
+  "nr": null,
   "breite": 1000,
   "hoehe": 750
  }

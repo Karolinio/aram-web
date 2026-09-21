@@ -1,7 +1,8 @@
-import galerieRoh from '../inhalt/galerie.json'
+import produktRoh from '../inhalt/produktgalerie.json'
 
 /**
- * Wie viele Bögen EIN Durchlauf der Arkade hat.
+ * Wie viele Bögen EIN Durchlauf der Arkade hat. Seit dem 21.09. gibt es nur
+ * noch die Produkt-Arkade; die Betriebs-Arkade ist ausgebaut.
  *
  * Steht hier und nicht in Galerie.tsx, weil zwei Stellen ihn brauchen: die
  * Komponente, um die Liste zweimal auszugeben, und `ziehen.ts`, um den
@@ -9,4 +10,4 @@ import galerieRoh from '../inhalt/galerie.json'
  * nächsten Bild auseinander — und der Sprung des Bandes läge dann sichtbar
  * mitten in einem Bogen.
  */
-export const BILDER_JE_SATZ = (galerieRoh as unknown[]).length
+export const BILDER_JE_SATZ = (produktRoh as unknown[]).length

@@ -7,6 +7,40 @@ weiterzubauen.
 
 ---
 
+## 21.09. — Nach dem Treffen: Beschriftungen, Nummern, Kritik vom Domain-Mann
+
+Arfan und sein Partner: „super". Sein früherer Domain-/Website-Mann (hat
+arampizzeria-bonn.de gebaut, hat den Hostinger-Zugang) am Telefon: weniger
+Animation („wirkt wie Baustelle, langsamer"), KI-Bilder kennzeichnen
+(„sonst 25.000 €"), will „die HTML". Karol will heute an ihn übergeben.
+
+- **Produktgalerie ohne Nummern** (Galerie.tsx) — Arfan: „Erstes, Zweites …
+  gibt es nicht mehr." Nummern bleiben nur in der Karte.
+- **Foto 3 ist Sucuk, nicht Lange Käse** → Datei `sucuk.webp`, in der Karte
+  hängt es jetzt an 16 Sucuk; 3 Lange Käse ohne Foto.
+- **Foto 4 zeigt „Mexicano scharf"**, nicht Doppelt Käse → `mexicano-scharf.webp`,
+  in der Galerie unter dem Namen; **an keinem Karteneintrag** (gibt es auf
+  der Karte nicht — Karte stammt von seiner alten Seite, Juni 2026).
+- Arfans Beschriftungen, Galerie UND Karte festgezurrt. Dateien heißen,
+  was sie zeigen (`pizza-gemuese`, `ricotta-kaese`, `hackfleisch-granatapfel`,
+  `hackfleisch-gemuese`, `mexicano-roll`, `kartoffel-kaese`, `pizza`,
+  `mexicano-scharf`, `sucuk`, neu `kaeseschiff` aus IMG_1533). Galerie: 16
+  Bögen, keine Nummern, Lahmacun mit Zwiebeln raus. Karte hat ein Foto NUR
+  dort, wo Galerie-Name und Karteneintrag dasselbe Gericht sind (10 Foto:
+  1, 2, 5, 10, 11, 15, 16, 18, 20, 22); 8/9/13/14/21 ohne Foto, weil ihre
+  alten Fotos andere Gerichte zeigen. `kartenbilder.py` schreibt die
+  Galerie nicht mehr; ZUORDNUNG = nur noch Kartengerichte.
+- **Obere Arkade raus, mit Bildern:** public/bilder/galerie/, galerie.json,
+  galeriebilder.py gelöscht. `galeriemass.ts` zählt jetzt die Produktgalerie.
+- Fußzeile: KI-Satz sagt jetzt ausdrücklich, dass alle Gerichte echte Fotos
+  sind; erzeugt sind nur Dampf und drei Teigstufen.
+- **Lighthouse mobil (live, 21.09.): Performance 27**, TBT 6,3 s, LCP 7,5 s,
+  Script-Auswertung 9 s bei 4×-Drossel, 20 lange Tasks (seite-*.js,
+  bausteine-*.js, ScrollTrigger). Der Domain-Mann hat mit „langsamer" recht.
+  Bytes sind nicht das Problem (2,7 MB gesamt, 436 kB JS), die Startarbeit
+  ist es. Offen: profilieren, was beim Start rechnet (Verdacht: Vermessen
+  der Bühne/Kurven, Mehlstaub, Saat), und am Handy Dekor abschalten.
+
 ## 13.09. — Startseite ohne Video, Schweif, Kopfzeile mit zwei Wegen
 
 Live auf https://karolinio.github.io/aram-web/ (GitHub Pages, `ARAM_BASIS=/aram-web/`).

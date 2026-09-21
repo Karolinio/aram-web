@@ -14,7 +14,7 @@ import './stile/bausteine.css'
 import './stile/sektionen.css'
 
 import Kopfzeile from './komponenten/Kopfzeile.tsx'
-import Galerie, { Produktgalerie } from './komponenten/Galerie.tsx'
+import { Produktgalerie } from './komponenten/Galerie.tsx'
 import Handarbeit from './komponenten/Handarbeit.tsx'
 import Reise from './komponenten/Reise.tsx'
 import Karte from './komponenten/Karte.tsx'
@@ -172,11 +172,10 @@ function Seite() {
             bevor es aufreisst. Vorher lag der Riss unmittelbar nach der ersten
             Sektion — ein Höhepunkt nach zwei Bildschirmhöhen ist kein
             Höhepunkt. */}
-        <Galerie />
-
-        {/* Die zweite Arkade: je EIN Gericht statt des Betriebs.
-            Sie steht direkt hinter der ersten und vor der Karte — wer die
-            Produkte gesehen hat, will als Naechstes die Preise. */}
+        {/* ═══ Die Betriebs-Arkade („Was an einem Morgen entsteht") ist RAUS ═══
+            Arfan/Karol am 21.09.: „komplett raus, ehrlich." Zehn Betriebsfotos,
+            drei davon doppelten „Der Laden", und zwei Bänder hintereinander
+            waren am Handy zu viel. Es bleibt EINE Arkade: je ein Gebäck. */}
         <Produktgalerie />
 
         {/* Der letzte Takt der Reise: hier reisst das Käseschiff auseinander. */}
