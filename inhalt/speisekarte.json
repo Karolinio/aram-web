@@ -1,7 +1,7 @@
 [
  {
   "gruppe": "Orientalisches Gebäck, Fata'er",
-  "hinweis": "Wir backen mit Weizenmehl. Jede Sorte mit Hirtenkäse aus Kuhmilch.",
+  "hinweis": "Wir backen mit Weizenmehl. Jede Sorte mit Hirtenkäse aus Kuhmilch. Mini-Fata'er für Partys: Stück 1,00 €.",
   "gerichte": [
    {
     "nr": 1,
@@ -30,13 +30,24 @@
     ],
     "bild": {
      "quelle": "/bilder/karte/muhammara.webp",
-     "alt": "Ein runder Fladen mit roter Paprikapaste und Sesam in der Mitte",
+     "alt": "Ein runder Fladen mit roter Paprikapaste und Sesam",
      "breite": 1000,
      "hoehe": 750
     }
    },
    {
     "nr": 3,
+    "name": "Muhammara mit Gouda",
+    "beschreibung": "Scharfe Paprikapaste, Sesam, Olivenöl, Gewürze, Granatapfelreduktion, Goudakäse",
+    "preis": 2.5,
+    "allergene": [
+     "Gluten",
+     "Sesam",
+     "Milch"
+    ]
+   },
+   {
+    "nr": 4,
     "name": "Lange Käse",
     "beschreibung": "Käse, Sesam",
     "preis": 2,
@@ -47,36 +58,89 @@
     ]
    },
    {
-    "nr": 4,
-    "name": "Doppelt Käse",
-    "beschreibung": "Käse, Minze, Paprika",
-    "preis": 3,
+    "nr": 5,
+    "name": "Käse mit Gouda",
+    "beschreibung": "",
+    "preis": 2,
     "allergene": [
      "Gluten",
+     "Sesam",
      "Milch"
     ]
    },
    {
-    "nr": 5,
-    "name": "Schamiyeh",
+    "nr": 6,
+    "name": "Schamiye",
     "beschreibung": "Käse, Petersilie, Eier, Butter",
     "preis": 2,
     "allergene": [
      "Gluten",
      "Milch",
-     "Ei"
+     "Eier",
+     "Sesam"
     ],
     "bild": {
      "quelle": "/bilder/karte/schamiyeh.webp",
-     "alt": "Ein quadratisch gefaltetes Gebaeck mit Kaese und gruenen Kraeutern",
+     "alt": "Ein quadratisch gefaltetes Gebäck mit Käse und grünen Kräutern",
      "breite": 1000,
      "hoehe": 750
     }
    },
    {
-    "nr": 6,
+    "nr": 7,
     "name": "Beirut",
     "beschreibung": "Käse, Minze",
+    "preis": 2,
+    "allergene": [
+     "Gluten",
+     "Milch",
+     "Eier",
+     "Sesam"
+    ]
+   },
+   {
+    "nr": 8,
+    "name": "Frischkäse",
+    "beschreibung": "Frischkäse, Würzmischung, Zwiebeln",
+    "preis": 2,
+    "allergene": [
+     "Gluten",
+     "Sesam",
+     "Milch"
+    ]
+   },
+   {
+    "nr": 9,
+    "name": "Ricotta Käse",
+    "beschreibung": "Lauchzwiebeln und Petersilie",
+    "preis": 2,
+    "allergene": [
+     "Gluten",
+     "Sesam",
+     "Milch"
+    ],
+    "bild": {
+     "quelle": "/bilder/karte/ricotta-kaese.webp",
+     "alt": "Eine geschlossene, halbmondförmige Teigtasche",
+     "breite": 1000,
+     "hoehe": 750
+    }
+   },
+   {
+    "nr": 10,
+    "name": "Doppelt Käse",
+    "beschreibung": "Käse, Minze, Paprika",
+    "preis": 3,
+    "allergene": [
+     "Gluten",
+     "Milch",
+     "Eier"
+    ]
+   },
+   {
+    "nr": 11,
+    "name": "Oliven",
+    "beschreibung": "Grüne Oliven, Muhammara, Granatapfelreduktion",
     "preis": 2,
     "allergene": [
      "Gluten",
@@ -84,7 +148,7 @@
     ]
    },
    {
-    "nr": 7,
+    "nr": 12,
     "name": "Spinat",
     "beschreibung": "Spinat, Zwiebeln, Paprika, Zitrone, Sumach",
     "preis": 2,
@@ -93,28 +157,37 @@
     ]
    },
    {
-    "nr": 8,
-    "name": "Oliven",
-    "beschreibung": "Grüne Oliven, Muhammara, Granatapfelreduktion",
-    "preis": 2,
-    "allergene": [
-     "Gluten"
-    ]
-   },
-   {
-    "nr": 9,
-    "name": "Frischkäse",
-    "beschreibung": "Frischkäse, Würzmischung, Zwiebeln",
+    "nr": 13,
+    "name": "Sucuk Roll",
+    "beschreibung": "Hackfleisch, Gewürze, Knoblauch, Chili",
     "preis": 2,
     "allergene": [
      "Gluten",
      "Milch"
+    ],
+    "bild": {
+     "quelle": "/bilder/karte/sucuk.webp",
+     "alt": "Eine lange, geschlossene Teigrolle mit Sesam",
+     "breite": 1000,
+     "hoehe": 750
+    }
+   },
+   {
+    "nr": 14,
+    "name": "Sucuk mit Gouda",
+    "beschreibung": "Sucuk mit Goudakäse",
+    "preis": 3,
+    "allergene": [
+     "Gluten",
+     "Milch",
+     "Eier",
+     "Sesam"
     ]
    },
    {
-    "nr": 10,
-    "name": "Hackfleisch & Gemüse",
-    "beschreibung": "Hackfleisch, Tomaten, Zwiebeln, Paprika, Minze, Petersilie, Knoblauch",
+    "nr": 15,
+    "name": "Hackfleisch mit Gemüse",
+    "beschreibung": "Mit Hackfleisch, Tomaten, Paprika, Minze, Petersilie, Knoblauch",
     "preis": 2,
     "allergene": [
      "Gluten"
@@ -127,9 +200,9 @@
     }
    },
    {
-    "nr": 11,
-    "name": "Hackfleisch",
-    "beschreibung": "Zwiebeln, Granatapfelreduktion",
+    "nr": 16,
+    "name": "Hackfleisch mit Granatapfelsirup",
+    "beschreibung": "Mit Zwiebeln, Granatapfelreduktion",
     "preis": 2,
     "allergene": [
      "Gluten"
@@ -142,69 +215,31 @@
     }
    },
    {
-    "nr": 13,
-    "name": "Schaorma Roll",
-    "beschreibung": "Teigrolle mit Dönerfleisch, Mayo, Petersilie, Knoblauch",
-    "preis": 3,
-    "allergene": [
-     "Gluten",
-     "Ei"
-    ]
-   },
-   {
-    "nr": 14,
-    "name": "Fahita",
-    "beschreibung": "Hühnchenbrust, Paprika, Zwiebeln, Champignons",
-    "preis": 2,
-    "allergene": [
-     "Gluten",
-     "Ei"
-    ]
-   },
-   {
-    "nr": 15,
-    "name": "Mexicano Roll",
-    "beschreibung": "Hühnchenbrust, Paprika, Zwiebeln, Champignons, Mais, Senf, Mayonnaise",
-    "preis": 2.5,
-    "allergene": [
-     "Gluten",
-     "Ei",
-     "Senf"
-    ],
-    "bild": {
-     "quelle": "/bilder/karte/mexicano-roll.webp",
-     "alt": "Eine gefüllte Teigrolle mit drei Einschnitten",
-     "breite": 1000,
-     "hoehe": 750
-    }
-   },
-   {
-    "nr": 16,
-    "name": "Sucuk",
-    "beschreibung": "Hackfleisch, Gewürze, Olivenöl, Chili",
+    "nr": 17,
+    "name": "Lahmacun Hackfleisch mit Gemüse",
+    "beschreibung": "Mit Gemüse und Hackfleisch",
     "preis": 2,
     "allergene": [
      "Gluten"
     ],
     "bild": {
-     "quelle": "/bilder/karte/sucuk.webp",
-     "alt": "Eine lange, geschlossene Teigrolle mit Sucuk, mit Sesam bestreut",
+     "quelle": "/bilder/karte/lahmacun.webp",
+     "alt": "Ein Lahmacun, dünn ausgerollt und flächig mit Hackfleisch belegt",
      "breite": 1000,
      "hoehe": 750
     }
    },
    {
-    "nr": 17,
-    "name": "Sucuk mit Käse",
-    "beschreibung": "Sucuk mit Käse",
-    "preis": 3,
+    "nr": 18,
+    "name": "Lahmacun mit Granatapfelsirup",
+    "beschreibung": "Zwiebeln, Granatapfelreduktion",
+    "preis": 2.5,
     "allergene": [
-     "Gluten",
-     "Milch"
+     "Gluten"
     ]
    },
    {
-    "nr": 18,
+    "nr": 19,
     "name": "Toschka",
     "beschreibung": "Hackfleisch, Käse, Gemüse, Gewürze",
     "preis": 3,
@@ -214,13 +249,55 @@
     ],
     "bild": {
      "quelle": "/bilder/karte/toschka.webp",
-     "alt": "Ein runder Fladen mit Hackfleisch und vier Wuerfeln Hirtenkaese",
+     "alt": "Ein runder Fladen mit Hackfleisch und vier Würfeln Hirtenkäse",
      "breite": 1000,
      "hoehe": 750
     }
    },
    {
-    "nr": 19,
+    "nr": 20,
+    "name": "Schaorma Roll",
+    "beschreibung": "Teigrolle mit Dönerfleisch, Mayo, Petersilie, Knoblauch",
+    "preis": 3,
+    "allergene": [
+     "Gluten",
+     "Eier"
+    ]
+   },
+   {
+    "nr": 21,
+    "name": "Mexicano scharf",
+    "beschreibung": "Hähnchenbrust, Paprika, Zwiebeln und Champignons",
+    "preis": 2,
+    "allergene": [
+     "Gluten",
+     "Eier"
+    ],
+    "bild": {
+     "quelle": "/bilder/karte/mexicano-scharf.webp",
+     "alt": "Ein quadratisch gefaltetes Gebäck mit gelber Füllung",
+     "breite": 1000,
+     "hoehe": 750
+    }
+   },
+   {
+    "nr": 22,
+    "name": "Mexicano Roll",
+    "beschreibung": "Hähnchenbrust, Paprika, Zwiebeln, Champignons, Mais, Senf und Mayonnaise",
+    "preis": 2.5,
+    "allergene": [
+     "Gluten",
+     "Eier"
+    ],
+    "bild": {
+     "quelle": "/bilder/karte/mexicano-roll.webp",
+     "alt": "Eine gefüllte Teigrolle mit drei Einschnitten",
+     "breite": 1000,
+     "hoehe": 750
+    }
+   },
+   {
+    "nr": 23,
     "name": "Gemüse Käse",
     "beschreibung": "Gemüse, Käse",
     "preis": 3,
@@ -230,54 +307,62 @@
     ]
    },
    {
-    "nr": 20,
-    "name": "Groß Käse, scharf",
-    "beschreibung": "Hirtenkäse",
+    "nr": 24,
+    "name": "Lange Käse mit Paprikapaste",
+    "beschreibung": "Käse, Sesam, Paprikapaste",
+    "preis": 3,
+    "allergene": [
+     "Gluten",
+     "Sesam",
+     "Milch"
+    ]
+   },
+   {
+    "nr": 25,
+    "name": "Lange Käse mit Gemüse",
+    "beschreibung": "Käse, Sesam, Gemüse",
+    "preis": 3,
+    "allergene": [
+     "Gluten",
+     "Sesam",
+     "Milch"
+    ]
+   },
+   {
+    "nr": 26,
+    "name": "Kartoffeln mit Käse und Gemüse",
+    "beschreibung": "Mit Kartoffeln, Gemüse und Käse",
     "preis": 3,
     "allergene": [
      "Gluten",
      "Milch"
     ],
     "bild": {
-     "quelle": "/bilder/karte/gross-kaese-scharf.webp",
-     "alt": "Ein geschlossenes Schiffchen aus Teig mit Sesam und Schwarzkuemmel",
+     "quelle": "/bilder/karte/kartoffel-kaese.webp",
+     "alt": "Ein runder Fladen mit Kartoffelwürfeln, Paprika und Tomate",
      "breite": 1000,
      "hoehe": 750
     }
    },
    {
-    "nr": 21,
-    "name": "Groß Käse, Gemüse",
-    "beschreibung": "Käse und Gemüse",
+    "nr": 27,
+    "name": "Pizza mit Gemüse",
+    "beschreibung": "Tomaten mit Gemüse",
     "preis": 3,
     "allergene": [
      "Gluten",
      "Milch"
-    ]
-   },
-   {
-    "nr": 22,
-    "name": "Lahmacun",
-    "beschreibung": "Gemüse und Hackfleisch",
-    "preis": 2,
-    "allergene": [
-     "Gluten"
+    ],
+    "zusatzstoffe": [
+     "Farbstoff",
+     "Süßstoff"
     ],
     "bild": {
-     "quelle": "/bilder/karte/lahmacun.webp",
-     "alt": "Ein Lahmacun, duenn ausgerollt und flaechig mit Hackfleisch belegt",
+     "quelle": "/bilder/karte/pizza-gemuese.webp",
+     "alt": "Ein runder Fladen mit grünen Oliven, Tomatenwürfeln und Hirtenkäse",
      "breite": 1000,
      "hoehe": 750
     }
-   },
-   {
-    "nr": 22,
-    "name": "Lahmacun mit Zwiebeln",
-    "beschreibung": "Zwiebeln, Granatapfelreduktion",
-    "preis": 2.5,
-    "allergene": [
-     "Gluten"
-    ]
    }
   ]
  },
@@ -286,8 +371,8 @@
   "hinweis": "Wir backen mit Weizenmehl.",
   "gerichte": [
    {
-    "nr": 41,
-    "name": "Zaatar",
+    "nr": 30,
+    "name": "Manakisch Zaatar",
     "beschreibung": "Sesam, Olivenöl, Würzmischung mit Thymian",
     "preis": 3.5,
     "allergene": [
@@ -296,7 +381,7 @@
     ]
    },
    {
-    "nr": 42,
+    "nr": 31,
     "name": "Muhammara",
     "beschreibung": "Scharfe Paprikapaste, Sesam, Olivenöl, Gewürze, Granatapfelreduktion",
     "preis": 3.5,
@@ -306,7 +391,18 @@
     ]
    },
    {
-    "nr": 43,
+    "nr": 32,
+    "name": "Muhammara mit Gouda",
+    "beschreibung": "Scharfe Paprikapaste, Sesam, Olivenöl, Gewürze, Granatapfelreduktion, Goudakäse",
+    "preis": 5,
+    "allergene": [
+     "Gluten",
+     "Sesam",
+     "Milch"
+    ]
+   },
+   {
+    "nr": 33,
     "name": "Käse",
     "beschreibung": "Hirtenkäse aus Kuhmilch",
     "preis": 5,
@@ -316,7 +412,7 @@
     ]
    },
    {
-    "nr": 44,
+    "nr": 34,
     "name": "Manakisch-Mix",
     "beschreibung": "Käse, Würzmischung mit Thymian, scharfe Paprikapaste",
     "preis": 5,
@@ -327,7 +423,7 @@
     ]
    },
    {
-    "nr": 45,
+    "nr": 35,
     "name": "Hackfleisch",
     "beschreibung": "Hackfleisch und Gemüse",
     "preis": 5,
@@ -336,8 +432,8 @@
     ]
    },
    {
-    "nr": 46,
-    "name": "Gemüse Manakisch",
+    "nr": 36,
+    "name": "Gemüse mit Käse",
     "beschreibung": "Käse und Gemüse",
     "preis": 5,
     "allergene": [
@@ -347,7 +443,7 @@
     ]
    },
    {
-    "nr": 48,
+    "nr": 37,
     "name": "Spinat",
     "beschreibung": "Spinat, Zwiebeln, Paprika, Zitrone, Sumach",
     "preis": 5,
@@ -356,10 +452,21 @@
     ]
    },
    {
-    "nr": 49,
+    "nr": 38,
     "name": "Sucuk",
     "beschreibung": "Hackfleisch, Gewürze, Käse",
     "preis": 5,
+    "allergene": [
+     "Gluten",
+     "Eier",
+     "Sesam"
+    ]
+   },
+   {
+    "nr": 39,
+    "name": "Sucuk Spezial",
+    "beschreibung": "Hackfleisch, Käse, Gewürze, Tomaten",
+    "preis": 7,
     "allergene": [
      "Gluten",
      "Eier",
@@ -577,6 +684,60 @@
      "Farbstoff",
      "Süßstoff"
     ]
+   }
+  ]
+ },
+ {
+  "gruppe": "Getränke",
+  "hinweis": "",
+  "gerichte": [
+   {
+    "name": "Coca-Cola, Fanta, Sprite",
+    "beschreibung": "",
+    "preis": 2,
+    "allergene": []
+   },
+   {
+    "name": "Mezzo Mix",
+    "beschreibung": "",
+    "preis": 2,
+    "allergene": []
+   },
+   {
+    "name": "Coca-Cola, Zero, light (0,5 l)",
+    "beschreibung": "",
+    "preis": 2.5,
+    "allergene": []
+   },
+   {
+    "name": "Fanta, Sprite, Ice Tea Fuze",
+    "beschreibung": "",
+    "preis": 2.5,
+    "allergene": []
+   },
+   {
+    "name": "Capri-Sonne",
+    "beschreibung": "",
+    "preis": 1,
+    "allergene": []
+   },
+   {
+    "name": "Vio still",
+    "beschreibung": "Wasser",
+    "preis": 2,
+    "allergene": []
+   },
+   {
+    "name": "Schwarzer Tee",
+    "beschreibung": "",
+    "preis": 1,
+    "allergene": []
+   },
+   {
+    "name": "Ayran",
+    "beschreibung": "",
+    "preis": 1.5,
+    "allergene": []
    }
   ]
  }

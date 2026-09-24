@@ -299,11 +299,17 @@ export default function Karte() {
                             )}
                           </p>
                         </div>
-                        <p className="zeile__beschreibung">{g.beschreibung}</p>
-                        <p className="zeile__allergene">
-                          <span className="visuell-versteckt">Enthält: </span>
-                          {[...g.allergene, ...(g.zusatzstoffe ?? [])].join(' · ')}
-                        </p>
+                        {/* Seit dem Flyer vom 24.09. gibt es Einträge ohne
+                            Beschreibung (Käse mit Gouda) und ohne Allergene
+                            (Getränke). Eine leere Zeile wäre Luft, die nach
+                            vergessenem Text aussieht. */}
+                        {g.beschreibung && <p className="zeile__beschreibung">{g.beschreibung}</p>}
+                        {(g.allergene.length > 0 || (g.zusatzstoffe?.length ?? 0) > 0) && (
+                          <p className="zeile__allergene">
+                            <span className="visuell-versteckt">Enthält: </span>
+                            {[...g.allergene, ...(g.zusatzstoffe ?? [])].join(' · ')}
+                          </p>
+                        )}
                       </div>
 
                       <div className="zaehler">

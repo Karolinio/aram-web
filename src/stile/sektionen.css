@@ -2408,6 +2408,22 @@
 
 .gruppe { margin-bottom: clamp(2.5rem, 4vw, 3.5rem); }
 
+/**
+ * ═══ Jede Gruppe ist ein Kapitel (24.09.) ═══
+ *
+ * Karol am Handy: „22 Lahmacun, 41 Zaatar, 43 Käse, 61 Margherita — warum
+ * ist das so?" Die Überschrift war am Handy KLEINER als die Gerichtnamen
+ * (1,5 rem gegen rund 2 rem), und so las sich jeder Gruppenwechsel als
+ * Zahlensprung. Ab der zweiten Gruppe trennt jetzt ein dunkler Strich über
+ * die ganze Breite, mit Luft davor, und die Überschrift ist deutlich
+ * grösser als jedes Gericht darunter.
+ */
+.gruppe + .gruppe {
+  margin-top: clamp(1.5rem, 3vw, 2.5rem);
+  padding-top: clamp(1.75rem, 3vw, 2.5rem);
+  border-top: 3px solid color-mix(in oklch, var(--ton-tief) 80%, transparent);
+}
+
 /* Vorher: Versalien, 0,16em gesperrt, 2px-Balken darunter — eine gedruckte
    Karte von 1995. Jetzt trägt die Schrift selbst den Ton: Fraunces, gross,
    normale Schreibweise, und eine Haarlinie statt eines Balkens. */
@@ -2415,7 +2431,7 @@
   /* Boden bei 1,5 rem statt 1,4: die Überschrift steht auf Orange in Weiss,
      und Weiss trägt dort erst ab 24 px. Bei 1,4 rem waren es am Handy 22,4 —
      dieselbe Rechnung wie bei --text-gericht. */
-  font-size: clamp(1.5rem, 1.1rem + 1.1vw, 1.9rem);
+  font-size: clamp(2.25rem, 1.7rem + 1.8vw, 3rem);
   font-weight: 600;
   font-variation-settings: var(--wonk-kopf);
   letter-spacing: -0.01em;

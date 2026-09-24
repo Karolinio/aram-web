@@ -7,6 +7,30 @@ weiterzubauen.
 
 ---
 
+## 24.09. — Karte nach dem AKTUELLEN Flyer, Blech-Bilder in der Galerie
+
+Karol hat vier Fotos von Arfans aktuellem Flyer geschickt (~/Downloads/
+IMG_2929–2932.HEIC). **Das ist eine andere Karte als die alte Seite** und
+erklärt alle Namen, die Arfan beim Treffen genannt hat.
+
+- Karte neu: Fata'er **01–27** (u. a. Muhammara/Käse/Sucuk mit Gouda,
+  Ricotta Käse, Hackfleisch mit Granatapfelsirup, Mexicano scharf, Lange
+  Käse mit Paprikapaste/Gemüse, Kartoffeln mit Käse und Gemüse, Pizza mit
+  Gemüse; Fahita und Groß Käse sind WEG), Manakisch **30–39** (neu: Sucuk
+  Spezial 7 €), Pizza 61–75 unverändert, **Getränke** neu (ohne Nummern).
+  59 Einträge, 13 mit Foto. Wortlaut wie gedruckt; „39 Sucuk Spezial …
+  Tomaten und beizen" — „beizen" weggelassen, unleserlich/Druckfehler.
+- Gruppenüberschrift jetzt Kapitel: 3-px-Strich + grösser als Gerichte.
+- Galerie 23 Bögen: 16 Einzelprodukte (Namen wie Flyer), danach sieben
+  Blech-/Tischbilder aus dem August-Ordner mit BESCHREIBENDEN Zeilen, kein
+  Gerichtname geraten (Nr 35, 43, 32, 34, 38, 41, 25 → `blech-*`). Nr 9 =
+  Dublette von 34.
+- Flyer bestätigt: WhatsApp = 0177 4637662, Festnetz 0228 18034488,
+  Mo Ruhetag, Di–So 8–19, Parkplatz Auf der Urdel; das Oliven-Kranz-Logo
+  steht auf dem Flyer (also echt, neben dem Cartoon-Logo).
+- Offen bei Arfan: Name des Titelgebäcks (Flyer-Vorderseite = Nr 41),
+  Käseschiff = 04 Lange Käse?, „Pizza" in der Galerie = 23 Gemüse Käse?
+
 ## 21.09. — Nach dem Treffen: Beschriftungen, Nummern, Kritik vom Domain-Mann
 
 Arfan und sein Partner: „super". Sein früherer Domain-/Website-Mann (hat

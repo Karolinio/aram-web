@@ -22,7 +22,7 @@
  },
  {
   "datei": "sucuk",
-  "titel": "Sucuk",
+  "titel": "Sucuk Roll",
   "nr": null,
   "breite": 1000,
   "hoehe": 750
@@ -36,14 +36,14 @@
  },
  {
   "datei": "schamiyeh",
-  "titel": "Schamiyeh",
+  "titel": "Schamiye",
   "nr": null,
   "breite": 1000,
   "hoehe": 750
  },
  {
   "datei": "pizza-gemuese",
-  "titel": "Pizza Gemüse",
+  "titel": "Pizza mit Gemüse",
   "nr": null,
   "breite": 1000,
   "hoehe": 750
@@ -78,7 +78,7 @@
  },
  {
   "datei": "kartoffel-kaese",
-  "titel": "Kartoffel Käse",
+  "titel": "Kartoffeln mit Käse und Gemüse",
   "nr": null,
   "breite": 1000,
   "hoehe": 750
@@ -107,6 +107,55 @@
  {
   "datei": "lahmacun",
   "titel": "Lahmacun",
+  "nr": null,
+  "breite": 1000,
+  "hoehe": 750
+ },
+ {
+  "datei": "blech-manakisch-tisch",
+  "titel": "Manakisch mit Zaatar und Käse, zum Tee",
+  "nr": null,
+  "breite": 1000,
+  "hoehe": 750
+ },
+ {
+  "datei": "blech-manakisch-kaese",
+  "titel": "Manakisch mit Käse",
+  "nr": null,
+  "breite": 1000,
+  "hoehe": 750
+ },
+ {
+  "datei": "blech-manakisch-streifen",
+  "titel": "Manakisch vom Blech, direkt vor dem Ofen",
+  "nr": null,
+  "breite": 1000,
+  "hoehe": 750
+ },
+ {
+  "datei": "blech-fatayer",
+  "titel": "Fata'er, frisch vom Brett",
+  "nr": null,
+  "breite": 1000,
+  "hoehe": 750
+ },
+ {
+  "datei": "blech-rollen",
+  "titel": "Gefüllte Rollen vom Blech",
+  "nr": null,
+  "breite": 1000,
+  "hoehe": 750
+ },
+ {
+  "datei": "blech-ofen",
+  "titel": "Frisch aus dem Steinofen",
+  "nr": null,
+  "breite": 1000,
+  "hoehe": 750
+ },
+ {
+  "datei": "blech-sesam",
+  "titel": "Sesamgebäck vor dem Ofen",
   "nr": null,
   "breite": 1000,
   "hoehe": 750
