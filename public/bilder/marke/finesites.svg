@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="finesites">
+  <!--
+    v2, 22.09.2026 — `/f` statt eines Punkts.
+    Ein Punkt allein ist im 16-px-Quadrat ein Fleck; `/f` sind zwei
+    unterscheidbare Formen. Farben und Winkel sind der Standlogo-Frame aus
+    tokens.css v3 (Violett 295 → Magenta 342, 104 Grad), als Pfade gezeichnet,
+    damit das Symbol ohne Schriftdatei auskommt.
+  -->
+  <defs>
+    <linearGradient id="v" x1="0" y1="0" x2="1" y2="0.25">
+      <stop offset="0" stop-color="oklch(46% 0.18 295)"/>
+      <stop offset="0.5" stop-color="oklch(56% 0.19 316)"/>
+      <stop offset="1" stop-color="oklch(62% 0.22 342)"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="oklch(98.2% 0.006 300)"/>
+  <!-- Der Schrägstrich, 16 Grad gekippt wie die Glyphe der Lexend. -->
+  <path d="M22 47 L31 17" stroke="url(#v)" stroke-width="7" stroke-linecap="round" fill="none"/>
+  <!-- Das f: Stamm mit Bogen oben, Querstrich auf x-Höhe. -->
+  <path d="M46 20a6 6 0 0 0-8 5.6V47" stroke="url(#v)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M34 31h12" stroke="url(#v)" stroke-width="6.4" stroke-linecap="round" fill="none"/>
+</svg>

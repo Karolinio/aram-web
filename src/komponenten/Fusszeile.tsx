@@ -88,6 +88,43 @@ export default function Fusszeile() {
         </p>
       </div>
 
+      {/* ═══ Die unterste Leiste: © links, Urheber rechts (25.09.) ═══
+          Karol baut die Seite ohne Honorar; die Gegenleistung ist diese eine
+          Zeile. Form nach Mobbin, wo sie bei Agenturen durchweg gleich aussieht
+          (Current „Designed and built by Logic + Rhythm", Structured „Website
+          by Locomotive", Faculty „Design by Studio Faculty"): EINE Zeile in der
+          untersten Leiste, so gross wie die Rechtslinks, gegenüber vom ©, über
+          einer Haarlinie. Kein grosses Logo — das Signet ist so klein wie ein
+          Favicon, damit die Seite Arams bleibt.
+
+          NICHT ins Impressum: dort steht, wer die Seite BETREIBT, und das ist
+          Arfan. `nofollow`, weil derselbe Fusslink auf vielen Kundenseiten für
+          Google sonst nach Linktausch aussieht — der Wert ist der Klick. */}
+      <div className="schale fuss__leiste">
+        <p className="fuss__recht">
+          © {new Date().getFullYear()} {ARAM.langname}
+        </p>
+        <a
+          className="urheber"
+          href="https://finesites.de"
+          target="_blank"
+          rel="nofollow noopener"
+        >
+          <span className="urheber__vor">Website von</span>
+          <img
+            className="urheber__signet"
+            src={pfad('bilder/marke/finesites.svg')}
+            alt=""
+            width={18}
+            height={18}
+            loading="lazy"
+            decoding="async"
+          />
+          <span className="urheber__name">finesites</span>
+          <span className="visuell-versteckt"> (öffnet in neuem Tab)</span>
+        </a>
+      </div>
+
       {import.meta.env.DEV && offen.length > 0 && (
         <div className="schale">
           <div className="nichtlive">

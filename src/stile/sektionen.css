@@ -5519,3 +5519,60 @@
 }
 
 .fuss__ki { margin-top: 2rem; max-width: 60ch; opacity: .7; font-size: .85rem; }
+
+/* ═══ Unterste Leiste und Urheberzeile ═══ siehe Fusszeile.tsx */
+.fuss__leiste {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 2rem;
+  margin-top: clamp(2rem, 4vw, 3rem);
+  padding-top: 1.25rem;
+  border-top: 1px solid color-mix(in oklch, var(--creme) 14%, transparent);
+  font-size: 0.8125rem;
+  letter-spacing: 0.01em;
+}
+.fuss__recht {
+  margin: 0;
+  max-width: none;
+  color: var(--creme-ruhig);
+}
+.fuss a.urheber {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  /* Trefferfläche 44 px hoch, ohne die Zeile optisch dicker zu machen. */
+  min-height: 44px;
+  margin-block: -0.75rem;
+  color: var(--creme);
+  text-decoration: none;
+}
+.urheber__vor { color: var(--creme-ruhig); }
+.urheber__signet {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  box-shadow: 0 0 0 1px color-mix(in oklch, var(--creme) 18%, transparent);
+  transition: transform var(--duration-fast, 150ms) var(--ease-teig, ease-out);
+}
+.urheber__name {
+  font-weight: 600;
+  letter-spacing: 0;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 0.25em;
+  text-decoration-thickness: 1px;
+  transition: text-decoration-color var(--duration-fast, 150ms) ease-out;
+}
+.fuss a.urheber:hover { color: var(--creme); }
+.fuss a.urheber:hover .urheber__name { text-decoration-color: currentColor; }
+.fuss a.urheber:hover .urheber__signet { transform: translateY(-1px); }
+.fuss a.urheber:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .fuss a.urheber:hover .urheber__signet { transform: none; }
+}
