@@ -114,16 +114,17 @@ export default function Fusszeile() {
               wird eine Signatur wie unter einem Plakat: Vorsatz in Versalien,
               darunter die echte Wortmarke statt des Namens in Aram-Schrift. */}
           <span className="urheber__vor">Gestaltet &amp; gebaut von</span>
+          {/* 25.09., Karol: "das Logo ausgefuellt, kein Weiss mehr" — statt
+              des freigestellten PNGs (weisse Schrift, nur der Strich in
+              Farbe) steht hier jetzt ECHTER Text in derselben Schrift und
+              demselben Verlauf wie auf finesites.de selbst (Lexend 900,
+              --marke-verlauf-Toene): Strich UND Wort in einer Farbe, an
+              jeder Groesse gestochen scharf, kein Bitmap mehr. */}
           <span className="urheber__marke">
-            <img
-              className="urheber__wortmarke"
-              src={pfad('bilder/marke/finesites-wortmarke.webp')}
-              alt="finesites"
-              width={742}
-              height={151}
-              loading="lazy"
-              decoding="async"
-            />
+            <span className="urheber__wortmarke" aria-hidden="true">
+              <span className="urheber__strich">/</span>finesites
+            </span>
+            <span className="visuell-versteckt">finesites</span>
             <span className="urheber__pfeil" aria-hidden="true">↗</span>
           </span>
           <span className="visuell-versteckt"> (öffnet in neuem Tab)</span>

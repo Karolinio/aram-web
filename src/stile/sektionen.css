@@ -5555,14 +5555,52 @@
 }
 .urheber__marke {
   display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
+  align-items: baseline;
+  gap: 0.4rem;
 }
+/* ═══ Derselbe Verlauf wie auf finesites.de (tokens.css --marke-verlauf) ═══
+ * Vier Halbwellen Violett→Magenta→Violett, 400 % breit, in 18 s einmal durch.
+ * Kein Weiss mehr im Wort: Strich und Buchstaben tragen dieselbe Fuellung,
+ * `background-clip: text` schneidet den Verlauf an der Schrift zu. Ruhig am
+ * Handy (`pointer: coarse`) — dieselbe Regel, mit der die Seite dort schon
+ * Zierdekor abschaltet; die Marke steht dort schlicht in der letzten Phase
+ * des Verlaufs (kraeftiges Magenta), statisch und lesbar. */
 .urheber__wortmarke {
-  display: block;
-  height: clamp(1.5rem, 1.2rem + 0.8vw, 1.9rem);
-  width: auto;
-  transition: opacity var(--duration-fast, 150ms) ease-out;
+  display: inline-block;
+  font-family: 'Lexend', var(--font-display), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.045em;
+  font-size: clamp(1.15rem, 0.95rem + 0.7vw, 1.5rem);
+  line-height: 1;
+  background-image: linear-gradient(104deg,
+    oklch(46% 0.18 295) 0%,
+    oklch(56% 0.2 318) 12.5%,
+    oklch(64% 0.22 340) 25%,
+    oklch(56% 0.2 318) 37.5%,
+    oklch(46% 0.18 295) 50%,
+    oklch(56% 0.2 318) 62.5%,
+    oklch(64% 0.22 340) 75%,
+    oklch(56% 0.2 318) 87.5%,
+    oklch(46% 0.18 295) 100%);
+  background-size: 400% 100%;
+  background-position: 92% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: urheber-wandern 18s linear infinite;
+}
+.urheber__strich {
+  /* Lexends Schraegstrich haengt tiefer als die Buchstaben — auf dem echten
+     Signet dieselbe Beobachtung, siehe tokens.css Zeile ~1308. */
+  margin-right: 0.03em;
+}
+@keyframes urheber-wandern {
+  from { background-position: 92% 0; }
+  to   { background-position: -308% 0; }
+}
+@media (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .urheber__wortmarke { animation: none; background-position: 100% 0; }
 }
 .urheber__pfeil {
   font-size: 1rem;
