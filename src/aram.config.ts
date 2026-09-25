@@ -152,7 +152,8 @@ export const ARAM = {
        und muss in der Erklärung stehen — mit Namen und Sitz. Solange es keinen
        Server gibt, gibt es auch keinen Hoster; die Erklärung sagt das offen,
        statt einen zu erfinden. */
-    hoster: null as string | Luecke,
+    /* 25.09.: kommt aus der Bau-Umgebung — siehe HOSTER in vite.config.ts. */
+    hoster: __ARAM_HOSTER__ as string | Luecke,
     /* Für Verbraucherstreitbeilegung: § 36 VSBG verlangt eine Aussage, ob man
        teilnimmt. Die übliche Antwort kleiner Betriebe ist „nein" — aber das
        muss der Betrieb sagen, nicht ich. */

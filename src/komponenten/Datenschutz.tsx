@@ -18,7 +18,7 @@ import Rechtsseite, { Fehlt } from './Rechtsseite.tsx'
  *   sessionStorage     EINER: die Bestellauswahl, siehe bestellung.ts. Sie
  *                      verlässt das Gerät nicht und ist beim Schliessen des
  *                      Tabs weg.
- *   fremde Server      KEINE beim Laden. Beide Schriften liegen auf dem
+ *   fremde Server      KEINE beim Laden. Alle Schriften liegen auf dem
  *                      eigenen Server, es gibt keine Karte, kein Video, kein
  *                      Analysewerkzeug, kein Einwilligungsbanner.
  *   ausgehend          genau eine Adresse: wa.me — und erst, wenn jemand
@@ -70,7 +70,7 @@ export default function Datenschutz() {
         Ausgeliefert wird die Seite von{' '}
         {r.hoster ?? <Fehlt was="Name und Sitz des Hosters" />}. Wie lange dort
         Serverprotokolle aufbewahrt werden, richtet sich nach dessen
-        Auftragsverarbeitungsvertrag.
+        Bestimmungen zur Auftragsverarbeitung.
       </p>
 
       <h2>Was diese Seite NICHT tut</h2>
@@ -78,9 +78,10 @@ export default function Datenschutz() {
         <li>Keine Cookies, auch keine „technisch notwendigen".</li>
         <li>Keine Reichweitenmessung, keine Statistik, kein Tracking.</li>
         <li>
-          Keine Inhalte von fremden Servern. Beide Schriften liegen auf unserem
-          eigenen Server; es gibt keine eingebettete Karte, kein Video und keine
-          Schaltflächen sozialer Netzwerke.
+          Keine Inhalte von fremden Servern. Alle Schriften, Bilder und Videos
+          liegen auf demselben Server wie die Seite; es gibt keine eingebettete
+          Karte, kein Video von fremden Plattformen und keine Schaltflächen
+          sozialer Netzwerke.
         </li>
         <li>Kein Kontaktformular und damit keine Formulardaten.</li>
       </ul>
@@ -109,6 +110,14 @@ export default function Datenschutz() {
         gebraucht wird und keine Aufbewahrungsfrist entgegensteht.
       </p>
 
+      <h2>Link zu finesites</h2>
+      <p>
+        Ganz unten auf der Seite steht ein Link zu finesites.de, der Seite des
+        Gestalters. Er ist ein gewöhnlicher Link: Erst wenn du ihn drückst,
+        öffnet sich finesites.de in einem neuen Tab, und dort gilt deren
+        Datenschutzerklärung. Ohne diesen Klick findet keine Verbindung statt.
+      </p>
+
       <h2>Anruf</h2>
       <p>
         Ein Druck auf die Telefonnummer öffnet nur die Telefon-App deines
@@ -126,7 +135,7 @@ export default function Datenschutz() {
       </p>
 
       <p className="rechtsseite__fuss leise">
-        Stand: 17. August 2026. Diese Erklärung ist gegen den Quelltext dieser
+        Stand: 25. September 2026. Diese Erklärung ist gegen den Quelltext dieser
         Seite geprüft. Sie beschreibt, was der Code tatsächlich tut, und nicht
         das, was ein Textbaustein üblicherweise behauptet.
       </p>

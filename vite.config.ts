@@ -190,8 +190,26 @@ const BASIS =
   (globalThis as { process?: { env?: Record<string, string | undefined> } }).process?.env
     ?.ARAM_BASIS ?? '/'
 
+/**
+ * ═══ Wer die Seite ausliefert (25.09.) ═══
+ *
+ * Die Datenschutzerklaerung stand live mit „Name und Sitz des Hosters fehlt
+ * noch" da — genau die Zeile, die ein pruefender Blick zuerst findet. Der
+ * Hoster haengt davon ab, WO gebaut wird: die Vorschau liegt bei GitHub
+ * Pages (der Workflow setzt ARAM_URSPRUNG auf *.github.io), die fertige Seite
+ * bei Hostinger (TREFFEN.md, Teil C). ARAM_HOSTER ueberschreibt beides, falls
+ * es je ein dritter wird.
+ */
+const UMGEBUNG = (globalThis as { process?: { env?: Record<string, string | undefined> } }).process?.env
+const HOSTER =
+  UMGEBUNG?.ARAM_HOSTER ??
+  (UMGEBUNG?.ARAM_URSPRUNG?.toLowerCase().includes('github.io')
+    ? 'GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA (GitHub Pages). GitHub ist nach dem EU-US Data Privacy Framework zertifiziert; die Übermittlung in die USA stützt sich auf den Angemessenheitsbeschluss der EU-Kommission (Art. 45 DSGVO)'
+    : 'HOSTINGER operations, UAB, Švitrigailos str. 34, LT-03230 Vilnius, Litauen')
+
 export default defineConfig({
   base: BASIS,
+  define: { __ARAM_HOSTER__: JSON.stringify(HOSTER) },
   plugins: [unterpfadPlugin(BASIS), react(), strukturdatenPlugin()],
   build: {
     target: 'es2022',
