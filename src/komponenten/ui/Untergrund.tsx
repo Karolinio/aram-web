@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react'
+
 import { pfad } from '../../pfad.ts'
 
 /**
@@ -92,7 +94,7 @@ export default function Untergrund({
         <div className={`untergrund__folie untergrund__folie--${ton}`} />
       )}
 
-      {muster === 'saat' && <div className="untergrund__saat" />}
+      {muster === 'saat' && <Saat />}
 
       {/* Das Korn liegt ganz oben und IMMER. Es ist das einzige, was alle
           sieben Sektionen teilen. */}
@@ -100,3 +102,36 @@ export default function Untergrund({
     </div>
   )
 }
+
+/**
+ * ═══ Die Saat rieselt nur, wo jemand hinsieht (25.09.) ═══
+ *
+ * Gemessen am gedrosselten Handy: sieben Sektionen tragen je eine
+ * endlos laufende `rieseln`-Animation auf einer sektionsgrossen Ebene, und
+ * sieben von acht laufenden Animationen der Seite lagen ausserhalb des
+ * Bildes. Jede davon hält eine eigene Grafikebene im Speicher und wird in
+ * jedem Bild mit zusammengesetzt — für niemanden.
+ *
+ * Ausserhalb (mit 25 % Vorlauf, damit der Wechsel nie im Bild passiert)
+ * trägt die Ebene `data-ruht`, und das Stilblatt nimmt ihr die Animation
+ * ganz weg: pausieren allein liesse die Ebene bestehen. Beim Wiedereintritt
+ * beginnt das Rieseln von vorn — unsichtbar, weil es ausserhalb geschieht.
+ */
+function Saat() {
+  const ref = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const el = ref.current
+    if (!el || typeof IntersectionObserver === 'undefined') return
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e?.isIntersecting) el.removeAttribute('data-ruht')
+        else el.setAttribute('data-ruht', '')
+      },
+      { rootMargin: '25% 0px' },
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+  return <div className="untergrund__saat" ref={ref} data-ruht="" />
+}
+

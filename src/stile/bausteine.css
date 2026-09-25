@@ -927,6 +927,9 @@ body:has(.leiste) .wasserzeichen {
    */
   translate: var(--saat-seite, 0) var(--saat-schub, 0);
 }
+/* Ausserhalb des Bildes keine Animation und damit keine eigene Ebene —
+   siehe Saat() in Untergrund.tsx. */
+.untergrund__saat[data-ruht] { animation: none; }
 
 /**
  * ═══ Das Rieseln ═══

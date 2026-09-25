@@ -599,7 +599,8 @@
   /* 4,6 statt 3,75 rem. Karol: „Glasheader vielleicht etwas grösser, also
      weiter nach unten." Eine Scheibe braucht Dicke, um als Scheibe zu lesen —
      bei 60 px war sie eine Leiste mit Unschärfe dahinter. */
-  --kopf-hoehe: calc(4.6rem + var(--kopf-schwebe));
+  /* 25.09.: 3,5 statt 4,6 rem — Karol: „der Header soll einfach duenner sein." */
+  --kopf-hoehe: calc(3.5rem + var(--kopf-schwebe));
   /* 25.09.: der Kopf schwebt jetzt mit Rand statt an der Kante zu kleben —
      dieser Abstand ist Teil von "wie tief der Inhalt beginnt", darum hier
      neben --kopf-hoehe und nicht lokal in der Header-Regel. */

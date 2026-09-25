@@ -308,7 +308,8 @@ export default function Vorhang() {
           film.style.opacity = String(1 - t)
           if (filmVideo) {
             if (t >= 1 && !filmVideo.paused) filmVideo.pause()
-            else if (t < 1 && filmVideo.paused) void filmVideo.play().catch(() => {})
+            /* Nur starten, wenn es wirklich im Bild ist — siehe die Wache unten. */
+            else if (t < 1 && filmVideo.paused && filmVideo.dataset.sichtbar !== 'nein') void filmVideo.play().catch(() => {})
           }
         }
         if (auftakt) {
@@ -380,6 +381,26 @@ export default function Vorhang() {
       tot = true
       abraeumen?.()
     }
+  }, [ruhig, schmal])
+
+  /* ═══ Das Video pausiert auch beim SPRUNG (25.09.) ═══
+     Die Pause oben haengt am Scrollfortschritt dieser Sektion. Springt man
+     per Anker („Karte" im Menü) weit darueber hinweg, kam der Fortschritt
+     gemessen nicht immer bei 1 an, und der Decoder lief unten weiter. Diese
+     Wache pausiert, sobald das Video aus dem Bild ist; gestartet wird es
+     weiterhin nur von oben, wenn die Sektion wirklich wieder in Ruhe ist. */
+  useEffect(() => {
+    const v = buehne.current?.querySelector('video')
+    if (!v || typeof IntersectionObserver === 'undefined') return
+    const io = new IntersectionObserver(([e]) => {
+      if (!e) return
+      v.dataset.sichtbar = e.isIntersecting ? 'ja' : 'nein'
+      if (!e.isIntersecting && !v.paused) v.pause()
+    })
+    io.observe(v)
+    return () => io.disconnect()
+    /* Dieselben Abhaengigkeiten wie oben: das <video> entsteht erst, wenn
+       `schmal` bekannt ist — mit [] lief die Wache einmal ins Leere. */
   }, [ruhig, schmal])
 
   return (

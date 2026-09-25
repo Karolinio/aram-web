@@ -5648,3 +5648,178 @@
 @media (prefers-reduced-motion: reduce) {
   .fuss a.urheber:hover .urheber__pfeil { transform: none; }
 }
+
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * Kopfzeile dünner, Knöpfe kleiner, Menü als Dropdown (25.09.)
+ *
+ * Karol: „Der Header soll einfach dünner sein … klappt sich zusammen und
+ * wird kleiner … WhatsApp- und Anrufzeichen kleiner, für beide Seiten nativ,
+ * benutzerfreundlich." Und zum Menü: „sieht richtig unprofessionell aus."
+ *
+ * 1. EINE Höhe, kein Zusammenklappen. Vorher 4,6 rem oben und 3,1 rem nach
+ *    dem Hero — der Sprung war das „Zusammenklappen". Jetzt 3,5 rem am
+ *    Rechner, 3,25 rem am Handy, immer. Das Logo behält seine 30 px.
+ * 2. Knöpfe: am Rechner 36 px hoch statt ~44, am Handy 36-px-Kreise mit
+ *    unsichtbar erweiterter 44-px-Trefferfläche (Apple HIG / Material:
+ *    klein sehen, gross treffen). Rahmen leiser.
+ * 3. Die Knöpfe tragen KEINEN eigenen Weichzeichner mehr. Ein
+ *    backdrop-filter IN einem backdrop-filter heisst: der Browser rechnet das
+ *    Glas zweimal übereinander, in jedem Bild beim Scrollen. Die Scheibe der
+ *    Kopfzeile reicht für beide.
+ * 4. Menü: Karte unter der Kopfzeile, gleich breit, deckend dunkel (kein
+ *    Weichzeichner — auch das ist Tempo), Zeilen in Lesegrösse mit Pfeil,
+ *    unten Status und zwei Knöpfe nebeneinander. Schleier dahinter.
+ * ═══════════════════════════════════════════════════════════════════════ */
+.kopf__zeile,
+.kopf[data-eng='ja'] .kopf__zeile {
+  min-height: 3.5rem;
+  transition: none;
+}
+.kopf__logo,
+.kopf[data-eng='ja'] .kopf__logo { height: 30px; transition: none; }
+
+.kopf__weg,
+.kopf[data-eng='ja'] .kopf__weg {
+  height: 2.25rem;
+  padding: 0 0.85rem;
+  gap: 0.4rem;
+  font-size: 0.875rem;
+  background: color-mix(in oklch, var(--creme) 8%, transparent);
+  border-color: color-mix(in oklch, var(--creme) 22%, transparent);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: none;
+}
+.kopf__weg svg { width: 0.95rem; height: 0.95rem; }
+.kopf__weg:hover {
+  background: color-mix(in oklch, var(--creme) 16%, transparent);
+  border-color: color-mix(in oklch, var(--creme) 40%, transparent);
+  color: var(--creme);
+  transform: none;
+}
+
+@media (max-width: 1000px) {
+  .kopf__zeile,
+  .kopf[data-eng='ja'] .kopf__zeile { min-height: 3.25rem; gap: 0.375rem; }
+  .kopf__weg,
+  .kopf[data-eng='ja'] .kopf__weg {
+    position: relative;
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0;
+  }
+  /* Unsichtbar grössere Trefferfläche: 36 px sehen, 44 px treffen. */
+  .kopf__weg::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 999px;
+  }
+  .kopf__weg svg { width: 1rem; height: 1rem; }
+  .kopf__menue { width: 2.75rem; height: 2.75rem; margin-inline-end: -0.35rem; }
+}
+
+/* ── Das Menü ── */
+.handymenue__schleier {
+  position: fixed;
+  inset: 0;
+  z-index: 38;
+  background: oklch(12% 0.01 50 / 0.45);
+  animation: menue-schleier 160ms ease-out both;
+}
+.handymenue__schleier[hidden] { display: none; }
+
+.handymenue {
+  inset: auto;
+  top: calc(var(--kopf-hoehe) + 0.5rem);
+  left: var(--kopf-schwebe);
+  right: var(--kopf-schwebe);
+  bottom: auto;
+  max-height: calc(100dvh - var(--kopf-hoehe) - 1.5rem);
+  display: block;
+  padding: 0.375rem;
+  border-radius: 1.25rem;
+  background: var(--ton-tief);
+  color: var(--creme);
+  border: 1px solid color-mix(in oklch, var(--creme) 14%, transparent);
+  box-shadow: 0 18px 48px -12px oklch(0% 0 0 / 0.6);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  transform-origin: top center;
+  animation: menue-auf 180ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.handymenue__wege { display: grid; }
+.handymenue__anker,
+.handymenue__anker:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 3rem;
+  padding: 0 0.875rem;
+  border-radius: 0.875rem;
+  font-family: var(--font-display);
+  font-variation-settings: var(--wonk-klein);
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.2;
+  color: var(--creme);
+  text-decoration: none;
+  background-image: none;
+}
+/* Trennlinie eingerückt wie in iOS-Listen — als eigene Linie, nicht als
+   Schatten der Zeile, sonst biegt sie sich um deren runde Ecken. */
+.handymenue__anker { position: relative; }
+.handymenue__anker + .handymenue__anker::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0.875rem;
+  right: 0.875rem;
+  height: 1px;
+  background: color-mix(in oklch, var(--creme) 9%, transparent);
+}
+.handymenue__anker:active { background: color-mix(in oklch, var(--creme) 8%, transparent); }
+.handymenue__pfeil { font-size: 1.35rem; line-height: 1; color: var(--creme-ruhig); }
+
+.handymenue__fuss {
+  display: grid;
+  gap: 0.625rem;
+  margin-top: 0.375rem;
+  padding: 0.75rem 0.5rem 0.5rem;
+  border-top: 1px solid color-mix(in oklch, var(--creme) 9%, transparent);
+}
+.handymenue__oeffnung { margin: 0 0.375rem; font-size: 0.8125rem; color: var(--creme-ruhig); }
+.handymenue__knoepfe { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+.handymenue__knopf {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-variation-settings: var(--wonk-klein);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--creme);
+  border: 1px solid color-mix(in oklch, var(--creme) 24%, transparent);
+}
+.handymenue__knopf--voll {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: var(--ton-tief);
+}
+.handymenue__knopf:focus-visible,
+.handymenue__anker:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+
+@keyframes menue-auf {
+  from { opacity: 0; transform: translateY(-6px) scale(0.98); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes menue-schleier { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .handymenue, .handymenue__schleier { animation: none; }
+}
+

@@ -7,6 +7,27 @@ weiterzubauen.
 
 ---
 
+## 25.09. (Abend) — Header dünn, Menü als Dropdown, zwei Tempo-Lecks zu
+
+- **Kopfzeile eine Höhe:** 3,5 rem (Handy 3,25), kein Zusammenklappen mehr
+  nach dem Hero (vorher 4,6 → 3,1). `--kopf-hoehe` = 3,5 rem + Schwebe.
+- **Knöpfe:** Rechner 36 px hoch, 0,875 rem; Handy 36-px-Kreise mit
+  unsichtbar erweiterter 44-px-Trefferfläche. Kein eigener Weichzeichner mehr
+  in den Knöpfen (backdrop-filter im backdrop-filter = doppeltes Glas je Bild).
+- **Handymenü neu:** kompakte dunkle Karte unter der Kopfzeile, gleich breit,
+  Zeilen mit Pfeil und eingerückten Trennlinien, Status + „Anrufen" (orange)
+  und „WhatsApp" nebeneinander; Schleier dahinter schliesst beim Antippen.
+  Vorher: halbdurchsichtiges Vollbild in Überschriftgrösse.
+- **Tempo:** (1) die sieben `rieseln`-Saat-Animationen laufen nur noch, wenn
+  ihre Sektion (±25 %) im Bild ist (`Saat()` in Untergrund.tsx,
+  `[data-ruht]` nimmt die Animation ganz weg) — Ebenenfläche oben 25,7 → 18,9
+  Mpx, laufende Animationen 8 → 4. (2) Startvideo lief nach Ankersprung
+  („Karte" im Menü) unten weiter: Wache per IntersectionObserver +
+  `data-sichtbar`, Neustart nur wenn sichtbar. Geprüft: oben läuft, nach
+  Menüsprung/harter Sprung pausiert, zurück oben läuft.
+- finesites.de geprüft (Impressum/Datenschutz vorhanden, keine Cookies, keine
+  Fremdhosts) — Befund im Chat.
+
 ## 25.09. — Header schwebend (Craft-Vorbild), Logo-Schraegstrich, Trennstriche raus
 
 - **Kopfzeile schwebt jetzt** statt kantenbuendig zu kleben: 999px Radius,

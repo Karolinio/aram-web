@@ -115,43 +115,58 @@ export default function Handymenue({ anker, offen, schliessen }: Props) {
      bliebe die Seite bei einem Neuaufbau mit offenem Menü blockiert. */
   useEffect(() => () => scrollenSperren(false), [])
 
+  /* ═══ Dropdown statt Vollbild (25.09.) ═══
+     Karol am Handy: „das, was sich öffnet, sieht unprofessionell aus." Es war
+     ein halbdurchsichtiges Vollbild in Überschriftgrösse — hinter dem die
+     Seite durchschien und in dessen Mitte ein leeres Loch klaffte. Jetzt ist
+     es, was iOS und Android an dieser Stelle zeigen: eine kompakte Karte
+     unter der Kopfzeile, gleich breit wie sie, darunter ein Schleier, der die
+     Seite abdunkelt und beim Antippen schliesst. */
   return createPortal(
-    <div
-      id="handymenue"
-      className="handymenue"
-      data-offen={offen ? 'ja' : 'nein'}
-      /* `hidden` statt nur unsichtbar: ein geschlossenes Menü darf für
-         Vorleseprogramme und den Tabulator gar nicht existieren. */
-      hidden={!offen}
-      role="dialog"
-      aria-modal="true"
-      aria-label="Navigation und Bestellwege"
-      ref={panel}
-    >
-      <nav className="handymenue__wege">
-        {anker.map((a) => (
-          <a key={a.id} href={`#${a.id}`} className="handymenue__anker" onClick={schliessen}>
-            {a.text}
-          </a>
-        ))}
-      </nav>
+    <>
+      <div
+        className="handymenue__schleier"
+        hidden={!offen}
+        onClick={schliessen}
+        aria-hidden="true"
+      />
+      <div
+        id="handymenue"
+        className="handymenue"
+        data-offen={offen ? 'ja' : 'nein'}
+        hidden={!offen}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Navigation und Bestellwege"
+        ref={panel}
+      >
+        <nav className="handymenue__wege">
+          {anker.map((a) => (
+            <a key={a.id} href={`#${a.id}`} className="handymenue__anker" onClick={schliessen}>
+              <span>{a.text}</span>
+              <span className="handymenue__pfeil" aria-hidden="true">›</span>
+            </a>
+          ))}
+        </nav>
 
-      <div className="handymenue__fuss">
-        <Oeffnung className="handymenue__oeffnung" />
-
-        <a className="knopf handymenue__knopf" href={ARAM.kontakt.telefonHref}>
-          <span aria-hidden="true">☎</span> {ARAM.kontakt.telefon}
-        </a>
-        <a
-          className="knopf knopf--leise handymenue__knopf"
-          href={ARAM.kontakt.whatsapp}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Über WhatsApp bestellen
-        </a>
+        <div className="handymenue__fuss">
+          <Oeffnung className="handymenue__oeffnung" />
+          <div className="handymenue__knoepfe">
+            <a className="handymenue__knopf handymenue__knopf--voll" href={ARAM.kontakt.telefonHref}>
+              Anrufen
+            </a>
+            <a
+              className="handymenue__knopf"
+              href={ARAM.kontakt.whatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              WhatsApp
+            </a>
+          </div>
+        </div>
       </div>
-    </div>,
+    </>,
     document.body,
   )
 }
