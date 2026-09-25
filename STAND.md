@@ -7,6 +7,34 @@ weiterzubauen.
 
 ---
 
+## 25.09. — Header schwebend (Craft-Vorbild), Logo-Schraegstrich, Trennstriche raus
+
+- **Kopfzeile schwebt jetzt** statt kantenbuendig zu kleben: 999px Radius,
+  20 px Luft zu allen drei Raendern, Haarlinien-Rand. Vorbild ueber Mobbin
+  gesucht: [Craft](https://mobbin.com/screens/327e98e7-442b-462c-b0f5-884af12e7d78)
+  (rein rundes Pill), [T1 Energy](https://mobbin.com/sites/sections/08b1da0a-e784-4a8c-8d23-0359ff00b023),
+  [Frontify](https://mobbin.com/sites/sections/62984214-7e41-43f6-b3fe-4ada5446fc18).
+  Glas/Farbe/Handy-Abschaltung (`pointer: coarse`) unveraendert — reine Form.
+  Neuer Token `--kopf-schwebe`, in `--kopf-hoehe` eingerechnet (alle Sprung-
+  marken/Hero-Abstaende bleiben korrekt).
+- **„/finesites" im Fuss:** derselbe Kniff wie auf finesites.de selbst
+  (`--marke-strich-grad`/`vertical-align: 0.149em`) — der Schraegstrich war
+  groesser als die Buchstaben, jetzt auf 0,72 em verkleinert und um seine
+  Unterlaenge angehoben, sitzt auf derselben Grundlinie.
+- **Trennstriche zwischen den Kartengruppen wieder raus** — Karol: „sieht
+  scheisse aus". Die groessere Gruppen-Ueberschrift (24.09.) bleibt, sie
+  traegt die Zaesur allein; nur der harte Strich ist weg, Abstand bleibt grosszuegig.
+- **Kartenblatt-Teaser auf der Startseite geprueft:** liest live und mit
+  Cache-Umgehung KORREKT die 24.09.-Karte (3 Muhammara mit Gouda, 4 Lange
+  Käse, 5 Käse mit Gouda, und 54 weitere). Karols Screenshot zeigte einen
+  alten Browser-Tab — kein Code-Fehler.
+- Offen/vertagt auf Karols Wunsch: Startseitenvideo NICHT entfernt (er sagte
+  ausdruecklich "ueberlege" vor dem Loeschen) — Empfehlung siehe Chat.
+  Schiefe Bilder rund um das Kartenblatt sind die Salve-Kurvenrotation
+  waehrend des Aufklapp-Schwungs (gewollt) — kein Fund eines echten Fehlers
+  in Ruhelage. Leere Kartenzeilen (Gerichte ohne Foto) bleiben ohne Bild,
+  wie von Anfang an entschieden (`Karte ohne Bild reserviert keinen Platz`).
+
 ## 24.09. — Karte nach dem AKTUELLEN Flyer, Blech-Bilder in der Galerie
 
 Karol hat vier Fotos von Arfans aktuellem Flyer geschickt (~/Downloads/

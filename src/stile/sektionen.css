@@ -148,6 +148,17 @@
  * einer Seite, deren wichtigste Zeile eine Telefonnummer ist, das Letzte, was
  * man will.
  */
+/**
+ * ═══ Schwebend statt kantenklebend (25.09.) ═══
+ *
+ * Karol nach Craft (Mobbin): "abgerundet und freistehend". Vorher lag die
+ * Scheibe kantenbuendig ueber die volle Breite — eine Leiste, keine Insel.
+ * Craft, T1 Energy und Frontify (alle auf Mobbin) loesen das gleich: ein
+ * abgerundeter Streifen mit Luft zu allen drei Raendern, auf dem Bild
+ * darunter schwebend statt daran klebend. Der Umbau ist reine Form — Glas,
+ * Farbe, die Handy-Abschaltung des Weichzeichners (pointer: coarse) bleiben
+ * unveraendert.
+ */
 .kopf {
   /**
    * FEST, nicht klebend. Eine klebende Kopfzeile behält ihren Platz im Fluss;
@@ -174,10 +185,15 @@
    * keine Scheibe mehr.
    */
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  /* Schwebeabstand oben (mit Notch-Sicherheit) und an beiden Seiten. */
+  top: max(var(--kopf-schwebe), env(safe-area-inset-top, 0px));
+  left: var(--kopf-schwebe);
+  right: var(--kopf-schwebe);
   z-index: 40;
+  border-radius: 999px;
+  /* Eine Haarlinie schaerft die Kante der Scheibe — ohne sie verliest sich
+     Glas auf hellem UND dunklem Grund an seinem eigenen Rand. */
+  border: 1px solid color-mix(in oklch, var(--creme) 24%, transparent);
   color: var(--creme);
   /**
    * ═══ Weiss statt Gold, und warum nicht ihr Orange ═══
@@ -298,6 +314,7 @@
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
     background-color: color-mix(in oklch, var(--ton-tief) 88%, transparent);
+    border-color: color-mix(in oklch, var(--creme) 16%, transparent);
   }
 }
 
@@ -2409,19 +2426,18 @@
 .gruppe { margin-bottom: clamp(2.5rem, 4vw, 3.5rem); }
 
 /**
- * ═══ Jede Gruppe ist ein Kapitel (24.09.) ═══
+ * ═══ Jede Gruppe ist ein Kapitel (24.09., Strich am 25.09. wieder raus) ═══
  *
  * Karol am Handy: „22 Lahmacun, 41 Zaatar, 43 Käse, 61 Margherita — warum
  * ist das so?" Die Überschrift war am Handy KLEINER als die Gerichtnamen
  * (1,5 rem gegen rund 2 rem), und so las sich jeder Gruppenwechsel als
- * Zahlensprung. Ab der zweiten Gruppe trennt jetzt ein dunkler Strich über
- * die ganze Breite, mit Luft davor, und die Überschrift ist deutlich
- * grösser als jedes Gericht darunter.
+ * Zahlensprung. Die Überschrift ist seitdem deutlich grösser als jedes
+ * Gericht darunter — DAS trennt schon. Der Trennstrich, der zusätzlich kam,
+ * war Karol zu viel („sieht ein bisschen scheisse aus") — die Luft allein
+ * traegt die Zaesur.
  */
 .gruppe + .gruppe {
-  margin-top: clamp(1.5rem, 3vw, 2.5rem);
-  padding-top: clamp(1.75rem, 3vw, 2.5rem);
-  border-top: 3px solid color-mix(in oklch, var(--ton-tief) 80%, transparent);
+  margin-top: clamp(2rem, 4vw, 3.25rem);
 }
 
 /* Vorher: Versalien, 0,16em gesperrt, 2px-Balken darunter — eine gedruckte
@@ -5591,8 +5607,15 @@
   animation: urheber-wandern 18s linear infinite;
 }
 .urheber__strich {
-  /* Lexends Schraegstrich haengt tiefer als die Buchstaben — auf dem echten
-     Signet dieselbe Beobachtung, siehe tokens.css Zeile ~1308. */
+  /* Dieselbe Korrektur wie auf finesites.de selbst (tokens.css
+     --marke-strich-grad/--marke-strich-luft): Karol dort am 24.09. — „das /
+     muss unten gekuerzt werden, damit es auf derselben Ebene liegt wie
+     finesites." Lexends Schraegstrich reicht 0,149 em unter die Grundlinie
+     und ist grösser als die Buchstaben um ihn herum; verkleinert auf 0,72 em
+     und um seine Unterlaenge angehoben, sitzt seine Unterkante exakt auf der
+     Grundlinie der Wortmarke — dieselbe Zahl, derselbe Effekt, zweite Seite. */
+  font-size: 0.72em;
+  vertical-align: 0.149em;
   margin-right: 0.03em;
 }
 @keyframes urheber-wandern {
