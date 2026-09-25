@@ -110,17 +110,22 @@ export default function Fusszeile() {
           target="_blank"
           rel="nofollow noopener"
         >
-          <span className="urheber__vor">Website von</span>
-          <img
-            className="urheber__signet"
-            src={pfad('bilder/marke/finesites.svg')}
-            alt=""
-            width={18}
-            height={18}
-            loading="lazy"
-            decoding="async"
-          />
-          <span className="urheber__name">finesites</span>
+          {/* 25.09., Karol: „grösser und professioneller." Aus der Textzeile
+              wird eine Signatur wie unter einem Plakat: Vorsatz in Versalien,
+              darunter die echte Wortmarke statt des Namens in Aram-Schrift. */}
+          <span className="urheber__vor">Gestaltet &amp; gebaut von</span>
+          <span className="urheber__marke">
+            <img
+              className="urheber__wortmarke"
+              src={pfad('bilder/marke/finesites-wortmarke.webp')}
+              alt="finesites"
+              width={742}
+              height={151}
+              loading="lazy"
+              decoding="async"
+            />
+            <span className="urheber__pfeil" aria-hidden="true">↗</span>
+          </span>
           <span className="visuell-versteckt"> (öffnet in neuem Tab)</span>
         </a>
       </div>

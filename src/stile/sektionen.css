@@ -5524,11 +5524,11 @@
 .fuss__leiste {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
   gap: 0.75rem 2rem;
-  margin-top: clamp(2rem, 4vw, 3rem);
-  padding-top: 1.25rem;
+  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+  padding-top: clamp(1.5rem, 3vw, 2rem);
   border-top: 1px solid color-mix(in oklch, var(--creme) 14%, transparent);
   font-size: 0.8125rem;
   letter-spacing: 0.01em;
@@ -5539,40 +5539,51 @@
   color: var(--creme-ruhig);
 }
 .fuss a.urheber {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  /* Trefferfläche 44 px hoch, ohne die Zeile optisch dicker zu machen. */
-  min-height: 44px;
-  margin-block: -0.75rem;
+  display: inline-grid;
+  justify-items: end;
+  gap: 0.55rem;
+  padding: 0.35rem 0;
   color: var(--creme);
   text-decoration: none;
 }
-.urheber__vor { color: var(--creme-ruhig); }
-.urheber__signet {
-  width: 18px;
-  height: 18px;
-  border-radius: 4px;
-  box-shadow: 0 0 0 1px color-mix(in oklch, var(--creme) 18%, transparent);
-  transition: transform var(--duration-fast, 150ms) var(--ease-teig, ease-out);
-}
-.urheber__name {
+.urheber__vor {
+  font-size: 0.6875rem;
   font-weight: 600;
-  letter-spacing: 0;
-  text-decoration: underline;
-  text-decoration-color: transparent;
-  text-underline-offset: 0.25em;
-  text-decoration-thickness: 1px;
-  transition: text-decoration-color var(--duration-fast, 150ms) ease-out;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--creme-ruhig);
+}
+.urheber__marke {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.urheber__wortmarke {
+  display: block;
+  height: clamp(1.5rem, 1.2rem + 0.8vw, 1.9rem);
+  width: auto;
+  transition: opacity var(--duration-fast, 150ms) ease-out;
+}
+.urheber__pfeil {
+  font-size: 1rem;
+  line-height: 1;
+  color: var(--creme-ruhig);
+  transition: transform 220ms var(--ease-teig, ease-out), color 220ms ease-out;
 }
 .fuss a.urheber:hover { color: var(--creme); }
-.fuss a.urheber:hover .urheber__name { text-decoration-color: currentColor; }
-.fuss a.urheber:hover .urheber__signet { transform: translateY(-1px); }
+.fuss a.urheber:hover .urheber__pfeil {
+  color: var(--creme);
+  transform: translate(2px, -2px);
+}
 .fuss a.urheber:focus-visible {
   outline: 2px solid var(--orange);
-  outline-offset: 4px;
-  border-radius: 4px;
+  outline-offset: 6px;
+  border-radius: 6px;
+}
+/* Am Handy steht die Signatur unter dem ©, also linksbündig. */
+@media (max-width: 719px) {
+  .fuss a.urheber { justify-items: start; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .fuss a.urheber:hover .urheber__signet { transform: none; }
+  .fuss a.urheber:hover .urheber__pfeil { transform: none; }
 }
