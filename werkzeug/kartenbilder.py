@@ -61,10 +61,19 @@ BREIT, HOCH = 1000, 750
 # Gebaecke, die in seiner Aufnahme senkrecht liegen: um 90 Grad drehen,
 # damit sie im Querformat der Laenge nach liegen.
 DREHUNG = {
-    'Groß Käse, scharf': 90,
+    # 25.09.: nach dem HINTERGRUND ausgerichtet, nicht nach dem Gebaeck —
+    # Karol: „manche sind seitlich oder auf dem Kopf." Stuehle, Fenster und
+    # Strasse stehen jetzt oben. Zaatar, Muhammara und Toschka sind danach
+    # mit auf das Gebaeck gesetzter Bildmitte zugeschnitten (0,52 / 0,57 /
+    # 0,62 der Hoehe), Mexicano scharf (nur Galerie, IMG_1523, +90) bei 0,475.
+    'Zaatar': -90,
+    'Muhammara': -90,
+    'Schamiyeh': -90,
+    'Toschka': -90,
+    'Mexicano Roll': -90,
+    'Groß Käse, scharf': -90,
     'Sucuk': 90,
     'Hackfleisch': 90,
-    'Mexicano Roll': 90,
 }
 
 # Name auf ihrer Karte -> (Datei, Bildbeschreibung, wie sicher)
