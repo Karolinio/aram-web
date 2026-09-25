@@ -153,7 +153,9 @@ export const ARAM = {
        Server gibt, gibt es auch keinen Hoster; die Erklärung sagt das offen,
        statt einen zu erfinden. */
     /* 25.09.: kommt aus der Bau-Umgebung — siehe HOSTER in vite.config.ts. */
-    hoster: __ARAM_HOSTER__ as string | Luecke,
+    /* `typeof`, weil vite.config.ts diese Datei selbst in Node laedt — dort
+       ist die Konstante nicht eingesetzt und waere ein ReferenceError. */
+    hoster: (typeof __ARAM_HOSTER__ !== 'undefined' ? __ARAM_HOSTER__ : null) as string | Luecke,
     /* Für Verbraucherstreitbeilegung: § 36 VSBG verlangt eine Aussage, ob man
        teilnimmt. Die übliche Antwort kleiner Betriebe ist „nein" — aber das
        muss der Betrieb sagen, nicht ich. */
