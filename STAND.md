@@ -7,6 +7,31 @@ weiterzubauen.
 
 ---
 
+## 25.09. (spät) — Prüfdurchgang, Datenschutz ohne Platzhalter, Bilder ausgerichtet
+
+- **Datenschutz stand live mit „Name und Sitz des Hosters fehlt noch".**
+  Jetzt aus der Bau-Umgebung (vite.config.ts `HOSTER` → `__ARAM_HOSTER__`):
+  *.github.io → GitHub, Inc. (DPF), sonst Hostinger; `ARAM_HOSTER`
+  überschreibt. „Beide Schriften … kein Video" → drei Schriften, eigene
+  Videos. Absatz zum finesites-Link. Stand 25.09.2026.
+- Sieben Produktfotos nach dem Hintergrund gedreht (siehe DREHUNG in
+  werkzeug/kartenbilder.py).
+- Prüfdurchgang (axe WCAG 2.1 AA, Links, Bilder, Hosts, Konsole) auf Start,
+  Impressum, Datenschutz, Handy + Mac: 0 Befunde. finesites.de ebenso 0.
+- Inhaltlich offen: Galerie zeigt „Käseschiff", „Groß Käse, scharf" und
+  „Pizza" — keiner der drei Namen steht auf dem aktuellen Flyer (Käseschiff =
+  04 Lange Käse?). Arfan fragen.
+
+### LIVEGANG auf arampizzeria-bonn.de — Checkliste
+1. `noindex` aus index.html raus, public/robots.txt auf `Allow: /` + Sitemap.
+2. Bauen mit `ARAM_BASIS=/` und `ARAM_URSPRUNG=https://arampizzeria-bonn.de`
+   (Hoster wird dann automatisch Hostinger); `ARAM.web.domain` setzen.
+3. Impressum: Rechtsform von Arfan bestätigt (Einzelunternehmen oder GbR).
+4. .htaccess: `ErrorDocument 404 /404.html`, `/menu/` → `/#karte`,
+   `/impressum/` → `/impressum.html`.
+5. Arfans Okay für die finesites-Zeile im Fuss (schriftlich, WhatsApp).
+6. Danach: Lighthouse + axe gegen die echte Domain, WhatsApp-Vorschau testen.
+
 ## 25.09. (Abend) — Header dünn, Menü als Dropdown, zwei Tempo-Lecks zu
 
 - **Kopfzeile eine Höhe:** 3,5 rem (Handy 3,25), kein Zusammenklappen mehr
